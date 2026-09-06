@@ -64,3 +64,12 @@
 - MinGit(v2.47.1) 설치 및 환경변수 등록 완료.
 - `main` 브랜치에 초기 백업, UI 리디자인 및 상태 커밋 완료.
 - 향후 GitHub 리포지토리 연결 시 원클릭 푸시 및 백업 가능.
+
+---
+
+## 5. 바로가기 생성 현황
+
+- **바탕화면 바로가기:** `고석현의 돈통` (Windows 바탕화면 바로가기 `.lnk`)
+- **실행 대상:** Google Chrome -> `https://script.google.com/macros/s/AKfycbwvmGOCVuYW6Uul4DZBe13JVEHZ0ie3BiOP6vDc-ND9k-E-yLbVgqohcjsNowLV7MldHg/exec`
+- **아이콘:** 전용 웹앱 아이콘 자동 적용 완료
+
