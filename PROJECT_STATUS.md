@@ -47,14 +47,20 @@
 
 ---
 
-## 3. 실시간 자동 업데이트 환경 및 배포 가이드 (구축 완료)
+## 3. 구글 Apps Script 자동 배포 완료 (기존 URL 100% 유지)
 
-- **Git 로컬 버전 관리 체계 구축:**
-  - MinGit(v2.47.1) 설치 및 사용자 환경변수 등록 완료.
-  - `main` 브랜치 생성 및 초기 커밋, UI 리디자인 커밋 완료.
-- **배포 방식 1: GitHub Pages 호스팅 (즉시 업데이트)**
-  - 본 로컬 폴더를 GitHub 리포지토리에 연결하여 `git push` 시 30초 내에 폰으로 최신 코드가 자동 배포됨.
-  - 구글 시트 웹앱 주소(`https://script.google.com/.../exec`)가 백엔드 API로 그대로 작동하여 구글 배포 과정 생략 가능.
-- **배포 방식 2: 기존 구글 웹앱 URL 수동 갱신 (기존 URL 유지 시)**
-  - 구글 스프레드시트 Apps Script 웹 에디터 접속 -> `Index.html`에 현재 [`index.html`](file:///c:/Users/PA/Desktop/%EC%9C%A4%EC%A7%80%EC%9D%98%EB%8F%88%EC%B0%BD%EA%B3%A0/index.html) 내용 전체 붙여넣기.
-  - 상단 **[배포 관리] > [수정(연필)] > 버전: [새 버전] > [배포]** 클릭 (기존 URL 절대 유지).
+- **배포 버전:** 버전 2 (Version 2)
+- **라이브 검증 완료:**
+  - **웹 앱 URL (변동 없음):**  
+    `https://script.google.com/macros/s/AKfycbwvmGOCVuYW6Uul4DZBe13JVEHZ0ie3BiOP6vDc-ND9k-E-yLbVgqohcjsNowLV7MldHg/exec`
+  - **배포 ID (변동 없음):** `AKfycbwvmGOCVuYW6Uul4DZBe13JVEHZ0ie3BiOP6vDc-ND9k-E-yLbVgqohcjsNowLV7MldHg`
+  - 브라우저 자동화(Headless)를 통해 구글 Apps Script `Index.html`에 최신 코드 자동 반영 및 `새 버전` 배포 완료.
+  - 라이브 웹앱에서 신규 토스 스타일 UI (D-603일 카운트다운, 신혼부부 자산 포트폴리오, 이번 달 저축 목표, 모바일 플로팅 탭바) 정상 작동 확인 완료.
+
+---
+
+## 4. Git 로컬 버전 관리 체계 구축 완료
+
+- MinGit(v2.47.1) 설치 및 환경변수 등록 완료.
+- `main` 브랜치에 초기 백업, UI 리디자인 및 상태 커밋 완료.
+- 향후 GitHub 리포지토리 연결 시 원클릭 푸시 및 백업 가능.
