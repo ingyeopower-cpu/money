@@ -74,18 +74,30 @@
 
         body {
             margin: 0;
-            background: var(--plane);
+            background: #eef2f6;
             color: var(--ink);
-            font-family: system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+            font-family: var(--font-main, system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif);
             font-size: 14px;
             line-height: 1.5;
-            -webkit-font-smoothing: antialiased
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        :root[data-theme="dark"] body {
+            background: #090c13;
         }
 
         .wrap {
-            max-width: 1120px;
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
             margin: 0 auto;
-            padding: calc(16px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(80px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+            background: var(--plane);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.08);
+            padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(100px + env(safe-area-inset-bottom, 0px));
+            position: relative;
         }
 
         h1 {
@@ -182,7 +194,7 @@
             display: flex;
             gap: 6px;
             margin-bottom: 16px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             background: var(--chip);
             padding: 5px;
             border-radius: 14px;
@@ -647,9 +659,14 @@
         }
 
         .wrap {
-            max-width: 1080px;
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
             margin: 0 auto;
-            padding: calc(16px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(100px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+            background: var(--plane);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.08);
+            padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(100px + env(safe-area-inset-bottom, 0px));
+            position: relative;
         }
 
         .card {
@@ -714,17 +731,9 @@
 
         .dday-main-stats {
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 18px;
-            margin-bottom: 20px;
-            align-items: flex-end;
-        }
-
-        @media (max-width: 640px) {
-            .dday-main-stats {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
         }
 
         .dday-stat-label {
@@ -812,9 +821,9 @@
         }
 
         .hero-quick-actions {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 8px;
-            flex-wrap: wrap;
         }
 
         .quick-btn {
@@ -904,15 +913,9 @@
 
         .couple-stat-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            grid-template-columns: 1fr;
+            gap: 10px;
             margin-bottom: 14px;
-        }
-
-        @media (max-width: 640px) {
-            .couple-stat-grid {
-                grid-template-columns: 1fr;
-            }
         }
 
         .couple-stat-box {
@@ -1052,25 +1055,27 @@
             font-weight: 700;
         }
 
-        /* Mobile Bottom Navigation Dock */
+        /* Mobile Bottom Navigation Dock (Active on both Mobile & PC) */
         .mobile-bottom-dock {
-            display: none;
+            display: flex;
             position: fixed;
             bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-top: 1px solid var(--border);
-            padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+            padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
             z-index: 99;
             justify-content: space-around;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.06);
         }
 
         :root[data-theme="dark"] .mobile-bottom-dock {
-            background: rgba(26, 32, 44, 0.88);
+            background: rgba(26, 32, 44, 0.92);
         }
 
         .dock-item {
