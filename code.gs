@@ -47,7 +47,7 @@ function doGet(e) {
     } catch (urlErr) {}
     template.currentDeploymentUrl = serviceUrl;
     return template.evaluate()
-      .setTitle("윤지의돈창고 · 자산관리")
+      .setTitle("고석현의 돈통 · 자산관리")
       .addMetaTag("viewport", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover")
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
   } catch (err) {
