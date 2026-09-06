@@ -63,17 +63,23 @@
 
 ---
 
-## 4. Git 로컬 버전 관리 체계 구축 완료
+## 4. GitHub Pages 배포 완료 (공식 라이브 웹앱)
 
-- MinGit(v2.47.1) 설치 및 환경변수 등록 완료.
-- `main` 브랜치에 초기 백업, UI 리디자인 및 상태 커밋 완료.
-- 향후 GitHub 리포지토리 연결 시 원클릭 푸시 및 백업 가능.
+- **웹 앱 URL (구글 상단 배너 없는 순수 웹앱):**  
+  [https://ingyeopower-cpu.github.io/money/](https://ingyeopower-cpu.github.io/money/)
+- **GitHub 리포지토리:**  
+  [https://github.com/ingyeopower-cpu/money](https://github.com/ingyeopower-cpu/money)
+- **배포 방식:** GitHub Actions (`pages-build-deployment`) 자동 배포
+- **연동 구조:** 프론트엔드는 GitHub Pages에서 구글 배너 없이 고속 호스팅되며, 데이터 저장/동기화/시세 갱신은 기존 구글 스프레드시트 백엔드 API와 실시간 통신합니다.
+- **모바일 웹앱(PWA):** 아이폰 Safari 또는 갤럭시 Chrome에서 접속 후 **[홈 화면에 추가]** 시 상단 주소창 및 배너 없이 진짜 네이티브 금융 앱처럼 실행됩니다.
 
 ---
 
-## 5. 바로가기 생성 현황
+## 5. 바탕화면 바로가기 현황
 
-- **바탕화면 바로가기:** `고석현의 돈통` (Windows 바탕화면 바로가기 `.lnk`)
-- **실행 대상:** Google Chrome -> `https://script.google.com/macros/s/AKfycbwvmGOCVuYW6Uul4DZBe13JVEHZ0ie3BiOP6vDc-ND9k-E-yLbVgqohcjsNowLV7MldHg/exec`
+- **바로가기 명칭:** `고석현의 돈통` (Windows 바탕화면 바로가기 `.lnk`)
+- **실행 대상:** Google Chrome -> `https://ingyeopower-cpu.github.io/money/`
 - **아이콘:** 전용 웹앱 아이콘 자동 적용 완료
+- **동작:** 더블클릭 시 구글 배너 없는 깨끗한 GitHub Pages 웹앱으로 즉시 열립니다.
+
 
