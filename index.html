@@ -2,6 +2,8 @@
 <html lang="ko" data-theme="light">
 
 <head>
+    <!-- Toss / Fintech Modern Font: Pretendard -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <title>윤지의돈창고 · 자산관리</title>
@@ -576,6 +578,531 @@
                 padding: 14px 10px 70px
             }
         }
+    
+        /* Toss / KakaoBank Modern Fintech Theme */
+        :root {
+            --font-main: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+            --toss-blue: #3182f6;
+            --toss-blue-light: #e8f3ff;
+            --toss-blue-hover: #1b64da;
+            --toss-pink: #f43f5e;
+            --toss-pink-light: #fff1f2;
+            --toss-green: #00b06f;
+            --toss-green-light: #ecfdf5;
+            --toss-purple: #7048e8;
+            --toss-purple-light: #f5f3ff;
+            --toss-amber: #f59e0b;
+            --toss-amber-light: #fffbeb;
+            --card-radius: 22px;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.07), 0 2px 6px rgba(0, 0, 0, 0.03);
+        }
+
+        :root[data-theme="light"] {
+            --plane: #f2f4f6;
+            --surface: #ffffff;
+            --ink: #191f28;
+            --ink2: #4e5968;
+            --muted: #8b95a1;
+            --grid: #e5e8eb;
+            --axis: #b0b8c1;
+            --border: rgba(0, 0, 0, 0.06);
+            --chip: #f9fafb;
+            --chip-active: #e8f3ff;
+        }
+
+        :root[data-theme="dark"] {
+            --plane: #0e1117;
+            --surface: #1a202c;
+            --ink: #f8fafc;
+            --ink2: #cbd5e1;
+            --muted: #64748b;
+            --grid: #2d3748;
+            --axis: #475569;
+            --border: rgba(255, 255, 255, 0.08);
+            --chip: #2d3748;
+            --chip-active: #1e3a8a;
+            --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --card-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            font-family: var(--font-main) !important;
+            letter-spacing: -0.015em;
+        }
+
+        .wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: calc(16px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(100px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--card-radius);
+            padding: 24px;
+            margin-bottom: 18px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        /* Hero D-day Widget */
+        .hero-dday-card {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface) 60%, var(--toss-blue-light) 100%);
+            border: 1px solid rgba(49, 130, 246, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        :root[data-theme="dark"] .hero-dday-card {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface) 60%, rgba(49, 130, 246, 0.15) 100%);
+            border-color: rgba(49, 130, 246, 0.3);
+        }
+
+        .dday-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .dday-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--toss-blue);
+            color: #ffffff;
+            font-size: 13.5px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 99px;
+            box-shadow: 0 4px 12px rgba(49, 130, 246, 0.3);
+            letter-spacing: -0.01em;
+        }
+
+        .dday-target-pill {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--ink2);
+            background: var(--chip);
+            border: 1px solid var(--border);
+            padding: 4px 12px;
+            border-radius: 99px;
+        }
+
+        .dday-main-stats {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 18px;
+            margin-bottom: 20px;
+            align-items: flex-end;
+        }
+
+        @media (max-width: 640px) {
+            .dday-main-stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+
+        .dday-stat-label {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .dday-stat-val {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--ink);
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .dday-stat-sub {
+            font-size: 12.5px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .dday-progress-section {
+            background: var(--chip);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .dday-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .dday-progress-pct {
+            color: var(--toss-blue);
+            font-size: 16px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .toss-progress-bar {
+            height: 12px;
+            background: var(--grid);
+            border-radius: 99px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .toss-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3182f6 0%, #00b06f 100%);
+            border-radius: 99px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .toss-progress-shimmer {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .dday-cheer-msg {
+            font-size: 12.5px;
+            color: var(--ink2);
+            margin-top: 10px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-quick-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            font-size: 12.5px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--ink2);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .quick-btn:hover {
+            background: var(--chip);
+            color: var(--ink);
+            transform: translateY(-1px);
+        }
+
+        .quick-btn.primary {
+            background: var(--toss-blue);
+            color: #ffffff;
+            border-color: transparent;
+        }
+
+        .quick-btn.primary:hover {
+            background: var(--toss-blue-hover);
+        }
+
+        /* Couple Asset Portfolio Widget */
+        .couple-card {
+            border: 1px solid var(--border);
+        }
+
+        .couple-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .couple-total-tag {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--toss-blue);
+            background: var(--toss-blue-light);
+            padding: 4px 12px;
+            border-radius: 99px;
+        }
+
+        :root[data-theme="dark"] .couple-total-tag {
+            background: rgba(49, 130, 246, 0.2);
+        }
+
+        .couple-ratio-bar-wrap {
+            margin-bottom: 18px;
+        }
+
+        .couple-ratio-bar {
+            height: 14px;
+            border-radius: 99px;
+            background: var(--grid);
+            display: flex;
+            overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.08);
+        }
+
+        .c-seg {
+            height: 100%;
+            transition: width 0.6s ease;
+        }
+
+        .c-seg.c-wife {
+            background: linear-gradient(90deg, #ec4899 0%, #f43f5e 100%);
+        }
+
+        .c-seg.c-husband {
+            background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .c-seg.c-joint {
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+        }
+
+        .couple-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        @media (max-width: 640px) {
+            .couple-stat-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .couple-stat-box {
+            background: var(--chip);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            transition: transform 0.15s ease;
+        }
+
+        .couple-stat-box:hover {
+            transform: translateY(-2px);
+        }
+
+        .wife-box { border-top: 3px solid #ec4899; }
+        .husband-box { border-top: 3px solid #3b82f6; }
+        .joint-box { border-top: 3px solid #10b981; }
+
+        .c-box-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .c-avatar { font-size: 16px; }
+        .c-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+        .c-pct {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 99px;
+            background: var(--surface);
+            color: var(--ink2);
+        }
+
+        .c-val {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--ink);
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 4px;
+        }
+
+        .c-note {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .couple-cheer-banner {
+            font-size: 12.5px;
+            color: var(--ink2);
+            text-align: center;
+            padding: 10px;
+            background: var(--chip);
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+
+        /* Monthly Savings Tracker Widget */
+        .monthly-saving-card {
+            border: 1px solid var(--border);
+        }
+
+        .monthly-badge {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #00b06f;
+            background: var(--toss-green-light);
+            padding: 4px 12px;
+            border-radius: 99px;
+        }
+
+        :root[data-theme="dark"] .monthly-badge {
+            background: rgba(0, 176, 111, 0.2);
+        }
+
+        .monthly-stats-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+            margin: 14px 0 10px;
+            flex-wrap: wrap;
+        }
+
+        .m-stat .lbl {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .m-stat .val {
+            font-size: 24px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .m-divider {
+            font-size: 22px;
+            color: var(--muted);
+            padding-bottom: 2px;
+        }
+
+        .text-toss-blue { color: var(--toss-blue) !important; }
+
+        .m-stat-right {
+            margin-left: auto;
+            align-self: center;
+        }
+
+        .monthly-progress-track {
+            height: 10px;
+            background: var(--grid);
+            border-radius: 99px;
+            overflow: hidden;
+            margin: 12px 0 8px;
+        }
+
+        .monthly-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3182f6 0%, #00b06f 100%);
+            border-radius: 99px;
+            transition: width 0.6s ease;
+        }
+
+        .monthly-milestones {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .monthly-milestones .active {
+            color: var(--toss-green);
+            font-weight: 700;
+        }
+
+        /* Mobile Bottom Navigation Dock */
+        .mobile-bottom-dock {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-top: 1px solid var(--border);
+            padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+            z-index: 99;
+            justify-content: space-around;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        :root[data-theme="dark"] .mobile-bottom-dock {
+            background: rgba(26, 32, 44, 0.88);
+        }
+
+        .dock-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            padding: 6px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .dock-item .dock-icon {
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .dock-item .dock-label {
+            font-size: 10.5px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .dock-item.active {
+            color: var(--toss-blue);
+            background: var(--toss-blue-light);
+        }
+
+        :root[data-theme="dark"] .dock-item.active {
+            background: rgba(49, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-bottom-dock {
+                display: flex;
+            }
+            .tabs {
+                display: none; /* 모바일에서는 하단 독으로 완전 대체하여 극강의 앱 사용성 제공 */
+            }
+        }
+
     </style>
 </head>
 
@@ -583,8 +1110,13 @@
     <div class="wrap">
         <header>
             <div>
-                <h1>잔금 프로젝트 · 자산관리</h1>
-                <div class="sub" id="headline">2028년 5월 입주 잔금 목표</div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:26px;">🏛️</span>
+                    <div>
+                        <h1 style="font-size:21px;font-weight:800;letter-spacing:-0.02em;">윤지의돈창고</h1>
+                        <div class="sub" id="headline">신혼부부 잔금 프로젝트 · 자산관리</div>
+                    </div>
+                </div>
             </div>
             <div class="tools">
                 <span class="savestate" id="savestate">—</span>
@@ -611,6 +1143,131 @@
 
         <!-- ============ 대시보드 ============ -->
         <section id="tab-dash">
+            <!-- 1. Hero 잔금 D-day 카운트다운 카드 -->
+            <div class="card hero-dday-card">
+                <div class="dday-top-row">
+                    <div class="dday-badge" id="dashDdayBadge">⏳ 입주 잔금까지 계산 중…</div>
+                    <div class="dday-target-pill" id="dashTargetMonthPill">2028년 5월 목표</div>
+                </div>
+                <div class="dday-main-stats">
+                    <div class="dday-stat-left">
+                        <div class="dday-stat-label">현재 준비된 총자산</div>
+                        <div class="dday-stat-val" id="dashHeroTotal">—</div>
+                        <div class="dday-stat-sub" id="dashHeroWon">—원</div>
+                    </div>
+                    <div class="dday-stat-right">
+                        <div class="dday-stat-label">최종 필요 준비자금</div>
+                        <div class="dday-stat-val" style="color:var(--muted);font-size:24px;" id="dashHeroGoal">—</div>
+                        <div class="dday-stat-sub" id="dashHeroGap">취득세 포함 · 부족액 계산 중</div>
+                    </div>
+                </div>
+                <div class="dday-progress-section">
+                    <div class="dday-progress-header">
+                        <span class="dday-progress-title">목표 달성률</span>
+                        <span class="dday-progress-pct" id="dashHeroPct">0.0%</span>
+                    </div>
+                    <div class="toss-progress-bar">
+                        <div class="toss-progress-fill" id="dashHeroProgFill" style="width: 0%;">
+                            <div class="toss-progress-shimmer"></div>
+                        </div>
+                    </div>
+                    <div class="dday-cheer-msg" id="dashHeroCheer">
+                        ✨ 지금 페이스를 유지하면 목표 잔금을 안정적으로 마련할 수 있어요!
+                    </div>
+                </div>
+                <div class="hero-quick-actions">
+                    <button class="quick-btn primary" onclick="switchTab('flow')">💰 저축 기록하기</button>
+                    <button class="quick-btn" onclick="syncPrices()">⚡ 실시간 시세 갱신</button>
+                    <button class="quick-btn" onclick="switchTab('loan')">📐 대출 시뮬레이션</button>
+                    <button class="quick-btn" onclick="switchTab('assets')">💎 보유 종목 보기</button>
+                </div>
+            </div>
+
+            <!-- 2. 신혼부부 자산 포트폴리오 (아내 vs 남편 vs 공동) -->
+            <div class="card couple-card">
+                <div class="couple-card-header">
+                    <div>
+                        <h2 style="margin:0; font-size:16.5px; font-weight:700;">👫 신혼부부 자산 포트폴리오</h2>
+                        <div class="sub">아내와 남편의 자산 비중과 공동 자금을 실시간 분석합니다.</div>
+                    </div>
+                    <div class="couple-total-tag" id="coupleTotalBadge">부부 합산 —</div>
+                </div>
+                <div class="couple-ratio-bar-wrap">
+                    <div class="couple-ratio-bar">
+                        <div class="c-seg c-wife" id="barWife" style="width: 40%;" title="아내 자산"></div>
+                        <div class="c-seg c-husband" id="barHusband" style="width: 15%;" title="남편 자산"></div>
+                        <div class="c-seg c-joint" id="barJoint" style="width: 45%;" title="공동 자금"></div>
+                    </div>
+                </div>
+                <div class="couple-stat-grid">
+                    <div class="couple-stat-box wife-box">
+                        <div class="c-box-top">
+                            <span class="c-avatar">👩</span>
+                            <span class="c-name">아내 자산</span>
+                            <span class="c-pct" id="txtWifePct">—%</span>
+                        </div>
+                        <div class="c-val" id="txtWifeAmt">—</div>
+                        <div class="c-note" id="txtWifeCount">주식/ETF 보유</div>
+                    </div>
+                    <div class="couple-stat-box husband-box">
+                        <div class="c-box-top">
+                            <span class="c-avatar">🧑</span>
+                            <span class="c-name">남편 자산</span>
+                            <span class="c-pct" id="txtHusbandPct">—%</span>
+                        </div>
+                        <div class="c-val" id="txtHusbandAmt">—</div>
+                        <div class="c-note" id="txtHusbandCount">주식/ETF 보유</div>
+                    </div>
+                    <div class="couple-stat-box joint-box">
+                        <div class="c-box-top">
+                            <span class="c-avatar">🏦</span>
+                            <span class="c-name">공동 자금</span>
+                            <span class="c-pct" id="txtJointPct">—%</span>
+                        </div>
+                        <div class="c-val" id="txtJointAmt">—</div>
+                        <div class="c-note">예적금 · 채권 · 금 등</div>
+                    </div>
+                </div>
+                <div class="couple-cheer-banner" id="coupleCheerBanner">
+                    💑 두 사람이 함께 쌓아온 자산이 착실히 목표를 향해 나아가고 있습니다!
+                </div>
+            </div>
+
+            <!-- 3. 이번 달 저축 목표 달성 현황 -->
+            <div class="card monthly-saving-card">
+                <div class="sec-actions" style="margin-bottom: 8px;">
+                    <div>
+                        <h2 style="margin:0; font-size:16.5px; font-weight:700;" id="lblCurrentMonthSavings">📅 이번 달 저축 목표 달성 현황</h2>
+                        <div class="sub">월 목표 저축액을 향해 성실히 달려가고 있어요.</div>
+                    </div>
+                    <div class="monthly-badge" id="monthlySavingBadge">목표 달성 중</div>
+                </div>
+                <div class="monthly-stats-row">
+                    <div class="m-stat">
+                        <div class="lbl">이번 달 누적 저축</div>
+                        <div class="val text-toss-blue" id="txtCurrentMonthSaved">—</div>
+                    </div>
+                    <div class="m-divider">/</div>
+                    <div class="m-stat">
+                        <div class="lbl">월 저축 목표</div>
+                        <div class="val" style="color:var(--muted)" id="txtMonthlyGoal">—</div>
+                    </div>
+                    <div class="m-stat-right" id="txtMonthDiffNote">
+                        <span class="pill ok">—</span>
+                    </div>
+                </div>
+                <div class="monthly-progress-track">
+                    <div class="monthly-progress-fill" id="barMonthlyProgress" style="width: 0%;"></div>
+                </div>
+                <div class="monthly-milestones">
+                    <span>0%</span>
+                    <span>25%</span>
+                    <span>50%</span>
+                    <span>75%</span>
+                    <span class="active">100% 달성</span>
+                </div>
+            </div>
+
             <div class="kpis">
                 <div class="kpi hero">
                     <div class="lbl">현재 총자산</div>
@@ -2057,6 +2714,21 @@
                 el.value = el.type === "date" ? (v || "") : (v == null ? "" : v);
             });
         }
+        
+        function switchTab(tabId) {
+            document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x.dataset.tab === tabId));
+            document.querySelectorAll(".dock-item").forEach(x => {
+                x.classList.toggle("active", x.dataset.tab === tabId);
+            });
+            ["dash", "assets", "goal", "flow", "loan", "log"].forEach(k => {
+                const el = document.getElementById("tab-" + k);
+                if (el) el.hidden = (k !== tabId);
+            });
+            if (tabId === "dash") renderDash();
+            if (tabId === "loan") renderLoan();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         function render() { renderDash(); renderAssets(); renderGoal(); renderLoan(); renderFx(); renderSelects(); renderLog(); }
 
         // 자산 변동 기록 / 저축·유입·이동 기록 공통: 기본은 이번 달+전달만 표시하고, 그 이전은 달을 선택해야 보이도록 함
@@ -2200,6 +2872,109 @@
 
         function renderDash() {
             const c = calc();
+            const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
+
+            /* [위젯 1] Hero 잔금 D-day 카운트다운 카드 연산 */
+            try {
+                const [ty, tm] = (S.goal.targetMonth || "2028-05").split("-").map(Number);
+                const targetDate = new Date(ty, tm - 1, 1);
+                const now = new Date();
+                const diffDays = Math.ceil((targetDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                const dDayBadge = document.getElementById("dashDdayBadge");
+                if (dDayBadge) {
+                    dDayBadge.textContent = diffDays > 0 ? `⏳ 입주 잔금까지 D-${diffDays}일` : (diffDays === 0 ? "🎉 오늘이 입주 잔금일입니다!" : `입주 경과 D+${Math.abs(diffDays)}일`);
+                }
+                const targetPill = document.getElementById("dashTargetMonthPill");
+                if (targetPill) targetPill.textContent = (S.goal.targetMonth || "2028-05").replace("-", "년 ") + "월 목표";
+                set("dashHeroTotal", kfmt(c.total));
+                set("dashHeroWon", won(c.total) + "원");
+                set("dashHeroGoal", kfmt(c.goal));
+                set("dashHeroGap", "취득세 " + kfmt(acqTax()) + " 포함 · " + (c.gap > 0 ? "부족액 " + kfmt(c.gap) : "목표 달성 완료! 🎉"));
+                const heroPctVal = Math.min(100, c.goal > 0 ? c.total / c.goal * 100 : 0);
+                set("dashHeroPct", heroPctVal.toFixed(1) + "%");
+                const heroProg = document.getElementById("dashHeroProgFill");
+                if (heroProg) heroProg.style.width = heroPctVal + "%";
+                const heroCheer = document.getElementById("dashHeroCheer");
+                if (heroCheer) {
+                    if (c.gap <= 0) heroCheer.innerHTML = "🎉 축하합니다! 필요 잔금 목표를 100% 조기 달성하셨습니다!";
+                    else if (c.diff >= 0) heroCheer.innerHTML = `✨ 지금 추세라면 목표 달성 후 <b>${kfmt(c.diff)}원</b>의 여유 자금이 남아요! (잔여 ${c.n}개월)`;
+                    else heroCheer.innerHTML = `💪 매달 <b>${kfmt(c.need)}원</b>씩 저축하면 잔금 목표를 100% 달성할 수 있어요! (잔여 ${c.n}개월)`;
+                }
+            } catch (errDday) { console.error("Dday calc error:", errDday); }
+
+            /* [위젯 2] 신혼부부 자산 포트폴리오 (아내 vs 남편 vs 공동) */
+            try {
+                let wifeStock = 0, wifeCount = 0;
+                let husbandStock = 0, husbandCount = 0;
+                (S.holdings || []).forEach(h => {
+                    const val = (h.qty || 0) * (h.price || 0) * (h.isUsd ? fxRate : 1);
+                    if (h.owner === "아내") { wifeStock += val; wifeCount++; }
+                    else if (h.owner === "남편") { husbandStock += val; husbandCount++; }
+                });
+                let jointCash = 0, jointCount = 0;
+                (S.buckets || []).forEach(b => {
+                    if (b.kind !== "stock") { jointCash += (b.amount || 0); jointCount++; }
+                });
+                const coupleTotal = wifeStock + husbandStock + jointCash;
+                const wifePct = coupleTotal > 0 ? (wifeStock / coupleTotal * 100) : 0;
+                const husbandPct = coupleTotal > 0 ? (husbandStock / coupleTotal * 100) : 0;
+                const jointPct = Math.max(0, 100 - wifePct - husbandPct);
+
+                const barW = document.getElementById("barWife"); if (barW) barW.style.width = wifePct.toFixed(1) + "%";
+                const barH = document.getElementById("barHusband"); if (barH) barH.style.width = husbandPct.toFixed(1) + "%";
+                const barJ = document.getElementById("barJoint"); if (barJ) barJ.style.width = jointPct.toFixed(1) + "%";
+
+                set("coupleTotalBadge", "부부 합산 " + kfmt(coupleTotal) + "원");
+                set("txtWifeAmt", kfmt(wifeStock) + "원");
+                set("txtWifePct", wifePct.toFixed(1) + "%");
+                set("txtWifeCount", `주식/ETF ${wifeCount}종목`);
+                set("txtHusbandAmt", kfmt(husbandStock) + "원");
+                set("txtHusbandPct", husbandPct.toFixed(1) + "%");
+                set("txtHusbandCount", `주식/ETF ${husbandCount}종목`);
+                set("txtJointAmt", kfmt(jointCash) + "원");
+                set("txtJointPct", jointPct.toFixed(1) + "%");
+                const cheerBanner = document.getElementById("coupleCheerBanner");
+                if (cheerBanner) {
+                    cheerBanner.innerHTML = `💑 두 사람이 함께 쌓아온 자산이 벌써 <b>${kfmt(coupleTotal)}원</b>을 넘었습니다!`;
+                }
+            } catch (errCouple) { console.error("Couple calc error:", errCouple); }
+
+            /* [위젯 3] 이번 달 저축 목표 달성 현황 */
+            try {
+                const curYm = todayISO().substring(0, 7);
+                const [curY, curM] = curYm.split("-");
+                let curMonthSaving = 0;
+                (S.entries || []).forEach(e => {
+                    if (e.type === "saving" && (e.date || "").startsWith(curYm)) {
+                        curMonthSaving += (e.amount || 0);
+                    }
+                });
+                const monthlyGoal = S.goal.monthlySaving || 4000000;
+                const savingPct = monthlyGoal > 0 ? (curMonthSaving / monthlyGoal * 100) : 0;
+                const monthDiff = curMonthSaving - monthlyGoal;
+
+                set("lblCurrentMonthSavings", `📅 ${curY}년 ${Number(curM)}월 저축 현황`);
+                set("txtCurrentMonthSaved", kfmt(curMonthSaving) + "원");
+                set("txtMonthlyGoal", kfmt(monthlyGoal) + "원");
+                const mBadge = document.getElementById("monthlySavingBadge");
+                const diffNote = document.getElementById("txtMonthDiffNote");
+                if (savingPct >= 100) {
+                    if (mBadge) {
+                        mBadge.textContent = `🎉 목표 ${Math.round(savingPct)}% 달성!`;
+                        mBadge.style.color = "#00b06f";
+                    }
+                    if (diffNote) diffNote.innerHTML = `<span class="pill ok">+${kfmt(monthDiff)} 초과 달성</span>`;
+                } else {
+                    if (mBadge) {
+                        mBadge.textContent = `달성률 ${savingPct.toFixed(1)}%`;
+                        mBadge.style.color = "var(--toss-blue)";
+                    }
+                    if (diffNote) diffNote.innerHTML = `<span class="pill bad">${kfmt(-monthDiff)} 남음</span>`;
+                }
+                const mProg = document.getElementById("barMonthlyProgress");
+                if (mProg) mProg.style.width = Math.min(100, Math.max(0, savingPct)) + "%";
+            } catch (errMonth) { console.error("Monthly saving error:", errMonth); }
+
             document.getElementById("headline").textContent =
                 (S.goal.targetMonth || "").replace("-", "년 ") + "월 잔금 납부 · 남은 기간 " + c.n + "개월";
             set("k-total", kfmt(c.total)); set("k-total-note", won(c.total) + "원");
@@ -2220,7 +2995,7 @@
             set("prog-r", "목표 " + kfmt(gTot) + " (" + pct.toFixed(1) + "%)");
             renderHistory();
 
-            const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
+            // fxRate already defined at top of renderDash
             let yearlyDiv = 0;
             const groupedHoldings = {};
             S.holdings.forEach(h => {
@@ -2955,14 +3730,7 @@
 
         /* ---------- 이벤트 ---------- */
         document.querySelectorAll(".tab").forEach(t => {
-            t.addEventListener("click", () => {
-                document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === t));
-                ["dash", "assets", "goal", "flow", "loan", "log"].forEach(k => {
-                    document.getElementById("tab-" + k).hidden = (k !== t.dataset.tab);
-                });
-                if (t.dataset.tab === "dash") renderDash();
-                if (t.dataset.tab === "loan") renderLoan();
-            });
+            t.addEventListener("click", () => switchTab(t.dataset.tab));
         });
 
         document.getElementById("btnSave").addEventListener("click", () => save(true));
