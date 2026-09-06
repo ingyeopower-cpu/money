@@ -1,0 +1,3293 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>윤지의돈창고 · 자산관리</title>
+    <!-- iOS / Android 모바일 웹앱(PWA) 전용 설정 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="윤지의돈창고">
+    <meta name="application-name" content="윤지의돈창고">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230f172a%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231e293b%22%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%22gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23fbbf24%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23d97706%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22128%22%20fill%3D%22url(%23bg)%22%2F%3E%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22170%22%20fill%3D%22url(%23gold)%22%2F%3E%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22140%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%2214%22%20stroke-opacity%3D%220.6%22%2F%3E%3Cpath%20d%3D%22M256%20160v192M200%20210c0-26%2024-42%2056-42s56%2016%2056%2042-24%2038-56%2046-56%2020-56%2046%2024%2042%2056%2042%2056-16%2056-42%22%20fill%3D%22none%22%20stroke%3D%22%230f172a%22%20stroke-width%3D%2226%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230f172a%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231e293b%22%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%22gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23fbbf24%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23d97706%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22128%22%20fill%3D%22url(%23bg)%22%2F%3E%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22170%22%20fill%3D%22url(%23gold)%22%2F%3E%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22140%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%2214%22%20stroke-opacity%3D%220.6%22%2F%3E%3Cpath%20d%3D%22M256%20160v192M200%20210c0-26%2024-42%2056-42s56%2016%2056%2042-24%2038-56%2046-56%2020-56%2046%2024%2042%2056%2042%2056-16%2056-42%22%20fill%3D%22none%22%20stroke%3D%22%230f172a%22%20stroke-width%3D%2226%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+    <link rel="manifest" href="data:application/manifest+json;utf8,%7B%22name%22%3A%22%EC%9C%A4%EC%A7%80%EC%9D%98%EB%8F%88%EC%B0%BD%EA%B3%A0%20%EC%9E%90%EC%82%B0%EA%B4%80%EB%A6%AC%22%2C%22short_name%22%3A%22%EB%8F%88%EC%B0%BD%EA%B3%A0%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f172a%22%2C%22theme_color%22%3A%22%230f172a%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Butf8%2C%253Csvg%2520xmlns%253D%2522http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2522%2520viewBox%253D%25220%25200%2520512%2520512%2522%253E%253Cdefs%253E%253ClinearGradient%2520id%253D%2522bg%2522%2520x1%253D%25220%2522%2520y1%253D%25220%2522%2520x2%253D%25221%2522%2520y2%253D%25221%2522%253E%253Cstop%2520offset%253D%25220%2525%2522%2520stop-color%253D%2522%25230f172a%2522%252F%253E%253Cstop%2520offset%253D%2522100%2525%2522%2520stop-color%253D%2522%25231e293b%2522%252F%253E%253C%252FlinearGradient%253E%253ClinearGradient%2520id%253D%2522gold%2522%2520x1%253D%25220%2522%2520y1%253D%25220%2522%2520x2%253D%25221%2522%2520y2%253D%25221%2522%253E%253Cstop%2520offset%253D%25220%2525%2522%2520stop-color%253D%2522%2523fbbf24%2522%252F%253E%253Cstop%2520offset%253D%2522100%2525%2522%2520stop-color%253D%2522%2523d97706%2522%252F%253E%253C%252FlinearGradient%253E%253C%252Fdefs%253E%253Crect%2520width%253D%2522512%2522%2520height%253D%2522512%2522%2520rx%253D%2522128%2522%2520fill%253D%2522url(%2523bg)%2522%252F%253E%253Ccircle%2520cx%253D%2522256%2522%2520cy%253D%2522256%2522%2520r%253D%2522170%2522%2520fill%253D%2522url(%2523gold)%2522%252F%253E%253Ccircle%2520cx%253D%2522256%2522%2520cy%253D%2522256%2522%2520r%253D%2522140%2522%2520fill%253D%2522none%2522%2520stroke%253D%2522%2523fff%2522%2520stroke-width%253D%252214%2522%2520stroke-opacity%253D%25220.6%2522%252F%253E%253Cpath%2520d%253D%2522M256%2520160v192M200%2520210c0-26%252024-42%252056-42s56%252016%252056%252042-24%252038-56%252046-56%252020-56%252046%252024%252042%252056%252042%252056-16%252056-42%2522%2520fill%253D%2522none%2522%2520stroke%253D%2522%25230f172a%2522%2520stroke-width%253D%252226%2522%2520stroke-linecap%253D%2522round%2522%2520stroke-linejoin%253D%2522round%2522%252F%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22192x192%20512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+    <style>
+        :root {
+            color-scheme: light;
+            --plane: #f9f9f7;
+            --surface: #fcfcfb;
+            --ink: #0b0b0b;
+            --ink2: #52514e;
+            --muted: #898781;
+            --grid: #e1e0d9;
+            --axis: #c3c2b7;
+            --border: rgba(11, 11, 11, 0.10);
+            --s1: #2a78d6;
+            --s2: #eb6834;
+            --s3: #1baf7a;
+            --s4: #eda100;
+            --s5: #e87ba4;
+            --s6: #008300;
+            --s7: #4a3aa7;
+            --s8: #e34948;
+            --good: #0ca30c;
+            --warn: #fab219;
+            --crit: #d03b3b;
+            --goodtext: #006300;
+            --chip: #f0efec;
+        }
+
+        :root[data-theme="dark"] {
+            color-scheme: dark;
+            --plane: #0d0d0d;
+            --surface: #1a1a19;
+            --ink: #ffffff;
+            --ink2: #c3c2b7;
+            --muted: #898781;
+            --grid: #2c2c2a;
+            --axis: #383835;
+            --border: rgba(255, 255, 255, 0.10);
+            --s1: #3987e5;
+            --s2: #d95926;
+            --s3: #199e70;
+            --s4: #c98500;
+            --s5: #d55181;
+            --s6: #008300;
+            --s7: #9085e9;
+            --s8: #e66767;
+            --good: #0ca30c;
+            --warn: #fab219;
+            --crit: #d03b3b;
+            --goodtext: #0ca30c;
+            --chip: #232322;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--plane);
+            color: var(--ink);
+            font-family: system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased
+        }
+
+        .wrap {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: calc(16px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(80px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 0;
+            letter-spacing: -0.01em
+        }
+
+        h2 {
+            font-size: 15px;
+            margin: 0 0 12px;
+            letter-spacing: -0.01em
+        }
+
+        h3 {
+            font-size: 13px;
+            margin: 0 0 8px;
+            color: var(--ink2);
+            font-weight: 600
+        }
+
+        .sub {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 2px
+        }
+
+        header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 18px
+        }
+
+        .tools {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center
+        }
+
+        button {
+            font: inherit;
+            font-size: 13px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--ink);
+            padding: 7px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: .12s
+        }
+
+        button:hover {
+            background: var(--chip)
+        }
+
+        button.primary {
+            background: var(--s1);
+            border-color: transparent;
+            color: #fff
+        }
+
+        button.primary:hover {
+            filter: brightness(1.08)
+        }
+
+        button.ghost {
+            background: transparent
+        }
+
+        button.danger {
+            color: var(--crit)
+        }
+
+        button.sm {
+            padding: 4px 9px;
+            font-size: 12px;
+            border-radius: 6px;
+            white-space: nowrap
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 14px
+        }
+
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            background: var(--chip);
+            padding: 4px;
+            border-radius: 10px
+        }
+
+        .tab {
+            padding: 8px 14px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--ink2);
+            border: none;
+            background: transparent
+        }
+
+        .tab[aria-selected="true"] {
+            background: var(--surface);
+            color: var(--ink);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+            font-weight: 600
+        }
+
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+            gap: 10px;
+            margin-bottom: 14px
+        }
+
+        .kpi {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 15px
+        }
+
+        .kpi .lbl {
+            font-size: 11.5px;
+            color: var(--muted);
+            letter-spacing: .01em
+        }
+
+        .kpi .val {
+            font-size: 21px;
+            font-weight: 650;
+            margin-top: 5px;
+            letter-spacing: -0.02em
+        }
+
+        .kpi .note {
+            font-size: 11.5px;
+            color: var(--ink2);
+            margin-top: 3px
+        }
+
+        .kpi.hero .val {
+            font-size: 26px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px
+        }
+
+        th,
+        td {
+            text-align: right;
+            padding: 8px 8px;
+            border-bottom: 1px solid var(--grid)
+        }
+
+        th {
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 11.5px;
+            white-space: nowrap
+        }
+
+        th:first-child,
+        td:first-child {
+            text-align: left
+        }
+
+        td.num,
+        th.num {
+            font-variant-numeric: tabular-nums
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none
+        }
+
+        tfoot td {
+            border-top: 1px solid var(--axis);
+            border-bottom: none;
+            font-weight: 650;
+            padding-top: 10px
+        }
+
+        input,
+        select {
+            font: inherit;
+            font-size: 13px;
+            background: var(--surface);
+            color: var(--ink);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 6px 9px;
+            width: 100%
+        }
+
+        input:focus,
+        select:focus {
+            outline: 2px solid var(--s1);
+            outline-offset: -1px
+        }
+
+        input.num {
+            text-align: right;
+            font-variant-numeric: tabular-nums
+        }
+
+        input.num[readonly] {
+            background: var(--chip);
+            color: var(--muted)
+        }
+
+        .grid2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 12px
+        }
+
+        .field label {
+            display: block;
+            font-size: 11.5px;
+            color: var(--muted);
+            margin-bottom: 4px
+        }
+
+        .bar {
+            height: 9px;
+            border-radius: 99px;
+            background: var(--chip);
+            overflow: hidden;
+            margin: 10px 0 6px
+        }
+
+        .bar>i {
+            display: block;
+            height: 100%;
+            border-radius: 99px;
+            background: var(--s1)
+        }
+
+        .legend {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: var(--ink2);
+            margin-top: 10px
+        }
+
+        .legend span {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 2px;
+            flex: 0 0 auto
+        }
+
+        .pill {
+            display: inline-block;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 99px;
+            background: var(--chip);
+            color: var(--ink2)
+        }
+
+        .pill.ok {
+            background: rgba(12, 163, 12, .14);
+            color: var(--goodtext)
+        }
+
+        .pill.bad {
+            background: rgba(208, 59, 59, .14);
+            color: var(--crit)
+        }
+
+        .rowflex {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            flex-wrap: wrap
+        }
+
+        .rowflex .field {
+            flex: 1;
+            min-width: 120px
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .warnbar {
+            background: rgba(250, 178, 25, .16);
+            border: 1px solid rgba(250, 178, 25, .4);
+            color: var(--ink);
+            padding: 10px 13px;
+            border-radius: 10px;
+            font-size: 12.5px;
+            margin-bottom: 14px
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 26px;
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+            background: var(--ink);
+            color: var(--plane);
+            padding: 10px 18px;
+            border-radius: 99px;
+            font-size: 13px;
+            pointer-events: none;
+            transition: .2s;
+            z-index: 60;
+            max-width: 90vw;
+            text-align: center
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0)
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            padding: 16px
+        }
+
+        .modal.show {
+            display: flex
+        }
+
+        .modal .box {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 22px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 86vh;
+            overflow: auto
+        }
+
+        svg {
+            display: block;
+            overflow: visible
+        }
+
+        .chartwrap {
+            width: 100%;
+            overflow-x: auto
+        }
+
+        .hint {
+            font-size: 11.5px;
+            color: var(--muted);
+            margin-top: 8px;
+            line-height: 1.6
+        }
+
+        .tablewrap {
+            width: 100%;
+            overflow-x: auto
+        }
+
+        .gain {
+            color: var(--goodtext)
+        }
+
+        .loss {
+            color: var(--crit)
+        }
+
+        .donutRow {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .donutSvgWrap {
+            flex: 0 0 auto;
+            margin: 0 auto
+        }
+
+        .donutLegend {
+            flex: 1 1 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            min-width: 200px
+        }
+
+        .donutLegend .row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px
+        }
+
+        .donutLegend .row .nm {
+            flex: 1;
+            color: var(--ink2);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .donutLegend .row .amt {
+            color: var(--ink);
+            font-variant-numeric: tabular-nums;
+            font-weight: 600
+        }
+
+        .donutLegend .row .pct {
+            color: var(--muted);
+            font-variant-numeric: tabular-nums;
+            width: 42px;
+            text-align: right
+        }
+
+        .arcseg {
+            cursor: pointer;
+            transition: filter .12s
+        }
+
+        .arcseg:hover {
+            filter: brightness(1.1)
+        }
+
+        .savestate {
+            font-size: 11.5px;
+            color: var(--muted);
+            white-space: nowrap
+        }
+
+        .sec-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            flex-wrap: wrap
+        }
+
+        .tag {
+            font-size: 10.5px;
+            padding: 1px 6px;
+            border-radius: 5px;
+            background: var(--chip);
+            color: var(--muted);
+            margin-left: 6px
+        }
+
+        @media (max-width:640px) {
+            .kpi .val {
+                font-size: 19px
+            }
+
+            .wrap {
+                padding: 14px 10px 70px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <header>
+            <div>
+                <h1>잔금 프로젝트 · 자산관리</h1>
+                <div class="sub" id="headline">2028년 5월 입주 잔금 목표</div>
+            </div>
+            <div class="tools">
+                <span class="savestate" id="savestate">—</span>
+                <button class="primary" id="btnSave">저장</button>
+                <button id="btnExport">백업 파일 저장</button>
+                <button id="btnImport">백업 불러오기</button>
+                <button class="ghost" id="btnTheme" title="밝게/어둡게">◐</button>
+                <input type="file" id="fileInput" accept="application/json" style="display:none">
+            </div>
+        </header>
+
+        <div id="storageWarn" class="warnbar" style="display:none">
+            이 환경에서는 브라우저 자동 저장이 동작하지 않습니다. 작업을 마치면 반드시 <b>백업 파일 저장</b>을 눌러 JSON으로 보관해 주세요.
+        </div>
+
+        <div class="tabs" role="tablist">
+            <button class="tab" role="tab" data-tab="dash" aria-selected="true">대시보드</button>
+            <button class="tab" role="tab" data-tab="assets" aria-selected="false">자산</button>
+            <button class="tab" role="tab" data-tab="goal" aria-selected="false">목표 설정</button>
+            <button class="tab" role="tab" data-tab="flow" aria-selected="false">저축 · 자금이동</button>
+            <button class="tab" role="tab" data-tab="loan" aria-selected="false">대출 계산기</button>
+            <button class="tab" role="tab" data-tab="log" aria-selected="false">기록</button>
+        </div>
+
+        <!-- ============ 대시보드 ============ -->
+        <section id="tab-dash">
+            <div class="kpis">
+                <div class="kpi hero">
+                    <div class="lbl">현재 총자산</div>
+                    <div class="val" id="k-total">—</div>
+                    <div class="note" id="k-total-note"></div>
+                </div>
+                <div class="kpi">
+                    <div class="lbl">필요 준비자금</div>
+                    <div class="val" id="k-goal">—</div>
+                    <div class="note" id="k-goal-note"></div>
+                </div>
+                <div class="kpi">
+                    <div class="lbl">부족액</div>
+                    <div class="val" id="k-gap">—</div>
+                    <div class="note" id="k-gap-note"></div>
+                </div>
+                <div class="kpi">
+                    <div class="lbl">남은 기간</div>
+                    <div class="val" id="k-months">—</div>
+                    <div class="note" id="k-months-note"></div>
+                </div>
+                <div class="kpi">
+                    <div class="lbl">필요 월 저축액</div>
+                    <div class="val" id="k-need">—</div>
+                    <div class="note" id="k-need-note"></div>
+                </div>
+                <div class="kpi">
+                    <div class="lbl">계획 저축액 기준</div>
+                    <div class="val" id="k-plan">—</div>
+                    <div class="note" id="k-plan-note"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>목표 달성률</h2>
+                <div class="bar"><i id="progbar" style="width:0%"></i></div>
+                <div class="rowflex" style="justify-content:space-between">
+                    <span class="muted" id="prog-l">—</span>
+                    <span class="muted" id="prog-r">—</span>
+                </div>
+            </div>
+
+
+
+            <div class="card">
+                <div class="sec-actions">
+                    <div>
+                        <h2 style="margin:0">월별 자산 추이 전망</h2>
+                        <div class="sub">현재 자산에 매월 계획 저축액을 더한 단순 누적 (수익률 가정 없음)</div>
+                    </div>
+                </div>
+                <div class="chartwrap"><svg id="chartProj" height="260"></svg></div>
+                <div class="legend">
+                    <span><i class="dot" style="background:var(--s1)"></i>예상 누적 자산</span>
+                    <span><i class="dot"
+                            style="background:transparent;border-top:2px dashed var(--axis);height:0;width:16px;border-radius:0"></i>필요
+                        준비자금</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="sec-actions">
+                    <div>
+                        <h2 style="margin:0">자산 변동 기록 (시계열)</h2>
+                        <div class="sub">오늘부터 매일 종가 반영 시점의 자산 기록입니다. (단위: 원) · 기본은 이번 달과 전달만 표시, 그 이전은 아래에서 달을 선택하세요
+                        </div>
+                    </div>
+                    <div class="tools">
+                        <select id="hist-monthSel" onchange="renderHistory()"></select>
+                        <select id="historyPeriod" onchange="renderHistory()">
+                            <option value="day">일간</option>
+                            <option value="week">주간</option>
+                            <option value="month">월간</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="tablewrap">
+                    <table style="min-width:640px">
+                        <thead>
+                            <tr>
+                                <th>날짜</th>
+                                <th class="num">총 자산</th>
+                                <th class="num">총 변동액</th>
+                                <th class="num">순수익 (평가손익)</th>
+                                <th class="num">수익률</th>
+                                <th class="num">추가 입금</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="sec-actions">
+                    <div>
+                        <h2 style="margin:0">참고 지표 및 배당 예상</h2>
+                        <div class="sub" id="fxStamp">환율 등락과 종목별 예상 배당금 입금일자를 확인합니다.</div>
+                    </div>
+                    <button class="sm" id="btnFxSync">자동 조회</button>
+                </div>
+                <div class="grid2">
+                    <div class="field"><label>원달러 환율 (원)</label><input class="num" data-fx="usdKrw"></div>
+                    <div class="field"><label>달러인덱스 (DXY)</label><input class="num" data-fx="dxy"></div>
+                </div>
+                <div class="grid2" style="margin-top:8px">
+                    <div class="field"><label>환율 기준일</label><input type="date" data-fx="usdKrwDate"></div>
+                    <div class="field"><label>달러인덱스 기준일</label><input type="date" data-fx="dxyDate"></div>
+                </div>
+                <div class="hint">"자동 조회"는 원달러 환율은 무료 환율 API(open.er-api.com)에서, 달러인덱스는 야후 파이낸스에 실제 고시되는 지수(DX-Y.NYB)를
+                    그대로 가져옵니다. 이 조회가 안 될 때만 유로·엔·파운드·캐나다달러·스웨덴크로나·스위스프랑 환율로 근사 계산한 값을 대신 씁니다(이 경우 공식 값과 약간 오차가 있을 수
+                    있어요). 자동 조회 자체가 실패하면(브라우저 보안 등으로) 직접 입력하신 값이 그대로 유지됩니다.</div>
+
+                <hr style="border:none; border-top:1px solid var(--grid); margin:18px 0">
+                <div class="sec-actions">
+                    <div>
+                        <h3 style="margin:0; font-size:14.5px;">월 예상 배당금 (세전)</h3>
+                        <div class="sub">위 금액은 전체 종목 연 배당률 기준 월 평균 합계입니다. 아래 표는 종목별 실제 지급 주기(월배당/분기배당 등)에 맞춘 1회 지급 예상액과
+                            입금일자입니다.</div>
+                    </div>
+                    <div class="val" id="dashExpectedDiv"
+                        style="color:var(--s1); font-size:18px; font-weight:650; font-variant-numeric:tabular-nums;">0원
+                    </div>
+                </div>
+                <div class="tablewrap">
+                    <table style="min-width:400px; margin-top:8px;">
+                        <thead>
+                            <tr>
+                                <th>종목명</th>
+                                <th class="num">예상 1회 지급액</th>
+                                <th>예상 입금일자 (참고치)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dividendScheduleBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>자산 구성</h2>
+                <div class="donutRow">
+                    <div class="donutSvgWrap"><svg id="chartComp"></svg></div>
+                    <div class="donutLegend" id="compLegend"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>자산 항목별 요약</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>항목</th>
+                            <th class="num">금액</th>
+                            <th class="num">비중</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryBody"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td>합계</td>
+                            <td class="num" id="summaryTotal"></td>
+                            <td class="num">100%</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+
+        <!-- ============ 자산 ============ -->
+        <section id="tab-assets" hidden>
+            <div class="card">
+                <div class="sec-actions">
+                    <div>
+                        <h2 style="margin:0">보유 종목</h2>
+                        <div class="sub" id="priceStamp">—</div>
+                    </div>
+                    <div class="tools">
+                        <button class="primary" id="btnSync">전일 종가 반영</button>
+                        <button id="btnManualPrice">직접 입력</button>
+                    </div>
+                </div>
+                <div class="tablewrap">
+                    <table style="width:1244px;table-layout:fixed">
+                        <colgroup>
+                            <col style="width:150px">
+                            <col style="width:55px">
+                            <col style="width:100px">
+                            <col style="width:65px">
+                            <col style="width:130px">
+                            <col style="width:84px">
+                            <col style="width:140px">
+                            <col style="width:130px">
+                            <col style="width:45px">
+                            <col style="width:100px">
+                            <col style="width:135px">
+                            <col style="width:55px">
+                            <col style="width:55px">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>종목명</th>
+                                <th>코드(티커)</th>
+                                <th>계좌</th>
+                                <th>소유자</th>
+                                <th>소속 항목</th>
+                                <th class="num">수량</th>
+                                <th class="num">평단가</th>
+                                <th class="num">종가</th>
+                                <th class="num" title="예상 연 배당수익률">배당률(%)</th>
+                                <th class="num">평가액</th>
+                                <th class="num">평가손익</th>
+                                <th title="표시 순서">순서</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="holdBody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9">주식 평가액 · 평가손익 합계</td>
+                                <td class="num" id="holdTotal"></td>
+                                <td class="num" id="holdPL"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div style="margin-top:12px"><button class="sm" id="btnAddHold">+ 종목 추가</button></div>
+                <div class="hint" id="priceHint">국내 장(15:30) 마감 전에는 ‘전일 종가 반영’, 마감 후에는 ‘당일 종가 반영’으로 버튼 이름이 자동으로 바뀝니다. 하루
+                    한 번만 실행되고, 앱을 열 때도 오늘 아직 반영 안 됐으면 자동으로 한 번 시도합니다. 브라우저 보안(CORS) 때문에 자동 조회가 막히면 직접 입력 창이 자동으로
+                    열립니다.<br>평단가는 매수 시 평균 단가를 입력하면 평가손익이 자동 계산됩니다. 달러($) 체크 시 평단가와 종가를 달러로 입력하고, 평가액은 원달러 환율로 계산됩니다.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="sec-actions">
+                    <div>
+                        <h2 style="margin:0">자산 항목</h2>
+                        <div class="sub">이름·금액을 바로 고칠 수 있고, 항목을 추가·삭제할 수 있습니다</div>
+                    </div>
+                    <button class="sm" id="btnAddBucket">+ 항목 추가</button>
+                </div>
+                <div class="tablewrap">
+                    <table style="min-width:520px">
+                        <thead>
+                            <tr>
+                                <th>항목명</th>
+                                <th>유형</th>
+                                <th class="num">금액(원)</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="bucketBody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">총자산</td>
+                                <td class="num" id="bucketTotal"></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="hint">‘주식 계좌’ 유형의 금액은 위 보유 종목 평가액으로 자동 계산되어 직접 입력할 수 없습니다.</div>
+            </div>
+        </section>
+
+        <!-- ============ 목표 설정 ============ -->
+        <section id="tab-goal" hidden>
+            <div class="card">
+                <h2>분양 · 입주 비용 (소비 내역)</h2>
+                <div class="grid2">
+                    <div class="field"><label>총 분양가</label><input class="num" data-goal="totalPrice"></div>
+                    <div class="field"><label>계약금 (납부 완료)</label><input class="num" data-goal="contractPaid"></div>
+                    <div class="field"><label>중도금 (대출, 무이자)</label><input class="num" data-goal="midLoan"></div>
+                    <div class="field"><label>잔금</label><input class="num" data-goal="balance"></div>
+                </div>
+                <div class="hint" id="sumCheck"></div>
+            </div>
+
+            <div class="card">
+                <h2>준비해야 할 자금</h2>
+                <div class="grid2">
+                    <div class="field"><label>잔금 <span class="tag">위 값 연동</span></label><input class="num"
+                            id="g-balance" disabled></div>
+                    <div class="field"><label>취득세율 (%)</label><input class="num" data-goal="acqTaxRate"></div>
+                    <div class="field"><label>취득세 <span class="tag">분양가 × 세율</span></label><input class="num" id="g-tax"
+                            disabled></div>
+                    <div class="field"><label>발코니 확장 · 옵션 잔금</label><input class="num" data-goal="optionCost"></div>
+                    <div class="field"><label>이사 · 인테리어 · 가전가구</label><input class="num" data-goal="moveCost"></div>
+                    <div class="field"><label>기타 예비비</label><input class="num" data-goal="extraCost"></div>
+                </div>
+
+                <div class="sec-actions" style="margin-top:20px; margin-bottom:8px;">
+                    <div>
+                        <h3 style="margin:0">기타 입주/등기 비용 (선택)</h3>
+                    </div>
+                    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12.5px;">
+                        <input type="checkbox" data-goal="useExtraTaxes" style="width:auto;"> 적용하기
+                    </label>
+                </div>
+                <div class="grid2" id="extraTaxesWrap">
+                    <div class="field"><label>국민주택채권 매입(할인) 비용</label><input class="num" data-goal="bondDiscount"></div>
+                    <div class="field"><label>법무사 수수료 (등기)</label><input class="num" data-goal="legalFee"></div>
+                    <div class="field"><label>인지세 및 증지대</label><input class="num" data-goal="stampDuty"></div>
+                    <div class="field"><label>선수관리비</label><input class="num" data-goal="moveInDeposit"></div>
+                </div>
+
+                <div class="kpis" style="margin-top:16px">
+                    <div class="kpi hero">
+                        <div class="lbl">필요 준비자금 합계 <span class="tag">잔금+취득세+추가지출+기타비용</span></div>
+                        <div class="val" id="g-total">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>저축 계획</h2>
+                <div class="grid2">
+                    <div class="field"><label>잔금 납부 (입주) 시점</label><input type="month" data-goal="targetMonth"></div>
+                    <div class="field"><label>매달 저축 가능액 (원)</label><input class="num" data-goal="monthlySaving"></div>
+                </div>
+                <div class="hint" id="planHint"></div>
+            </div>
+
+            <div class="card">
+                <div class="sec-actions">
+                    <div>
+                        <h2 style="margin:0">동기화 (구글시트)</h2>
+                        <div class="sub">폰·PC에서 같은 데이터를 보려면 구글시트 웹앱 주소를 연결하세요. 비워두면 지금처럼 이 기기에만 저장됩니다.</div>
+                    </div>
+                    <span class="savestate" id="syncStatus">연결 안 됨</span>
+                </div>
+                <div class="grid2">
+                    <div class="field"><label>웹 앱 URL</label><input id="sync-url"
+                            placeholder="https://script.google.com/macros/s/.../exec"></div>
+                </div>
+                <div class="rowflex" style="margin-top:10px">
+                    <button class="primary" id="btnSyncNow">지금 동기화</button>
+                    <button id="btnSyncPull">이 기기로 최신값 불러오기</button>
+                    <button id="btnSyncPush">이 기기 값으로 덮어쓰기</button>
+                    <button class="ghost" id="btnSyncSave">연결 정보 저장</button>
+                </div>
+                <div class="hint">설정 방법은 함께 받으신 <b>잔금프로젝트_동기화_AppsScript.gs</b> 파일 상단 안내를 참고해 주세요. 이 버전은 비밀번호(토큰) 입력이 필요
+                    없는 대신, 이 웹 앱 URL을 아는 사람은 누구나 이 데이터를 읽고 쓸 수 있습니다. URL을 남에게 공유하거나 화면에 노출하지 마세요. 한 번에 한 기기에서만 수정하고, 수정
+                    후에는 다른 기기를 열기 전에 "지금 동기화"를 한 번 눌러주는 습관을 들이면 충돌 없이 쓸 수 있습니다.</div>
+            </div>
+        </section>
+
+        <!-- ============ 대출 계산기 ============ -->
+        <section id="tab-loan" hidden>
+            <div class="card">
+                <div class="sec-actions">
+                    <div>
+                        <h2 style="margin:0">필요 대출 금액 (잔금 대출)</h2>
+                        <div class="sub">잔금 납부 시 받아야 할 총 주택담보대출 금액입니다. (이미 납부한 계약금은 제외됨)</div>
+                    </div>
+                    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12.5px;">
+                        <input type="checkbox" data-loan="customAmount" style="width:auto;"> 직접 입력
+                    </label>
+                </div>
+                <div class="grid2">
+                    <div class="field"><label>준비해야 할 자금 (잔금+세금+비용)</label><input class="num" id="l-goalTotal" disabled>
+                    </div>
+                    <div class="field">
+                        <label style="display:flex; justify-content:space-between;">중도금 대출 (대환 예정)
+                            <span style="font-size:11.5px;font-weight:normal;"><input type="checkbox"
+                                    data-loan="includeMidLoan" style="width:auto;" checked> 대출에 포함</span>
+                        </label>
+                        <input class="num" id="l-midLoan" disabled>
+                    </div>
+                    <div class="field"><label>목표 대출 금액 <span class="tag" id="l-reqTag">준비 자금 + 중도금</span></label><input
+                            class="num" id="l-reqLoan" data-loan="manualAmount" disabled></div>
+                </div>
+                <div class="hint" style="margin-top:8px">※ 잔금 대출(주택담보대출)을 받으면 보통 그 돈으로 기존 중도금 대출을 먼저 상환(대환)하고, 남은 돈으로 잔금
+                    및 세금을 냅니다. 따라서 목표 대출 금액은 <b>(분양가 - 기납부 계약금) + 부대비용</b>과 동일합니다.</div>
+            </div>
+
+            <div class="card">
+                <h2>대출 조건</h2>
+                <div class="grid2">
+                    <div class="field"><label>연 금리 (%)</label><input class="num" data-loan="rate"></div>
+                    <div class="field"><label>대출 기간 (년)</label><select data-loan="term">
+                            <option value="30">30년</option>
+                            <option value="40">40년</option>
+                            <option value="50">50년</option>
+                        </select></div>
+                    <div class="field"><label>거치 기간 (년)</label><select data-loan="grace">
+                            <option value="0">없음 (0년)</option>
+                            <option value="1">1년</option>
+                            <option value="2">2년</option>
+                            <option value="3">3년</option>
+                        </select></div>
+                    <div class="field"><label>상환 방식</label><select data-loan="type">
+                            <option value="원리금균등">원리금 균등상환</option>
+                            <option value="원금균등">원금 균등상환</option>
+                            <option value="체증식">체증식 분할상환</option>
+                        </select></div>
+                </div>
+                <div class="kpis" style="margin-top:16px">
+                    <div class="kpi hero">
+                        <div class="lbl" id="l-pmt-lbl">1회차 월 상환액</div>
+                        <div class="val" id="l-pmt" style="color:var(--s1)">—</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="lbl">월 평균 상환액</div>
+                        <div class="val" id="l-avgPmt">—</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="lbl">총 이자액</div>
+                        <div class="val" id="l-totalInt">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="sec-actions">
+                    <div>
+                        <h2 style="margin:0">금리 변동에 따른 월 상환액 (1회차 기준)</h2>
+                        <div class="sub">현재 금리를 기준으로 위아래 1%p 변동 시의 상환액 추이를 보여줍니다.</div>
+                    </div>
+                </div>
+                <div class="chartwrap"><svg id="chartLoan" height="180"></svg></div>
+            </div>
+
+            <div class="card">
+                <h2>대출 규제 한도 (DSR & DTI & 방공제)</h2>
+                <div class="grid2">
+                    <div class="field"><label>아내 연봉 (세전)</label><input class="num" data-loan="salaryW"></div>
+                    <div class="field"><label>남편 연봉 (세전)</label><input class="num" data-loan="salaryH"></div>
+                    <div class="field"><label>기타 대출 연 원리금 상환액</label><input class="num" data-loan="otherDebt"></div>
+                </div>
+
+                <div class="sec-actions" style="margin-top:16px; margin-bottom:8px;">
+                    <div>
+                        <h3 style="margin:0">스트레스 DSR 3단계 (금리 가산)</h3>
+                    </div>
+                    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12.5px;">
+                        <input type="checkbox" data-loan="useStressDsr" style="width:auto;" checked> 적용 (+1.5%p)
+                    </label>
+                </div>
+
+                <div class="bar" style="margin-top:14px"><i id="dsrbar" style="width:0%"></i></div>
+                <div class="rowflex" style="justify-content:space-between; margin-bottom:6px;">
+                    <span class="muted" id="dsr-l">—</span>
+                    <span class="muted" id="dsr-r">—</span>
+                </div>
+                <div class="rowflex" style="justify-content:space-between; margin-bottom:14px; font-size:12px">
+                    <span class="muted" id="dti-l">—</span>
+                    <span class="muted" id="dti-r">DTI 한도: 60%</span>
+                </div>
+
+                <div class="grid2" style="margin-top:14px">
+                    <div class="field"><label>주택 예상 감정가 (기본: 분양가)</label><input class="num" data-loan="estValue"></div>
+                    <div class="field"><label>LTV 한도 (%) <span class="tag">생애최초 80%</span></label><input class="num"
+                            data-loan="ltv"></div>
+                    <div class="field">
+                        <label style="display:flex; justify-content:space-between;">방공제 (최우선변제금) 차감
+                            <span style="font-size:11.5px;font-weight:normal;"><input type="checkbox"
+                                    data-loan="useDeduction" style="width:auto;"> 적용</span>
+                        </label>
+                        <input class="num" data-loan="deduction">
+                    </div>
+                </div>
+                <div class="hint">스트레스 DSR 3단계 적용 시 DSR 산출용 금리에 1.5%p가 가산되어 한도가 더욱 깐깐하게 계산됩니다. (실제 납부하는 이자가 늘어나는 것은
+                    아닙니다)<br>생애최초 주택구입(디딤돌 등)의 경우 보통 LTV 80%, DTI 60%, DSR은 조건에 따라 유연하게 적용될 수 있습니다.</div>
+                <div class="kpis" style="margin-top:16px">
+                    <div class="kpi hero">
+                        <div class="lbl">규제상 최대 가능 금액 (LTV 기준)</div>
+                        <div class="val" id="l-maxLtv">—</div>
+                        <div class="note" id="l-maxLtv-note"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ 저축 · 자금이동 ============ -->
+        <section id="tab-flow" hidden>
+            <div class="card">
+                <h2>이번 달 저축 기록</h2>
+                <div class="rowflex">
+                    <div class="field" style="max-width:150px"><label>날짜</label><input type="date" id="sv-date"></div>
+                    <div class="field" id="sv-amtField" style="max-width:170px"><label id="sv-amtLabel">금액
+                            (원)</label><input class="num" id="sv-amt" placeholder="4,000,000"></div>
+                    <div class="field"><label>입금할 자산 항목</label><select id="sv-bucket"></select></div>
+                    <div class="field"><label>메모</label><input id="sv-memo" placeholder="선택"></div>
+                    <button class="primary" id="btnAddSaving">저축 기록</button>
+                </div>
+                <div class="rowflex" id="sv-stockWrap" style="display:none;margin-top:8px">
+                    <div class="field"><label>종목</label><select id="sv-stockSel"></select></div>
+                    <div class="field" id="sv-newNameWrap" style="display:none"><label>종목명</label><input id="sv-newName"
+                            placeholder="새 종목명"></div>
+                    <div class="field" id="sv-newCodeWrap" style="display:none;max-width:110px">
+                        <label>코드(선택)</label><input id="sv-newCode" placeholder="458730"></div>
+                    <div class="field" style="max-width:110px"><label>주수</label><input class="num" id="sv-qty"
+                            placeholder="10"></div>
+                    <div class="field" style="max-width:130px"><label>체결단가(원)</label><input class="num"
+                            id="sv-execPrice" placeholder="15,000"></div>
+                </div>
+                <div class="hint">기록하면 선택한 자산 항목의 금액이 즉시 늘어나고, 부족액과 필요 월 저축액이 다시 계산됩니다. 주식 계좌를 선택하면 금액 칸은 자동계산으로 바뀌고,
+                    종목·주수·체결단가만 입력하면 됩니다 (주수 × 체결단가가 금액에 자동으로 채워지고, 보유 종목의 평단가에도 가중평균으로 반영됩니다. 소유자·계좌 구분은 자산 탭에서 나중에 지정해
+                    주세요).</div>
+            </div>
+
+            <div class="card">
+                <h2>목돈 유입 <span class="tag">외부에서 새로 들어온 돈</span></h2>
+                <div class="rowflex">
+                    <div class="field" style="max-width:150px"><label>날짜</label><input type="date" id="in-date"></div>
+                    <div class="field" style="max-width:170px"><label>금액 (원)</label><input class="num" id="in-amt"
+                            placeholder="10,000,000"></div>
+                    <div class="field"><label>들어올 자산 항목</label><select id="in-bucket"></select></div>
+                    <div class="field"><label>메모</label><input id="in-memo" placeholder="상여금, 부모님 지원 등"></div>
+                    <button class="primary" id="btnAddInflow">유입 기록</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>배당금 입금 <span class="tag">주식 배당 등 투자 수익</span></h2>
+                <div class="rowflex">
+                    <div class="field" style="max-width:150px"><label>날짜</label><input type="date" id="dv-date"></div>
+                    <div class="field" style="max-width:170px"><label>금액 (원)</label><input class="num" id="dv-amt"
+                            placeholder="50,000"></div>
+                    <div class="field"><label>입금된 자산 항목</label><select id="dv-bucket"></select></div>
+                    <div class="field"><label>종목 / 메모</label><input id="dv-memo" placeholder="타미당 등"></div>
+                    <button class="primary" id="btnAddDividend">배당 기록</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>자금 이동 <span class="tag">적금 만기 등</span></h2>
+                <div class="rowflex">
+                    <div class="field" style="max-width:150px"><label>날짜</label><input type="date" id="tf-date"></div>
+                    <div class="field"><label>보낼 항목</label><select id="tf-from"></select></div>
+                    <div class="field"><label>받을 항목</label><select id="tf-to"></select></div>
+                    <div class="field" style="max-width:170px"><label>금액 (원)</label><input class="num" id="tf-amt">
+                    </div>
+                    <div class="field"><label>메모</label><input id="tf-memo" placeholder="적금 만기 등"></div>
+                    <button class="primary" id="btnAddTransfer">이동</button>
+                </div>
+                <div class="hint">적금이 만기되면 여기서 <b>적금 → 예금(또는 원하는 항목)</b>으로 직접 옮겨 주세요. 총자산은 변하지 않고 구성만 바뀝니다.<br>
+                    이자가 붙어 원금보다 늘었다면, 늘어난 이자만 위의 <b>목돈 유입</b>으로 따로 기록하시면 됩니다.</div>
+            </div>
+        </section>
+
+        <!-- ============ 기록 ============ -->
+        <section id="tab-log" hidden>
+            <div class="card">
+                <div class="sec-actions">
+                    <h2 style="margin:0">저축 · 유입 · 이동 기록</h2>
+                    <div class="tools"><select id="log-monthSel" onchange="renderLog()"></select></div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>날짜</th>
+                            <th>구분</th>
+                            <th>내용</th>
+                            <th class="num">금액</th>
+                            <th>메모</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="logBody"></tbody>
+                </table>
+                <div class="hint">기본은 이번 달과 전달 기록만 표시됩니다. 그 이전 기록을 보려면 위 드롭다운에서 달을 선택하세요 (더 오래된 기록도 지워지지 않고 데이터에 그대로
+                    남아있습니다). 기록을 삭제하면 자산 금액도 함께 되돌립니다.</div>
+            </div>
+            <div class="card">
+                <div class="sec-actions">
+                    <h2 style="margin:0">월별 저축 및 배당 실적</h2>
+                    <div class="tools"><select id="perf-monthSel" onchange="renderLog()"></select></div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>월</th>
+                            <th class="num">저축</th>
+                            <th class="num">목돈 유입</th>
+                            <th class="num">배당금</th>
+                            <th class="num">합계</th>
+                            <th class="num">계획 대비</th>
+                            <th style="text-align:center">달성 여부</th>
+                        </tr>
+                    </thead>
+                    <tbody id="monthBody"></tbody>
+                </table>
+                <div class="hint">기본은 이번 달과 전달 실적만 표시됩니다. 그 이전 달을 보려면 위 드롭다운에서 달을 선택하세요 (더 오래된 데이터도 지워지지 않고 그대로 남아있습니다).
+                </div>
+            </div>
+            <div class="card">
+                <h2>종가 반영 이력</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>일자</th>
+                            <th>방식</th>
+                            <th>내용</th>
+                        </tr>
+                    </thead>
+                    <tbody id="syncBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- 수동 시세 입력 모달 -->
+    <div class="modal" id="priceModal">
+        <div class="box">
+            <h2 style="font-size:17px">종가 직접 입력</h2>
+            <div class="sub" id="priceModalSub" style="margin-bottom:14px"></div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>종목</th>
+                        <th class="num">종가 (원)</th>
+                    </tr>
+                </thead>
+                <tbody id="priceModalBody"></tbody>
+            </table>
+            <div class="rowflex" style="margin-top:16px;justify-content:flex-end">
+                <button id="pmCancel">취소</button>
+                <button class="primary" id="pmSave">반영</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        "use strict";
+        const KEY = "janggeum-asset-v1";
+        const uid = () => Math.random().toString(36).slice(2, 9);
+
+        /* ---------- 기본 데이터 (백업된 실제 자산 데이터) ---------- */
+        function defaults() {
+            return {
+          "v": 1,
+          "goal": {
+                    "totalPrice": 692000000,
+                    "contractPaid": 69200000,
+                    "midLoan": 415200000,
+                    "balance": 207600000,
+                    "acqTaxRate": 1.5,
+                    "optionCost": 31860000,
+                    "moveCost": 30000000,
+                    "extraCost": 0,
+                    "targetMonth": "2028-05",
+                    "monthlySaving": 4000000,
+                    "useExtraTaxes": true,
+                    "bondDiscount": 1500000,
+                    "legalFee": 300000,
+                    "stampDuty": 150000,
+                    "moveInDeposit": 400000
+          },
+          "buckets": [
+                    {
+                              "id": "b_stock",
+                              "name": "국내 주식/ETF 계좌",
+                              "kind": "stock",
+                              "amount": 0
+                    },
+                    {
+                              "id": "n4jvk0j",
+                              "name": "미국 단기국채",
+                              "kind": "cash",
+                              "amount": 9830000
+                    },
+                    {
+                              "id": "jbd38kh",
+                              "name": "국내채권",
+                              "kind": "cash",
+                              "amount": 30000000
+                    },
+                    {
+                              "id": "ua5i675",
+                              "name": "금 현물 계좌",
+                              "kind": "cash",
+                              "amount": 3200000
+                    },
+                    {
+                              "id": "7nqqnys",
+                              "name": "예금",
+                              "kind": "cash",
+                              "amount": 39000000
+                    },
+                    {
+                              "id": "jsnhcyj",
+                              "name": "적금",
+                              "kind": "cash",
+                              "amount": 12000000
+                    },
+                    {
+                              "id": "bwwbaj8",
+                              "name": "현금",
+                              "kind": "cash",
+                              "amount": 3000001
+                    },
+                    {
+                              "id": "b_stock_overseas",
+                              "name": "해외주식",
+                              "kind": "stock",
+                              "amount": 0
+                    }
+          ],
+          "holdings": [
+                    {
+                              "id": "iu1r0px",
+                              "bucketId": "b_stock",
+                              "name": "TIGER 미국배당다우존스",
+                              "code": "458730",
+                              "account": "일반계좌",
+                              "qty": 1169,
+                              "avgPrice": 15320,
+                              "price": 14965,
+                              "priceDate": "2026-09-05",
+                              "owner": "아내",
+                              "isUsd": false,
+                              "divYield": 3.5,
+                              "order": 6
+                    },
+                    {
+                              "id": "v6zjfbn",
+                              "bucketId": "b_stock",
+                              "name": "TIGER 미국배당다우존스",
+                              "code": "458730",
+                              "account": "ISA",
+                              "qty": 3183,
+                              "avgPrice": 15669,
+                              "price": 14965,
+                              "priceDate": "2026-09-05",
+                              "owner": "아내",
+                              "isUsd": false,
+                              "divYield": 3.5,
+                              "order": 7
+                    },
+                    {
+                              "id": "lrg3hfq",
+                              "bucketId": "b_stock",
+                              "name": "KODEX 미국S&P500",
+                              "code": "379800",
+                              "account": "일반계좌",
+                              "qty": 519,
+                              "avgPrice": 24532,
+                              "price": 23620,
+                              "priceDate": "2026-09-05",
+                              "owner": "아내",
+                              "isUsd": false,
+                              "divYield": 1,
+                              "order": 1
+                    },
+                    {
+                              "id": "5kus7q2",
+                              "bucketId": "b_stock",
+                              "name": "KODEX 미국S&P500",
+                              "code": "379800",
+                              "account": "ISA",
+                              "qty": 165,
+                              "avgPrice": 22941,
+                              "price": 23620,
+                              "priceDate": "2026-09-05",
+                              "owner": "아내",
+                              "isUsd": false,
+                              "divYield": 1,
+                              "order": 2
+                    },
+                    {
+                              "id": "qoio6jh",
+                              "bucketId": "b_stock",
+                              "name": "KODEX 미국나스닥100",
+                              "code": "379810",
+                              "account": "일반계좌",
+                              "qty": 210,
+                              "avgPrice": 28374,
+                              "price": 26470,
+                              "priceDate": "2026-09-05",
+                              "owner": "아내",
+                              "isUsd": false,
+                              "divYield": 1,
+                              "order": 4
+                    },
+                    {
+                              "id": "hxo1bom",
+                              "bucketId": "b_stock",
+                              "name": "KODEX 미국나스닥100",
+                              "code": "379810",
+                              "account": "ISA",
+                              "qty": 124,
+                              "avgPrice": 25356,
+                              "price": 26470,
+                              "priceDate": "2026-09-05",
+                              "owner": "아내",
+                              "isUsd": false,
+                              "divYield": 1,
+                              "order": 5
+                    },
+                    {
+                              "id": "xbg0ndu",
+                              "bucketId": "b_stock",
+                              "name": "KODEX 한국부동산리츠인프라",
+                              "code": "476800",
+                              "account": "ISA",
+                              "qty": 350,
+                              "avgPrice": 4553,
+                              "price": 4225,
+                              "priceDate": "2026-09-05",
+                              "owner": "아내",
+                              "isUsd": false,
+                              "divYield": 5,
+                              "order": 10
+                    },
+                    {
+                              "id": "u3iziav",
+                              "bucketId": "b_stock",
+                              "name": "ACE 미국하이일드액티브(H)",
+                              "code": "455660",
+                              "account": "ISA",
+                              "qty": 100,
+                              "avgPrice": 9551,
+                              "price": 9425,
+                              "priceDate": "2026-09-05",
+                              "owner": "아내",
+                              "isUsd": false,
+                              "divYield": 7,
+                              "order": 9
+                    },
+                    {
+                              "id": "qa2cvkm",
+                              "bucketId": "b_stock",
+                              "name": "TIGER 미국배당다우존스",
+                              "code": "458730",
+                              "account": "ISA",
+                              "qty": 710,
+                              "avgPrice": 14863,
+                              "price": 14965,
+                              "priceDate": "2026-09-05",
+                              "owner": "남편",
+                              "isUsd": false,
+                              "divYield": 3.5,
+                              "order": 8
+                    },
+                    {
+                              "id": "4cm69ju",
+                              "bucketId": "b_stock",
+                              "name": "KODEX 미국S&P500",
+                              "code": "379800",
+                              "account": "ISA",
+                              "qty": 383,
+                              "avgPrice": 24780,
+                              "price": 23620,
+                              "priceDate": "2026-09-05",
+                              "owner": "남편",
+                              "isUsd": false,
+                              "divYield": 1,
+                              "order": 3
+                    },
+                    {
+                              "id": "d1yox3h",
+                              "bucketId": "b_stock_overseas",
+                              "name": "SOXL 미국반도체 3배 디렉시온 ETF",
+                              "code": "SOXL",
+                              "account": "일반계좌",
+                              "owner": "남편",
+                              "qty": 20,
+                              "avgPrice": 186.3,
+                              "price": 117.28,
+                              "priceDate": "2026-09-05",
+                              "isUsd": true,
+                              "divYield": 0,
+                              "order": 11
+                    }
+          ],
+          "entries": [
+                    {
+                              "id": "e0llhi5",
+                              "type": "saving",
+                              "date": "2026-08-19",
+                              "amount": 1000000,
+                              "bucketId": "jsnhcyj",
+                              "memo": ""
+                    },
+                    {
+                              "id": "bbiscf8",
+                              "type": "saving",
+                              "date": "2026-08-23",
+                              "amount": 1,
+                              "bucketId": "bwwbaj8",
+                              "memo": ""
+                    },
+                    {
+                              "id": "oywfd4l",
+                              "type": "saving",
+                              "date": "2026-09-03",
+                              "amount": 1507000,
+                              "bucketId": "b_stock",
+                              "memo": "",
+                              "holdingId": "iu1r0px",
+                              "stockQty": 100,
+                              "execPrice": 15070
+                    },
+                    {
+                              "id": "mb66gcw",
+                              "type": "saving",
+                              "date": "2026-09-03",
+                              "amount": 2259000,
+                              "bucketId": "b_stock",
+                              "memo": "",
+                              "holdingId": "iu1r0px",
+                              "stockQty": 150,
+                              "execPrice": 15060
+                    },
+                    {
+                              "id": "r3vngoo",
+                              "type": "saving",
+                              "date": "2026-09-03",
+                              "amount": 4262550,
+                              "bucketId": "b_stock",
+                              "memo": "",
+                              "holdingId": "lrg3hfq",
+                              "stockQty": 181,
+                              "execPrice": 23550
+                    },
+                    {
+                              "id": "gj53ut0",
+                              "type": "saving",
+                              "date": "2026-09-03",
+                              "amount": 492870,
+                              "bucketId": "b_stock",
+                              "memo": "",
+                              "holdingId": "lrg3hfq",
+                              "stockQty": 21,
+                              "execPrice": 23470
+                    },
+                    {
+                              "id": "v7oha9u",
+                              "type": "saving",
+                              "date": "2026-09-03",
+                              "amount": 3004000,
+                              "bucketId": "b_stock",
+                              "memo": "",
+                              "holdingId": "iu1r0px",
+                              "stockQty": 200,
+                              "execPrice": 15020
+                    }
+          ],
+          "syncLog": [
+                    {
+                              "date": "2026-08-18",
+                              "mode": "서버 자동",
+                              "detail": "5종목 중 5종목 반영"
+                    },
+                    {
+                              "date": "2026-08-19",
+                              "mode": "서버 자동",
+                              "detail": "5종목 중 5종목 반영"
+                    },
+                    {
+                              "date": "2026-08-19",
+                              "mode": "서버 자동",
+                              "detail": "5종목 중 5종목 반영"
+                    },
+                    {
+                              "date": "2026-08-20",
+                              "mode": "서버 자동",
+                              "detail": "5종목 중 5종목 반영"
+                    },
+                    {
+                              "date": "2026-08-20",
+                              "mode": "서버 자동",
+                              "detail": "5종목 중 5종목 반영"
+                    },
+                    {
+                              "date": "2026-08-20",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 5종목 반영"
+                    },
+                    {
+                              "date": "2026-08-20",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 5종목 반영"
+                    },
+                    {
+                              "date": "2026-08-20",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                              "date": "2026-08-23",
+                              "mode": "자동(앱 실행 시)",
+                              "detail": "6종목 중 2종목 반영"
+                    },
+                    {
+                              "date": "2026-08-26",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                              "date": "2026-08-30",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                              "date": "2026-09-02",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                              "date": "2026-09-03",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                              "date": "2026-09-03",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                              "date": "2026-09-03",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                              "date": "2026-09-03",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                              "date": "2026-09-04",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                              "date": "2026-09-04",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                              "date": "2026-09-04",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                              "date": "2026-09-05",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                              "date": "2026-09-05",
+                              "mode": "서버 자동",
+                              "detail": "6종목 중 6종목 반영"
+                    }
+          ],
+          "lastSync": "2026-09-05",
+          "fx": {
+                    "usdKrw": 1348.99,
+                    "usdKrwDate": "2026-09-05",
+                    "dxy": 99.157,
+                    "dxyDate": "2026-09-05",
+                    "dxyIsExact": true
+          },
+          "theme": "light",
+          "updatedAt": "2026-09-05T10:18:58.876Z",
+          "history": [
+                    {
+                              "date": "2026-08-20",
+                              "total": 204179052.6
+                    },
+                    {
+                              "date": "2026-08-23",
+                              "total": 204150449.12
+                    },
+                    {
+                              "date": "2026-08-26",
+                              "total": 203380805.808
+                    },
+                    {
+                              "date": "2026-08-30",
+                              "total": 203380805.808
+                    },
+                    {
+                              "date": "2026-09-02",
+                              "total": 201981978.72
+                    },
+                    {
+                              "date": "2026-09-03",
+                              "total": 212292340.78
+                    },
+                    {
+                              "date": "2026-09-04",
+                              "total": 212528213.204
+                    },
+                    {
+                              "date": "2026-09-05",
+                              "total": 212411791.944
+                    }
+          ],
+          "loan": {
+                    "customAmount": false,
+                    "manualAmount": 0,
+                    "includeMidLoan": true,
+                    "useStressDsr": true,
+                    "rate": 4,
+                    "term": 30,
+                    "grace": 0,
+                    "type": "체증식",
+                    "salaryH": 100000000,
+                    "salaryW": 40000000,
+                    "otherDebt": 0,
+                    "ltv": 80,
+                    "estValue": 692000000,
+                    "deduction": 28000000,
+                    "useDeduction": true
+          },
+          "tax": {
+                    "rate": 4,
+                    "term": 30,
+                    "type": "원리금균등"
+          }
+};
+        }
+
+        /* ---------- 저장 ---------- */
+        let storageOK = true;
+        try { localStorage.setItem("__t", "1"); localStorage.removeItem("__t"); } catch (e) { storageOK = false; }
+        let S = migrate(defaults());
+        function load() {
+            if (!storageOK) return;
+            try {
+                const raw = localStorage.getItem(KEY);
+                if (raw) { const d = JSON.parse(raw); if (d && d.goal && d.buckets) S = migrate(d); }
+            } catch (e) { console.warn("불러오기 실패", e); }
+        }
+        function migrate(d) {
+            const base = defaults();
+            d.goal = Object.assign({}, base.goal, d.goal || {});
+            d.goal.useExtraTaxes = d.goal.useExtraTaxes !== false;
+            if (d.goal.bondDiscount === undefined) d.goal.bondDiscount = 1500000;
+            if (d.goal.legalFee === undefined) d.goal.legalFee = 300000;
+            if (d.goal.stampDuty === undefined) d.goal.stampDuty = 150000;
+            if (d.goal.moveInDeposit === undefined) d.goal.moveInDeposit = 400000;
+            d.loan = Object.assign({}, base.loan, d.loan || {});
+            if (d.loan.includeMidLoan === undefined) d.loan.includeMidLoan = true;
+            if (d.loan.useStressDsr === undefined) d.loan.useStressDsr = true;
+            if (d.loan.salaryH === 50000000) d.loan.salaryH = 100000000;
+            if (d.loan.ltv === 70) d.loan.ltv = 80;
+            d.buckets = Array.isArray(d.buckets) && d.buckets.length ? d.buckets : base.buckets;
+            d.holdings = Array.isArray(d.holdings) ? d.holdings : base.holdings;
+            d.holdings.forEach(h => {
+                if (typeof h.avgPrice !== "number") h.avgPrice = 0;
+                if (typeof h.account !== "string") h.account = "";
+                if (typeof h.isUsd !== "boolean") h.isUsd = false;
+                if (h.account === "일반주식계좌") h.account = "남편 일반계좌";
+                if (h.account === "ISA") h.account = "남편 ISA";
+                if (typeof h.owner !== "string" || !h.owner) {
+                    h.owner = (h.account || "").indexOf("남편") >= 0 ? "남편" : (h.account || "").indexOf("아내") >= 0 ? "아내" : "";
+                }
+                // 계좌 필드에는 더 이상 소유자를 표기하지 않음 (소유자는 owner 필드로만 구분) — 남아있는 접두어 제거
+                h.account = (h.account || "").replace(/^(남편|아내)\s*/, "");
+                if (typeof h.divYield !== "number") {
+                    if ((h.name || "").indexOf("다우존스") >= 0 || (h.name || "").indexOf("타미당") >= 0) h.divYield = 3.5;
+                    else if ((h.name || "").indexOf("S&P") >= 0 || (h.name || "").indexOf("나스닥") >= 0) h.divYield = 1.0;
+                    else if ((h.name || "").indexOf("리츠") >= 0 || (h.name || "").indexOf("인프라") >= 0) h.divYield = 5.0;
+                    else if ((h.name || "").indexOf("하이일드") >= 0) h.divYield = 7.0;
+                    else h.divYield = 0;
+                }
+            });
+            // 표시순서(order) 기본값 지정 — order가 없는 종목만, 일반계좌 먼저·ISA 다음, 종목명 우선순위(S&P500→나스닥→배당다우존스→하이일드→부동산 순)로 부여. 이후에는 사용자가 ▲▼로 직접 조정한 순서를 그대로 유지함
+            const NAME_PRIORITY = ["S&P500", "나스닥", "배당다우존스", "하이일드", "부동산"];
+            const nameRank_ = nm => { const i = NAME_PRIORITY.findIndex(k => (nm || "").indexOf(k) >= 0); return i >= 0 ? i : NAME_PRIORITY.length; };
+            const acctRank_ = a => a === "일반계좌" ? 0 : a === "ISA" ? 1 : 2;
+            const needOrder = d.holdings.filter(h => typeof h.order !== "number");
+            if (needOrder.length) {
+                let maxOrder = d.holdings.reduce((m, h) => typeof h.order === "number" ? Math.max(m, h.order) : m, 0);
+                needOrder.sort((a, b) => nameRank_(a.name) - nameRank_(b.name) || acctRank_(a.account) - acctRank_(b.account) || (a.name || "").localeCompare(b.name || ""));
+                needOrder.forEach(h => { maxOrder += 1; h.order = maxOrder; });
+            }
+            d.entries = Array.isArray(d.entries) ? d.entries : [];
+            d.history = Array.isArray(d.history) ? d.history : [];
+            d.syncLog = Array.isArray(d.syncLog) ? d.syncLog : [];
+            d.fx = Object.assign({}, base.fx, d.fx || {});
+            if (typeof d.updatedAt !== "string") d.updatedAt = null;
+            return d;
+        }
+        function updateHistory() {
+            if (!S.history) S.history = [];
+            const d = todayISO();
+            const t = totalAssets();
+            const last = S.history[S.history.length - 1];
+            if (last && last.date === d) last.total = t;
+            else S.history.push({ date: d, total: t });
+        }
+        let saveTimer = null, dirty = false, syncPushTimer = null;
+        function save(explicit) {
+            if (!storageOK) { dirty = true; stamp(); if (explicit) toast("이 환경에서는 자동 저장이 안 됩니다. ‘백업 파일 저장’을 이용해 주세요."); return; }
+            try {
+                updateHistory();
+                localStorage.setItem(KEY, JSON.stringify(S));
+                dirty = false; stamp(new Date());
+                if (explicit) toast("저장했습니다");
+            } catch (e) {
+                dirty = true; stamp();
+                toast("저장에 실패했습니다. ‘백업 파일 저장’으로 보관해 주세요.");
+            }
+        }
+        function autosave() {
+            dirty = true; stamp();
+            S.updatedAt = new Date().toISOString();
+            clearTimeout(saveTimer); saveTimer = setTimeout(() => save(false), 400);
+            clearTimeout(syncPushTimer); syncPushTimer = setTimeout(() => { if (sync.url) doSync(); }, 2500);
+        }
+        function stamp(t) {
+            const el = document.getElementById("savestate");
+            if (!storageOK) { el.textContent = "자동저장 불가"; el.style.color = "var(--crit)"; return; }
+            if (dirty) { el.textContent = "저장 중…"; el.style.color = "var(--muted)"; }
+            else { const d = t || new Date(); el.textContent = "저장됨 " + String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); el.style.color = "var(--goodtext)"; }
+        }
+
+        /* ---------- 동기화 (구글시트 Apps Script) ---------- */
+        const SYNC_KEY = "janggeum-sync-cfg";
+
+        // 구글 앱스 스크립트 템플릿에 의해 자동 주입되는 현재 배포 URL (새 계정/새 배포 시 자동으로 인식)
+        let injectedServiceUrl = "<?= currentDeploymentUrl ?>";
+        if (!injectedServiceUrl || injectedServiceUrl.indexOf("http") !== 0) {
+            injectedServiceUrl = (window.location.hostname === "script.google.com") ? window.location.href.split('?')[0] : "";
+        }
+        const DEFAULT_SYNC_URL = injectedServiceUrl || "https://script.google.com/macros/s/AKfycbwvmGOCVuYW6Uul4DZBe13JVEHZ0ie3BiOP6vDc-ND9k-E-yLbVgqohcjsNowLV7MldHg/exec";
+
+        function loadSyncCfg() {
+            try {
+                const raw = localStorage.getItem(SYNC_KEY);
+                if (raw) {
+                    const d = JSON.parse(raw);
+                    // 이전 계정의 오래된 배포 URL이 브라우저에 남아있다면 버리고 새 배포 URL 채택
+                    const isOldUrl = d.url && (d.url.indexOf("AKfycbz7oT6rAZQe3ustt") >= 0 || d.url.indexOf("AKfycbyHDfpXe1") >= 0);
+                    const effectiveUrl = (!isOldUrl && d.url) ? d.url : DEFAULT_SYNC_URL;
+                    return { url: effectiveUrl, lastSyncAt: d.lastSyncAt || null };
+                }
+            } catch (e) { }
+            return { url: DEFAULT_SYNC_URL, lastSyncAt: null };
+        }
+        function saveSyncCfg() { try { localStorage.setItem(SYNC_KEY, JSON.stringify(sync)); } catch (e) { } }
+        let sync = loadSyncCfg();
+        let syncing = false;
+
+        function setSyncStatus(msg, kind) {
+            const el = document.getElementById("syncStatus"); if (!el) return;
+            el.textContent = msg;
+            el.style.color = kind === "err" ? "var(--crit)" : kind === "ok" ? "var(--goodtext)" : "var(--muted)";
+        }
+        function syncDataUrl() {
+            const sep = sync.url.indexOf("?") >= 0 ? "&" : "?";
+            return sync.url + sep + "action=data";
+        }
+        async function syncPull() {
+            const ac = new AbortController(); const t = setTimeout(() => ac.abort(), 12000);
+            try {
+                const r = await fetch(syncDataUrl(), { method: "GET", signal: ac.signal });
+                return await r.json();
+            } finally { clearTimeout(t); }
+        }
+        async function syncPush() {
+            const ac = new AbortController(); const t = setTimeout(() => ac.abort(), 12000);
+            try {
+                const body = JSON.stringify({ data: S });
+                const r = await fetch(sync.url, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, signal: ac.signal, body });
+                return await r.json();
+            } finally { clearTimeout(t); }
+        }
+        async function pullRemoteData_() {
+            try {
+                const pulled = await syncPull();
+                if (!pulled || pulled.ok === false) return null;
+                let remoteData = pulled.data ? JSON.parse(pulled.data) : null;
+                if (remoteData && !(remoteData.goal && remoteData.buckets)) remoteData = null;
+                return remoteData;
+            } catch (e) { return null; }
+        }
+        function remoteHasMoreEntries_(remoteData) {
+            if (!remoteData) return false;
+            return (remoteData.entries || []).length > (S.entries || []).length;
+        }
+        async function safeSyncPush_() {
+            const remoteData = await pullRemoteData_();
+            if (remoteHasMoreEntries_(remoteData)) return { skipped: true, remoteData: remoteData };
+            await syncPush();
+            return { skipped: false };
+        }
+        async function serverRefreshMarket() {
+            if (!sync.url) return null;
+            var pushResult = null;
+            try { pushResult = await safeSyncPush_(); } catch (e) { }
+            const ac = new AbortController(); const t = setTimeout(() => ac.abort(), 20000);
+            try {
+                const sep = sync.url.indexOf("?") >= 0 ? "&" : "?";
+                const r = await fetch(sync.url + sep + "action=refreshMarket", { method: "GET", signal: ac.signal });
+                const j = await r.json();
+                if (!j || j.ok === false) throw new Error((j && j.error) || "서버 갱신 실패");
+                let remoteData = j.data ? JSON.parse(j.data) : null;
+                if (remoteData && remoteData.goal && remoteData.buckets) {
+                    S = migrate(remoteData);
+                    document.documentElement.setAttribute("data-theme", S.theme || "light");
+                    save(false);
+                }
+                j.pushSkipped = !!(pushResult && pushResult.skipped);
+                return j;
+            } finally { clearTimeout(t); }
+        }
+        function mergeEntries_(localEntries, remoteEntries) {
+            const map = new Map();
+            (remoteEntries || []).forEach(e => { if (e && e.id) map.set(e.id, e); });
+            (localEntries || []).forEach(e => { if (e && e.id) map.set(e.id, e); });
+            return Array.from(map.values()).sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.id || "").localeCompare(a.id || ""));
+        }
+
+        async function doSync() {
+            if (!sync.url || syncing) return;
+            syncing = true; setSyncStatus("동기화 중…");
+            try {
+                const pulled = await syncPull();
+                if (!pulled || pulled.ok === false) throw new Error(errText_(pulled && pulled.error));
+                let remoteData = pulled.data ? JSON.parse(pulled.data) : null;
+                if (remoteData && !(remoteData.goal && remoteData.buckets)) remoteData = null;
+                const remoteAt = remoteData && remoteData.updatedAt || null;
+                const localAt = S.updatedAt;
+
+                if (remoteData && (!localAt || (remoteAt && remoteAt > localAt))) {
+                    // 서버에 더 최신 데이터가 있는 경우: entries는 병합하여 두 사람 기록 모두 보존
+                    const mergedEntries = mergeEntries_(S.entries, remoteData.entries);
+                    S = migrate(remoteData);
+                    S.entries = mergedEntries;
+                    document.documentElement.setAttribute("data-theme", S.theme || "light");
+                    save(false); render();
+                    setSyncStatus("구글시트의 최신 데이터를 불러왔습니다 · " + nowHM_(), "ok");
+                } else {
+                    // 이 기기에서 수정한 내용을 서버로 보낼 때도 혹시 서버에 새로 추가된 기록과 병합
+                    if (remoteData && remoteData.entries) {
+                        S.entries = mergeEntries_(S.entries, remoteData.entries);
+                    }
+                    const pushed = await syncPush();
+                    if (!pushed || pushed.ok === false) throw new Error(errText_(pushed && pushed.error));
+                    setSyncStatus("이 기기 내용을 구글시트에 저장했습니다 · " + nowHM_(), "ok");
+                }
+                sync.lastSyncAt = new Date().toISOString(); saveSyncCfg();
+            } catch (e) {
+                setSyncStatus("동기화 실패: " + (e.message || e), "err");
+            } finally { syncing = false; }
+        }
+        async function syncForcePull() {
+            if (!sync.url) return;
+            if (!confirm("이 기기의 값을 구글시트의 최신값으로 덮어씁니다. 계속할까요?")) return;
+            syncing = true; setSyncStatus("불러오는 중…");
+            try {
+                const pulled = await syncPull();
+                if (!pulled || pulled.ok === false) throw new Error(errText_(pulled && pulled.error));
+                const remote = pulled.data ? JSON.parse(pulled.data) : null;
+                if (!remote || !(remote.goal && remote.buckets)) { setSyncStatus("구글시트에 아직 저장된 데이터가 없습니다", "err"); return; }
+                S = migrate(remote);
+                document.documentElement.setAttribute("data-theme", S.theme || "light");
+                save(false); render();
+                setSyncStatus("구글시트 값을 불러왔습니다 · " + nowHM_(), "ok");
+            } catch (e) { setSyncStatus("불러오기 실패: " + (e.message || e), "err"); }
+            finally { syncing = false; }
+        }
+        async function syncForcePush() {
+            if (!sync.url) return;
+            const remoteData = await pullRemoteData_();
+            let warn = "구글시트의 값을 이 기기의 내용으로 덮어씁니다. 계속할까요?";
+            if (remoteHasMoreEntries_(remoteData)) {
+                warn = "⚠ 서버에 이 기기가 모르는 저축/자금이동 기록이 있습니다. 계속할까요?";
+            }
+            if (!confirm(warn)) return;
+            syncing = true; setSyncStatus("저장하는 중…");
+            try {
+                S.updatedAt = new Date().toISOString(); save(false);
+                const pushed = await syncPush();
+                if (!pushed || pushed.ok === false) throw new Error(errText_(pushed && pushed.error));
+                setSyncStatus("이 기기 값을 구글시트에 저장했습니다 · " + nowHM_(), "ok");
+            } catch (e) { setSyncStatus("저장 실패: " + (e.message || e), "err"); }
+            finally { syncing = false; }
+        }
+        function errText_(code) {
+            if (code === "unauthorized") return "토큰이 일치하지 않습니다";
+            if (code === "bad_json") return "요청 형식 오류";
+            return code || "알 수 없는 오류";
+        }
+        function nowHM_() { const d = new Date(); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); }
+        function isKrMarketClosedToday() {
+            const kst = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+            const day = kst.getDay();
+            if (day === 0 || day === 6) return false;
+            return (kst.getHours() * 60 + kst.getMinutes()) >= (15 * 60 + 30);
+        }
+        function priceBtnLabel() { return isKrMarketClosedToday() ? "당일 종가 반영" : "전일 종가 반영"; }
+
+        /* ---------- 포맷 ---------- */
+        const usd = v => Number(v || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const won = v => Math.round(v || 0).toLocaleString("en-US");
+        function kfmt(n) {
+            n = Math.round(n || 0);
+            const sign = n < 0 ? "-" : ""; n = Math.abs(n);
+            const eok = Math.floor(n / 100000000);
+            const man = Math.floor((n % 100000000) / 10000);
+            if (eok > 0) return sign + eok + "억" + (man > 0 ? " " + man.toLocaleString("ko-KR") + "만" : "");
+            if (man > 0) return sign + man.toLocaleString("ko-KR") + "만원";
+            return sign + n.toLocaleString("ko-KR") + "원";
+        }
+        const parseNum = v => { const n = Number(String(v == null ? "" : v).replace(/[^0-9.-]/g, "")); return isFinite(n) ? n : 0; };
+        const todayISO = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
+
+        /* ---------- 계산 ---------- */
+        const stockValue = () => {
+            const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
+            return S.holdings.reduce((s, h) => s + (h.qty || 0) * (h.price || 0) * (h.isUsd ? fxRate : 1), 0);
+        };
+        function bucketAmount(b) {
+            if (b.kind === "stock") {
+                const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
+                return S.holdings.filter(h => h.bucketId === b.id).reduce((s, h) => s + (h.qty || 0) * (h.price || 0) * (h.isUsd ? fxRate : 1), 0);
+            }
+            return b.amount || 0;
+        }
+        const totalAssets = () => S.buckets.reduce((s, b) => s + bucketAmount(b), 0);
+        const acqTax = () => Math.round((S.goal.totalPrice || 0) * (S.goal.acqTaxRate || 0) / 100);
+        const extraTaxes = () => S.goal.useExtraTaxes ? (S.goal.bondDiscount || 0) + (S.goal.legalFee || 0) + (S.goal.stampDuty || 0) + (S.goal.moveInDeposit || 0) : 0;
+        const goalTotal = () => (S.goal.balance || 0) + acqTax() + (S.goal.optionCost || 0) + (S.goal.moveCost || 0) + (S.goal.extraCost || 0) + extraTaxes();
+        const totalFundingNeed = () => (S.goal.totalPrice || 0) + acqTax() + (S.goal.optionCost || 0) + (S.goal.moveCost || 0) + (S.goal.extraCost || 0) + extraTaxes();
+        function monthsLeft() {
+            const [y, m] = (S.goal.targetMonth || "2028-05").split("-").map(Number);
+            const now = new Date();
+            const n = (y - now.getFullYear()) * 12 + (m - (now.getMonth() + 1));
+            return Math.max(0, n);
+        }
+        function calc() {
+            const total = totalAssets(), goal = goalTotal(), gap = Math.max(0, goal - total), n = monthsLeft();
+            const need = n > 0 ? gap / n : gap;
+            const plan = S.goal.monthlySaving || 0;
+            const projected = total + plan * n;
+            return { total, goal, gap, n, need, plan, projected, diff: projected - goal };
+        }
+
+        /* ---------- 렌더 ---------- */
+        function renderFx() {
+            document.querySelectorAll("[data-fx]").forEach(el => {
+                const k = el.dataset.fx, v = S.fx[k];
+                el.value = el.type === "date" ? (v || "") : (v == null ? "" : v);
+            });
+        }
+        function render() { renderDash(); renderAssets(); renderGoal(); renderLoan(); renderFx(); renderSelects(); renderLog(); }
+
+        // 자산 변동 기록 / 저축·유입·이동 기록 공통: 기본은 이번 달+전달만 표시하고, 그 이전은 달을 선택해야 보이도록 함
+        function recentWindowStart() {
+            const d = new Date(); d.setMonth(d.getMonth() - 1, 1); return d.toISOString().substring(0, 10);
+        }
+        function populateMonthSelect(selectEl, dates) {
+            const months = [...new Set(dates.map(d => d.substring(0, 7)))].sort().reverse();
+            const prev = selectEl.value;
+            selectEl.innerHTML = '<option value="recent">최근 (이번 달+전달)</option>' +
+                months.map(m => '<option value="' + m + '">' + m + '</option>').join("");
+            if (prev && (prev === "recent" || months.includes(prev))) selectEl.value = prev;
+            else selectEl.value = "recent";
+        }
+
+        function renderHistory() {
+            const period = document.getElementById("historyPeriod").value;
+            const hb = document.getElementById("historyBody");
+            hb.innerHTML = "";
+            // 기본은 이번 달+전달만 표시, 그 이전은 달을 선택해야 보이도록 함 (더 오래된 기록도 데이터에 그대로 남아있고 삭제되지 않음)
+            const monthSel = document.getElementById("hist-monthSel");
+            populateMonthSelect(monthSel, (S.history || []).map(h => h.date));
+            const sel = monthSel.value;
+            const historyData = sel === "recent"
+                ? (S.history || []).filter(h => h.date >= recentWindowStart())
+                : (S.history || []).filter(h => h.date.substring(0, 7) === sel);
+            if (historyData.length === 0) {
+                hb.innerHTML = '<tr><td colspan="6" class="muted" style="text-align:center;padding:20px">해당 기간에 기록이 없습니다.</td></tr>';
+                return;
+            }
+            const getWeek = (dStr) => {
+                const d = new Date(dStr);
+                const firstDayOfYear = new Date(d.getFullYear(), 0, 1);
+                const pastDaysOfYear = (d - firstDayOfYear) / 86400000;
+                return d.getFullYear() + "-W" + Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+            };
+            const getMonth = (dStr) => dStr.substring(0, 7);
+            const groups = {};
+            historyData.forEach(h => {
+                let key = h.date;
+                if (period === 'week') key = getWeek(h.date);
+                if (period === 'month') key = getMonth(h.date);
+                if (!groups[key]) groups[key] = { key, firstTotal: h.total, lastTotal: h.total };
+                else groups[key].lastTotal = h.total;
+            });
+            const keys = Object.keys(groups).sort();
+            let prevTotal = null;
+            const rowsData = [];
+            for (let i = 0; i < keys.length; i++) {
+                const g = groups[keys[i]];
+                if (i === 0) {
+                    rowsData.unshift({ label: keys[i], total: g.lastTotal, totalChange: null, priceChange: null, priceChangePct: null, inflow: null });
+                    prevTotal = g.lastTotal;
+                    continue;
+                }
+                let inflow = 0;
+                S.entries.forEach(e => {
+                    if (e.type !== 'saving' && e.type !== 'inflow') return;
+                    let eKey = e.date;
+                    if (period === 'week') eKey = getWeek(e.date);
+                    if (period === 'month') eKey = getMonth(e.date);
+                    if (eKey === keys[i]) inflow += e.amount;
+                });
+                const totalChange = g.lastTotal - prevTotal;
+                const priceChange = totalChange - inflow;
+                const priceChangePct = prevTotal > 0 ? (priceChange / prevTotal * 100) : 0;
+                rowsData.unshift({ label: keys[i], total: g.lastTotal, totalChange, priceChange, priceChangePct, inflow });
+                prevTotal = g.lastTotal;
+            }
+            rowsData.forEach(r => {
+                const tr = document.createElement("tr");
+                if (r.totalChange === null) {
+                    tr.innerHTML = '<td>' + r.label + '</td><td class="num">' + won(r.total) + '</td><td colspan="4" class="muted" style="text-align:center;font-size:12px">첫 기록일 (비교값 없음)</td>';
+                } else {
+                    const plCls = r.priceChange > 0 ? "gain" : r.priceChange < 0 ? "loss" : "";
+                    const totalCls = r.totalChange > 0 ? "gain" : r.totalChange < 0 ? "loss" : "";
+                    tr.innerHTML = '<td>' + r.label + '</td>' +
+                        '<td class="num">' + won(r.total) + '</td>' +
+                        '<td class="num ' + totalCls + '">' + (r.totalChange > 0 ? '+' : '') + won(r.totalChange) + '</td>' +
+                        '<td class="num ' + plCls + '">' + (r.priceChange > 0 ? '+' : '') + won(r.priceChange) + '</td>' +
+                        '<td class="num ' + plCls + '">' + (r.priceChange > 0 ? '+' : '') + r.priceChangePct.toFixed(1) + '%</td>' +
+                        '<td class="num" style="color:var(--s1)">' + (r.inflow > 0 ? '+' : '') + won(r.inflow) + '</td>';
+                }
+                hb.appendChild(tr);
+            });
+        }
+
+        /* ---------- 환율/달러인덱스 자동 조회 ---------- */
+        async function syncFxClientFallback() {
+            const ac = new AbortController(); const t = setTimeout(() => ac.abort(), 10000);
+            try {
+                const r = await fetch("https://open.er-api.com/v6/latest/USD", { signal: ac.signal });
+                const j = await r.json();
+                if (!j || j.result !== "success" || !j.rates || !j.rates.KRW) throw new Error("응답 형식 오류");
+                const rt = j.rates;
+                const eurusd = 1 / rt.EUR, usdjpy = rt.JPY, gbpusd = 1 / rt.GBP, usdcad = rt.CAD, usdsek = rt.SEK, usdchf = rt.CHF;
+                const dxy = 50.14348112
+                    * Math.pow(eurusd, -0.576) * Math.pow(usdjpy, 0.136) * Math.pow(gbpusd, -0.119)
+                    * Math.pow(usdcad, 0.091) * Math.pow(usdsek, 0.042) * Math.pow(usdchf, 0.036);
+                const today = todayISO();
+                S.fx.usdKrw = Math.round(rt.KRW * 100) / 100;
+                S.fx.usdKrwDate = today;
+                S.fx.dxy = Math.round(dxy * 1000) / 1000;
+                S.fx.dxyDate = today;
+                autosave(); renderFx();
+                return true;
+            } finally { clearTimeout(t); }
+        }
+        async function syncFx() {
+            const btn = document.getElementById("btnFxSync");
+            const stampEl = document.getElementById("fxStamp");
+            if (btn) btn.disabled = true;
+            if (stampEl) stampEl.textContent = "조회 중…";
+            try {
+                // 1) 서버(Apps Script)를 통한 조회 우선 — CORS 제약이 없어 훨씬 안정적
+                if (sync.url) {
+                    try {
+                        const res = await serverRefreshMarket();
+                        if (res && res.fxOk) {
+                            renderFx();
+                            const dxyNote = S.fx.dxyIsExact ? "(달러인덱스는 야후 파이낸스 실제 고시값)" : "(달러인덱스는 근사치)";
+                            const skipNote = res.pushSkipped ? " · ⚠ 서버에 이 기기가 모르는 기록이 있어 이 기기 값 저장은 건너뛰었습니다" : "";
+                            if (stampEl) stampEl.textContent = "서버에서 자동 조회 완료 · " + nowHM_() + " " + dxyNote + skipNote;
+                            toast("환율/달러인덱스를 갱신했습니다" + (res.priceOk > 0 ? " (종가도 " + res.priceOk + "/" + res.priceTotal + " 갱신됨)" : ""));
+                            render();
+                            return;
+                        }
+                    } catch (e) { /* 서버 방식 실패 시 아래 클라이언트 폴백으로 진행 */ }
+                }
+                // 2) 폴백: 브라우저에서 직접 조회 (구글시트 연동이 없거나 서버 조회가 실패한 경우)
+                await syncFxClientFallback();
+                if (stampEl) stampEl.textContent = "자동 조회 완료 · " + nowHM_() + " (달러인덱스는 근사치입니다)";
+                toast("환율/달러인덱스를 갱신했습니다");
+            } catch (e) {
+                if (stampEl) stampEl.textContent = "자동 조회 실패 — 직접 입력하신 값이 유지됩니다";
+                toast("자동 조회에 실패했습니다. 직접 입력해 주세요");
+            } finally {
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        function renderDash() {
+            const c = calc();
+            document.getElementById("headline").textContent =
+                (S.goal.targetMonth || "").replace("-", "년 ") + "월 잔금 납부 · 남은 기간 " + c.n + "개월";
+            set("k-total", kfmt(c.total)); set("k-total-note", won(c.total) + "원");
+            set("k-goal", kfmt(c.goal)); set("k-goal-note", "취득세 " + kfmt(acqTax()) + " 포함");
+            set("k-gap", kfmt(c.gap)); set("k-gap-note", c.gap > 0 ? "달성률 " + (c.total / c.goal * 100).toFixed(1) + "%" : "목표 달성");
+            set("k-months", c.n + "개월"); set("k-months-note", (S.goal.targetMonth || "") + " 기준");
+            set("k-need", kfmt(c.need)); set("k-need-note", "매달 이만큼 모으면 목표 도달");
+            set("k-plan", kfmt(c.plan));
+            const planNote = document.getElementById("k-plan-note");
+            if (c.diff >= 0) planNote.innerHTML = '<span class="pill ok">' + kfmt(c.diff) + ' 여유</span>';
+            else planNote.innerHTML = '<span class="pill bad">' + kfmt(-c.diff) + ' 부족</span>';
+
+            const gTot = goalTotal();
+            const pct = Math.min(100, gTot > 0 ? c.total / gTot * 100 : 0);
+            document.getElementById("progbar").style.width = pct + "%";
+            document.getElementById("progbar").style.background = pct >= 100 ? "var(--good)" : "var(--s1)";
+            set("prog-l", "현재 " + kfmt(S.history && S.history.length ? S.history[S.history.length - 1].total : c.total));
+            set("prog-r", "목표 " + kfmt(gTot) + " (" + pct.toFixed(1) + "%)");
+            renderHistory();
+
+            const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
+            let yearlyDiv = 0;
+            const groupedHoldings = {};
+            S.holdings.forEach(h => {
+                if (h.divYield > 0) {
+                    if (!groupedHoldings[h.code]) {
+                        groupedHoldings[h.code] = { name: h.name, code: h.code, qty: 0, price: h.price, divYield: h.divYield, isUsd: h.isUsd };
+                    }
+                    groupedHoldings[h.code].qty += h.qty || 0;
+                }
+            });
+
+            const divList = [];
+            Object.values(groupedHoldings).forEach(h => {
+                const rate = h.isUsd ? fxRate : 1;
+                const value = (h.qty || 0) * (h.price || 0) * rate;
+                const yDiv = value * (h.divYield / 100);
+                yearlyDiv += yDiv;
+                const mDiv = yDiv / 12;
+
+                let payoutDateStr = "종목별 상이 (분배금 현황 페이지 확인 권장)";
+                let payoutFreq = 12; // 정확한 주기를 모르는 종목은 월 평균으로 대신 표시
+                if (h.isUsd || !/^\d+$/.test(h.code)) {
+                    payoutDateStr = "종목별 상이 (보통 분기/월말)";
+                } else {
+                    // 실제 상품별 분배 주기 기준 (운용사 고시 기준, 변경될 수 있음)
+                    if (h.name.indexOf("다우존스") >= 0 || h.name.indexOf("타미당") >= 0) { payoutDateStr = "월배당 · 매월 말 기준, 익월 초(약 7영업일 이내) 지급"; payoutFreq = 12; }
+                    else if (h.name.indexOf("하이일드") >= 0) { payoutDateStr = "월배당 · 매월 말(27일경) 기준, 익월 초(1~2영업일) 지급"; payoutFreq = 12; }
+                    else if (h.name.indexOf("리츠") >= 0 || h.name.indexOf("인프라") >= 0) { payoutDateStr = "월배당 · 매월 말 기준, 익월 초 지급"; payoutFreq = 12; }
+                    else if (h.name.indexOf("S&P") >= 0 || h.name.indexOf("나스닥") >= 0) { payoutDateStr = "분기배당 · 1·4·7·10월 말경 기준, 분기 초 지급 (월배당 아님)"; payoutFreq = 4; }
+                    else payoutDateStr = "종목별 상이 (분배금 현황 페이지 확인 권장)";
+                }
+                const payoutAmt = yDiv / payoutFreq;
+                divList.push({ name: h.name, code: h.code, mDiv: mDiv, payoutAmt: payoutAmt, date: payoutDateStr });
+            });
+
+            const monthlyDiv = yearlyDiv / 12;
+            const dashDivEl = document.getElementById("dashExpectedDiv");
+            if (dashDivEl) dashDivEl.textContent = kfmt(monthlyDiv) + "  (" + won(monthlyDiv) + "원)";
+
+            const divBody = document.getElementById("dividendScheduleBody");
+            if (divBody) {
+                divBody.innerHTML = "";
+                if (divList.length === 0) {
+                    divBody.innerHTML = '<tr><td colspan="3" class="muted" style="text-align:center;padding:12px">배당 수익이 기대되는 종목이 없습니다.</td></tr>';
+                } else {
+                    divList.sort((a, b) => b.mDiv - a.mDiv).forEach(d => {
+                        if (d.mDiv > 0) {
+                            const tr = document.createElement("tr");
+                            tr.innerHTML = '<td>' + esc(d.name) + '</td><td class="num" style="color:var(--s1)">' + won(d.payoutAmt) + '원</td><td class="muted">' + d.date + '</td>';
+                            divBody.appendChild(tr);
+                        }
+                    });
+                }
+            }
+
+            // 요약 테이블 + 자산 구성 원그래프 (같은 데이터, 항목별로 고정된 색상 사용)
+            const compRows = buildCompositionRows();
+            const tb = document.getElementById("summaryBody"); tb.innerHTML = "";
+            compRows.forEach(r => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = '<td><i class="dot" style="background:' + r.color + '"></i> ' + esc(r.name) + '</td><td class="num">' + won(r.amt) + '</td><td class="num">' +
+                    (c.total > 0 ? (r.amt / c.total * 100).toFixed(1) : "0.0") + '%</td>';
+                tb.appendChild(tr);
+            });
+            set("summaryTotal", won(c.total));
+            drawProjection(c); drawDonut(compRows, c.total);
+        }
+
+        function renderAssets() {
+            const hb = document.getElementById("holdBody"); hb.innerHTML = "";
+            const stockBuckets = S.buckets.filter(b => b.kind === "stock");
+            const ACCOUNTS = ["", "일반계좌", "ISA"];
+            const OWNERS = ["", "아내", "남편"];
+            const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
+
+            const groups = [
+                { title: "👩 아내 계좌", items: [] },
+                { title: "🧑 남편 계좌", items: [] },
+                { title: "⚪ 미지정", items: [] }
+            ];
+            S.holdings.forEach(h => {
+                if (h.owner === "아내") groups[0].items.push(h);
+                else if (h.owner === "남편") groups[1].items.push(h);
+                else groups[2].items.push(h);
+            });
+
+            groups.forEach(g => {
+                if (g.items.length === 0) return;
+                g.items.sort((a, b) => (a.order || 0) - (b.order || 0));
+                const sep = document.createElement("tr");
+                sep.innerHTML = '<td colspan="13" style="background:var(--chip); font-weight:600; font-size:13px; color:var(--ink2); padding:8px 12px; border-bottom:1px solid var(--grid);">' + g.title + '</td>';
+                hb.appendChild(sep);
+
+                let gValue = 0, gCost = 0;
+                g.items.forEach((h, idx) => {
+                    const rate = h.isUsd ? fxRate : 1;
+                    const value = (h.qty || 0) * (h.price || 0) * rate, cost = (h.qty || 0) * (h.avgPrice || 0) * rate, pl = value - cost, plPct = cost > 0 ? (pl / cost * 100) : 0;
+                    gValue += value; gCost += cost;
+                    const plCls = pl > 0 ? "gain" : pl < 0 ? "loss" : "";
+                    const plTxt = cost > 0 ? (pl >= 0 ? "+" : "") + won(pl) + " (" + (pl >= 0 ? "+" : "") + plPct.toFixed(1) + "%)" : "—";
+                    const isFirst = idx === 0, isLast = idx === g.items.length - 1;
+                    const tr = document.createElement("tr");
+                    tr.innerHTML =
+                        '<td><input value="' + esc(h.name) + '" data-h="' + h.id + '" data-f="name" style="width:100%"></td>' +
+                        '<td><input value="' + esc(h.code) + '" data-h="' + h.id + '" data-f="code" style="width:100%"></td>' +
+                        '<td style="width:132px"><select data-h="' + h.id + '" data-f="account" style="width:100%">' +
+                        ACCOUNTS.map(a => '<option value="' + a + '"' + (a === (h.account || "") ? " selected" : "") + '>' + (a || "미지정") + '</option>').join("") +
+                        '</select></td>' +
+                        '<td style="width:70px"><select data-h="' + h.id + '" data-f="owner" style="width:100%">' +
+                        OWNERS.map(o => '<option value="' + o + '"' + (o === (h.owner || "") ? " selected" : "") + '>' + (o || "미지정") + '</option>').join("") +
+                        '</select></td>' +
+                        '<td style="width:120px"><select data-h="' + h.id + '" data-f="bucketId" style="width:100%">' +
+                        stockBuckets.map(b => '<option value="' + b.id + '"' + (b.id === h.bucketId ? " selected" : "") + '>' + esc(b.name) + '</option>').join("") +
+                        '</select></td>' +
+                        '<td style="width:100px"><input class="num" value="' + won(h.qty) + '" data-h="' + h.id + '" data-f="qty" style="width:100%"></td>' +
+                        '<td style="width:168px"><div style="display:flex;align-items:center;gap:4px">' +
+                        '<input class="num" value="' + (h.isUsd ? usd(h.avgPrice) : won(h.avgPrice)) + '" data-h="' + h.id + '" data-f="avgPrice" style="width:100%">' +
+                        '<label style="display:flex;align-items:center;gap:2px;font-size:12px;cursor:pointer;white-space:nowrap"><input type="checkbox" data-h="' + h.id + '" data-f="isUsd" ' + (h.isUsd ? 'checked' : '') + '>$</label></div></td>' +
+                        '<td style="width:150px"><div style="display:flex;align-items:center;gap:4px">' +
+                        '<input class="num" value="' + (h.isUsd ? usd(h.price) : won(h.price)) + '" data-h="' + h.id + '" data-f="price" style="width:100%">' +
+                        '<span class="muted" style="font-size:12px;white-space:nowrap">' + (h.isUsd ? '$' : '(원화)') + '</span></div></td>' +
+                        '<td style="width:50px"><input class="num" value="' + (h.divYield || 0) + '" data-h="' + h.id + '" data-f="divYield" style="width:100%"></td>' +
+                        '<td class="num">' + won(value) + '</td>' +
+                        '<td class="num ' + plCls + '">' + plTxt + '</td>' +
+                        '<td style="width:54px;white-space:nowrap"><button class="sm" data-moveh="' + h.id + '" data-dir="-1" title="위로"' + (isFirst ? ' disabled' : '') + '>▲</button><button class="sm" data-moveh="' + h.id + '" data-dir="1" title="아래로"' + (isLast ? ' disabled' : '') + '>▼</button></td>' +
+                        '<td style="width:58px"><button class="sm danger" data-delh="' + h.id + '">삭제</button></td>';
+                    hb.appendChild(tr);
+                });
+                const gPl = gValue - gCost;
+                const gPlPct = gCost > 0 ? (gPl / gCost * 100) : 0;
+                const gPlCls = gPl > 0 ? "gain" : gPl < 0 ? "loss" : "";
+                const gPlTxt = gCost > 0 ? (gPl >= 0 ? "+" : "") + won(gPl) + " (" + (gPl >= 0 ? "+" : "") + gPlPct.toFixed(1) + "%)" : "—";
+                const gPlPctTxt = gCost > 0 ? (gPlPct >= 0 ? "+" : "") + gPlPct.toFixed(1) + "%" : "—";
+                const subtotal = document.createElement("tr");
+                subtotal.innerHTML =
+                    '<td colspan="9" style="text-align:right;font-weight:600;color:var(--ink2);padding:6px 12px;border-bottom:2px solid var(--grid)">' + g.title + ' 합계 (' + g.items.length + '건) · 총 평가손익률 <span class="' + gPlCls + '">' + gPlPctTxt + '</span></td>' +
+                    '<td class="num" style="font-weight:600;border-bottom:2px solid var(--grid)">' + won(gValue) + '</td>' +
+                    '<td class="num ' + gPlCls + '" style="font-weight:600;border-bottom:2px solid var(--grid)">' + gPlTxt + '</td>' +
+                    '<td style="border-bottom:2px solid var(--grid)"></td>' +
+                    '<td style="border-bottom:2px solid var(--grid)"></td>';
+                hb.appendChild(subtotal);
+            });
+            set("holdTotal", won(stockValue()));
+            const totalCost = S.holdings.reduce((s, h) => s + (h.qty || 0) * (h.avgPrice || 0) * (h.isUsd ? fxRate : 1), 0);
+            const totalPL = stockValue() - totalCost;
+            const plEl = document.getElementById("holdPL");
+            plEl.textContent = totalCost > 0 ? (totalPL >= 0 ? "+" : "") + won(totalPL) + " (" + (totalPL >= 0 ? "+" : "") + (totalPL / totalCost * 100).toFixed(1) + "%)" : "—";
+            plEl.className = "num " + (totalPL > 0 ? "gain" : totalPL < 0 ? "loss" : "");
+            const dates = [...new Set(S.holdings.map(h => h.priceDate).filter(Boolean))];
+            document.getElementById("priceStamp").textContent =
+                dates.length ? "종가 기준일 " + dates.join(", ") : "종가 기준일 정보 없음";
+            const syncBtn = document.getElementById("btnSync");
+            if (syncBtn && !syncBtn.disabled) syncBtn.textContent = priceBtnLabel();
+
+            const bb = document.getElementById("bucketBody"); bb.innerHTML = "";
+            S.buckets.forEach(b => {
+                const isStock = b.kind === "stock";
+                const tr = document.createElement("tr");
+                tr.innerHTML =
+                    '<td><input value="' + esc(b.name) + '" data-b="' + b.id + '" data-f="name"></td>' +
+                    '<td style="width:130px"><select data-b="' + b.id + '" data-f="kind">' +
+                    '<option value="cash"' + (!isStock ? " selected" : "") + '>현금성 · 기타</option>' +
+                    '<option value="stock"' + (isStock ? " selected" : "") + '>주식 계좌</option></select></td>' +
+                    '<td style="width:150px">' + (isStock
+                        ? '<input class="num" value="' + won(bucketAmount(b)) + '" disabled>'
+                        : '<input class="num" value="' + won(b.amount) + '" data-b="' + b.id + '" data-f="amount">') + '</td>' +
+                    '<td style="width:58px"><button class="sm danger" data-delb="' + b.id + '">삭제</button></td>';
+                bb.appendChild(tr);
+            });
+            set("bucketTotal", won(totalAssets()));
+        }
+
+        function renderGoal() {
+            document.querySelectorAll("[data-goal]").forEach(el => {
+                const k = el.dataset.goal, v = S.goal[k];
+                if (el.type === "month") el.value = v || "";
+                else if (el.type === "checkbox") el.checked = !!v;
+                else if (k === "acqTaxRate") el.value = v;
+                else el.value = won(v);
+            });
+            const taxWrap = document.getElementById("extraTaxesWrap");
+            if (taxWrap) taxWrap.style.display = S.goal.useExtraTaxes ? "grid" : "none";
+
+            document.getElementById("g-balance").value = won(S.goal.balance);
+            document.getElementById("g-tax").value = won(acqTax());
+            set("g-total", kfmt(goalTotal()) + "  (" + won(goalTotal()) + "원)");
+            const sum = (S.goal.contractPaid || 0) + (S.goal.midLoan || 0) + (S.goal.balance || 0);
+            const ok = sum === (S.goal.totalPrice || 0);
+            document.getElementById("sumCheck").innerHTML =
+                won(sum) + "원 " + (ok ? '<span class="pill ok">분양가와 일치</span>' : '<span class="pill bad">분양가와 ' + won(Math.abs(sum - (S.goal.totalPrice || 0))) + '원 차이</span>');
+            const c = calc();
+            document.getElementById("planHint").innerHTML =
+                "남은 " + c.n + "개월 동안 매달 <b>" + kfmt(c.need) + "</b>을 모으면 목표에 정확히 도달합니다.<br>" +
+                "계획한 <b>" + kfmt(c.plan) + "</b>으로는 " + (c.diff >= 0
+                    ? "목표보다 <b style='color:var(--goodtext)'>" + kfmt(c.diff) + " 여유</b>가 생깁니다."
+                    : "목표에 <b style='color:var(--crit)'>" + kfmt(-c.diff) + " 부족</b>합니다.");
+        }
+
+        function renderLoan() {
+            document.querySelectorAll("[data-loan]").forEach(el => {
+                const k = el.dataset.loan, v = S.loan[k];
+                if (el.type === "checkbox") el.checked = !!v;
+                else if (el.tagName === "SELECT") el.value = v;
+                else el.value = won(v);
+            });
+
+            const gTotal = goalTotal();
+            const mLoan = S.loan.includeMidLoan ? (S.goal.midLoan || 0) : 0;
+            const targetReq = Math.max(0, gTotal + mLoan);
+
+            const elTotal = document.getElementById("l-goalTotal");
+            if (elTotal) elTotal.value = won(gTotal);
+
+            const elPaid = document.getElementById("l-midLoan");
+            if (elPaid) elPaid.value = won(S.goal.midLoan || 0);
+
+            const reqInput = document.getElementById("l-reqLoan");
+            if (!S.loan.customAmount) {
+                if (reqInput) reqInput.value = won(targetReq);
+                set("l-reqTag", S.loan.includeMidLoan ? "준비 자금 + 중도금" : "준비 자금만");
+            } else {
+                set("l-reqTag", "직접 입력 중");
+            }
+            if (reqInput) reqInput.disabled = !S.loan.customAmount;
+
+            const P = S.loan.customAmount ? (S.loan.manualAmount || 0) : targetReq;
+            const R = (S.loan.rate || 0) / 100 / 12;
+            const N = (S.loan.term || 30) * 12;
+            const G = (S.loan.grace || 0) * 12;
+            const L = N - G;
+
+            let pmt1 = 0, totalInt = 0, avgPmt = 0;
+            const calcPmt = (rRate) => {
+                let p1 = 0, tI = 0, aP = 0;
+                if (P > 0 && rRate > 0 && L > 0) {
+                    if (S.loan.type === "원리금균등") {
+                        const pmt = P * rRate * Math.pow(1 + rRate, L) / (Math.pow(1 + rRate, L) - 1);
+                        p1 = G === 0 ? P * rRate : pmt;
+                        tI = (P * rRate * G) + (pmt * L - P);
+                        aP = (P + tI) / N;
+                    } else if (S.loan.type === "원금균등") {
+                        const princ = P / L;
+                        p1 = G === 0 ? princ + P * rRate : P * rRate;
+                        let tempInt = 0;
+                        for (let i = 0; i < L; i++) tempInt += (P - princ * i) * rRate;
+                        tI = (P * rRate * G) + tempInt;
+                        aP = (P + tI) / N;
+                    } else if (S.loan.type === "체증식") {
+                        const inc = 0.005;
+                        let factor = 0;
+                        for (let i = 0; i < L; i++) factor += Math.pow(1 + inc, i) / Math.pow(1 + rRate, i + 1);
+                        const pmt_first = P / factor;
+                        p1 = G === 0 ? pmt_first : P * rRate;
+                        let tempInt = 0, currentBal = P, currentPmt = pmt_first;
+                        for (let i = 0; i < L; i++) {
+                            let intPart = currentBal * rRate;
+                            let prcPart = currentPmt - intPart;
+                            tempInt += intPart;
+                            currentBal -= prcPart;
+                            currentPmt *= (1 + inc);
+                        }
+                        tI = (P * rRate * G) + tempInt;
+                        aP = (P + tI) / N;
+                    }
+                } else if (P > 0 && rRate === 0 && L > 0) {
+                    p1 = P / L; aP = P / N; tI = 0;
+                }
+                return { pmt1: p1, totalInt: tI, avgPmt: aP };
+            };
+
+            const res = calcPmt(R);
+            pmt1 = res.pmt1; totalInt = res.totalInt; avgPmt = res.avgPmt;
+
+            set("l-pmt", kfmt(pmt1));
+            set("l-avgPmt", won(avgPmt) + "원");
+            set("l-totalInt", kfmt(totalInt));
+
+            const income = (S.loan.salaryH || 0) + (S.loan.salaryW || 0);
+            const annualMortgage = avgPmt * 12;
+            const dsr_basic = income > 0 ? (annualMortgage + (S.loan.otherDebt || 0)) / income * 100 : 0;
+
+            const dsrBar = document.getElementById("dsrbar");
+
+            // DSR 계산용 금리 (스트레스 DSR 적용 시 +1.5%p 가산)
+            const dsrRate = S.loan.useStressDsr ? (S.loan.rate || 0) + 1.5 : (S.loan.rate || 0);
+            const R_dsr = dsrRate / 100 / 12;
+            const resDsr = calcPmt(R_dsr);
+
+            const annualMortgageForDsr = resDsr.avgPmt * 12;
+            const dsr = income > 0 ? (annualMortgageForDsr + (S.loan.otherDebt || 0)) / income * 100 : 0;
+
+            // DTI는 통상 실제 금리 기준 (기타대출은 원리금상환액을 그대로 사용하거나 이자만 사용하지만 보수적으로 합산)
+            const annualMortgageForDti = avgPmt * 12;
+            const dti = income > 0 ? (annualMortgageForDti + (S.loan.otherDebt || 0)) / income * 100 : 0;
+
+            if (dsrBar) {
+                dsrBar.style.width = Math.min(100, dsr) + "%";
+                dsrBar.style.background = dsr > 40 ? "var(--crit)" : dsr > 30 ? "var(--warn)" : "var(--s1)";
+            }
+
+            const dsrNote = S.loan.useStressDsr ? " (스트레스 3단계 반영)" : "";
+            set("dsr-l", "현재 DSR " + dsr.toFixed(1) + "%" + dsrNote);
+            set("dsr-r", "연간 상환액(DSR용) " + kfmt(annualMortgageForDsr + (S.loan.otherDebt || 0)));
+
+            set("dti-l", "현재 DTI " + dti.toFixed(1) + "%" + (dti > 60 ? " (60% 초과 주의!)" : ""));
+
+            const estV = S.loan.estValue || 0;
+            const ltvMax = estV * (S.loan.ltv || 70) / 100;
+            const ded = S.loan.useDeduction ? (S.loan.deduction || 0) : 0;
+            const maxLoan = Math.max(0, ltvMax - ded);
+
+            set("l-maxLtv", kfmt(maxLoan));
+            const ltvNote = P > maxLoan
+                ? "<span class='pill bad'>목표 대출금(" + kfmt(P) + ") 한도 초과</span>"
+                : "<span class='pill ok'>대출 한도 내 가능</span>";
+            const noteEl = document.getElementById("l-maxLtv-note");
+            if (noteEl) noteEl.innerHTML = ltvNote;
+
+            drawLoanChart(P, S.loan.rate || 0, calcPmt);
+        }
+
+        function drawLoanChart(P, baseRate, calcFn) {
+            const svg = document.getElementById("chartLoan");
+            if (!svg) return;
+            const cw = svg.parentElement.clientWidth;
+            const W = Math.max(340, cw > 0 ? cw - 4 : 340), H = 180;
+            const pad = { t: 16, r: 20, b: 24, l: 60 };
+            svg.setAttribute("width", W); svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+
+            if (P <= 0 || baseRate <= 0) { svg.innerHTML = ""; return; }
+
+            const pts = [];
+            for (let i = -10; i <= 10; i += 5) {
+                const r = Math.max(0.1, baseRate + i * 0.1);
+                const mPmt = calcFn(r / 100 / 12).pmt1;
+                pts.push({ rate: r, pmt: mPmt });
+            }
+
+            const minPmt = Math.min(...pts.map(p => p.pmt)) * 0.95;
+            const maxPmt = Math.max(...pts.map(p => p.pmt)) * 1.05;
+            const range = maxPmt - minPmt;
+
+            const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
+            const X = (idx) => pad.l + (iw * idx / (pts.length - 1));
+            const Y = (v) => pad.t + ih - ih * ((v - minPmt) / (range || 1));
+
+            let g = '<line x1="' + pad.l + '" y1="' + (pad.t + ih) + '" x2="' + (W - pad.r) + '" y2="' + (pad.t + ih) + '" stroke="var(--grid)" stroke-width="1"/>';
+
+            pts.forEach((p, idx) => {
+                g += '<text x="' + X(idx) + '" y="' + (H - pad.b + 16) + '" text-anchor="middle" font-size="11" fill="var(--muted)">' + p.rate.toFixed(1) + '%</text>';
+                const y = Y(p.pmt);
+                if (idx > 0) {
+                    g += '<line x1="' + X(idx - 1) + '" y1="' + Y(pts[idx - 1].pmt) + '" x2="' + X(idx) + '" y2="' + y + '" stroke="var(--s1)" stroke-width="2"/>';
+                }
+                g += '<circle cx="' + X(idx) + '" cy="' + y + '" r="4" fill="' + (p.rate === baseRate ? 'var(--s1)' : 'var(--surface)') + '" stroke="var(--s1)" stroke-width="2"/>';
+                g += '<text x="' + X(idx) + '" y="' + (y - 10) + '" text-anchor="middle" font-size="10.5" fill="var(--ink)" font-weight="600" paint-order="stroke" stroke="var(--surface)" stroke-width="3">' + won(p.pmt) + '</text>';
+            });
+            svg.innerHTML = g;
+        }
+
+        function renderSelects() {
+            const opts = S.buckets.map(b => '<option value="' + b.id + '">' + esc(b.name) + '</option>').join("");
+            ["sv-bucket", "in-bucket", "dv-bucket", "tf-from", "tf-to"].forEach(id => {
+                const el = document.getElementById(id); const prev = el.value;
+                el.innerHTML = opts; if (prev && S.buckets.some(b => b.id === prev)) el.value = prev;
+            });
+            const dep = S.buckets.find(b => b.name.indexOf("예금") >= 0);
+            if (dep && !document.getElementById("tf-to").dataset.touched) document.getElementById("tf-to").value = dep.id;
+            updateSvStockUI();
+        }
+
+        const SV_NEW = "__new__";
+        function updateSvStockUI() {
+            const bid = document.getElementById("sv-bucket").value;
+            const b = S.buckets.find(x => x.id === bid);
+            const wrap = document.getElementById("sv-stockWrap");
+            const amtInput = document.getElementById("sv-amt");
+            const amtLabel = document.getElementById("sv-amtLabel");
+            if (!b || b.kind !== "stock") {
+                wrap.style.display = "none";
+                amtInput.readOnly = false;
+                amtLabel.textContent = "금액 (원)";
+                return;
+            }
+            wrap.style.display = "flex";
+            amtInput.readOnly = true;
+            amtLabel.textContent = "금액 (원, 자동계산)";
+            const sel = document.getElementById("sv-stockSel");
+            const prev = sel.value;
+            const holds = S.holdings.filter(h => h.bucketId === bid);
+            sel.innerHTML = holds.map(h => {
+                const tag = [h.owner || "미지정", h.account || "미지정"].join(" · ");
+                return '<option value="' + h.id + '">' + esc(h.name) + (h.code ? " (" + esc(h.code) + ")" : "") + " · " + esc(tag) + '</option>';
+            }).join("")
+                + '<option value="' + SV_NEW + '">+ 새 종목 추가</option>';
+            if (prev && (holds.some(h => h.id === prev) || prev === SV_NEW)) sel.value = prev;
+            else if (holds.length === 0) sel.value = SV_NEW;
+            updateSvNewUI();
+            updateSvAmtFromStock();
+        }
+        function updateSvNewUI() {
+            const isNew = document.getElementById("sv-stockSel").value === SV_NEW;
+            document.getElementById("sv-newNameWrap").style.display = isNew ? "" : "none";
+            document.getElementById("sv-newCodeWrap").style.display = isNew ? "" : "none";
+        }
+        function updateSvAmtFromStock() {
+            const bid = document.getElementById("sv-bucket").value;
+            const b = S.buckets.find(x => x.id === bid);
+            if (!b || b.kind !== "stock") return;
+            const qty = parseNum(document.getElementById("sv-qty").value);
+            const execPrice = parseNum(document.getElementById("sv-execPrice").value);
+            document.getElementById("sv-amt").value = (qty > 0 && execPrice > 0) ? won(qty * execPrice) : "";
+        }
+
+        function renderLog() {
+            const tb = document.getElementById("logBody"); tb.innerHTML = "";
+            const label = { saving: "저축", inflow: "목돈 유입", transfer: "자금 이동", dividend: "배당금 입금" };
+            const bn = id => { const b = S.buckets.find(x => x.id === id); return b ? b.name : "(삭제된 항목)"; };
+            const hd = id => {
+                const h = S.holdings.find(x => x.id === id);
+                if (!h) return "(삭제된 종목)";
+                return h.name + (h.code ? "(" + h.code + ")" : "") + " · " + (h.owner || "미지정") + " · " + (h.account || "미지정");
+            };
+            // 기본은 이번 달+전달만 표시, 그 이전은 달을 선택해야 보이도록 함 (더 오래된 기록도 데이터에 그대로 남아있고 삭제되지 않음)
+            const monthSel = document.getElementById("log-monthSel");
+            populateMonthSelect(monthSel, S.entries.map(e => e.date));
+            const sel = monthSel.value;
+            const visibleEntries = sel === "recent"
+                ? S.entries.filter(e => e.date >= recentWindowStart())
+                : S.entries.filter(e => e.date.substring(0, 7) === sel);
+            visibleEntries.sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id)).forEach(e => {
+                let desc = e.type === "transfer" ? bn(e.fromId) + " → " + bn(e.toId) : bn(e.bucketId);
+                if (e.holdingId) desc += " · " + hd(e.holdingId) + " " + won(e.stockQty) + "주" + (e.execPrice ? " @" + won(e.execPrice) : "");
+                const tr = document.createElement("tr");
+                tr.innerHTML = '<td>' + e.date + '</td><td>' + label[e.type] + '</td><td>' + esc(desc) + '</td>' +
+                    '<td class="num">' + won(e.amount) + '</td><td>' + esc(e.memo || "") + '</td>' +
+                    '<td style="width:58px"><button class="sm danger" data-dele="' + e.id + '">삭제</button></td>';
+                tb.appendChild(tr);
+            });
+            if (!visibleEntries.length) tb.innerHTML = '<tr><td colspan="6" class="muted">해당 기간에 기록이 없습니다.</td></tr>';
+
+            // 월별 실적
+            const m = {};
+            S.entries.filter(e => e.type !== "transfer").forEach(e => {
+                const k = e.date.substring(0, 7);
+                if (!m[k]) m[k] = { sv: 0, in: 0, dv: 0 };
+                if (e.type === "saving") m[k].sv += e.amount;
+                else if (e.type === "inflow") m[k].in += e.amount;
+                else if (e.type === "dividend") m[k].dv += e.amount;
+            });
+            // 기본은 이번 달+전달 실적만 표시, 그 이전은 달을 선택해야 보이도록 함 (더 오래된 데이터도 지워지지 않고 그대로 남아있음)
+            const perfMonthSel = document.getElementById("perf-monthSel");
+            populateMonthSelect(perfMonthSel, S.entries.filter(e => e.type !== "transfer").map(e => e.date));
+            const perfSel = perfMonthSel.value;
+            const lastMonthYM = recentWindowStart().substring(0, 7);
+            const monthKeys = Object.keys(m).sort().reverse().filter(k => perfSel === "recent" ? k >= lastMonthYM : k === perfSel);
+            const mb = document.getElementById("monthBody"); mb.innerHTML = "";
+            monthKeys.forEach(k => {
+                const r = m[k], tot = r.sv + r.in + r.dv;
+                const diff = tot - (S.goal.monthlySaving || 0);
+                const achieved = diff >= 0;
+                const tr = document.createElement("tr");
+                tr.innerHTML = '<td>' + k + '</td><td class="num">' + won(r.sv) + '</td><td class="num">' + won(r.in) + '</td><td class="num" style="color:var(--s1)">' + won(r.dv) + '</td>' +
+                    '<td class="num">' + won(tot) + '</td><td class="num ' + (diff >= 0 ? 'gain' : 'loss') + '">' + (diff >= 0 ? '+' : '') + won(diff) + '</td>' +
+                    '<td style="text-align:center" class="' + (achieved ? 'gain' : 'loss') + '">' + (achieved ? '✅ 달성' : '❌ 미달성') + '</td>';
+                mb.appendChild(tr);
+            });
+            if (!monthKeys.length) mb.innerHTML = '<tr><td colspan="7" class="muted">해당 기간에 실적이 없습니다.</td></tr>';
+
+            const sb = document.getElementById("syncBody"); sb.innerHTML = "";
+            [...S.syncLog].reverse().slice(0, 3).forEach(s => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = '<td>' + s.date + '</td><td>' + esc(s.mode) + '</td><td>' + esc(s.detail) + '</td>';
+                sb.appendChild(tr);
+            });
+            if (!S.syncLog.length) sb.innerHTML = '<tr><td colspan="3" class="muted">아직 기록이 없습니다.</td></tr>';
+        }
+
+        const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+        const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+        /* ---------- 차트 ---------- */
+        function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+        function niceStep(range, count) {
+            const raw = Math.max(1, range) / Math.max(1, count);
+            const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+            const n = raw / mag;
+            const s = n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10;
+            return s * mag;
+        }
+        function drawProjection(c) {
+            const svg = document.getElementById("chartProj");
+            const W = Math.max(340, svg.parentElement.clientWidth - 4), H = 260;
+            const P = { t: 18, r: W < 560 ? 14 : 16, b: 36, l: W < 560 ? 54 : 70 };
+            svg.setAttribute("width", W); svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+            const iw = W - P.l - P.r, ih = H - P.t - P.b;
+            const n = c.n, pts = [];
+            const [ty, tm] = (S.goal.targetMonth || "2028-05").split("-").map(Number);
+            for (let i = 0; i <= n; i++) {
+                const d = new Date(ty, tm - 1 - (n - i), 1);
+                pts.push({ i, v: c.total + c.plan * i, label: String(d.getFullYear()).slice(2) + "." + String(d.getMonth() + 1).padStart(2, "0") });
+            }
+            const rawMax = Math.max(c.goal, pts[pts.length - 1].v) * 1.06;
+            const step = niceStep(rawMax, 4);
+            const maxV = Math.ceil(rawMax / step) * step;
+            const X = i => P.l + (n === 0 ? iw / 2 : iw * i / n);
+            const Y = v => P.t + ih - ih * (v / maxV);
+            let g = "";
+            for (let v = 0; v <= maxV + 1; v += step) {
+                const y = Y(v);
+                g += '<line x1="' + P.l + '" y1="' + y + '" x2="' + (W - P.r) + '" y2="' + y + '" stroke="' + css("--grid") + '" stroke-width="1"/>' +
+                    '<text x="' + (P.l - 8) + '" y="' + (y + 4) + '" text-anchor="end" font-size="10.5" fill="' + css("--muted") + '" style="font-variant-numeric:tabular-nums">' + kfmt(v) + '</text>';
+            }
+            const xs = Math.max(1, Math.ceil(n / 8));
+            for (let i = 0; i <= n; i += xs) {
+                g += '<text x="' + X(i) + '" y="' + (H - P.b + 16) + '" text-anchor="middle" font-size="10.5" fill="' + css("--muted") + '">' + pts[i].label + '</text>';
+            }
+            // 목표선
+            const gy = Y(c.goal);
+            g += '<line x1="' + P.l + '" y1="' + gy + '" x2="' + (W - P.r) + '" y2="' + gy + '" stroke="' + css("--axis") + '" stroke-width="2" stroke-dasharray="5 4"/>';
+            g += '<text x="' + (P.l + 8) + '" y="' + (gy - 8) + '" text-anchor="start" font-size="11" fill="' + css("--ink2") + '" paint-order="stroke" stroke="' + css("--surface") + '" stroke-width="4">필요 준비자금 ' + kfmt(c.goal) + '</text>';
+            // 면적 + 선
+            const line = pts.map((p, i) => (i ? "L" : "M") + X(p.i) + " " + Y(p.v)).join(" ");
+            g += '<path d="' + line + ' L' + X(n) + ' ' + (P.t + ih) + ' L' + X(0) + ' ' + (P.t + ih) + ' Z" fill="' + css("--s1") + '" opacity="0.10"/>';
+            g += '<path d="' + line + '" fill="none" stroke="' + css("--s1") + '" stroke-width="2" stroke-linecap="round"/>';
+            // 도달 시점
+            const hit = pts.find(p => p.v >= c.goal);
+            if (hit && hit.i < n) {
+                g += '<circle cx="' + X(hit.i) + '" cy="' + Y(hit.v) + '" r="5" fill="' + css("--s1") + '" stroke="' + css("--surface") + '" stroke-width="2"/>';
+                const anchor = hit.i > n * 0.75 ? "end" : "middle";
+                const dx = hit.i > n * 0.75 ? -10 : 0;
+                g += '<text x="' + (X(hit.i) + dx) + '" y="' + (Y(hit.v) + 20) + '" text-anchor="' + anchor + '" font-size="11" font-weight="600" fill="' + css("--ink") + '" paint-order="stroke" stroke="' + css("--surface") + '" stroke-width="4">' + hit.label + ' 목표 도달</text>';
+            }
+            g += '<circle cx="' + X(n) + '" cy="' + Y(pts[n].v) + '" r="4.5" fill="' + css("--s1") + '" stroke="' + css("--surface") + '" stroke-width="2"/>';
+            g += '<text x="' + (W - P.r) + '" y="' + (Y(pts[n].v) - 12) + '" text-anchor="end" font-size="11" font-weight="600" fill="' + css("--ink") + '" paint-order="stroke" stroke="' + css("--surface") + '" stroke-width="4">' + kfmt(pts[n].v) + '</text>';
+            g += '<line x1="' + P.l + '" y1="' + (P.t + ih) + '" x2="' + (W - P.r) + '" y2="' + (P.t + ih) + '" stroke="' + css("--axis") + '" stroke-width="1"/>';
+            svg.innerHTML = g;
+        }
+
+        // 자산 항목마다 고정된 색을 배정 (금액 순위가 바뀌어도 같은 항목은 같은 색 유지),
+        // 8개를 넘으면 나머지는 "기타"로 묶음
+        function buildCompositionRows() {
+            const PAL = ["--s1", "--s2", "--s3", "--s4", "--s5", "--s6", "--s7", "--s8"].map(css);
+            const identity = S.buckets.map((b, i) => ({ id: b.id, name: b.name, amt: bucketAmount(b), idx: i }));
+            let base;
+            if (identity.length > 8) {
+                const kept = identity.slice(0, 7);
+                const restAmt = identity.slice(7).reduce((s, r) => s + r.amt, 0);
+                base = kept.concat([{ id: "__other__", name: "기타", amt: restAmt, idx: 7 }]);
+            } else base = identity;
+            const withColor = base.map((r, i) => Object.assign({}, r, { color: PAL[i % PAL.length] }));
+            return withColor.sort((a, b) => {
+                const aH = a.name === "남편 자산" ? 1 : 0, bH = b.name === "남편 자산" ? 1 : 0;
+                if (aH !== bH) return aH - bH;
+                return b.amt - a.amt;
+            });
+        }
+        function polarPt(cx, cy, r, deg) {
+            const rad = (deg - 90) * Math.PI / 180;
+            return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+        }
+        function ringArc(cx, cy, r, a0, a1) {
+            const s = polarPt(cx, cy, r, a0), e = polarPt(cx, cy, r, a1);
+            const large = (a1 - a0) > 180 ? 1 : 0;
+            return "M " + s.x + " " + s.y + " A " + r + " " + r + " 0 " + large + " 1 " + e.x + " " + e.y;
+        }
+        function labelInk(hex) {
+            const h = hex.replace("#", "");
+            const r = parseInt(h.substr(0, 2), 16) / 255, g = parseInt(h.substr(2, 2), 16) / 255, bl = parseInt(h.substr(4, 2), 16) / 255;
+            const L = 0.2126 * r + 0.7152 * g + 0.0722 * bl;
+            return L > 0.55 ? "#0b0b0b" : "#ffffff";
+        }
+        function drawDonut(rows, total) {
+            const svg = document.getElementById("chartComp");
+            const wrapW = svg.parentElement.parentElement.clientWidth;
+            const size = Math.max(200, Math.min(300, wrapW < 420 ? wrapW - 32 : 280));
+            const cx = size / 2, cy = size / 2, rOuter = size / 2 - 6, rInner = rOuter * 0.62, rMid = (rOuter + rInner) / 2, ringW = rOuter - rInner;
+            svg.setAttribute("width", size); svg.setAttribute("height", size); svg.setAttribute("viewBox", "0 0 " + size + " " + size);
+            const sum = rows.reduce((s, r) => s + Math.max(0, r.amt), 0) || 1;
+            const gapDeg = Math.min(3, (2 / (2 * Math.PI * rMid)) * 360 * 4);
+            let angle = 0, g = "";
+            rows.forEach(r => {
+                const span = Math.max(0, r.amt) / sum * 360;
+                if (span <= 0) return;
+                const a0 = angle + gapDeg / 2, a1 = angle + span - gapDeg / 2;
+                if (a1 > a0) {
+                    g += '<path class="arcseg" d="' + ringArc(cx, cy, rMid, a0, a1) + '" fill="none" stroke="' + r.color + '" stroke-width="' + ringW + '" stroke-linecap="butt"><title>' +
+                        esc(r.name) + ": " + won(r.amt) + "원 (" + (total > 0 ? (r.amt / total * 100).toFixed(1) : 0) + "%)" + '</title></path>';
+                    const pct = total > 0 ? r.amt / total * 100 : 0;
+                    if (pct >= 7) {
+                        const mid = angle + span / 2, lp = polarPt(cx, cy, rMid, mid), ink = labelInk(r.color);
+                        g += '<text x="' + lp.x + '" y="' + (lp.y + 4) + '" text-anchor="middle" font-size="12" font-weight="700" fill="' + ink + '">' + pct.toFixed(0) + '%</text>';
+                    }
+                }
+                angle += span;
+            });
+            // 중앙 라벨
+            g += '<text x="' + cx + '" y="' + (cy - 6) + '" text-anchor="middle" font-size="11.5" fill="' + css("--muted") + '">총자산</text>';
+            g += '<text x="' + cx + '" y="' + (cy + 16) + '" text-anchor="middle" font-size="17" font-weight="700" fill="' + css("--ink") + '">' + kfmt(total) + '</text>';
+            svg.innerHTML = g;
+
+            const lg = document.getElementById("compLegend"); lg.innerHTML = "";
+            rows.forEach(r => {
+                const pct = total > 0 ? (r.amt / total * 100) : 0;
+                const row = document.createElement("div"); row.className = "row";
+                row.innerHTML = '<i class="dot" style="background:' + r.color + '"></i><span class="nm">' + esc(r.name) + '</span>' +
+                    '<span class="amt">' + kfmt(r.amt) + '</span><span class="pct">' + pct.toFixed(1) + '%</span>';
+                lg.appendChild(row);
+            });
+        }
+
+        /* ---------- 시세 조회 ---------- */
+        const SOURCES = [
+            {
+                name: "naver-basic", url: c => "https://api.stock.naver.com/stock/" + c + "/basic",
+                pick: j => parseNum(j && (j.closePrice || j.nowPrice))
+            },
+            {
+                name: "naver-poll", url: c => "https://polling.finance.naver.com/api/realtime/domestic/stock/" + c,
+                pick: j => parseNum(j && j.datas && j.datas[0] && (j.datas[0].closePrice || j.datas[0].nv))
+            },
+            {
+                name: "yahoo", url: c => "https://query1.finance.yahoo.com/v8/finance/chart/" + (/^\d+$/.test(c) ? c + ".KS" : c) + "?range=5d&interval=1d",
+                pick: j => {
+                    const m = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
+                    return m ? parseNum(m.regularMarketPrice || m.chartPreviousClose) : 0;
+                }
+            }
+        ];
+        const PROXIES = [
+            u => u,
+            u => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u),
+            u => "https://corsproxy.io/?url=" + encodeURIComponent(u),
+            u => "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(u)
+        ];
+        async function getJSON(url, ms) {
+            const ac = new AbortController(); const t = setTimeout(() => ac.abort(), ms || 9000);
+            try {
+                const r = await fetch(url, { signal: ac.signal, headers: { "Accept": "application/json" } });
+                if (!r.ok) throw new Error("HTTP " + r.status);
+                const txt = await r.text();
+                return JSON.parse(txt);
+            } finally { clearTimeout(t); }
+        }
+        async function fetchPrice(code, ms, fxRate) {
+            for (const p of PROXIES) {
+                for (const s of SOURCES) {
+                    try {
+                        const j = await getJSON(p(s.url(code)), ms);
+                        let v = s.pick(j);
+                        if (v > 0) return v;
+                    } catch (e) { /* 다음 경로 시도 */ }
+                }
+            }
+            return 0;
+        }
+        async function syncPrices(opts) {
+            const silent = !!(opts && opts.silent);
+            const btn = document.getElementById("btnSync");
+            if (!silent && S.lastSync === todayISO()) {
+                if (!confirm("오늘 이미 종가를 반영했습니다. 다시 반영할까요?")) return;
+            }
+            btn.disabled = true; const old = btn.textContent; btn.textContent = "조회 중…";
+
+            // 1) 서버(Apps Script)를 통한 조회 우선 시도 — CORS 제약이 없어 훨씬 안정적
+            if (sync.url) {
+                try {
+                    const res = await serverRefreshMarket();
+                    if (res) {
+                        btn.disabled = false; btn.textContent = priceBtnLabel();
+                        if (res.priceOk > 0) {
+                            render();
+                            const skipNote = res.pushSkipped ? " (⚠ 서버에 이 기기가 모르는 기록이 있어 이 기기 값 저장은 건너뜀)" : "";
+                            toast(res.priceOk + "/" + res.priceTotal + "개 종목 종가를 서버에서 갱신했습니다" + (res.fxOk ? " (환율도 갱신됨)" : "") + skipNote);
+                            return;
+                        } else if (!silent) {
+                            openPriceModal("서버 조회에도 실패했습니다. 직접 입력해 주세요.");
+                            return;
+                        } else {
+                            return; // 자동 실행 중 실패는 조용히 넘어감
+                        }
+                    }
+                } catch (e) { /* 서버 방식 실패 시 아래 클라이언트 폴백으로 진행 */ }
+            }
+
+            // 2) 폴백: 브라우저에서 직접 조회 (구글시트 연동이 없거나 서버 조회가 실패한 경우)
+            const codes = [...new Set(S.holdings.map(h => h.code).filter(Boolean))];
+            const got = {}; let okCount = 0;
+            const ms = silent ? 4000 : 9000; // 자동 실행일 땐 실패를 더 빨리 포기해서 화면이 오래 멈춰 보이지 않게 함
+            for (const c of codes) {
+                btn.textContent = "조회 중… " + c;
+                const v = await fetchPrice(c, ms);
+                if (v > 0) { got[c] = v; okCount++; }
+            }
+            btn.disabled = false; btn.textContent = priceBtnLabel();
+            if (okCount > 0) {
+                S.holdings.forEach(h => { if (got[h.code]) { h.price = got[h.code]; h.priceDate = todayISO(); } });
+                S.lastSync = todayISO();
+                S.syncLog.push({ date: todayISO(), mode: silent ? "자동(앱 실행 시)" : "자동", detail: codes.length + "종목 중 " + okCount + "종목 반영" });
+            }
+            if (okCount < codes.length) {
+                if (silent) {
+                    // 자동 실행 중 실패/일부실패는 조용히 넘어감 (사용자가 요청하지 않은 상황에서 모달을 띄우지 않음)
+                    if (okCount > 0) { save(true); render(); toast(okCount + "개 종목 종가를 자동 반영했습니다 (일부만 성공)"); }
+                } else {
+                    openPriceModal(okCount === 0
+                        ? "자동 조회가 차단되었습니다. 증권사 앱이나 네이버 금융에서 " + priceWordLabel() + " 종가를 확인해 입력해 주세요."
+                        : "일부 종목만 자동 조회되었습니다. 나머지를 확인해 입력해 주세요.");
+                }
+            } else {
+                save(true); render(); toast(okCount + "개 종목 종가를 반영했습니다" + (silent ? " (앱 실행 시 자동)" : ""));
+            }
+        }
+        function openPriceModal(msg) {
+            document.getElementById("priceModalSub").textContent = msg || "각 종목의 " + priceWordLabel() + " 종가를 입력해 주세요.";
+            const tb = document.getElementById("priceModalBody"); tb.innerHTML = "";
+            S.holdings.forEach(h => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = '<td>' + esc(h.name) + ' <span class="muted">' + esc(h.code) + '</span></td>' +
+                    '<td style="width:120px"><input class="num" value="' + won(h.price) + '" data-pm="' + h.id + '"></td>';
+                tb.appendChild(tr);
+            });
+            document.getElementById("priceModal").classList.add("show");
+        }
+
+        /* ---------- 토스트 ---------- */
+        let toastTimer = null;
+        function toast(msg) {
+            const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show");
+            clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+        }
+
+        /* ---------- 이벤트 ---------- */
+        document.querySelectorAll(".tab").forEach(t => {
+            t.addEventListener("click", () => {
+                document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === t));
+                ["dash", "assets", "goal", "flow", "loan", "log"].forEach(k => {
+                    document.getElementById("tab-" + k).hidden = (k !== t.dataset.tab);
+                });
+                if (t.dataset.tab === "dash") renderDash();
+                if (t.dataset.tab === "loan") renderLoan();
+            });
+        });
+
+        document.getElementById("btnSave").addEventListener("click", () => save(true));
+        document.getElementById("btnTheme").addEventListener("click", () => {
+            S.theme = S.theme === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", S.theme);
+            autosave(); renderDash();
+        });
+        document.getElementById("btnExport").addEventListener("click", () => {
+            const blob = new Blob([JSON.stringify(S, null, 2)], { type: "application/json" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "잔금프로젝트_백업_" + todayISO() + ".json";
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+            toast("백업 파일을 저장했습니다");
+        });
+        document.getElementById("btnImport").addEventListener("click", () => document.getElementById("fileInput").click());
+        document.getElementById("fileInput").addEventListener("change", ev => {
+            const f = ev.target.files[0]; if (!f) return;
+            const rd = new FileReader();
+            rd.onload = () => {
+                try {
+                    const d = JSON.parse(rd.result);
+                    if (!d.goal || !d.buckets) throw new Error("형식 오류");
+                    S = migrate(d);
+                    document.documentElement.setAttribute("data-theme", S.theme || "light");
+                    save(false); render(); toast("백업을 불러왔습니다");
+                } catch (e) { alert("백업 파일을 읽을 수 없습니다: " + e.message); }
+            };
+            rd.readAsText(f); ev.target.value = "";
+        });
+
+        // 입력 감지 (Event Delegation)
+        document.body.addEventListener("change", e => {
+            const el = e.target;
+
+            if (el.dataset && el.dataset.goal) {
+                const k = el.dataset.goal;
+                S.goal[k] = el.type === "checkbox" ? el.checked : (el.type === "month" ? el.value : parseNum(el.value));
+                if (k === "totalPrice" || k === "contractPaid" || k === "midLoan") {
+                    const auto = (S.goal.totalPrice || 0) - (S.goal.contractPaid || 0) - (S.goal.midLoan || 0);
+                    if (auto >= 0) S.goal.balance = auto;
+                }
+                autosave(); renderGoal(); renderDash(); renderLoan();
+            }
+
+            if (el.dataset && el.dataset.loan) {
+                const k = el.dataset.loan;
+                S.loan[k] = el.type === "checkbox" ? el.checked : (el.tagName === "SELECT" ? el.value : parseNum(el.value));
+                if (k === "customAmount" && !S.loan.customAmount) {
+                    const totalNeed = totalFundingNeed();
+                    S.loan.manualAmount = Math.max(0, totalNeed - (S.goal.contractPaid || 0));
+                }
+                autosave(); renderLoan();
+            }
+        });
+
+        // 참고 지표 (환율/달러인덱스)
+        document.querySelectorAll("[data-fx]").forEach(el => {
+            el.addEventListener("change", () => {
+                const k = el.dataset.fx;
+                S.fx[k] = el.type === "date" ? el.value : parseNum(el.value);
+                autosave();
+            });
+        });
+
+        // 동기화
+        document.getElementById("btnSyncSave").addEventListener("click", () => {
+            sync.url = document.getElementById("sync-url").value.trim();
+            saveSyncCfg();
+            toast(sync.url ? "연결 정보를 저장했습니다" : "연결 정보를 비웠습니다 (이 기기에만 저장됨)");
+            setSyncStatus(sync.url ? "연결됨 (아직 동기화 전)" : "연결 안 됨");
+        });
+        document.getElementById("btnSyncNow").addEventListener("click", () => {
+            sync.url = document.getElementById("sync-url").value.trim();
+            saveSyncCfg();
+            if (!sync.url) { toast("먼저 웹 앱 URL을 입력해 주세요"); return; }
+            doSync();
+        });
+        document.getElementById("btnSyncPull").addEventListener("click", () => {
+            sync.url = document.getElementById("sync-url").value.trim();
+            saveSyncCfg();
+            if (!sync.url) { toast("먼저 웹 앱 URL을 입력해 주세요"); return; }
+            syncForcePull();
+        });
+        document.getElementById("btnSyncPush").addEventListener("click", () => {
+            sync.url = document.getElementById("sync-url").value.trim();
+            saveSyncCfg();
+            if (!sync.url) { toast("먼저 웹 앱 URL을 입력해 주세요"); return; }
+            syncForcePush();
+        });
+
+        // 자산 편집 (이벤트 위임)
+        document.body.addEventListener("change", e => {
+            const el = e.target;
+            if (el.dataset.h) {
+                const h = S.holdings.find(x => x.id === el.dataset.h); if (!h) return;
+                const f = el.dataset.f;
+                if (f === "isUsd") { h[f] = el.checked; }
+                else { h[f] = (f === "qty" || f === "price" || f === "avgPrice") ? parseNum(el.value) : el.value; }
+                if (f === "price") h.priceDate = todayISO();
+                autosave(); renderAssets(); renderDash();
+            } else if (el.dataset.b) {
+                const b = S.buckets.find(x => x.id === el.dataset.b); if (!b) return;
+                const f = el.dataset.f;
+                if (f === "amount") b.amount = parseNum(el.value);
+                else if (f === "kind") { b.kind = el.value; if (b.kind === "stock") b.amount = 0; }
+                else b[f] = el.value;
+                autosave(); renderAssets(); renderDash(); renderSelects();
+            }
+        });
+        document.body.addEventListener("click", e => {
+            const b = e.target.closest("button"); if (!b) return;
+            if (b.dataset.delh) {
+                if (!confirm("이 종목을 삭제할까요?")) return;
+                S.holdings = S.holdings.filter(h => h.id !== b.dataset.delh);
+                autosave(); renderAssets(); renderDash();
+            }
+            if (b.dataset.moveh) {
+                const dir = parseInt(b.dataset.dir, 10);
+                const h = S.holdings.find(x => x.id === b.dataset.moveh);
+                if (h) {
+                    const ownerKey = x => x.owner === "아내" ? "아내" : x.owner === "남편" ? "남편" : "";
+                    const groupItems = S.holdings.filter(x => ownerKey(x) === ownerKey(h)).sort((a, c) => (a.order || 0) - (c.order || 0));
+                    const idx = groupItems.findIndex(x => x.id === h.id);
+                    const swapIdx = idx + dir;
+                    if (swapIdx >= 0 && swapIdx < groupItems.length) {
+                        const other = groupItems[swapIdx];
+                        const tmp = h.order; h.order = other.order; other.order = tmp;
+                        autosave(); renderAssets();
+                    }
+                }
+            }
+            if (b.dataset.delb) {
+                const bk = S.buckets.find(x => x.id === b.dataset.delb);
+                const used = S.holdings.some(h => h.bucketId === bk.id);
+                if (used) { alert("이 항목에 속한 종목이 있어 삭제할 수 없습니다. 종목을 먼저 옮기거나 삭제해 주세요."); return; }
+                if (S.buckets.length <= 1) { alert("자산 항목은 최소 1개가 있어야 합니다."); return; }
+                if (!confirm("‘" + bk.name + "’ 항목을 삭제할까요? 관련 기록은 남습니다.")) return;
+                S.buckets = S.buckets.filter(x => x.id !== bk.id);
+                autosave(); render();
+            }
+            if (b.dataset.dele) {
+                const en = S.entries.find(x => x.id === b.dataset.dele); if (!en) return;
+                if (!confirm("이 기록을 삭제하고 자산 금액을 되돌릴까요?")) return;
+                applyEntry(en, -1);
+                S.entries = S.entries.filter(x => x.id !== en.id);
+                autosave(); render();
+            }
+        });
+        function nextHoldingOrder() {
+            return S.holdings.reduce((m, h) => typeof h.order === "number" ? Math.max(m, h.order) : m, 0) + 1;
+        }
+        document.getElementById("btnAddHold").addEventListener("click", () => {
+            const sb = S.buckets.find(b => b.kind === "stock");
+            if (!sb) { alert("먼저 ‘주식 계좌’ 유형의 자산 항목을 만들어 주세요."); return; }
+            S.holdings.push({ id: uid(), bucketId: sb.id, name: "새 종목", code: "", account: "", owner: "", qty: 0, avgPrice: 0, price: 0, priceDate: "", order: nextHoldingOrder() });
+            autosave(); renderAssets(); renderDash();
+        });
+        document.getElementById("btnAddBucket").addEventListener("click", () => {
+            S.buckets.push({ id: uid(), name: "새 자산 항목", kind: "cash", amount: 0 });
+            autosave(); renderAssets(); renderDash(); renderSelects();
+        });
+
+        // 시세
+        document.getElementById("btnSync").addEventListener("click", syncPrices);
+        document.getElementById("btnFxSync").addEventListener("click", syncFx);
+        document.getElementById("btnManualPrice").addEventListener("click", () => openPriceModal());
+        document.getElementById("pmCancel").addEventListener("click", () => document.getElementById("priceModal").classList.remove("show"));
+        document.getElementById("pmSave").addEventListener("click", () => {
+            let n = 0;
+            document.querySelectorAll("[data-pm]").forEach(inp => {
+                const h = S.holdings.find(x => x.id === inp.dataset.pm); if (!h) return;
+                const v = parseNum(inp.value);
+                if (v > 0 && v !== h.price) { h.price = v; h.priceDate = todayISO(); n++; }
+                else if (v > 0) { h.priceDate = todayISO(); }
+            });
+            S.lastSync = todayISO();
+            S.syncLog.push({ date: todayISO(), mode: "직접 입력", detail: n + "종목 가격 변경" });
+            document.getElementById("priceModal").classList.remove("show");
+            save(true); render(); toast("종가를 반영했습니다");
+        });
+
+        // 저축 / 유입 / 이동
+        function applyEntry(e, sign) {
+            const get = id => S.buckets.find(b => b.id === id);
+            if (e.type === "saving" || e.type === "inflow" || e.type === "dividend") {
+                const b = get(e.bucketId);
+                if (b && b.kind !== "stock") b.amount = (b.amount || 0) + sign * e.amount;
+                else if (b && b.kind === "stock" && e.holdingId) {
+                    const h = S.holdings.find(x => x.id === e.holdingId);
+                    if (h) {
+                        const totalCost = (h.qty || 0) * (h.avgPrice || 0);
+                        const tradeCost = (e.stockQty || 0) * (e.execPrice || 0);
+                        const newTotalCost = totalCost + sign * tradeCost;
+                        const newQty = (h.qty || 0) + sign * (e.stockQty || 0);
+                        h.qty = newQty;
+                        h.avgPrice = newQty > 0 ? Math.round(newTotalCost / newQty) : 0;
+                    }
+                }
+            } else if (e.type === "transfer") {
+                const f = get(e.fromId), t = get(e.toId);
+                if (f && f.kind !== "stock") f.amount = (f.amount || 0) - sign * e.amount;
+                if (t && t.kind !== "stock") t.amount = (t.amount || 0) + sign * e.amount;
+            }
+        }
+        function addEntry(e) {
+            S.entries.push(e); applyEntry(e, 1);
+            autosave(); render();
+        }
+        document.getElementById("sv-bucket").addEventListener("change", updateSvStockUI);
+        document.getElementById("sv-stockSel").addEventListener("change", updateSvNewUI);
+        document.getElementById("sv-qty").addEventListener("input", updateSvAmtFromStock);
+        document.getElementById("sv-execPrice").addEventListener("input", updateSvAmtFromStock);
+        document.getElementById("btnAddSaving").addEventListener("click", () => {
+            const bid = document.getElementById("sv-bucket").value;
+            const b = S.buckets.find(x => x.id === bid);
+            const date = document.getElementById("sv-date").value || todayISO();
+            const memo = document.getElementById("sv-memo").value;
+            if (b && b.kind === "stock") {
+                const qty = parseNum(document.getElementById("sv-qty").value);
+                if (qty <= 0) { alert("주수를 입력해 주세요."); return; }
+                const execPrice = parseNum(document.getElementById("sv-execPrice").value);
+                if (execPrice <= 0) { alert("체결단가를 입력해 주세요."); return; }
+                const amt = qty * execPrice;
+                const sel = document.getElementById("sv-stockSel").value;
+                let holdingId = sel;
+                if (sel === SV_NEW) {
+                    const name = document.getElementById("sv-newName").value.trim();
+                    if (!name) { alert("종목명을 입력해 주세요."); return; }
+                    const code = document.getElementById("sv-newCode").value.trim();
+                    const nh = { id: uid(), bucketId: bid, name, code, account: "", owner: "", qty: 0, avgPrice: 0, price: execPrice, priceDate: date, order: nextHoldingOrder() };
+                    S.holdings.push(nh);
+                    holdingId = nh.id;
+                }
+                addEntry({ id: uid(), type: "saving", date, amount: amt, bucketId: bid, memo, holdingId, stockQty: qty, execPrice });
+                document.getElementById("sv-qty").value = ""; document.getElementById("sv-newName").value = ""; document.getElementById("sv-newCode").value = ""; document.getElementById("sv-execPrice").value = "";
+                toast("저축을 기록하고 보유 종목에 반영했습니다");
+            } else {
+                const amt = parseNum(document.getElementById("sv-amt").value);
+                if (amt <= 0) { alert("금액을 입력해 주세요."); return; }
+                addEntry({ id: uid(), type: "saving", date, amount: amt, bucketId: bid, memo });
+                toast("저축을 기록했습니다");
+            }
+            document.getElementById("sv-amt").value = ""; document.getElementById("sv-memo").value = "";
+        });
+        document.getElementById("btnAddInflow").addEventListener("click", () => {
+            const amt = parseNum(document.getElementById("in-amt").value);
+            const bid = document.getElementById("in-bucket").value;
+            if (amt <= 0) { alert("금액을 입력해 주세요."); return; }
+            const b = S.buckets.find(x => x.id === bid);
+            if (b && b.kind === "stock") { alert("주식 계좌 항목에는 직접 입금할 수 없습니다."); return; }
+            addEntry({
+                id: uid(), type: "inflow", date: document.getElementById("in-date").value || todayISO(),
+                amount: amt, bucketId: bid, memo: document.getElementById("in-memo").value
+            });
+            document.getElementById("in-amt").value = ""; document.getElementById("in-memo").value = "";
+            toast("목돈 유입을 기록했습니다");
+        });
+        document.getElementById("btnAddDividend").addEventListener("click", () => {
+            const amt = parseNum(document.getElementById("dv-amt").value);
+            const bid = document.getElementById("dv-bucket").value;
+            if (amt <= 0) { alert("금액을 입력해 주세요."); return; }
+            const b = S.buckets.find(x => x.id === bid);
+            if (b && b.kind === "stock") { alert("주식 계좌 항목에는 직접 입금할 수 없습니다."); return; }
+            addEntry({
+                id: uid(), type: "dividend", date: document.getElementById("dv-date").value || todayISO(),
+                amount: amt, bucketId: bid, memo: document.getElementById("dv-memo").value
+            });
+            document.getElementById("dv-amt").value = ""; document.getElementById("dv-memo").value = "";
+            toast("배당금을 기록했습니다");
+        });
+        document.getElementById("tf-to").addEventListener("change", e => e.target.dataset.touched = "1");
+        document.getElementById("btnAddTransfer").addEventListener("click", () => {
+            const amt = parseNum(document.getElementById("tf-amt").value);
+            const from = document.getElementById("tf-from").value, to = document.getElementById("tf-to").value;
+            if (amt <= 0) { alert("금액을 입력해 주세요."); return; }
+            if (from === to) { alert("보낼 항목과 받을 항목이 같습니다."); return; }
+            const f = S.buckets.find(x => x.id === from), t = S.buckets.find(x => x.id === to);
+            if ((f && f.kind === "stock") || (t && t.kind === "stock")) { alert("주식 계좌는 자금 이동 대상이 아닙니다. 종목 수량을 직접 수정해 주세요."); return; }
+            if (f && (f.amount || 0) < amt && !confirm("‘" + f.name + "’ 잔액보다 큰 금액입니다. 그래도 이동할까요?")) return;
+            addEntry({
+                id: uid(), type: "transfer", date: document.getElementById("tf-date").value || todayISO(),
+                amount: amt, fromId: from, toId: to, memo: document.getElementById("tf-memo").value
+            });
+            document.getElementById("tf-amt").value = ""; document.getElementById("tf-memo").value = "";
+            toast("자금을 이동했습니다");
+        });
+
+        window.addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+        let rz = null;
+        window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(renderDash, 160); });
+
+        // 부부 연동: 핸드폰을 켜거나 앱 화면으로 돌아올 때 즉시 최신 데이터 자동 동기화
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "visible" && sync.url && !syncing) {
+                doSync();
+            }
+        });
+        window.addEventListener("focus", () => {
+            if (sync.url && !syncing) {
+                doSync();
+            }
+        });
+
+        /* ---------- 시작 ---------- */
+        load();
+        document.documentElement.setAttribute("data-theme", S.theme || "light");
+        if (!storageOK) document.getElementById("storageWarn").style.display = "block";
+        ["sv-date", "in-date", "tf-date"].forEach(id => document.getElementById(id).value = todayISO());
+        document.getElementById("sync-url").value = sync.url;
+        render();
+        stamp(new Date());
+        (async () => {
+            if (sync.url) {
+                setSyncStatus("연결됨 · 불러오는 중…");
+                try { await doSync(); } catch (e) { }
+            }
+            // 오늘 아직 종가를 반영하지 않았다면 자동으로 한 번 시도 (실패해도 조용히 넘어감)
+            if (S.lastSync !== todayISO()) {
+                try { await syncPrices({ silent: true }); } catch (e) { }
+            }
+        })();
+    </script>
+</body>
+
+</html>
