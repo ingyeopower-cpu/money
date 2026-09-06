@@ -49,17 +49,15 @@
 
 ## 3. 구글 Apps Script 자동 배포 완료 (기존 URL 100% 유지)
 
-- **배포 버전:** 버전 3 (Version 3)
-- **앱 타이틀 변경 완료:**
-  - 헤더 메인 타이틀: `🏛️ 고석현의 돈통`
-  - 브라우저 창/탭 타이틀: `고석현의 돈통 · 자산관리`
-  - 모바일 PWA 웹앱 명칭: `고석현의 돈통`
+- **배포 버전:** 버전 5 (Version 5)
+- **레이아웃 혁신 (모바일 뷰 기본 적용):**
+  - **PC 환경 모바일 앱 컨테이너 일원화:** PC 화면에서도 모바일과 동일하게 중앙 480px 스마트폰 프레임 및 소프트 앰비언트 배경 적용 (토스/인스타그램 웹 스타일).
+  - **상단 탭 & 하단 독 동시 지원:** 모바일 및 PC 전체에서 상단 가로 스크롤 필 탭과 하단 플로팅 독이 함께 노출되어 극강의 직관적 내비게이션 제공.
 - **라이브 검증 완료:**
   - **웹 앱 URL (변동 없음):**  
     `https://script.google.com/macros/s/AKfycbwvmGOCVuYW6Uul4DZBe13JVEHZ0ie3BiOP6vDc-ND9k-E-yLbVgqohcjsNowLV7MldHg/exec`
   - **배포 ID (변동 없음):** `AKfycbwvmGOCVuYW6Uul4DZBe13JVEHZ0ie3BiOP6vDc-ND9k-E-yLbVgqohcjsNowLV7MldHg`
-  - 브라우저 자동화를 통해 구글 Apps Script `Code.gs` 및 `Index.html`에 최신 코드 자동 반영 및 `새 버전` 배포 완료.
-  - 라이브 웹앱에서 신규 타이틀 `고석현의 돈통` 및 신규 토스 스타일 UI 정상 작동 확인 완료.
+  - GitHub Pages 및 구글 Apps Script 양쪽 모두 모바일-퍼스트 기본 뷰 정상 배포 확인 완료.
 
 ---
 
