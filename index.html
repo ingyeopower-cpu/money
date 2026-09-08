@@ -2409,6 +2409,10 @@
                     <span class="toad-diff-val" id="toadDiffVal">+0원 (+0.0%)</span>
                     <span class="toad-diff-desc" id="toadDiffDesc">전일 대비 변동액</span>
                 </div>
+                <!-- 주요 원인 항목 분석 배너 -->
+                <div class="toad-cause-banner" id="toadCauseBanner" style="display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:12.5px;text-align:left;line-height:1.5;">
+                    <span id="toadCauseText" style="font-weight:600;color:var(--ink);"></span>
+                </div>
             </div>
             
             <!-- 재치있는 두꺼비 코멘터리 -->
@@ -2976,6 +2980,17 @@
                     else if ((h.name || "").indexOf("리츠") >= 0 || (h.name || "").indexOf("인프라") >= 0) h.divYield = 5.0;
                     else if ((h.name || "").indexOf("하이일드") >= 0) h.divYield = 7.0;
                     else h.divYield = 0;
+                }
+                const BASE_PREV_PRICES = {
+                    "458730": 14965, // TIGER 미국배당다우존스
+                    "379800": 23620, // KODEX 미국S&P500
+                    "379810": 26470, // KODEX 미국나스닥100
+                    "476800": 4225,  // KODEX 한국부동산리츠인프라
+                    "455660": 9425,  // ACE 미국하이일드액티브(H)
+                    "SOXL": 117.28
+                };
+                if (typeof h.prevPrice !== "number" || h.prevPrice <= 0) {
+                    h.prevPrice = BASE_PREV_PRICES[h.code] || h.price;
                 }
             });
             // 표시순서(order) 기본값 지정 — order가 없는 종목만, 일반계좌 먼저·ISA 다음, 종목명 우선순위(S&P500→나스닥→배당다우존스→하이일드→부동산 순)로 부여. 이후에는 사용자가 ▲▼로 직접 조정한 순서를 그대로 유지함
@@ -4740,6 +4755,35 @@
             const _p2 = new Image(); _p2.src = getToadAssetUrl("toad_loss.gif");
         } catch (e) {}
 
+        function getTopMoverHolding() {
+            const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
+            const grouped = {};
+            (S.holdings || []).forEach(h => {
+                if (!h.price || !h.prevPrice || h.price === h.prevPrice) return;
+                const diffPerShare = h.price - h.prevPrice;
+                const totalDiff = diffPerShare * (h.qty || 0) * (h.isUsd ? fxRate : 1);
+                const pct = (diffPerShare / h.prevPrice) * 100;
+                const key = h.name || h.code;
+                if (!grouped[key]) {
+                    grouped[key] = { name: key, diff: 0, oldTotal: 0, pct: pct };
+                }
+                grouped[key].diff += totalDiff;
+                grouped[key].oldTotal += h.prevPrice * (h.qty || 0) * (h.isUsd ? fxRate : 1);
+            });
+            
+            const list = Object.values(grouped);
+            if (!list.length) return null;
+            
+            list.sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff));
+            const top = list[0];
+            const topPct = top.oldTotal > 0 ? (top.diff / top.oldTotal * 100) : top.pct;
+            return {
+                name: top.name,
+                diff: top.diff,
+                pct: topPct
+            };
+        }
+
         function renderToadModalContent(mode, change, isTest) {
             activeToadMode = mode;
             const box = document.getElementById("toadModalBox");
@@ -4754,6 +4798,8 @@
             const curAmt = document.getElementById("toadCurAmt");
             const diffVal = document.getElementById("toadDiffVal");
             const diffDesc = document.getElementById("toadDiffDesc");
+            const causeBanner = document.getElementById("toadCauseBanner");
+            const causeText = document.getElementById("toadCauseText");
             const bubbleIcon = document.getElementById("toadBubbleIcon");
             const bubbleText = document.getElementById("toadBubbleText");
             
@@ -4762,6 +4808,27 @@
             if (dateNote) dateNote.textContent = `${ty}년 ${Number(tm)}월 ${Number(td)}일 · 전일 대비 자산 리포트` + (isTest ? " (테스트)" : "");
             
             box.classList.remove("is-gain", "is-loss");
+            const topMover = getTopMoverHolding();
+            
+            if (causeBanner && causeText) {
+                if (topMover && Math.abs(topMover.diff) > 1000) {
+                    causeBanner.style.display = "block";
+                    if (topMover.diff < 0) {
+                        causeText.innerHTML = `📉 주요 원인: <b>${topMover.name}</b> 항목에서 <b>${topMover.pct.toFixed(1)}% (${kfmt(topMover.diff)}원)</b>이 사라졌어요! 😱`;
+                    } else {
+                        causeText.innerHTML = `📈 주요 원인: <b>${topMover.name}</b> 항목에서 <b>+${topMover.pct.toFixed(1)}% (+${kfmt(topMover.diff)}원)</b>이 생겼어요! 🎉`;
+                    }
+                } else if (isTest) {
+                    causeBanner.style.display = "block";
+                    if (mode === "loss") {
+                        causeText.innerHTML = `📉 주요 원인: <b>TIGER 미국배당다우존스</b> 항목에서 <b>-2.1% (-157만원)</b>이 사라졌어요! 😱`;
+                    } else {
+                        causeText.innerHTML = `📈 주요 원인: <b>KODEX 미국S&P500</b> 항목에서 <b>+1.8% (+45만원)</b>이 생겼어요! 🎉`;
+                    }
+                } else {
+                    causeBanner.style.display = "none";
+                }
+            }
             
             if (mode === "loss") {
                 box.classList.add("is-loss");
@@ -4774,13 +4841,14 @@
                 prevAmt.textContent = kfmt(change.hasPrev ? change.prevTotal : 212411792) + "원";
                 curAmt.textContent = kfmt(change.curTotal) + "원";
                 
-                const lossAmt = (change.diff < 0 && !isTest) ? -change.diff : 1240000;
-                const lossPct = (change.diff < 0 && !isTest) ? Math.abs(change.diffPct) : 0.58;
+                const lossAmt = (change.diff < 0 && !isTest) ? -change.diff : 1940000;
+                const lossPct = (change.diff < 0 && !isTest) ? Math.abs(change.diffPct) : 0.91;
                 diffVal.textContent = `-${kfmt(lossAmt)}원 (-${lossPct.toFixed(2)}%)`;
                 diffDesc.textContent = "전일 대비 감소액";
                 
                 bubbleIcon.textContent = "🗡️";
-                bubbleText.innerHTML = `“<b>강도 두꺼비가 칼질로 계좌를 썰어갔습니다!</b> 😱<br>하지만 2028년 5월 잔금일까지 우리는 적립식 장기 투자자입니다. 일희일비하지 말고 꾸준히 모아가면 반드시 승리합니다!”`;
+                const moverComment = (topMover && topMover.diff < 0) ? `특히 <b>${topMover.name}</b>에서 <b>${kfmt(Math.abs(topMover.diff))}원</b>을 썰어갔네요.<br>` : '';
+                bubbleText.innerHTML = `“<b>강도 두꺼비가 칼질로 계좌를 썰어갔습니다!</b> 😱<br>${moverComment}하지만 2028년 5월 잔금일까지 우리는 적립식 장기 투자자입니다. 일희일비하지 말고 꾸준히 모아가면 반드시 승리합니다!”`;
             } else {
                 box.classList.add("is-gain");
                 icon.textContent = "👑";
@@ -4798,7 +4866,8 @@
                 diffDesc.textContent = "전일 대비 증가액";
                 
                 bubbleIcon.textContent = "🍷";
-                bubbleText.innerHTML = `“<b>와인 잔을 높이 들고 축배를 듭시다! 짠~!</b> 🍷<br>전일 대비 자산이 늘어 입주 잔금 완납에 한 걸음 더 가까워졌습니다! 오늘도 멋지게 자산을 키워낸 두 분을 축하합니다!”`;
+                const moverComment = (topMover && topMover.diff > 0) ? `특히 <b>${topMover.name}</b>이 <b>+${kfmt(topMover.diff)}원</b> 기분 좋게 올랐네요!<br>` : '';
+                bubbleText.innerHTML = `“<b>와인 잔을 높이 들고 축배를 듭시다! 짠~!</b> 🍷<br>${moverComment}전일 대비 자산이 늘어 입주 잔금 완납에 한 걸음 더 가까워졌습니다! 오늘도 멋지게 자산을 키워낸 두 분을 축하합니다!”`;
             }
         }
 
