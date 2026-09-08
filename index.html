@@ -1568,6 +1568,238 @@
         .toad-header-btn:active {
             transform: scale(0.96);
         }
+
+        /* 헤더 빠른 환율 버튼 & 액션 그룹 */
+        .header-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .fx-header-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            color: var(--ink);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 11px;
+            border-radius: 99px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .fx-header-pill:hover {
+            border-color: #3182f6;
+            background: rgba(49, 130, 246, 0.06);
+            transform: scale(1.03);
+        }
+        .fx-header-pill:active {
+            transform: scale(0.97);
+        }
+        .fx-pill-flag {
+            font-size: 13px;
+        }
+        .fx-pill-spin {
+            display: inline-block;
+            font-size: 11px;
+            transition: transform 0.3s ease;
+        }
+        .fx-pill-spin.spinning {
+            animation: fxSpin 0.7s linear infinite;
+        }
+
+        /* 실시간 원·달러 환율 위젯 카드 (Live FX Card) */
+        .live-fx-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 16px 18px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .live-fx-card:hover {
+            border-color: rgba(49, 130, 246, 0.35);
+            box-shadow: 0 6px 20px rgba(49, 130, 246, 0.07);
+        }
+        .fx-card-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            gap: 8px;
+        }
+        .fx-badge-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .fx-icon-pill {
+            font-size: 11px;
+            font-weight: 800;
+            color: #2563eb;
+            background: rgba(37, 99, 235, 0.1);
+            padding: 2px 7px;
+            border-radius: 6px;
+            letter-spacing: 0.02em;
+        }
+        .fx-title-main {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: -0.01em;
+        }
+        .fx-live-indicator {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+            display: inline-block;
+            animation: fxPulse 2s infinite;
+        }
+        @keyframes fxPulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 10px rgba(16, 185, 129, 0.9); }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .fx-refresh-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--chip);
+            border: 1px solid var(--border);
+            color: var(--ink);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 11px;
+            border-radius: 99px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .fx-refresh-btn:hover {
+            background: #3182f6;
+            color: #ffffff;
+            border-color: #3182f6;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(49, 130, 246, 0.25);
+        }
+        .fx-refresh-btn:active {
+            transform: scale(0.96);
+        }
+        .fx-refresh-icon {
+            display: inline-block;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+        .fx-refresh-icon.spinning {
+            animation: fxSpin 0.7s linear infinite;
+        }
+        @keyframes fxSpin {
+            100% { transform: rotate(360deg); }
+        }
+        .fx-main-rate-wrap {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 4px 0 10px 0;
+        }
+        .fx-rate-big {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+        .fx-rate-num {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--ink);
+            letter-spacing: -0.03em;
+            font-variant-numeric: tabular-nums;
+            line-height: 1.1;
+        }
+        .fx-rate-unit {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+        .fx-rate-tags {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .fx-diff-pill {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 8px;
+            background: rgba(16, 185, 129, 0.12);
+            color: #10b981;
+            font-variant-numeric: tabular-nums;
+        }
+        .fx-diff-pill.up {
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+        }
+        .fx-diff-pill.down {
+            background: rgba(49, 130, 246, 0.12);
+            color: #3182f6;
+        }
+        .fx-dxy-pill {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 8px;
+            background: var(--chip);
+            color: var(--ink2);
+            border: 1px solid var(--border);
+            font-variant-numeric: tabular-nums;
+        }
+        .fx-bottom-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+            font-size: 11.5px;
+            color: var(--muted);
+            gap: 8px;
+        }
+        .fx-meta-left {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .fx-clock-icon {
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+        .fx-link-btn {
+            background: none;
+            border: none;
+            color: #3182f6;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .fx-link-btn:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -1582,7 +1814,14 @@
                         <div class="sub" id="headline">신혼부부 잔금 프로젝트 · 자산관리</div>
                     </div>
                 </div>
-                <button class="toad-header-btn" onclick="openToadAlertModal(true)" title="두꺼비 전일 대비 알림 테스트">🐸 두꺼비 보기</button>
+                <div class="header-actions-group">
+                    <button class="fx-header-pill" id="btnHeaderFx" onclick="syncLiveFx(true)" title="실시간 원·달러 환율 새로고침">
+                        <span class="fx-pill-flag">🇺🇸</span>
+                        <span class="fx-pill-rate" id="headerFxRate">—원</span>
+                        <span class="fx-pill-spin" id="headerFxSpin">🔄</span>
+                    </button>
+                    <button class="toad-header-btn" onclick="openToadAlertModal(true)" title="두꺼비 전일 대비 알림 테스트">🐸 두꺼비 보기</button>
+                </div>
             </div>
             <div class="tools">
                 <span class="savestate" id="savestate">—</span>
@@ -1661,6 +1900,40 @@
                 <div class="toad-briefing-right">
                     <div class="toad-diff-badge" id="toadDiffBadge">—</div>
                     <div class="toad-play-hint">🎬 움짤 보기 ›</div>
+                </div>
+            </div>
+
+            <!-- 실시간 원·달러 환율 위젯 카드 -->
+            <div class="card live-fx-card" id="liveFxCard">
+                <div class="fx-card-top-row">
+                    <div class="fx-badge-wrap">
+                        <span class="fx-icon-pill">🇺🇸 USD</span>
+                        <span class="fx-title-main">원·달러 환율</span>
+                        <span class="fx-live-indicator" id="fxLiveIndicator" title="실시간 연동 상태"></span>
+                    </div>
+                    <button class="fx-refresh-btn" id="btnLiveFxRefresh" onclick="syncLiveFx(true)" title="지금 실시간 환율 조회">
+                        <span class="fx-refresh-icon" id="fxRefreshIcon">🔄</span>
+                        <span class="fx-refresh-text">실시간 조회</span>
+                    </button>
+                </div>
+                <div class="fx-main-rate-wrap">
+                    <div class="fx-rate-big">
+                        <span class="fx-rate-num" id="dashFxRate">1,348.99</span>
+                        <span class="fx-rate-unit">원</span>
+                    </div>
+                    <div class="fx-rate-tags">
+                        <span class="fx-diff-pill" id="dashFxDiffPill">실시간 고시</span>
+                        <span class="fx-dxy-pill" id="dashFxDxyPill">DXY 99.16</span>
+                    </div>
+                </div>
+                <div class="fx-bottom-meta">
+                    <div class="fx-meta-left">
+                        <span class="fx-clock-icon">🕒</span>
+                        <span id="fxCheckpointNote">자동 체크: 16:00 (장 마감) · 06:00 (아침 정산)</span>
+                    </div>
+                    <button class="fx-link-btn" onclick="switchTab('assets')" title="자산 탭에서 환율 상세 및 미국 주식 확인">
+                        상세보기 ›
+                    </button>
                 </div>
             </div>
 
@@ -3439,6 +3712,92 @@
             }
         }
 
+        /* ---------- 실시간 원·달러 환율 즉시 업데이트 (수동 및 16시/06시 자동) ---------- */
+        async function syncLiveFx(showToast = true) {
+            const spinEl = document.getElementById("fxRefreshIcon");
+            const headerSpinEl = document.getElementById("headerFxSpin");
+            const btn = document.getElementById("btnLiveFxRefresh");
+            if (spinEl) spinEl.classList.add("spinning");
+            if (headerSpinEl) headerSpinEl.classList.add("spinning");
+            if (btn) btn.disabled = true;
+            
+            try {
+                // 1) 무료 공개 실시간 환율 API (open.er-api.com) 호출 - CORS 완전 개방, 최신 고시 환율 제공
+                const ac = new AbortController();
+                const timer = setTimeout(() => ac.abort(), 7000);
+                let gotRate = 0;
+                let gotDxy = 0;
+                let dxyIsExact = false;
+                
+                try {
+                    const r = await fetch("https://open.er-api.com/v6/latest/USD", { signal: ac.signal });
+                    const j = await r.json();
+                    if (j && j.result === "success" && j.rates && j.rates.KRW) {
+                        gotRate = Math.round(j.rates.KRW * 100) / 100;
+                        const rt = j.rates;
+                        const eurusd = 1 / rt.EUR, usdjpy = rt.JPY, gbpusd = 1 / rt.GBP, usdcad = rt.CAD, usdsek = rt.SEK, usdchf = rt.CHF;
+                        gotDxy = 50.14348112
+                            * Math.pow(eurusd, -0.576) * Math.pow(usdjpy, 0.136) * Math.pow(gbpusd, -0.119)
+                            * Math.pow(usdcad, 0.091) * Math.pow(usdsek, 0.042) * Math.pow(usdchf, 0.036);
+                    }
+                } catch (netErr) {
+                    console.warn("Client FX fetch failed, fallback to server if available", netErr);
+                } finally {
+                    clearTimeout(timer);
+                }
+                
+                // 2) 클라이언트 조회 실패 시 구글 스프레드시트 서버 조회 시도
+                if (!gotRate && sync.url) {
+                    try {
+                        const res = await serverRefreshMarket();
+                        if (res && res.fxOk && S.fx && S.fx.usdKrw > 0) {
+                            gotRate = S.fx.usdKrw;
+                        }
+                    } catch (e) {}
+                }
+                
+                if (gotRate > 0) {
+                    S.fx = S.fx || {};
+                    if (S.fx.usdKrw && S.fx.usdKrw !== gotRate) {
+                        S.fx.prevUsdKrw = S.fx.usdKrw;
+                    }
+                    S.fx.usdKrw = gotRate;
+                    S.fx.usdKrwDate = todayISO();
+                    if (gotDxy > 0) {
+                        S.fx.dxy = Math.round(gotDxy * 100) / 100;
+                        S.fx.dxyDate = todayISO();
+                    }
+                    S.fx.lastUpdated = new Date().toISOString();
+                    
+                    save(true);
+                    render();
+                    
+                    // 구글 스프레드시트에 백그라운드 동기화 (최신 환율 클라우드 저장)
+                    if (sync.url) {
+                        saveToServer(true).catch(() => {});
+                    }
+                    
+                    if (showToast) {
+                        toast(`🇺🇸 실시간 환율 갱신 완료: 1달러 = ${gotRate.toLocaleString('ko-KR')}원`);
+                    }
+                    return true;
+                } else {
+                    if (showToast) {
+                        toast("⚠️ 실시간 환율 조회에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+                    }
+                    return false;
+                }
+            } catch (err) {
+                console.error("syncLiveFx error:", err);
+                if (showToast) toast("환율 조회 오류: " + err.message);
+                return false;
+            } finally {
+                if (spinEl) spinEl.classList.remove("spinning");
+                if (headerSpinEl) headerSpinEl.classList.remove("spinning");
+                if (btn) btn.disabled = false;
+            }
+        }
+
         function renderDash() {
             const c = calc();
             const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
@@ -3504,6 +3863,58 @@
                 }
             } catch (errToadCard) {
                 console.error("Toad card render error:", errToadCard);
+            }
+
+            /* [위젯 1-C] 실시간 원·달러 환율 위젯 연산 및 렌더 */
+            try {
+                const fxRateVal = (S.fx && S.fx.usdKrw > 0) ? S.fx.usdKrw : 1350;
+                const fxDateStr = (S.fx && S.fx.usdKrwDate) || todayISO();
+                const dxyVal = (S.fx && S.fx.dxy > 0) ? S.fx.dxy : null;
+                const cp = getCurrentMarketCheckpoint();
+                
+                // 대시보드 환율 카드 숫자
+                const dashFxRateEl = document.getElementById("dashFxRate");
+                if (dashFxRateEl) dashFxRateEl.textContent = fxRateVal.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                
+                // 헤더 알약 버튼
+                const headerFxRateEl = document.getElementById("headerFxRate");
+                if (headerFxRateEl) headerFxRateEl.textContent = Math.round(fxRateVal).toLocaleString('ko-KR') + "원";
+                
+                // 달러 인덱스 배지
+                const dxyPillEl = document.getElementById("dashFxDxyPill");
+                if (dxyPillEl) {
+                    dxyPillEl.textContent = dxyVal ? `DXY ${dxyVal.toFixed(2)}` : "DXY —";
+                }
+                
+                // 등락 배지
+                const diffPillEl = document.getElementById("dashFxDiffPill");
+                if (diffPillEl) {
+                    const prevFx = S.fx && S.fx.prevUsdKrw;
+                    if (prevFx && prevFx > 0 && prevFx !== fxRateVal) {
+                        const diff = fxRateVal - prevFx;
+                        const diffPct = (diff / prevFx) * 100;
+                        diffPillEl.classList.remove("up", "down");
+                        if (diff > 0) {
+                            diffPillEl.classList.add("up");
+                            diffPillEl.textContent = `▲ +${diff.toFixed(2)}원 (+${diffPct.toFixed(2)}%)`;
+                        } else {
+                            diffPillEl.classList.add("down");
+                            diffPillEl.textContent = `▼ ${diff.toFixed(2)}원 (${diffPct.toFixed(2)}%)`;
+                        }
+                    } else {
+                        diffPillEl.classList.remove("up", "down");
+                        diffPillEl.textContent = "실시간 고시";
+                    }
+                }
+                
+                // 체크포인트 및 업데이트 안내
+                const cpNoteEl = document.getElementById("fxCheckpointNote");
+                if (cpNoteEl) {
+                    const updatedTimeStr = (S.fx && S.fx.lastUpdated) ? ` · 최근 ${new Date(S.fx.lastUpdated).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}` : ` (${fxDateStr})`;
+                    cpNoteEl.textContent = `1일 2회 자동 (16:00 · 06:00)${updatedTimeStr} · 미국 직투(SOXL) 연동`;
+                }
+            } catch (errFx) {
+                console.error("Dashboard FX render error:", errFx);
             }
 
             /* [위젯 2] 신혼부부 자산 포트폴리오 (아내 vs 남편 vs 공동) */
@@ -4330,7 +4741,8 @@
                         : "일부 종목만 자동 조회되었습니다. 나머지를 확인해 입력해 주세요.");
                 }
             } else {
-                save(true); render(); toast(okCount + "개 종목 종가를 반영했습니다" + (silent ? ` (${cp.timeLabel} 자동)` : ""));
+                await syncLiveFx(false);
+                save(true); render(); toast(okCount + "개 종목 종가 및 환율을 반영했습니다" + (silent ? ` (${cp.timeLabel} 자동)` : ""));
             }
         }
 
@@ -4733,6 +5145,7 @@
             if (lastSlot !== cp.slotId) {
                 try {
                     await syncPrices({ silent: true, slotId: cp.slotId });
+                    await syncLiveFx(false); // 16:00 한국 장 마감 / 06:00 아침 정산 동일 시각에 환율도 자동 업데이트
                     localStorage.setItem("toad_last_sync_slot", cp.slotId);
                     S.lastSyncSlot = cp.slotId;
                     save(true);
