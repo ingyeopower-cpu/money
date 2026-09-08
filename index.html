@@ -10,9 +10,9 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>고석현의 돈통 · 자산관리</title>
-    <!-- 두꺼비 움짤 빠른 로딩을 위한 Preload -->
-    <link rel="preload" as="image" href="./assets/toad_gain.gif">
-    <link rel="preload" as="image" href="./assets/toad_loss.gif">
+    <!-- 두꺼비 움짤 빠른 로딩을 위한 Preload (강력한 캐시 우회 적용) -->
+    <link rel="preload" as="image" href="./assets/toad_gain_v3.gif?v=20260908_v3">
+    <link rel="preload" as="image" href="./assets/toad_loss_v3.gif?v=20260908_v3">
     <!-- iOS / Android 모바일 웹앱(PWA) 전용 설정 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2389,7 +2389,7 @@
             <div class="toad-date-note" id="toadDateNote">2026년 9월 8일 · 전일 대비 리포트</div>
             
             <div class="toad-gif-container" id="toadGifContainer">
-                <img id="toadGifImg" class="toad-gif-img" src="./assets/toad_gain.gif" alt="두꺼비 움짤">
+                <img id="toadGifImg" class="toad-gif-img" src="./assets/toad_gain_v3.gif?v=20260908_v3" alt="두꺼비 움짤">
             </div>
             
             <!-- 자산 변동 디테일 카드 -->
@@ -4744,10 +4744,12 @@
         }
 
         function getToadAssetUrl(filename) {
+            const ver = "20260908_v3";
+            const actualFile = filename.replace(/\.gif$/, "_v3.gif");
             if (location.hostname.includes("github.io")) {
-                return "https://ingyeopower-cpu.github.io/money/assets/" + filename;
+                return "https://ingyeopower-cpu.github.io/money/assets/" + actualFile + "?v=" + ver;
             }
-            return "./assets/" + filename;
+            return "./assets/" + actualFile + "?v=" + ver;
         }
 
         try {
