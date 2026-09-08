@@ -6,7 +6,13 @@
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>고석현의 돈통 · 자산관리</title>
+    <!-- 두꺼비 움짤 빠른 로딩을 위한 Preload -->
+    <link rel="preload" as="image" href="./assets/toad_gain.gif">
+    <link rel="preload" as="image" href="./assets/toad_loss.gif">
     <!-- iOS / Android 모바일 웹앱(PWA) 전용 설정 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -4678,6 +4684,18 @@
             } catch (e) {}
         }
 
+        function getToadAssetUrl(filename) {
+            if (location.hostname.includes("github.io")) {
+                return "https://ingyeopower-cpu.github.io/money/assets/" + filename;
+            }
+            return "./assets/" + filename;
+        }
+
+        try {
+            const _p1 = new Image(); _p1.src = getToadAssetUrl("toad_gain.gif");
+            const _p2 = new Image(); _p2.src = getToadAssetUrl("toad_loss.gif");
+        } catch (e) {}
+
         function renderToadModalContent(mode, change, isTest) {
             activeToadMode = mode;
             const box = document.getElementById("toadModalBox");
@@ -4706,7 +4724,7 @@
                 icon.textContent = "🗡️";
                 text.textContent = "강도 두꺼비의 습격 · 자산 하락";
                 headline.textContent = "🚨 으악! 계좌가 습격당했습니다!";
-                gifImg.src = "./assets/toad_loss.gif?t=" + Date.now();
+                gifImg.src = getToadAssetUrl("toad_loss.gif");
                 
                 prevDateLbl.textContent = change.hasPrev ? `어제 자산 (${change.prevDate})` : "이전 자산";
                 prevAmt.textContent = kfmt(change.hasPrev ? change.prevTotal : 212411792) + "원";
@@ -4724,7 +4742,7 @@
                 icon.textContent = "👑";
                 text.textContent = "대왕 두꺼비의 축배 · 자산 상승";
                 headline.textContent = "🎉 만세! 자산이 상승했습니다!";
-                gifImg.src = "./assets/toad_gain.gif?t=" + Date.now();
+                gifImg.src = getToadAssetUrl("toad_gain.gif");
                 
                 prevDateLbl.textContent = change.hasPrev ? `어제 자산 (${change.prevDate})` : "이전 자산";
                 prevAmt.textContent = kfmt(change.hasPrev ? change.prevTotal : 210000000) + "원";
@@ -4772,9 +4790,9 @@
             if (modal) modal.classList.remove("show");
             
             const chk = document.getElementById("chkDoNotShowToday");
-            if (saveRemember || (chk && chk.checked)) {
+            if (chk && chk.checked) {
                 try {
-                    localStorage.setItem("toad_daily_alert_seen", todayISO());
+                    localStorage.setItem("toad_hide_today_" + todayISO(), "1");
                 } catch (e) {}
             }
         }
@@ -4782,12 +4800,15 @@
         function checkDailyToadAlert() {
             try {
                 const today = todayISO();
-                const seenDate = localStorage.getItem("toad_daily_alert_seen");
-                if (seenDate !== today) {
-                    // 오늘 처음 이 기기에서 방문/접속했을 때 팝업 자동 실행
+                const hideToday = localStorage.getItem("toad_hide_today_" + today);
+                const sessionShown = sessionStorage.getItem("toad_session_shown");
+                
+                // 오늘 하루 끄기를 누르지 않았고, 이번 앱 실행(세션)에서 아직 안 떴다면 0.15초 만에 즉각 팝업!
+                if (!hideToday && !sessionShown) {
+                    sessionStorage.setItem("toad_session_shown", "1");
                     setTimeout(() => {
                         openToadAlertModal(false);
-                    }, 650);
+                    }, 150);
                 }
             } catch (e) {
                 console.error("Daily check error:", e);
@@ -4806,17 +4827,32 @@
         document.getElementById("sync-url").value = sync.url;
         render();
         stamp(new Date());
+
+        // 앱 켜자마자 0.15초 만에 두꺼비 알림 즉각 실행! (느린 구글시트/시세조회 대기 완전히 분리)
+        checkDailyToadAlert();
+
         (async () => {
             if (sync.url) {
                 setSyncStatus("연결됨 · 불러오는 중…");
-                try { await doSync(); } catch (e) { }
+                try { 
+                    await doSync(); 
+                    // 백그라운드 동기화 완료 후 모달이 띄워져 있다면 최신 자산으로 금액 부드럽게 갱신
+                    const m = document.getElementById("toadAlertModal");
+                    if (m && m.classList.contains("show")) {
+                        renderToadModalContent(activeToadMode, getDailyAssetChange(), false);
+                    }
+                } catch (e) { }
             }
-            // 오늘 아직 종가를 반영하지 않았다면 자동으로 한 번 시도 (실패해도 조용히 넘어감)
+            // 오늘 아직 종가를 반영하지 않았다면 백그라운드에서 한 번 시도
             if (S.lastSync !== todayISO()) {
-                try { await syncPrices({ silent: true }); } catch (e) { }
+                try { 
+                    await syncPrices({ silent: true }); 
+                    const m = document.getElementById("toadAlertModal");
+                    if (m && m.classList.contains("show")) {
+                        renderToadModalContent(activeToadMode, getDailyAssetChange(), false);
+                    }
+                } catch (e) { }
             }
-            // 기기별 오늘 첫 로그인/접속 시 전일 대비 두꺼비 알림 자동 팝업
-            checkDailyToadAlert();
         })();
     </script>
 </body>
