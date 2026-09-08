@@ -22,8 +22,21 @@ description: Auto execution rule
 - 만약 앱스스크립트 UI에서 배포해야 할 경우:
   `배포 관리` -> 활성 배포 선택 -> `수정(연필 아이콘)` -> 버전: `새 버전` 선택 -> `배포` 순으로 진행하여 기존 주소(ID)가 유지되도록 할 것.
 
-# Minor & Scratch Files Rule
-- 브라우저 서브에이전트나 작업 중 생성되는 임시 메모/scratchpad 파일이 에디터 탭으로 자동 오픈되지 않도록 엄격 관리할 것.
-- 임시 스크립트나 중간 결과물은 반드시 `UserFacing: false`로 설정하거나 `scratch/` 디렉토리에만 보관할 것.
-- 작업 완료 후 불필요한 임시 scratchpad 파일은 즉시 정리할 것.
+# Unwanted Files & Scratchpad Zero-Tolerance Rule (에디터 탭 자동 열림 원천 차단)
+- **사용자 핵심 불편사항:** 작업 중 `Scratchpad`, 임시 메모, 불필요한 아티팩트 파일이 에디터 상단 탭으로 우후죽순 열려 작업 화면이 지저분해지는 문제.
+- **원인:**
+  1. `browser_subagent`가 호출될 때마다 brain 폴더에 자동 생성하는 `scratchpad_*.md` 파일이 IDE 상단 에디터 탭으로 자동 등록됨.
+  2. 에이전트가 임시 파일을 `UserFacing: true`로 생성하여 에디터 탭으로 오픈됨.
+- **절대 준수 수칙:**
+  1. **브라우저 서브에이전트 종료 즉시 파일 강제 삭제 (필수):**
+     `browser_subagent`를 호출한 경우, 결과 확인 후 **턴을 끝내기 전에 반드시** 아래 PowerShell 명령을 실행하여 생성된 임시 scratchpad를 즉시 영구 삭제할 것:
+     `Remove-Item -Path "$env:USERPROFILE\.gemini\antigravity-ide\brain\*\browser\scratchpad_*.md" -Force -ErrorAction SilentlyContinue`
+     (`settings.json`의 `workbench.editor.closeOnFileDelete: true` 설정에 의해 파일 삭제 즉시 에디터 탭도 완전히 닫힘)
+  2. **불필요한 아티팩트/메모 생성 절대 금지:**
+     사용자가 명시적으로 문서화를 요구하지 않는 한 임시 마크다운 파일을 만들지 말 것. 생성 시 무조건 `UserFacing: false` 지정.
+  3. **가벼운 검증은 백그라운드 스크립트 우선 사용:**
+     단순 API 응답이나 코드 문법 검사는 무거운 브라우저 서브에이전트 대신 `node`, `curl`, `powershell`을 우선 활용하여 subagent 자체의 생성을 최소화할 것.
+  4. **탭 개수 상한 설정 유지:**
+     IDE 설정의 `workbench.editor.limit.value: 5`를 유지하여 에디터 탭이 5개 이상 무한정 증식하지 않도록 할 것.
+
 
