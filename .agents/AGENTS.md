@@ -38,5 +38,7 @@ description: Auto execution rule
      단순 API 응답이나 코드 문법 검사는 무거운 브라우저 서브에이전트 대신 `node`, `curl`, `powershell`을 우선 활용하여 subagent 자체의 생성을 최소화할 것.
   4. **탭 개수 상한 설정 유지:**
      IDE 설정의 `workbench.editor.limit.value: 5`를 유지하여 에디터 탭이 5개 이상 무한정 증식하지 않도록 할 것.
+  5. **Auto-Open Edited Files 끄기 유지:**
+     IDE Settings > General > File Access의 `Auto-Open Edited Files` 스위치가 OFF(회색) 상태로 유지되도록 관리할 것.
 
 
