@@ -1149,8 +1149,376 @@
                 color: #ffffff;
                 box-shadow: 0 2px 8px rgba(49, 130, 246, 0.35);
             }
+        /* ============ 두꺼비 전일 대비 브리핑 위젯 & 모달 ============ */
+        .toad-briefing-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 18px;
+            margin-bottom: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: linear-gradient(135deg, var(--surface) 0%, rgba(49, 130, 246, 0.05) 100%);
+            border: 1px solid rgba(49, 130, 246, 0.2);
+            border-radius: 20px;
+        }
+        .toad-briefing-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
+        }
+        .toad-briefing-card.is-gain {
+            background: linear-gradient(135deg, var(--surface) 0%, rgba(16, 185, 129, 0.08) 100%);
+            border-color: rgba(16, 185, 129, 0.35);
+        }
+        .toad-briefing-card.is-loss {
+            background: linear-gradient(135deg, var(--surface) 0%, rgba(239, 68, 68, 0.08) 100%);
+            border-color: rgba(239, 68, 68, 0.35);
+        }
+        .toad-briefing-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+        .toad-avatar-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+            background: var(--chip);
+            border: 1px solid var(--border);
+            transition: transform 0.2s;
+        }
+        .toad-briefing-card:hover .toad-avatar-badge {
+            transform: scale(1.1) rotate(5deg);
+        }
+        .is-gain .toad-avatar-badge {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+        .is-loss .toad-avatar-badge {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+        .toad-briefing-texts {
+            min-width: 0;
+        }
+        .toad-briefing-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--ink);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .toad-briefing-sub {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .toad-briefing-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+        .toad-diff-badge {
+            font-size: 13px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 99px;
+            letter-spacing: -0.01em;
+            background: var(--chip);
+            color: var(--ink);
+        }
+        .is-gain .toad-diff-badge {
+            color: #008300;
+            background: rgba(16, 185, 129, 0.14);
+        }
+        :root[data-theme="dark"] .is-gain .toad-diff-badge {
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.22);
+        }
+        .is-loss .toad-diff-badge {
+            color: #d03b3b;
+            background: rgba(239, 68, 68, 0.14);
+        }
+        :root[data-theme="dark"] .is-loss .toad-diff-badge {
+            color: #f87171;
+            background: rgba(239, 68, 68, 0.22);
+        }
+        .toad-play-hint {
+            font-size: 11px;
+            color: var(--toss-blue);
+            font-weight: 600;
         }
 
+        /* 두꺼비 알림 팝업 모달 */
+        .toad-modal {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 9999;
+        }
+        .toad-modal-box {
+            position: relative;
+            max-width: 420px;
+            padding: 24px 20px;
+            border-radius: 26px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+            border: 1px solid var(--border);
+            animation: toadModalScaleIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes toadModalScaleIn {
+            from { opacity: 0; transform: scale(0.92) translateY(12px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .toad-modal-box.is-loss {
+            border-color: rgba(239, 68, 68, 0.45);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.25);
+            animation: toadModalScaleIn 0.28s cubic-bezier(0.16, 1, 0.3, 1), toadShake 0.45s 0.3s ease-in-out;
+        }
+        .toad-modal-box.is-gain {
+            border-color: rgba(16, 185, 129, 0.45);
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.25);
+        }
+        @keyframes toadShake {
+            0%, 100% { transform: translate(0, 0); }
+            20% { transform: translate(-5px, 3px); }
+            40% { transform: translate(5px, -3px); }
+            60% { transform: translate(-3px, 2px); }
+            80% { transform: translate(3px, -1px); }
+        }
+        .toad-close-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: var(--chip);
+            color: var(--muted);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            padding: 0;
+            z-index: 10;
+        }
+        .toad-close-btn:hover {
+            color: var(--ink);
+            background: var(--border);
+        }
+        .toad-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .toad-modal-box.is-gain .toad-status-pill {
+            background: rgba(16, 185, 129, 0.15);
+            color: #008300;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        :root[data-theme="dark"] .toad-modal-box.is-gain .toad-status-pill {
+            color: #34d399;
+        }
+        .toad-modal-box.is-loss .toad-status-pill {
+            background: rgba(239, 68, 68, 0.15);
+            color: #d03b3b;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        :root[data-theme="dark"] .toad-modal-box.is-loss .toad-status-pill {
+            color: #f87171;
+        }
+        .toad-headline {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--ink);
+            margin: 0 0 4px 0;
+            letter-spacing: -0.02em;
+        }
+        .toad-date-note {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+        .toad-gif-container {
+            position: relative;
+            width: 100%;
+            max-width: 290px;
+            margin: 0 auto 16px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            background: #000000;
+            aspect-ratio: 1 / 1;
+        }
+        .toad-gif-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .toad-stat-card {
+            background: var(--chip);
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border);
+        }
+        .toad-stat-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed var(--border);
+        }
+        .toad-stat-item {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+        .toad-stat-item:last-child {
+            text-align: right;
+        }
+        .toad-stat-lbl {
+            font-size: 11.5px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+        .toad-stat-num {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-top: 2px;
+        }
+        .toad-stat-arrow {
+            font-size: 16px;
+            color: var(--muted);
+        }
+        .toad-diff-highlight {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+        }
+        .toad-diff-val {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        .toad-modal-box.is-gain .toad-diff-val {
+            color: #008300;
+        }
+        :root[data-theme="dark"] .toad-modal-box.is-gain .toad-diff-val {
+            color: #10b981;
+        }
+        .toad-modal-box.is-loss .toad-diff-val {
+            color: #d03b3b;
+        }
+        :root[data-theme="dark"] .toad-modal-box.is-loss .toad-diff-val {
+            color: #f87171;
+        }
+        .toad-diff-desc {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+        .toad-cheer-bubble {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        .toad-bubble-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            line-height: 1.3;
+        }
+        .toad-bubble-text {
+            font-size: 13px;
+            color: var(--ink2);
+            line-height: 1.5;
+            word-break: keep-all;
+        }
+        .toad-modal-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .toad-main-btn {
+            width: 100%;
+            height: 48px;
+            font-size: 15.5px;
+            font-weight: 700;
+            border-radius: 14px;
+            background: var(--toss-blue);
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(49, 130, 246, 0.35);
+            transition: transform 0.15s, opacity 0.15s;
+        }
+        .toad-main-btn:active {
+            transform: scale(0.98);
+        }
+        .toad-secondary-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+        .toad-checkbox-lbl {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .toad-test-toggles {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: auto;
+        }
+        .toad-mini-btn {
+            background: var(--chip);
+            border: 1px solid var(--border);
+            color: var(--ink2);
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .toad-mini-btn:hover {
+            color: var(--ink);
+            border-color: var(--ink2);
+        }
     </style>
 </head>
 
@@ -1228,6 +1596,21 @@
                     <button class="quick-btn" onclick="syncPrices()">⚡ 실시간 시세 갱신</button>
                     <button class="quick-btn" onclick="switchTab('loan')">📐 대출 시뮬레이션</button>
                     <button class="quick-btn" onclick="switchTab('assets')">💎 보유 종목 보기</button>
+                </div>
+            </div>
+
+            <!-- 두꺼비의 전일 대비 자산 리포트 브리핑 카드 -->
+            <div class="card toad-briefing-card" id="toadBriefingCard" onclick="openToadAlertModal(true)">
+                <div class="toad-briefing-left">
+                    <div class="toad-avatar-badge" id="toadAvatarBadge">🐸</div>
+                    <div class="toad-briefing-texts">
+                        <div class="toad-briefing-title" id="toadBriefingTitle">두꺼비의 자산 브리핑 계산 중…</div>
+                        <div class="toad-briefing-sub" id="toadBriefingSub">어제와 비교한 실시간 자산 변동 리포트</div>
+                    </div>
+                </div>
+                <div class="toad-briefing-right">
+                    <div class="toad-diff-badge" id="toadDiffBadge">—</div>
+                    <div class="toad-play-hint">🎬 움짤 보기 ›</div>
                 </div>
             </div>
 
@@ -1938,6 +2321,70 @@
             <div class="rowflex" style="margin-top:16px;justify-content:flex-end">
                 <button id="pmCancel">취소</button>
                 <button class="primary" id="pmSave">반영</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 두꺼비 전일 대비 자산 알림 모달 -->
+    <div class="modal toad-modal" id="toadAlertModal">
+        <div class="box toad-modal-box" id="toadModalBox">
+            <button class="toad-close-btn" onclick="closeToadAlertModal()" title="닫기">✕</button>
+            
+            <div class="toad-status-pill" id="toadStatusPill">
+                <span id="toadStatusIcon">👑</span>
+                <span id="toadStatusText">대왕 두꺼비의 축배</span>
+            </div>
+            
+            <h2 class="toad-headline" id="toadHeadline">자산이 상승했습니다!</h2>
+            <div class="toad-date-note" id="toadDateNote">2026년 9월 8일 · 전일 대비 리포트</div>
+            
+            <div class="toad-gif-container" id="toadGifContainer">
+                <img id="toadGifImg" class="toad-gif-img" src="./assets/toad_gain.gif" alt="두꺼비 움짤">
+            </div>
+            
+            <!-- 자산 변동 디테일 카드 -->
+            <div class="toad-stat-card" id="toadStatCard">
+                <div class="toad-stat-row">
+                    <div class="toad-stat-item">
+                        <span class="toad-stat-lbl" id="toadPrevDateLbl">어제 자산</span>
+                        <span class="toad-stat-num" id="toadPrevAmt">—</span>
+                    </div>
+                    <div class="toad-stat-arrow">➔</div>
+                    <div class="toad-stat-item">
+                        <span class="toad-stat-lbl">현재 총자산</span>
+                        <span class="toad-stat-num" id="toadCurAmt">—</span>
+                    </div>
+                </div>
+                <div class="toad-diff-highlight" id="toadDiffHighlight">
+                    <span class="toad-diff-val" id="toadDiffVal">+0원 (+0.0%)</span>
+                    <span class="toad-diff-desc" id="toadDiffDesc">전일 대비 변동액</span>
+                </div>
+            </div>
+            
+            <!-- 재치있는 두꺼비 코멘터리 -->
+            <div class="toad-cheer-bubble" id="toadCheerBubble">
+                <div class="toad-bubble-icon" id="toadBubbleIcon">🍷</div>
+                <div class="toad-bubble-text" id="toadBubbleText">
+                    와인을 높이 들고 축배를 듭시다! 잔금 완납과 내 집 마련에 한 걸음 더 가까워졌습니다!
+                </div>
+            </div>
+            
+            <!-- 하단 버튼 및 모드 테스트 스위처 -->
+            <div class="toad-modal-footer">
+                <button class="primary toad-main-btn" onclick="closeToadAlertModal(true)">
+                    확인 및 대시보드 보기
+                </button>
+                <div class="toad-secondary-row">
+                    <label class="toad-checkbox-lbl">
+                        <input type="checkbox" id="chkDoNotShowToday" checked>
+                        <span>오늘 이 기기에서 자동 팝업 안 보기</span>
+                    </label>
+                    <div class="toad-test-toggles">
+                        <span style="font-size:11px;color:var(--muted)">테스트:</span>
+                        <button class="toad-mini-btn" onclick="switchModalMode('loss')">🗡️ 하락</button>
+                        <button class="toad-mini-btn" onclick="switchModalMode('gain')">🍷 상승</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -2953,6 +3400,40 @@
                     else heroCheer.innerHTML = `💪 매달 <b>${kfmt(c.need)}원</b>씩 저축하면 잔금 목표를 100% 달성할 수 있어요! (잔여 ${c.n}개월)`;
                 }
             } catch (errDday) { console.error("Dday calc error:", errDday); }
+
+            /* [위젯 1-B] 두꺼비 전일 대비 자산 리포트 브리핑 카드 연산 */
+            try {
+                const change = getDailyAssetChange();
+                const card = document.getElementById("toadBriefingCard");
+                const avatar = document.getElementById("toadAvatarBadge");
+                const title = document.getElementById("toadBriefingTitle");
+                const sub = document.getElementById("toadBriefingSub");
+                const badge = document.getElementById("toadDiffBadge");
+                
+                if (card && avatar && title && sub && badge) {
+                    card.classList.remove("is-gain", "is-loss");
+                    if (change.direction === "up") {
+                        card.classList.add("is-gain");
+                        avatar.textContent = "🍷";
+                        title.textContent = `대왕 두꺼비의 축배! 자산 +${kfmt(change.diff)}원 상승`;
+                        sub.textContent = `전일 대비 +${change.diffPct.toFixed(2)}% 증가 · 터치하여 축배 움짤 보기`;
+                        badge.textContent = `+${kfmt(change.diff)}원`;
+                    } else if (change.direction === "down") {
+                        card.classList.add("is-loss");
+                        avatar.textContent = "🗡️";
+                        title.textContent = `강도 두꺼비의 습격! 자산 -${kfmt(-change.diff)}원 하락`;
+                        sub.textContent = `전일 대비 -${Math.abs(change.diffPct).toFixed(2)}% 감소 · 터치하여 박살 움짤 보기`;
+                        badge.textContent = `-${kfmt(-change.diff)}원`;
+                    } else {
+                        avatar.textContent = "🐸";
+                        title.textContent = "두꺼비의 전일 대비 자산 브리핑";
+                        sub.textContent = (change.hasPrev ? `어제(${change.prevDate})와 자산 동일` : "어제 기록 데이터 대기 중") + " · 터치하여 리포트 보기";
+                        badge.textContent = "보합";
+                    }
+                }
+            } catch (errToadCard) {
+                console.error("Toad card render error:", errToadCard);
+            }
 
             /* [위젯 2] 신혼부부 자산 포트폴리오 (아내 vs 남편 vs 공동) */
             try {
@@ -4089,6 +4570,234 @@
             }
         });
 
+        /* ---------- 두꺼비 전일 대비 자산 브리핑 & 모달 시스템 ---------- */
+        let activeToadMode = "gain"; // 'gain' or 'loss' or 'flat'
+
+        function getDailyAssetChange() {
+            const curTotal = totalAssets();
+            const today = todayISO();
+            
+            // 오늘 이전(과거)의 기록들을 날짜 오름차순으로 정렬
+            const pastRecords = (S.history || [])
+                .filter(h => h.date && h.date < today && typeof h.total === "number")
+                .sort((a, b) => a.date.localeCompare(b.date));
+                
+            let prevRecord = null;
+            if (pastRecords.length > 0) {
+                prevRecord = pastRecords[pastRecords.length - 1];
+            } else if (S.history && S.history.length > 1) {
+                prevRecord = S.history[S.history.length - 2];
+            }
+            
+            if (!prevRecord) {
+                return {
+                    hasPrev: false,
+                    curTotal: curTotal,
+                    prevTotal: curTotal,
+                    diff: 0,
+                    diffPct: 0,
+                    direction: "flat",
+                    prevDate: "이전 기록 없음"
+                };
+            }
+            
+            const prevTotal = prevRecord.total;
+            const diff = Math.round(curTotal - prevTotal);
+            const diffPct = prevTotal > 0 ? ((diff / prevTotal) * 100) : 0;
+            const direction = diff > 0 ? "up" : (diff < 0 ? "down" : "flat");
+            
+            return {
+                hasPrev: true,
+                curTotal,
+                prevTotal,
+                diff,
+                diffPct,
+                direction,
+                prevDate: prevRecord.date
+            };
+        }
+
+        function playToadSound(mode) {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                if (ctx.state === "suspended") ctx.resume();
+                
+                if (mode === "loss") {
+                    // 칼질(Slash) 타격 효과음: 노이즈 스윕 + 쿵
+                    const bufferSize = Math.floor(ctx.sampleRate * 0.22);
+                    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.04));
+                    }
+                    const noise = ctx.createBufferSource();
+                    noise.buffer = buffer;
+                    const filter = ctx.createBiquadFilter();
+                    filter.type = "bandpass";
+                    filter.frequency.setValueAtTime(3200, ctx.currentTime);
+                    filter.frequency.exponentialRampToValueAtTime(350, ctx.currentTime + 0.18);
+                    
+                    const gain = ctx.createGain();
+                    gain.gain.setValueAtTime(0.35, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.22);
+                    
+                    noise.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(ctx.destination);
+                    noise.start();
+                    
+                    const osc = ctx.createOscillator();
+                    const oscGain = ctx.createGain();
+                    osc.type = "triangle";
+                    osc.frequency.setValueAtTime(130, ctx.currentTime + 0.04);
+                    osc.frequency.exponentialRampToValueAtTime(45, ctx.currentTime + 0.3);
+                    oscGain.gain.setValueAtTime(0.4, ctx.currentTime + 0.04);
+                    oscGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.connect(oscGain);
+                    oscGain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + 0.04);
+                    osc.stop(ctx.currentTime + 0.3);
+                } else {
+                    // 와인 잔 짠(Clink) 크리스탈 맑은 소리
+                    [1318.5, 1975.5, 2637.0].forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        const start = ctx.currentTime + idx * 0.06;
+                        osc.type = "sine";
+                        osc.frequency.setValueAtTime(freq, start);
+                        gain.gain.setValueAtTime(0.2, start);
+                        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.7);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(start);
+                        osc.stop(start + 0.7);
+                    });
+                }
+            } catch (e) {}
+        }
+
+        function renderToadModalContent(mode, change, isTest) {
+            activeToadMode = mode;
+            const box = document.getElementById("toadModalBox");
+            const pill = document.getElementById("toadStatusPill");
+            const icon = document.getElementById("toadStatusIcon");
+            const text = document.getElementById("toadStatusText");
+            const headline = document.getElementById("toadHeadline");
+            const dateNote = document.getElementById("toadDateNote");
+            const gifImg = document.getElementById("toadGifImg");
+            const prevDateLbl = document.getElementById("toadPrevDateLbl");
+            const prevAmt = document.getElementById("toadPrevAmt");
+            const curAmt = document.getElementById("toadCurAmt");
+            const diffVal = document.getElementById("toadDiffVal");
+            const diffDesc = document.getElementById("toadDiffDesc");
+            const bubbleIcon = document.getElementById("toadBubbleIcon");
+            const bubbleText = document.getElementById("toadBubbleText");
+            
+            const today = todayISO();
+            const [ty, tm, td] = today.split("-");
+            if (dateNote) dateNote.textContent = `${ty}년 ${Number(tm)}월 ${Number(td)}일 · 전일 대비 자산 리포트` + (isTest ? " (테스트)" : "");
+            
+            box.classList.remove("is-gain", "is-loss");
+            
+            if (mode === "loss") {
+                box.classList.add("is-loss");
+                icon.textContent = "🗡️";
+                text.textContent = "강도 두꺼비의 습격 · 자산 하락";
+                headline.textContent = "🚨 으악! 계좌가 습격당했습니다!";
+                gifImg.src = "./assets/toad_loss.gif?t=" + Date.now();
+                
+                prevDateLbl.textContent = change.hasPrev ? `어제 자산 (${change.prevDate})` : "이전 자산";
+                prevAmt.textContent = kfmt(change.hasPrev ? change.prevTotal : 212411792) + "원";
+                curAmt.textContent = kfmt(change.curTotal) + "원";
+                
+                const lossAmt = (change.diff < 0 && !isTest) ? -change.diff : 1240000;
+                const lossPct = (change.diff < 0 && !isTest) ? Math.abs(change.diffPct) : 0.58;
+                diffVal.textContent = `-${kfmt(lossAmt)}원 (-${lossPct.toFixed(2)}%)`;
+                diffDesc.textContent = "전일 대비 감소액";
+                
+                bubbleIcon.textContent = "🗡️";
+                bubbleText.innerHTML = `“<b>강도 두꺼비가 칼질로 계좌를 썰어갔습니다!</b> 😱<br>하지만 2028년 5월 잔금일까지 우리는 적립식 장기 투자자입니다. 일희일비하지 말고 꾸준히 모아가면 반드시 승리합니다!”`;
+            } else {
+                box.classList.add("is-gain");
+                icon.textContent = "👑";
+                text.textContent = "대왕 두꺼비의 축배 · 자산 상승";
+                headline.textContent = "🎉 만세! 자산이 상승했습니다!";
+                gifImg.src = "./assets/toad_gain.gif?t=" + Date.now();
+                
+                prevDateLbl.textContent = change.hasPrev ? `어제 자산 (${change.prevDate})` : "이전 자산";
+                prevAmt.textContent = kfmt(change.hasPrev ? change.prevTotal : 210000000) + "원";
+                curAmt.textContent = kfmt(change.curTotal) + "원";
+                
+                const gainAmt = (change.diff > 0 && !isTest) ? change.diff : 2180000;
+                const gainPct = (change.diff > 0 && !isTest) ? change.diffPct : 1.03;
+                diffVal.textContent = `+${kfmt(gainAmt)}원 (+${gainPct.toFixed(2)}%)`;
+                diffDesc.textContent = "전일 대비 증가액";
+                
+                bubbleIcon.textContent = "🍷";
+                bubbleText.innerHTML = `“<b>와인 잔을 높이 들고 축배를 듭시다! 짠~!</b> 🍷<br>전일 대비 자산이 늘어 입주 잔금 완납에 한 걸음 더 가까워졌습니다! 오늘도 멋지게 자산을 키워낸 두 분을 축하합니다!”`;
+            }
+        }
+
+        function openToadAlertModal(isManual) {
+            const change = getDailyAssetChange();
+            let mode = "gain";
+            if (change.direction === "down") mode = "loss";
+            else if (change.direction === "up") mode = "gain";
+            else mode = "gain";
+            
+            renderToadModalContent(mode, change, false);
+            const modal = document.getElementById("toadAlertModal");
+            if (modal) modal.classList.add("show");
+            playToadSound(mode);
+            if (navigator.vibrate) {
+                if (mode === "loss") navigator.vibrate([100, 60, 140]);
+                else navigator.vibrate([40, 40, 40, 40]);
+            }
+        }
+
+        function switchModalMode(mode) {
+            const change = getDailyAssetChange();
+            renderToadModalContent(mode, change, true);
+            playToadSound(mode);
+            if (navigator.vibrate) {
+                if (mode === "loss") navigator.vibrate([100, 60, 140]);
+                else navigator.vibrate([40, 40, 40, 40]);
+            }
+        }
+
+        function closeToadAlertModal(saveRemember) {
+            const modal = document.getElementById("toadAlertModal");
+            if (modal) modal.classList.remove("show");
+            
+            const chk = document.getElementById("chkDoNotShowToday");
+            if (saveRemember || (chk && chk.checked)) {
+                try {
+                    localStorage.setItem("toad_daily_alert_seen", todayISO());
+                } catch (e) {}
+            }
+        }
+
+        function checkDailyToadAlert() {
+            try {
+                const today = todayISO();
+                const seenDate = localStorage.getItem("toad_daily_alert_seen");
+                if (seenDate !== today) {
+                    // 오늘 처음 이 기기에서 방문/접속했을 때 팝업 자동 실행
+                    setTimeout(() => {
+                        openToadAlertModal(false);
+                    }, 650);
+                }
+            } catch (e) {
+                console.error("Daily check error:", e);
+            }
+        }
+
+        document.getElementById("toadAlertModal").addEventListener("click", e => {
+            if (e.target.id === "toadAlertModal") closeToadAlertModal();
+        });
+
         /* ---------- 시작 ---------- */
         load();
         document.documentElement.setAttribute("data-theme", S.theme || "light");
@@ -4106,6 +4815,8 @@
             if (S.lastSync !== todayISO()) {
                 try { await syncPrices({ silent: true }); } catch (e) { }
             }
+            // 기기별 오늘 첫 로그인/접속 시 전일 대비 두꺼비 알림 자동 팝업
+            checkDailyToadAlert();
         })();
     </script>
 </body>
