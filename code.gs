@@ -35,6 +35,9 @@ function doGet(e) {
     if (action === "refreshMarket") {
       return jsonOut_(refreshMarket_());
     }
+    if (action === "setupTriggers") {
+      return jsonOut_(setupDailyTriggers_());
+    }
     if (action === "restoreBackup") {
       기존데이터_강제복원();
       return jsonOut_({ ok: true, message: "기존 데이터 복원 완료" });
@@ -132,6 +135,34 @@ function refreshMarket_() {
     data.syncLog = data.syncLog || [];
     data.syncLog.push({ date: today, mode: "서버 자동", detail: priceTotal + "종목 중 " + priceOk + "종목 반영" });
   }
+
+  // 당일 총자산 계산 및 history 스냅샷 자동 저장
+  try {
+    var curFx = (data.fx && data.fx.usdKrw > 0) ? data.fx.usdKrw : 1350;
+    var tot = 0;
+    (data.buckets || []).forEach(function(b) {
+      if (b.kind !== "stock") tot += Number(b.amount || 0);
+    });
+    (data.holdings || []).forEach(function(h) {
+      var p = Number(h.price || 0);
+      var q = Number(h.qty || 0);
+      tot += p * q * (h.isUsd ? curFx : 1);
+    });
+    data.history = data.history || [];
+    var existingHist = null;
+    for (var i = 0; i < data.history.length; i++) {
+      if (data.history[i].date === today) {
+        existingHist = data.history[i];
+        break;
+      }
+    }
+    if (existingHist) {
+      existingHist.total = Math.round(tot * 100) / 100;
+    } else {
+      data.history.push({ date: today, total: Math.round(tot * 100) / 100 });
+      data.history.sort(function(a, b) { return a.date.localeCompare(b.date); });
+    }
+  } catch (histErr) {}
 
   data.updatedAt = new Date().toISOString();
   sheet.getRange("A1").setValue(JSON.stringify(data));
@@ -269,4 +300,46 @@ function 기존데이터_강제복원() {
 
 function jsonOut_(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * 한국 장 종료 (16:00) 및 아침 06:00 자동 시세 갱신용 핸들러
+ */
+function scheduledMarketRefresh_() {
+  var res = refreshMarket_();
+  Logger.log("Scheduled market refresh completed: " + JSON.stringify(res));
+  return res;
+}
+
+/**
+ * 16시(한국 장 종료) 및 06시(아침 미국장/환율 마감) 시간 기반 트리거 설정
+ */
+function setupDailyTriggers_() {
+  try {
+    var triggers = ScriptApp.getProjectTriggers();
+    for (var i = 0; i < triggers.length; i++) {
+      if (triggers[i].getHandlerFunction() === "scheduledMarketRefresh_") {
+        ScriptApp.deleteTrigger(triggers[i]);
+      }
+    }
+    // 1) 한국 장 종료 시점 (오후 16:00 ~ 17:00 KST)
+    ScriptApp.newTrigger("scheduledMarketRefresh_")
+      .timeBased()
+      .atHour(16)
+      .everyDays(1)
+      .inTimezone("Asia/Seoul")
+      .create();
+
+    // 2) 아침 미국 증시 및 환율 마감 정산 (오전 06:00 ~ 07:00 KST)
+    ScriptApp.newTrigger("scheduledMarketRefresh_")
+      .timeBased()
+      .atHour(6)
+      .everyDays(1)
+      .inTimezone("Asia/Seoul")
+      .create();
+
+    return { ok: true, message: "한국 장 종료(16시) 및 아침(06시) 시세 자동 갱신 트리거가 설정되었습니다." };
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
 }

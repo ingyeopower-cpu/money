@@ -2085,11 +2085,12 @@
                     <div class="field"><label>웹 앱 URL</label><input id="sync-url"
                             placeholder="https://script.google.com/macros/s/.../exec"></div>
                 </div>
-                <div class="rowflex" style="margin-top:10px">
+                <div class="rowflex" style="margin-top:10px;flex-wrap:wrap;gap:8px;">
                     <button class="primary" id="btnSyncNow">지금 동기화</button>
                     <button id="btnSyncPull">이 기기로 최신값 불러오기</button>
                     <button id="btnSyncPush">이 기기 값으로 덮어쓰기</button>
                     <button class="ghost" id="btnSyncSave">연결 정보 저장</button>
+                    <button class="ghost" id="btnSetupServerTriggers" onclick="setupServerDailyTriggers()" style="border-color:rgba(42,120,214,0.4);color:var(--toss-blue);font-weight:600;">⏰ 구글 서버 16시/06시 자동 트리거 등록</button>
                 </div>
                 <div class="hint">설정 방법은 함께 받으신 <b>잔금프로젝트_동기화_AppsScript.gs</b> 파일 상단 안내를 참고해 주세요. 이 버전은 비밀번호(토큰) 입력이 필요
                     없는 대신, 이 웹 앱 URL을 아는 사람은 누구나 이 데이터를 읽고 쓸 수 있습니다. URL을 남에게 공유하거나 화면에 노출하지 마세요. 한 번에 한 기기에서만 수정하고, 수정
@@ -3114,7 +3115,7 @@
             await syncPush();
             return { skipped: false };
         }
-        async function serverRefreshMarket() {
+        async function serverRefreshMarket(targetSlot) {
             if (!sync.url) return null;
             var pushResult = null;
             try { pushResult = await safeSyncPush_(); } catch (e) { }
@@ -3127,6 +3128,10 @@
                 let remoteData = j.data ? JSON.parse(j.data) : null;
                 if (remoteData && remoteData.goal && remoteData.buckets) {
                     S = migrate(remoteData);
+                    if (targetSlot) {
+                        S.lastSyncSlot = targetSlot;
+                        localStorage.setItem("toad_last_sync_slot", targetSlot);
+                    }
                     document.documentElement.setAttribute("data-theme", S.theme || "light");
                     save(false);
                 }
@@ -3476,23 +3481,24 @@
                 const badge = document.getElementById("toadDiffBadge");
                 
                 if (card && avatar && title && sub && badge) {
+                    const cp = getCurrentMarketCheckpoint();
                     card.classList.remove("is-gain", "is-loss");
                     if (change.direction === "up") {
                         card.classList.add("is-gain");
                         avatar.textContent = "🍷";
                         title.textContent = `대왕 두꺼비의 축배! 자산 +${kfmt(change.diff)}원 상승`;
-                        sub.textContent = `전일 대비 +${change.diffPct.toFixed(2)}% 증가 · 터치하여 축배 움짤 보기`;
+                        sub.textContent = `${cp.name} · 전일 대비 +${change.diffPct.toFixed(2)}% · 터치하여 축배 움짤 보기`;
                         badge.textContent = `+${kfmt(change.diff)}원`;
                     } else if (change.direction === "down") {
                         card.classList.add("is-loss");
                         avatar.textContent = "🗡️";
                         title.textContent = `강도 두꺼비의 습격! 자산 -${kfmt(-change.diff)}원 하락`;
-                        sub.textContent = `전일 대비 -${Math.abs(change.diffPct).toFixed(2)}% 감소 · 터치하여 박살 움짤 보기`;
+                        sub.textContent = `${cp.name} · 전일 대비 -${Math.abs(change.diffPct).toFixed(2)}% · 터치하여 박살 움짤 보기`;
                         badge.textContent = `-${kfmt(-change.diff)}원`;
                     } else {
                         avatar.textContent = "🐸";
                         title.textContent = "두꺼비의 전일 대비 자산 브리핑";
-                        sub.textContent = (change.hasPrev ? `어제(${change.prevDate})와 자산 동일` : "어제 기록 데이터 대기 중") + " · 터치하여 리포트 보기";
+                        sub.textContent = `${cp.name} · ` + (change.hasPrev ? `어제(${change.prevDate})와 자산 동일` : "어제 기록 데이터 대기 중") + " · 터치하여 리포트 보기";
                         badge.textContent = "보합";
                     }
                 }
@@ -3743,8 +3749,13 @@
             plEl.textContent = totalCost > 0 ? (totalPL >= 0 ? "+" : "") + won(totalPL) + " (" + (totalPL >= 0 ? "+" : "") + (totalPL / totalCost * 100).toFixed(1) + "%)" : "—";
             plEl.className = "num " + (totalPL > 0 ? "gain" : totalPL < 0 ? "loss" : "");
             const dates = [...new Set(S.holdings.map(h => h.priceDate).filter(Boolean))];
-            document.getElementById("priceStamp").textContent =
-                dates.length ? "종가 기준일 " + dates.join(", ") : "종가 기준일 정보 없음";
+            const cp = getCurrentMarketCheckpoint();
+            const slotBadge = S.lastSyncSlot ? `<span style="display:inline-block;padding:2px 7px;background:rgba(42,120,214,0.1);color:var(--toss-blue);border-radius:6px;font-size:11.5px;font-weight:700;margin-left:6px;">최근: ${S.lastSyncSlot.includes("_1600") ? "한국 장 마감(16시)" : "아침 정산(06시)"}</span>` : '';
+            document.getElementById("priceStamp").innerHTML =
+                (dates.length ? "종가 기준일: " + dates.join(", ") : "종가 기준일 정보 없음") + slotBadge +
+                `<div style="margin-top:5px;font-size:12px;color:var(--toss-blue);font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">` +
+                `<span>🕒 체크 시점: <b>한국 장 종료 (16:00)</b> · <b>아침 정산 (06:00)</b></span>` +
+                `<span style="color:var(--muted);font-weight:500;">(다음 예정: ${cp.nextLabel})</span></div>`;
             const syncBtn = document.getElementById("btnSync");
             if (syncBtn && !syncBtn.disabled) syncBtn.textContent = priceBtnLabel();
 
@@ -4252,19 +4263,24 @@
         }
         async function syncPrices(opts) {
             const silent = !!(opts && opts.silent);
+            const cp = getCurrentMarketCheckpoint();
+            const targetSlot = (opts && opts.slotId) || cp.slotId;
             const btn = document.getElementById("btnSync");
-            if (!silent && S.lastSync === todayISO()) {
-                if (!confirm("오늘 이미 종가를 반영했습니다. 다시 반영할까요?")) return;
+            if (!silent && S.lastSyncSlot === targetSlot) {
+                if (!confirm(`이미 ${cp.name} 시세를 반영했습니다. 다시 조회할까요?`)) return;
             }
             btn.disabled = true; const old = btn.textContent; btn.textContent = "조회 중…";
 
             // 1) 서버(Apps Script)를 통한 조회 우선 시도 — CORS 제약이 없어 훨씬 안정적
             if (sync.url) {
                 try {
-                    const res = await serverRefreshMarket();
+                    const res = await serverRefreshMarket(targetSlot);
                     if (res) {
                         btn.disabled = false; btn.textContent = priceBtnLabel();
                         if (res.priceOk > 0) {
+                            S.lastSyncSlot = targetSlot;
+                            localStorage.setItem("toad_last_sync_slot", targetSlot);
+                            save(false);
                             render();
                             const skipNote = res.pushSkipped ? " (⚠ 서버에 이 기기가 모르는 기록이 있어 이 기기 값 저장은 건너뜀)" : "";
                             toast(res.priceOk + "/" + res.priceTotal + "개 종목 종가를 서버에서 갱신했습니다" + (res.fxOk ? " (환율도 갱신됨)" : "") + skipNote);
@@ -4282,7 +4298,7 @@
             // 2) 폴백: 브라우저에서 직접 조회 (구글시트 연동이 없거나 서버 조회가 실패한 경우)
             const codes = [...new Set(S.holdings.map(h => h.code).filter(Boolean))];
             const got = {}; let okCount = 0;
-            const ms = silent ? 4000 : 9000; // 자동 실행일 땐 실패를 더 빨리 포기해서 화면이 오래 멈춰 보이지 않게 함
+            const ms = silent ? 4000 : 9000;
             for (const c of codes) {
                 btn.textContent = "조회 중… " + c;
                 const v = await fetchPrice(c, ms);
@@ -4292,11 +4308,21 @@
             if (okCount > 0) {
                 S.holdings.forEach(h => { if (got[h.code]) { h.price = got[h.code]; h.priceDate = todayISO(); } });
                 S.lastSync = todayISO();
-                S.syncLog.push({ date: todayISO(), mode: silent ? "자동(앱 실행 시)" : "자동", detail: codes.length + "종목 중 " + okCount + "종목 반영" });
+                S.lastSyncSlot = targetSlot;
+                localStorage.setItem("toad_last_sync_slot", targetSlot);
+                
+                // 오늘 총자산 스냅샷을 history에 저장
+                const curTot = totalAssets();
+                S.history = S.history || [];
+                const exIdx = S.history.findIndex(h => h.date === todayISO());
+                if (exIdx >= 0) S.history[exIdx].total = curTot;
+                else S.history.push({ date: todayISO(), total: curTot });
+                S.history.sort((a, b) => a.date.localeCompare(b.date));
+                
+                S.syncLog.push({ date: todayISO(), mode: silent ? `자동(${cp.timeLabel})` : "자동", detail: codes.length + "종목 중 " + okCount + "종목 반영" });
             }
             if (okCount < codes.length) {
                 if (silent) {
-                    // 자동 실행 중 실패/일부실패는 조용히 넘어감 (사용자가 요청하지 않은 상황에서 모달을 띄우지 않음)
                     if (okCount > 0) { save(true); render(); toast(okCount + "개 종목 종가를 자동 반영했습니다 (일부만 성공)"); }
                 } else {
                     openPriceModal(okCount === 0
@@ -4304,7 +4330,31 @@
                         : "일부 종목만 자동 조회되었습니다. 나머지를 확인해 입력해 주세요.");
                 }
             } else {
-                save(true); render(); toast(okCount + "개 종목 종가를 반영했습니다" + (silent ? " (앱 실행 시 자동)" : ""));
+                save(true); render(); toast(okCount + "개 종목 종가를 반영했습니다" + (silent ? ` (${cp.timeLabel} 자동)` : ""));
+            }
+        }
+
+        async function setupServerDailyTriggers() {
+            if (!sync.url) {
+                toast("스프레드시트 웹 앱 URL이 입력되지 않았습니다.");
+                return;
+            }
+            const btn = document.getElementById("btnSetupServerTriggers");
+            if (btn) { btn.disabled = true; btn.textContent = "트리거 등록 중…"; }
+            toast("구글 서버에 16시/06시 자동 갱신 트리거를 요청하고 있습니다…");
+            try {
+                const sep = sync.url.includes("?") ? "&" : "?";
+                const r = await fetch(sync.url + sep + "action=setupTriggers");
+                const j = await r.json();
+                if (btn) { btn.disabled = false; btn.textContent = "⏰ 구글 서버 16시/06시 자동 트리거 등록"; }
+                if (j && j.ok) {
+                    toast("✅ 구글 서버 자동 트리거 등록 완료! (한국 장 마감 16:00 / 아침 06:00)");
+                } else {
+                    toast("⚠️ 등록 실패: " + ((j && j.error) || "응답 오류"));
+                }
+            } catch (e) {
+                if (btn) { btn.disabled = false; btn.textContent = "⏰ 구글 서버 16시/06시 자동 트리거 등록"; }
+                toast("통신 오류: " + e.message);
             }
         }
         function openPriceModal(msg) {
@@ -4635,6 +4685,68 @@
             }
         });
 
+        /* ---------- 자산 변화 체크 시점 시스템 (한국 장 종료 16:00 / 아침 정산 06:00) ---------- */
+        function getCurrentMarketCheckpoint() {
+            const now = new Date();
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const kst = new Date(utc + (9 * 3600000));
+            const kstHour = kst.getHours();
+            const kstMin = kst.getMinutes();
+            const totalMinutes = kstHour * 60 + kstMin;
+            
+            const today = todayISO();
+            
+            // 06:00 (360분) ~ 15:59 (959분): 아침 정산 시점 (미국장 종가 & 야간 환율 반영)
+            // 16:00 (960분) ~ 익일 05:59 (359분): 한국 장 마감 시점 (국내 주식/ETF 당일 확정 종가)
+            if (totalMinutes >= 360 && totalMinutes < 960) {
+                return {
+                    period: "morning",
+                    slotId: today + "_0600",
+                    name: "☀️ 아침 자산 리포트",
+                    timeLabel: "06:00 정산",
+                    desc: "미국 증시 종가 및 밤사이 환율이 반영된 아침 자산입니다.",
+                    nextLabel: "오늘 16:00 (한국 장 종료)"
+                };
+            } else {
+                let slotDate = today;
+                if (totalMinutes < 360) {
+                    const d = new Date(kst);
+                    d.setDate(d.getDate() - 1);
+                    slotDate = d.toISOString().slice(0, 10);
+                }
+                return {
+                    period: "krx_close",
+                    slotId: slotDate + "_1600",
+                    name: "🔔 한국 장 마감 리포트",
+                    timeLabel: "16:00 종가",
+                    desc: "국내 주식/ETF 정규장이 마감되어 당일 최종 종가가 확정된 자산입니다.",
+                    nextLabel: "내일 06:00 (아침 정산)"
+                };
+            }
+        }
+
+        async function checkCheckpointMarketSync() {
+            const cp = getCurrentMarketCheckpoint();
+            const lastSlot = localStorage.getItem("toad_last_sync_slot") || S.lastSyncSlot;
+            
+            // 아직 해당 체크 시점의 시세 조회가 실행되지 않았다면 자동 갱신
+            if (lastSlot !== cp.slotId) {
+                try {
+                    await syncPrices({ silent: true, slotId: cp.slotId });
+                    localStorage.setItem("toad_last_sync_slot", cp.slotId);
+                    S.lastSyncSlot = cp.slotId;
+                    save(true);
+                    
+                    const m = document.getElementById("toadAlertModal");
+                    if (m && m.classList.contains("show")) {
+                        renderToadModalContent(activeToadMode, getDailyAssetChange(), false);
+                    }
+                } catch (e) {
+                    console.error("Slot market sync error:", e);
+                }
+            }
+        }
+
         /* ---------- 두꺼비 전일 대비 자산 브리핑 & 모달 시스템 ---------- */
         let activeToadMode = "gain"; // 'gain' or 'loss' or 'flat'
 
@@ -4807,7 +4919,8 @@
             
             const today = todayISO();
             const [ty, tm, td] = today.split("-");
-            if (dateNote) dateNote.textContent = `${ty}년 ${Number(tm)}월 ${Number(td)}일 · 전일 대비 자산 리포트` + (isTest ? " (테스트)" : "");
+            const cp = getCurrentMarketCheckpoint();
+            if (dateNote) dateNote.textContent = `${ty}년 ${Number(tm)}월 ${Number(td)}일 · ${cp.name} (${cp.timeLabel} 기준)` + (isTest ? " (테스트)" : "");
             
             box.classList.remove("is-gain", "is-loss");
             const topMover = getTopMoverHolding();
@@ -4915,12 +5028,13 @@
         function checkDailyToadAlert() {
             try {
                 const today = todayISO();
+                const cp = getCurrentMarketCheckpoint();
                 const hideToday = localStorage.getItem("toad_hide_today_" + today);
-                const sessionShown = sessionStorage.getItem("toad_session_shown");
+                const slotShown = sessionStorage.getItem("toad_shown_slot_" + cp.slotId);
                 
-                // 오늘 하루 끄기를 누르지 않았고, 이번 앱 실행(세션)에서 아직 안 떴다면 0.15초 만에 즉각 팝업!
-                if (!hideToday && !sessionShown) {
-                    sessionStorage.setItem("toad_session_shown", "1");
+                // 오늘 하루 끄기를 누르지 않았고, 이번 체크 슬롯(16시 한국 장종료 or 06시 아침 정산)에서 아직 안 떴다면 0.15초 만에 즉각 팝업!
+                if (!hideToday && !slotShown) {
+                    sessionStorage.setItem("toad_shown_slot_" + cp.slotId, "1");
                     setTimeout(() => {
                         openToadAlertModal(false);
                     }, 150);
@@ -4943,7 +5057,7 @@
         render();
         stamp(new Date());
 
-        // 앱 켜자마자 0.15초 만에 두꺼비 알림 즉각 실행! (느린 구글시트/시세조회 대기 완전히 분리)
+        // 앱 켜자마자 0.15초 만에 해당 체크포인트 두꺼비 알림 즉각 실행!
         checkDailyToadAlert();
 
         (async () => {
@@ -4951,24 +5065,22 @@
                 setSyncStatus("연결됨 · 불러오는 중…");
                 try { 
                     await doSync(); 
-                    // 백그라운드 동기화 완료 후 모달이 띄워져 있다면 최신 자산으로 금액 부드럽게 갱신
                     const m = document.getElementById("toadAlertModal");
                     if (m && m.classList.contains("show")) {
                         renderToadModalContent(activeToadMode, getDailyAssetChange(), false);
                     }
                 } catch (e) { }
             }
-            // 오늘 아직 종가를 반영하지 않았다면 백그라운드에서 한 번 시도
-            if (S.lastSync !== todayISO()) {
-                try { 
-                    await syncPrices({ silent: true }); 
-                    const m = document.getElementById("toadAlertModal");
-                    if (m && m.classList.contains("show")) {
-                        renderToadModalContent(activeToadMode, getDailyAssetChange(), false);
-                    }
-                } catch (e) { }
-            }
+            // 한국 장 종료(16:00) 및 아침 정산(06:00) 기준 자동 시세 갱신 검사
+            await checkCheckpointMarketSync();
         })();
+
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "visible") {
+                checkDailyToadAlert();
+                checkCheckpointMarketSync();
+            }
+        });
     </script>
 </body>
 
