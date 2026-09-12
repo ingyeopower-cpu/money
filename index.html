@@ -1155,6 +1155,82 @@
                 color: #ffffff;
                 box-shadow: 0 2px 8px rgba(49, 130, 246, 0.35);
             }
+        }
+
+        /* ============ PC 와이드 화면 가독성 & 레이아웃 최적화 (Desktop View) ============ */
+        @media (min-width: 769px) {
+            body {
+                background: #ebedf0 !important;
+                padding: 30px 0 80px;
+            }
+            :root[data-theme="dark"] body {
+                background: #090c10 !important;
+            }
+            .wrap {
+                max-width: 760px;
+                padding: 36px 40px 60px;
+                border-radius: 28px;
+                box-shadow: 0 16px 60px rgba(0, 0, 0, 0.08), 0 2px 10px rgba(0, 0, 0, 0.03);
+                border: 1px solid var(--border);
+            }
+            .mobile-bottom-dock {
+                display: none !important;
+            }
+            .tabs {
+                position: static !important;
+                background: var(--surface) !important;
+                border: 1px solid var(--border);
+                border-radius: 16px;
+                padding: 6px 8px;
+                margin-bottom: 24px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+                overflow: visible;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            .tab {
+                font-size: 14px;
+                padding: 9px 18px;
+                border-radius: 12px;
+                font-weight: 600;
+            }
+            .card {
+                padding: 26px 30px;
+                margin-bottom: 20px;
+                border-radius: 24px;
+            }
+            .hero-quick-actions {
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 10px;
+            }
+            .quick-btn {
+                padding: 12px 10px;
+                font-size: 13.5px;
+            }
+            .dday-main-stats {
+                grid-template-columns: 1.2fr 1fr;
+                align-items: center;
+                gap: 20px;
+            }
+            .dday-stat-val {
+                font-size: 36px !important;
+            }
+            table {
+                font-size: 13.5px;
+            }
+            th, td {
+                padding: 11px 14px;
+            }
+            .grid2 {
+                gap: 16px;
+            }
+            .toad-modal-box {
+                max-width: 480px;
+                padding: 28px 26px;
+            }
+        }
+
         /* ============ 두꺼비 전일 대비 브리핑 위젯 & 모달 ============ */
         .toad-briefing-card {
             display: flex;
@@ -2683,9 +2759,14 @@
                     <span class="toad-diff-val" id="toadDiffVal">+0원 (+0.0%)</span>
                     <span class="toad-diff-desc" id="toadDiffDesc">전일 대비 변동액</span>
                 </div>
-                <!-- 주요 원인 항목 분석 배너 -->
-                <div class="toad-cause-banner" id="toadCauseBanner" style="display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:12.5px;text-align:left;line-height:1.5;">
-                    <span id="toadCauseText" style="font-weight:600;color:var(--ink);"></span>
+                <!-- 주요 원인 항목 분석 배너 (Top 3 변동 요인 & 환율 비교) -->
+                <div class="toad-cause-banner" id="toadCauseBanner" style="display:none;margin-top:12px;padding-top:12px;border-top:1px dashed var(--border);text-align:left;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                        <span style="font-size:12.5px;font-weight:700;color:var(--ink);">📊 주요 변동 요인 (Top 3)</span>
+                        <span id="toadCauseDateHint" style="font-size:11px;font-weight:600;color:var(--muted);">전일 대비</span>
+                    </div>
+                    <div id="toadCauseList" style="display:flex;flex-direction:column;gap:6px;"></div>
+                    <div id="toadCauseFx" style="margin-top:8px;"></div>
                 </div>
             </div>
             
@@ -5322,37 +5403,53 @@
             const _p2 = new Image(); _p2.src = getToadAssetUrl("toad_loss.gif");
         } catch (e) {}
 
-        function getTopMoverHolding() {
+        function getTopMovers(limit = 3) {
             const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
             const grouped = {};
             (S.holdings || []).forEach(h => {
                 if (!h.price || !h.prevPrice || h.price === h.prevPrice) return;
                 const diffPerShare = h.price - h.prevPrice;
                 const totalDiff = diffPerShare * (h.qty || 0) * (h.isUsd ? fxRate : 1);
-                const pct = (diffPerShare / h.prevPrice) * 100;
+                const oldVal = h.prevPrice * (h.qty || 0) * (h.isUsd ? fxRate : 1);
                 const key = h.name || h.code;
                 if (!grouped[key]) {
-                    grouped[key] = { name: key, diff: 0, oldTotal: 0, pct: pct };
+                    grouped[key] = { name: key, diff: 0, oldTotal: 0, code: h.code };
                 }
                 grouped[key].diff += totalDiff;
-                grouped[key].oldTotal += h.prevPrice * (h.qty || 0) * (h.isUsd ? fxRate : 1);
+                grouped[key].oldTotal += oldVal;
             });
             
-            const list = Object.values(grouped);
-            if (!list.length) return null;
-            
+            const list = Object.values(grouped).filter(item => Math.abs(item.diff) > 100);
+            list.forEach(item => {
+                item.pct = item.oldTotal > 0 ? (item.diff / item.oldTotal) * 100 : 0;
+            });
             list.sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff));
-            const top = list[0];
-            const topPct = top.oldTotal > 0 ? (top.diff / top.oldTotal * 100) : top.pct;
+            return list.slice(0, limit);
+        }
+
+        function getFxDailyChange() {
+            const curFx = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
+            const prevFx = S.fx && S.fx.prevUsdKrw > 0 ? S.fx.prevUsdKrw : curFx;
+            const diff = Math.round((curFx - prevFx) * 100) / 100;
+            const diffPct = prevFx > 0 ? ((diff / prevFx) * 100) : 0;
             return {
-                name: top.name,
-                diff: top.diff,
-                pct: topPct
+                curFx,
+                prevFx,
+                diff,
+                diffPct,
+                hasChange: Math.abs(diff) > 0.01,
+                date: (S.fx && S.fx.usdKrwDate) || todayISO()
             };
         }
 
         function renderToadModalContent(mode, change, isTest) {
+            if (!isTest) {
+                if (change.diff < 0) mode = "loss";
+                else if (change.diff > 0) mode = "gain";
+                else mode = "flat";
+            }
             activeToadMode = mode;
+            
             const box = document.getElementById("toadModalBox");
             const pill = document.getElementById("toadStatusPill");
             const icon = document.getElementById("toadStatusIcon");
@@ -5366,7 +5463,9 @@
             const diffVal = document.getElementById("toadDiffVal");
             const diffDesc = document.getElementById("toadDiffDesc");
             const causeBanner = document.getElementById("toadCauseBanner");
-            const causeText = document.getElementById("toadCauseText");
+            const causeList = document.getElementById("toadCauseList");
+            const causeFx = document.getElementById("toadCauseFx");
+            const causeDateHint = document.getElementById("toadCauseDateHint");
             const bubbleIcon = document.getElementById("toadBubbleIcon");
             const bubbleText = document.getElementById("toadBubbleText");
             
@@ -5376,46 +5475,156 @@
             if (dateNote) dateNote.textContent = `${ty}년 ${Number(tm)}월 ${Number(td)}일 · ${cp.name} (${cp.timeLabel} 기준)` + (isTest ? " (테스트)" : "");
             
             box.classList.remove("is-gain", "is-loss");
-            const topMover = getTopMoverHolding();
             
-            if (causeBanner && causeText) {
-                if (topMover && Math.abs(topMover.diff) > 1000) {
-                    causeBanner.style.display = "block";
-                    if (topMover.diff < 0) {
-                        causeText.innerHTML = `📉 주요 원인: <b>${topMover.name}</b> 항목에서 <b>${topMover.pct.toFixed(1)}% (${kfmt(topMover.diff)}원)</b>이 사라졌어요! 😱`;
-                    } else {
-                        causeText.innerHTML = `📈 주요 원인: <b>${topMover.name}</b> 항목에서 <b>+${topMover.pct.toFixed(1)}% (+${kfmt(topMover.diff)}원)</b>이 생겼어요! 🎉`;
-                    }
-                } else if (isTest) {
-                    causeBanner.style.display = "block";
-                    if (mode === "loss") {
-                        causeText.innerHTML = `📉 주요 원인: <b>TIGER 미국배당다우존스</b> 항목에서 <b>-2.1% (-157만원)</b>이 사라졌어요! 😱`;
-                    } else {
-                        causeText.innerHTML = `📈 주요 원인: <b>KODEX 미국S&P500</b> 항목에서 <b>+1.8% (+45만원)</b>이 생겼어요! 🎉`;
-                    }
-                } else {
-                    causeBanner.style.display = "none";
+            let displayPrev = change.hasPrev ? change.prevTotal : 210621447;
+            let displayCur = change.curTotal;
+            let displayDiff = change.diff;
+            let displayPct = change.diffPct;
+            
+            if (isTest) {
+                if (mode === "loss" && displayDiff >= 0) {
+                    displayDiff = -1940000;
+                    displayPct = displayPrev > 0 ? (displayDiff / displayPrev * 100) : -0.91;
+                    displayCur = displayPrev + displayDiff;
+                } else if (mode === "gain" && displayDiff <= 0) {
+                    displayDiff = 2180000;
+                    displayPct = displayPrev > 0 ? (displayDiff / displayPrev * 100) : 1.03;
+                    displayCur = displayPrev + displayDiff;
                 }
             }
             
+            const moneyText = (n) => {
+                const s = kfmt(Math.abs(n));
+                return s.endsWith("원") ? s : s + "원";
+            };
+
+            prevDateLbl.textContent = change.hasPrev ? `어제 자산 (${change.prevDate})` : "이전 자산";
+            prevAmt.textContent = moneyText(displayPrev);
+            curAmt.textContent = moneyText(displayCur);
+            
+            if (displayDiff < 0) {
+                diffVal.textContent = `-${moneyText(displayDiff)} (${displayPct.toFixed(2)}%)`;
+                diffDesc.textContent = "전일 대비 감소액";
+            } else if (displayDiff > 0) {
+                diffVal.textContent = `+${moneyText(displayDiff)} (+${displayPct.toFixed(2)}%)`;
+                diffDesc.textContent = "전일 대비 증가액";
+            } else {
+                diffVal.textContent = "0원 (0.00%)";
+                diffDesc.textContent = "전일 대비 변동 없음";
+            }
+            
+            // Top 3 movers & FX
+            const topMovers = getTopMovers(3);
+            const fxInfo = getFxDailyChange();
+            
+            if (causeBanner) {
+                causeBanner.style.display = "block";
+                if (causeDateHint) {
+                    causeDateHint.textContent = change.hasPrev ? `${change.prevDate} 대비` : "전일 대비";
+                }
+                
+                if (causeList) {
+                    if (topMovers && topMovers.length > 0) {
+                        causeList.innerHTML = topMovers.map((m, idx) => {
+                            const isUp = m.diff > 0;
+                            const moverIcon = isUp ? "📈" : (m.diff < 0 ? "📉" : "➖");
+                            const moverColor = isUp ? "var(--gain-color, #e03131)" : (m.diff < 0 ? "var(--loss-color, #1971c2)" : "var(--muted)");
+                            const sign = isUp ? "+" : "";
+                            const wonStr = isUp ? `+${moneyText(m.diff)}` : `-${moneyText(m.diff)}`;
+                            const pctStr = `${sign}${m.pct.toFixed(1)}%`;
+                            return `
+                                <div style="display:flex;align-items:center;justify-content:space-between;background:var(--card-subtle, rgba(0,0,0,0.03));padding:7px 10px;border-radius:8px;font-size:12px;">
+                                    <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:62%;">
+                                        <span style="font-size:11px;font-weight:700;color:var(--muted);width:16px;text-align:center;">${idx + 1}</span>
+                                        <span>${moverIcon}</span>
+                                        <span style="font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${m.name}</span>
+                                    </div>
+                                    <div style="text-align:right;white-space:nowrap;">
+                                        <span style="font-weight:700;color:${moverColor};">${pctStr}</span>
+                                        <span style="font-size:11px;color:var(--muted);margin-left:4px;">(${wonStr})</span>
+                                    </div>
+                                </div>
+                            `;
+                        }).join("");
+                    } else if (isTest) {
+                        const testItems = (mode === "loss") ? [
+                            { name: "TIGER 미국배당다우존스", diff: -2350000, pct: -3.1 },
+                            { name: "KODEX 미국S&P500", diff: -520000, pct: -2.1 },
+                            { name: "KODEX 미국나스닥100", diff: -150000, pct: -1.7 }
+                        ] : [
+                            { name: "KODEX 미국S&P500", diff: 1200000, pct: +2.3 },
+                            { name: "TIGER 미국배당다우존스", diff: 750000, pct: +1.5 },
+                            { name: "KODEX 한국부동산리츠인프라", diff: 230000, pct: +1.1 }
+                        ];
+                        causeList.innerHTML = testItems.map((m, idx) => {
+                            const isUp = m.diff > 0;
+                            const moverIcon = isUp ? "📈" : "📉";
+                            const moverColor = isUp ? "var(--gain-color, #e03131)" : "var(--loss-color, #1971c2)";
+                            const sign = isUp ? "+" : "";
+                            const wonStr = isUp ? `+${moneyText(m.diff)}` : `-${moneyText(m.diff)}`;
+                            return `
+                                <div style="display:flex;align-items:center;justify-content:space-between;background:var(--card-subtle, rgba(0,0,0,0.03));padding:7px 10px;border-radius:8px;font-size:12px;">
+                                    <div style="display:flex;align-items:center;gap:6px;">
+                                        <span style="font-size:11px;font-weight:700;color:var(--muted);width:16px;text-align:center;">${idx + 1}</span>
+                                        <span>${moverIcon}</span>
+                                        <span style="font-weight:600;color:var(--ink);">${m.name}</span>
+                                    </div>
+                                    <div style="text-align:right;">
+                                        <span style="font-weight:700;color:${moverColor};">${sign}${m.pct.toFixed(1)}%</span>
+                                        <span style="font-size:11px;color:var(--muted);margin-left:4px;">(${wonStr})</span>
+                                    </div>
+                                </div>
+                            `;
+                        }).join("");
+                    } else {
+                        causeList.innerHTML = `<div style="font-size:11.5px;color:var(--muted);text-align:center;padding:4px 0;">특이 변동 종목 없음 (시세 변동 미미)</div>`;
+                    }
+                }
+                
+                if (causeFx) {
+                    if (fxInfo && fxInfo.curFx > 0) {
+                        const isFxUp = fxInfo.diff > 0;
+                        const isFxDown = fxInfo.diff < 0;
+                        const fxSign = isFxUp ? "+" : "";
+                        const fxIcon = isFxUp ? "🔺" : (isFxDown ? "🔻" : "➖");
+                        const fxColor = isFxUp ? "var(--gain-color, #e03131)" : (isFxDown ? "var(--loss-color, #1971c2)" : "var(--muted)");
+                        const fxDiffStr = isFxUp ? `+${fxInfo.diff.toFixed(2)}원` : `${fxInfo.diff.toFixed(2)}원`;
+                        const fxPctStr = `${fxSign}${fxInfo.diffPct.toFixed(2)}%`;
+                        
+                        let compDesc = "";
+                        if (Math.abs(fxInfo.diff) < 0.01) {
+                            compDesc = `<span style="color:var(--muted);">어제와 동일 (보합)</span>`;
+                        } else {
+                            compDesc = `어제(${fxInfo.prevFx.toFixed(2)}원) 대비 <b style="color:${fxColor};">${fxDiffStr} (${fxPctStr})</b> ${fxIcon}`;
+                        }
+                        
+                        causeFx.innerHTML = `
+                            <div style="background:var(--card-subtle, rgba(0,0,0,0.03));padding:8px 10px;border-radius:8px;font-size:11.5px;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border);">
+                                <div style="display:flex;align-items:center;gap:6px;">
+                                    <span>💵</span>
+                                    <span style="font-weight:600;color:var(--ink);">원·달러 환율</span>
+                                    <span style="font-weight:700;color:var(--ink);">${fxInfo.curFx.toFixed(2)}원</span>
+                                </div>
+                                <div style="font-size:11px;text-align:right;">
+                                    ${compDesc}
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        causeFx.innerHTML = "";
+                    }
+                }
+            }
+            
+            const top1Mover = topMovers && topMovers.length > 0 ? topMovers[0] : null;
             if (mode === "loss") {
                 box.classList.add("is-loss");
                 icon.textContent = "🗡️";
                 text.textContent = "강도 두꺼비의 습격 · 자산 하락";
                 headline.textContent = "🚨 으악! 계좌가 습격당했습니다!";
                 gifImg.src = getToadAssetUrl("toad_loss.gif");
-                
-                prevDateLbl.textContent = change.hasPrev ? `어제 자산 (${change.prevDate})` : "이전 자산";
-                prevAmt.textContent = kfmt(change.hasPrev ? change.prevTotal : 212411792) + "원";
-                curAmt.textContent = kfmt(change.curTotal) + "원";
-                
-                const lossAmt = (change.diff < 0 && !isTest) ? -change.diff : 1940000;
-                const lossPct = (change.diff < 0 && !isTest) ? Math.abs(change.diffPct) : 0.91;
-                diffVal.textContent = `-${kfmt(lossAmt)}원 (-${lossPct.toFixed(2)}%)`;
-                diffDesc.textContent = "전일 대비 감소액";
-                
                 bubbleIcon.textContent = "🗡️";
-                const moverComment = (topMover && topMover.diff < 0) ? `특히 <b>${topMover.name}</b>에서 <b>${kfmt(Math.abs(topMover.diff))}원</b>을 썰어갔네요.<br>` : '';
+                const moverComment = (top1Mover && top1Mover.diff < 0) ? `특히 <b>${top1Mover.name}</b>에서 <b>${moneyText(top1Mover.diff)}</b>을 썰어갔네요.<br>` : '';
                 bubbleText.innerHTML = `“<b>실사 강도 두꺼비가 폴짝폴짝 뛰어와 정면으로 칼질을 푹! 푹! 찌르고 도망쳤습니다!</b> 😱💨<br>${moverComment}하지만 2028년 5월 잔금일까지 우리는 적립식 장기 투자자! 흔들림 없이 꾸준히 모아가면 반드시 승리합니다!”`;
             } else {
                 box.classList.add("is-gain");
@@ -5423,18 +5632,8 @@
                 text.textContent = "대왕 두꺼비의 축배 · 자산 상승";
                 headline.textContent = "🎉 만세! 자산이 상승했습니다!";
                 gifImg.src = getToadAssetUrl("toad_gain.gif");
-                
-                prevDateLbl.textContent = change.hasPrev ? `어제 자산 (${change.prevDate})` : "이전 자산";
-                prevAmt.textContent = kfmt(change.hasPrev ? change.prevTotal : 210000000) + "원";
-                curAmt.textContent = kfmt(change.curTotal) + "원";
-                
-                const gainAmt = (change.diff > 0 && !isTest) ? change.diff : 2180000;
-                const gainPct = (change.diff > 0 && !isTest) ? change.diffPct : 1.03;
-                diffVal.textContent = `+${kfmt(gainAmt)}원 (+${gainPct.toFixed(2)}%)`;
-                diffDesc.textContent = "전일 대비 증가액";
-                
                 bubbleIcon.textContent = "🍷";
-                const moverComment = (topMover && topMover.diff > 0) ? `특히 <b>${topMover.name}</b>이 <b>+${kfmt(topMover.diff)}원</b> 기분 좋게 올랐네요!<br>` : '';
+                const moverComment = (top1Mover && top1Mover.diff > 0) ? `특히 <b>${top1Mover.name}</b>이 <b>+${moneyText(top1Mover.diff)}</b> 기분 좋게 올랐네요!<br>` : '';
                 bubbleText.innerHTML = `“<b>실사 대왕 두꺼비가 폴짝폴짝 뛰어와 당신에게 축배의 와인을 권합니다! 짠~!</b> 🍷✨<br>${moverComment}전일 대비 자산이 늘어 입주 잔금 완납에 한 걸음 더 가까워졌습니다! 멋지게 자산을 불려낸 두 분을 축하합니다!”`;
             }
         }
@@ -5520,7 +5719,9 @@
                     await doSync(); 
                     const m = document.getElementById("toadAlertModal");
                     if (m && m.classList.contains("show")) {
-                        renderToadModalContent(activeToadMode, getDailyAssetChange(), false);
+                        const freshChange = getDailyAssetChange();
+                        const freshMode = (freshChange.direction === "down") ? "loss" : "gain";
+                        renderToadModalContent(freshMode, freshChange, false);
                     }
                 } catch (e) { }
             }
