@@ -3592,11 +3592,16 @@
         function kfmt(n) {
             n = Math.round(n || 0);
             const sign = n < 0 ? "-" : ""; n = Math.abs(n);
-            const eok = Math.floor(n / 100000000);
-            const man = Math.floor((n % 100000000) / 10000);
+            let eok = Math.floor(n / 100000000);
+            let man = Math.round((n % 100000000) / 10000);
+            if (man >= 10000) { eok += 1; man = 0; }
             if (eok > 0) return sign + eok + "억" + (man > 0 ? " " + man.toLocaleString("ko-KR") + "만" : "");
-            if (man > 0) return sign + man.toLocaleString("ko-KR") + "만원";
-            return sign + n.toLocaleString("ko-KR") + "원";
+            if (man > 0) return sign + man.toLocaleString("ko-KR") + "만";
+            return sign + n.toLocaleString("ko-KR");
+        }
+        function moneyText(n) {
+            const s = kfmt(n);
+            return s.endsWith("원") ? s : s + "원";
         }
         const parseNum = v => { const n = Number(String(v == null ? "" : v).replace(/[^0-9.-]/g, "")); return isFinite(n) ? n : 0; };
         const todayISO = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
@@ -3861,7 +3866,9 @@
                 
                 if (gotRate > 0) {
                     S.fx = S.fx || {};
-                    if (S.fx.usdKrw && S.fx.usdKrw !== gotRate) {
+                    if (S.fx.usdKrw && S.fx.usdKrwDate && S.fx.usdKrwDate !== todayISO()) {
+                        S.fx.prevUsdKrw = S.fx.usdKrw;
+                    } else if (!S.fx.prevUsdKrw && S.fx.usdKrw) {
                         S.fx.prevUsdKrw = S.fx.usdKrw;
                     }
                     S.fx.usdKrw = gotRate;
@@ -3930,8 +3937,8 @@
                 const heroCheer = document.getElementById("dashHeroCheer");
                 if (heroCheer) {
                     if (c.gap <= 0) heroCheer.innerHTML = "🎉 축하합니다! 필요 잔금 목표를 100% 조기 달성하셨습니다!";
-                    else if (c.diff >= 0) heroCheer.innerHTML = `✨ 지금 추세라면 목표 달성 후 <b>${kfmt(c.diff)}원</b>의 여유 자금이 남아요! (잔여 ${c.n}개월)`;
-                    else heroCheer.innerHTML = `💪 매달 <b>${kfmt(c.need)}원</b>씩 저축하면 잔금 목표를 100% 달성할 수 있어요! (잔여 ${c.n}개월)`;
+                    else if (c.diff >= 0) heroCheer.innerHTML = `✨ 지금 추세라면 목표 달성 후 <b>${moneyText(c.diff)}</b>의 여유 자금이 남아요! (잔여 ${c.n}개월)`;
+                    else heroCheer.innerHTML = `💪 매달 <b>${moneyText(c.need)}</b>씩 저축하면 잔금 목표를 100% 달성할 수 있어요! (잔여 ${c.n}개월)`;
                 }
             } catch (errDday) { console.error("Dday calc error:", errDday); }
 
@@ -3950,15 +3957,15 @@
                     if (change.direction === "up") {
                         card.classList.add("is-gain");
                         avatar.textContent = "🍷";
-                        title.textContent = `대왕 두꺼비의 축배! 자산 +${kfmt(change.diff)}원 상승`;
+                        title.textContent = `대왕 두꺼비의 축배! 자산 +${moneyText(change.diff)} 상승`;
                         sub.textContent = `${cp.name} · 전일 대비 +${change.diffPct.toFixed(2)}% · 터치하여 축배 움짤 보기`;
-                        badge.textContent = `+${kfmt(change.diff)}원`;
+                        badge.textContent = `+${moneyText(change.diff)}`;
                     } else if (change.direction === "down") {
                         card.classList.add("is-loss");
                         avatar.textContent = "🗡️";
-                        title.textContent = `강도 두꺼비의 습격! 자산 -${kfmt(-change.diff)}원 하락`;
+                        title.textContent = `강도 두꺼비의 습격! 자산 -${moneyText(-change.diff)} 하락`;
                         sub.textContent = `${cp.name} · 전일 대비 -${Math.abs(change.diffPct).toFixed(2)}% · 터치하여 박살 움짤 보기`;
-                        badge.textContent = `-${kfmt(-change.diff)}원`;
+                        badge.textContent = `-${moneyText(-change.diff)}`;
                     } else {
                         avatar.textContent = "🐸";
                         title.textContent = "두꺼비의 전일 대비 자산 브리핑";
@@ -4044,18 +4051,18 @@
                 const barH = document.getElementById("barHusband"); if (barH) barH.style.width = husbandPct.toFixed(1) + "%";
                 const barJ = document.getElementById("barJoint"); if (barJ) barJ.style.width = jointPct.toFixed(1) + "%";
 
-                set("coupleTotalBadge", "부부 합산 " + kfmt(coupleTotal) + "원");
-                set("txtWifeAmt", kfmt(wifeStock) + "원");
+                set("coupleTotalBadge", "부부 합산 " + moneyText(coupleTotal));
+                set("txtWifeAmt", moneyText(wifeStock));
                 set("txtWifePct", wifePct.toFixed(1) + "%");
                 set("txtWifeCount", `주식/ETF ${wifeCount}종목`);
-                set("txtHusbandAmt", kfmt(husbandStock) + "원");
+                set("txtHusbandAmt", moneyText(husbandStock));
                 set("txtHusbandPct", husbandPct.toFixed(1) + "%");
                 set("txtHusbandCount", `주식/ETF ${husbandCount}종목`);
-                set("txtJointAmt", kfmt(jointCash) + "원");
+                set("txtJointAmt", moneyText(jointCash));
                 set("txtJointPct", jointPct.toFixed(1) + "%");
                 const cheerBanner = document.getElementById("coupleCheerBanner");
                 if (cheerBanner) {
-                    cheerBanner.innerHTML = `💑 두 사람이 함께 쌓아온 자산이 벌써 <b>${kfmt(coupleTotal)}원</b>을 넘었습니다!`;
+                    cheerBanner.innerHTML = `💑 두 사람이 함께 쌓아온 자산이 벌써 <b>${moneyText(coupleTotal)}</b>을 넘었습니다!`;
                 }
             } catch (errCouple) { console.error("Couple calc error:", errCouple); }
 
@@ -4074,8 +4081,8 @@
                 const monthDiff = curMonthSaving - monthlyGoal;
 
                 set("lblCurrentMonthSavings", `📅 ${curY}년 ${Number(curM)}월 저축 현황`);
-                set("txtCurrentMonthSaved", kfmt(curMonthSaving) + "원");
-                set("txtMonthlyGoal", kfmt(monthlyGoal) + "원");
+                set("txtCurrentMonthSaved", moneyText(curMonthSaving));
+                set("txtMonthlyGoal", moneyText(monthlyGoal));
                 const mBadge = document.getElementById("monthlySavingBadge");
                 const diffNote = document.getElementById("txtMonthDiffNote");
                 if (savingPct >= 100) {
@@ -4083,13 +4090,13 @@
                         mBadge.textContent = `🎉 목표 ${Math.round(savingPct)}% 달성!`;
                         mBadge.style.color = "#00b06f";
                     }
-                    if (diffNote) diffNote.innerHTML = `<span class="pill ok">+${kfmt(monthDiff)} 초과 달성</span>`;
+                    if (diffNote) diffNote.innerHTML = `<span class="pill ok">+${moneyText(monthDiff)} 초과 달성</span>`;
                 } else {
                     if (mBadge) {
                         mBadge.textContent = `달성률 ${savingPct.toFixed(1)}%`;
                         mBadge.style.color = "var(--toss-blue)";
                     }
-                    if (diffNote) diffNote.innerHTML = `<span class="pill bad">${kfmt(-monthDiff)} 남음</span>`;
+                    if (diffNote) diffNote.innerHTML = `<span class="pill bad">${moneyText(-monthDiff)} 남음</span>`;
                 }
                 const mProg = document.getElementById("barMonthlyProgress");
                 if (mProg) mProg.style.width = Math.min(100, Math.max(0, savingPct)) + "%";
@@ -4826,7 +4833,17 @@
                 }
 
                 if (okCount > 0) {
-                    S.holdings.forEach(h => { if (got[h.code]) { h.price = got[h.code]; h.priceDate = todayISO(); } });
+                    S.holdings.forEach(h => {
+                        if (got[h.code]) {
+                            if (h.price && h.priceDate && h.priceDate !== todayISO()) {
+                                h.prevPrice = h.price;
+                            } else if (!h.prevPrice && h.price) {
+                                h.prevPrice = h.price;
+                            }
+                            h.price = got[h.code];
+                            h.priceDate = todayISO();
+                        }
+                    });
                     S.lastSync = todayISO();
                     S.lastSyncSlot = targetSlot;
                     localStorage.setItem("toad_last_sync_slot", targetSlot);

@@ -111,6 +111,11 @@ function refreshMarket_() {
     var fx = fetchFx_();
     if (fx) {
       data.fx = data.fx || {};
+      if (data.fx.usdKrw && data.fx.usdKrwDate && data.fx.usdKrwDate !== today) {
+        data.fx.prevUsdKrw = data.fx.usdKrw;
+      } else if (!data.fx.prevUsdKrw && data.fx.usdKrw) {
+        data.fx.prevUsdKrw = data.fx.usdKrw;
+      }
       data.fx.usdKrw = fx.usdKrw;
       data.fx.usdKrwDate = today;
       data.fx.dxy = fx.dxy;
@@ -129,7 +134,15 @@ function refreshMarket_() {
   });
   if (priceOk > 0) {
     (data.holdings || []).forEach(function (h) {
-      if (prices[h.code]) { h.price = prices[h.code]; h.priceDate = today; }
+      if (prices[h.code]) {
+        if (h.price && h.priceDate && h.priceDate !== today) {
+          h.prevPrice = h.price;
+        } else if (!h.prevPrice && h.price) {
+          h.prevPrice = h.price;
+        }
+        h.price = prices[h.code];
+        h.priceDate = today;
+      }
     });
     data.lastSync = today;
     data.syncLog = data.syncLog || [];
