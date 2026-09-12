@@ -1882,7 +1882,7 @@
                 </div>
                 <div class="hero-quick-actions">
                     <button class="quick-btn primary" onclick="switchTab('flow')">💰 저축 기록하기</button>
-                    <button class="quick-btn" onclick="syncPrices()">⚡ 실시간 시세 갱신</button>
+                    <button class="quick-btn" id="btnDashSyncPrices" onclick="syncPrices()">⚡ 실시간 시세 갱신</button>
                     <button class="quick-btn" onclick="switchTab('loan')">📐 대출 시뮬레이션</button>
                     <button class="quick-btn" onclick="switchTab('assets')">💎 보유 종목 보기</button>
                 </div>
@@ -3333,8 +3333,8 @@
                 const raw = localStorage.getItem(SYNC_KEY);
                 if (raw) {
                     const d = JSON.parse(raw);
-                    // 이전 계정의 오래된 배포 URL이 브라우저에 남아있다면 버리고 새 배포 URL 채택
-                    const isOldUrl = d.url && (d.url.indexOf("AKfycbz7oT6rAZQe3ustt") >= 0 || d.url.indexOf("AKfycbyHDfpXe1") >= 0);
+                    // 이전 계정의 오래되거나 유효하지 않은 배포 URL이 브라우저에 남아있다면 버리고 최신 공식 배포 URL 채택
+                    const isOldUrl = !d.url || d.url.indexOf("AKfycbz7oT6rAZQe3ustt") >= 0 || d.url.indexOf("AKfycbyHDfpXe1") >= 0 || (d.url.indexOf("script.google.com/macros/s/") >= 0 && d.url.indexOf("AKfycbwvmGOCVuYW6Uul4DZBe13JVEHZ0ie3BiOP6vDc-ND9k-E-yLbVgqohcjsNowLV7MldHg") === -1);
                     const effectiveUrl = (!isOldUrl && d.url) ? d.url : DEFAULT_SYNC_URL;
                     return { url: effectiveUrl, lastSyncAt: d.lastSyncAt || null };
                 }
@@ -3390,9 +3390,12 @@
         }
         async function serverRefreshMarket(targetSlot) {
             if (!sync.url) return null;
-            var pushResult = null;
-            try { pushResult = await safeSyncPush_(); } catch (e) { }
-            const ac = new AbortController(); const t = setTimeout(() => ac.abort(), 20000);
+            // 미저장된 로컬 변경사항이 있는 경우에만 가볍게 선행 푸시 (불필요한 중복 왕복 제거)
+            if (dirty) {
+                try { await syncPush(); } catch (e) { }
+            }
+            // 모바일 네트워크 및 Apps Script 콜드스타트를 고려하여 타임아웃 30초 부여
+            const ac = new AbortController(); const t = setTimeout(() => ac.abort(), 30000);
             try {
                 const sep = sync.url.indexOf("?") >= 0 ? "&" : "?";
                 const r = await fetch(sync.url + sep + "action=refreshMarket", { method: "GET", signal: ac.signal });
@@ -3400,15 +3403,18 @@
                 if (!j || j.ok === false) throw new Error((j && j.error) || "서버 갱신 실패");
                 let remoteData = j.data ? JSON.parse(j.data) : null;
                 if (remoteData && remoteData.goal && remoteData.buckets) {
+                    // 서버 최신 시세 반영 시 오프라인 기록 누락 방지를 위해 entries 안전 병합
+                    const mergedEntries = mergeEntries_(S.entries, remoteData.entries);
                     S = migrate(remoteData);
+                    S.entries = mergedEntries;
                     if (targetSlot) {
                         S.lastSyncSlot = targetSlot;
                         localStorage.setItem("toad_last_sync_slot", targetSlot);
                     }
                     document.documentElement.setAttribute("data-theme", S.theme || "light");
                     save(false);
+                    render();
                 }
-                j.pushSkipped = !!(pushResult && pushResult.skipped);
                 return j;
             } finally { clearTimeout(t); }
         }
@@ -3722,15 +3728,15 @@
             if (btn) btn.disabled = true;
             
             try {
-                // 1) 무료 공개 실시간 환율 API (open.er-api.com) 호출 - CORS 완전 개방, 최신 고시 환율 제공
-                const ac = new AbortController();
-                const timer = setTimeout(() => ac.abort(), 7000);
                 let gotRate = 0;
                 let gotDxy = 0;
-                let dxyIsExact = false;
-                
+
+                // 1) 1순위 무료 공개 실시간 환율 API (open.er-api.com)
                 try {
-                    const r = await fetch("https://open.er-api.com/v6/latest/USD", { signal: ac.signal });
+                    const ac1 = new AbortController();
+                    const timer1 = setTimeout(() => ac1.abort(), 6000);
+                    const r = await fetch("https://open.er-api.com/v6/latest/USD", { signal: ac1.signal });
+                    clearTimeout(timer1);
                     const j = await r.json();
                     if (j && j.result === "success" && j.rates && j.rates.KRW) {
                         gotRate = Math.round(j.rates.KRW * 100) / 100;
@@ -3740,20 +3746,36 @@
                             * Math.pow(eurusd, -0.576) * Math.pow(usdjpy, 0.136) * Math.pow(gbpusd, -0.119)
                             * Math.pow(usdcad, 0.091) * Math.pow(usdsek, 0.042) * Math.pow(usdchf, 0.036);
                     }
-                } catch (netErr) {
-                    console.warn("Client FX fetch failed, fallback to server if available", netErr);
-                } finally {
-                    clearTimeout(timer);
+                } catch (netErr1) {
+                    console.warn("Tier-1 FX API failed, trying Tier-2:", netErr1);
+                }
+
+                // 2) 2순위 보조 실시간 환율 API (exchangerate-api.com)
+                if (!gotRate) {
+                    try {
+                        const ac2 = new AbortController();
+                        const timer2 = setTimeout(() => ac2.abort(), 6000);
+                        const r2 = await fetch("https://api.exchangerate-api.com/v4/latest/USD", { signal: ac2.signal });
+                        clearTimeout(timer2);
+                        const j2 = await r2.json();
+                        if (j2 && j2.rates && j2.rates.KRW) {
+                            gotRate = Math.round(j2.rates.KRW * 100) / 100;
+                        }
+                    } catch (netErr2) {
+                        console.warn("Tier-2 FX API failed:", netErr2);
+                    }
                 }
                 
-                // 2) 클라이언트 조회 실패 시 구글 스프레드시트 서버 조회 시도
+                // 3) 3순위 구글 스프레드시트 백엔드 서버(Apps Script) 조회 시도
                 if (!gotRate && sync.url) {
                     try {
                         const res = await serverRefreshMarket();
                         if (res && res.fxOk && S.fx && S.fx.usdKrw > 0) {
                             gotRate = S.fx.usdKrw;
                         }
-                    } catch (e) {}
+                    } catch (e) {
+                        console.warn("Server market refresh failed during FX lookup:", e);
+                    }
                 }
                 
                 if (gotRate > 0) {
@@ -3768,13 +3790,15 @@
                         S.fx.dxyDate = todayISO();
                     }
                     S.fx.lastUpdated = new Date().toISOString();
+                    S.updatedAt = new Date().toISOString();
                     
-                    save(true);
+                    save(false);
                     render();
+                    renderFx();
                     
-                    // 구글 스프레드시트에 백그라운드 동기화 (최신 환율 클라우드 저장)
+                    // 구글 스프레드시트에 백그라운드 동기화 (최신 환율 클라우드 DB 안전 영구보관)
                     if (sync.url) {
-                        saveToServer(true).catch(() => {});
+                        doSync().catch(syncErr => console.warn("Background FX sync err:", syncErr));
                     }
                     
                     if (showToast) {
@@ -3789,7 +3813,7 @@
                 }
             } catch (err) {
                 console.error("syncLiveFx error:", err);
-                if (showToast) toast("환율 조회 오류: " + err.message);
+                if (showToast) toast("환율 조회 오류: " + ((err && err.message) || "일시적 오류"));
                 return false;
             } finally {
                 if (spinEl) spinEl.classList.remove("spinning");
@@ -4630,10 +4654,6 @@
         /* ---------- 시세 조회 ---------- */
         const SOURCES = [
             {
-                name: "naver-basic", url: c => "https://api.stock.naver.com/stock/" + c + "/basic",
-                pick: j => parseNum(j && (j.closePrice || j.nowPrice))
-            },
-            {
                 name: "naver-poll", url: c => "https://polling.finance.naver.com/api/realtime/domestic/stock/" + c,
                 pick: j => parseNum(j && j.datas && j.datas[0] && (j.datas[0].closePrice || j.datas[0].nv))
             },
@@ -4643,6 +4663,10 @@
                     const m = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
                     return m ? parseNum(m.regularMarketPrice || m.chartPreviousClose) : 0;
                 }
+            },
+            {
+                name: "naver-basic", url: c => "https://api.stock.naver.com/stock/" + c + "/basic",
+                pick: j => parseNum(j && (j.closePrice || j.nowPrice))
             }
         ];
         const PROXIES = [
@@ -4677,72 +4701,84 @@
             const cp = getCurrentMarketCheckpoint();
             const targetSlot = (opts && opts.slotId) || cp.slotId;
             const btn = document.getElementById("btnSync");
-            if (!silent && S.lastSyncSlot === targetSlot) {
-                if (!confirm(`이미 ${cp.name} 시세를 반영했습니다. 다시 조회할까요?`)) return;
+            const dashBtn = document.getElementById("btnDashSyncPrices");
+            
+            function restoreBtns() {
+                if (btn) { btn.disabled = false; btn.textContent = priceBtnLabel(); }
+                if (dashBtn) { dashBtn.disabled = false; dashBtn.innerHTML = '⚡ 실시간 시세 갱신'; }
             }
-            btn.disabled = true; const old = btn.textContent; btn.textContent = "조회 중…";
 
-            // 1) 서버(Apps Script)를 통한 조회 우선 시도 — CORS 제약이 없어 훨씬 안정적
-            if (sync.url) {
-                try {
-                    const res = await serverRefreshMarket(targetSlot);
-                    if (res) {
-                        btn.disabled = false; btn.textContent = priceBtnLabel();
-                        if (res.priceOk > 0) {
+            if (btn) { btn.disabled = true; btn.textContent = "조회 중…"; }
+            if (dashBtn) { dashBtn.disabled = true; dashBtn.innerHTML = '<span class="spin">🔄</span> 시세 갱신 중…'; }
+
+            try {
+                // 1) 서버(Apps Script)를 통한 조회 우선 시도 — CORS 제약이 없어 가장 빠르고 안정적
+                if (sync.url) {
+                    try {
+                        const res = await serverRefreshMarket(targetSlot);
+                        if (res && res.priceOk > 0) {
                             S.lastSyncSlot = targetSlot;
                             localStorage.setItem("toad_last_sync_slot", targetSlot);
                             save(false);
                             render();
-                            const skipNote = res.pushSkipped ? " (⚠ 서버에 이 기기가 모르는 기록이 있어 이 기기 값 저장은 건너뜀)" : "";
-                            toast(res.priceOk + "/" + res.priceTotal + "개 종목 종가를 서버에서 갱신했습니다" + (res.fxOk ? " (환율도 갱신됨)" : "") + skipNote);
+                            if (!silent) {
+                                toast(`⚡ ${res.priceOk}/${res.priceTotal}개 종목 종가 및 환율을 갱신했습니다!` + (res.fxOk ? " (환율도 최신화됨)" : ""));
+                            }
                             return;
-                        } else if (!silent) {
-                            openPriceModal("서버 조회에도 실패했습니다. 직접 입력해 주세요.");
-                            return;
-                        } else {
-                            return; // 자동 실행 중 실패는 조용히 넘어감
+                        } else if (!silent && res && res.ok === false) {
+                            console.warn("Server returned false:", res.error);
                         }
+                    } catch (e) {
+                        console.warn("Server market refresh failed, attempting fallback:", e);
                     }
-                } catch (e) { /* 서버 방식 실패 시 아래 클라이언트 폴백으로 진행 */ }
-            }
-
-            // 2) 폴백: 브라우저에서 직접 조회 (구글시트 연동이 없거나 서버 조회가 실패한 경우)
-            const codes = [...new Set(S.holdings.map(h => h.code).filter(Boolean))];
-            const got = {}; let okCount = 0;
-            const ms = silent ? 4000 : 9000;
-            for (const c of codes) {
-                btn.textContent = "조회 중… " + c;
-                const v = await fetchPrice(c, ms);
-                if (v > 0) { got[c] = v; okCount++; }
-            }
-            btn.disabled = false; btn.textContent = priceBtnLabel();
-            if (okCount > 0) {
-                S.holdings.forEach(h => { if (got[h.code]) { h.price = got[h.code]; h.priceDate = todayISO(); } });
-                S.lastSync = todayISO();
-                S.lastSyncSlot = targetSlot;
-                localStorage.setItem("toad_last_sync_slot", targetSlot);
-                
-                // 오늘 총자산 스냅샷을 history에 저장
-                const curTot = totalAssets();
-                S.history = S.history || [];
-                const exIdx = S.history.findIndex(h => h.date === todayISO());
-                if (exIdx >= 0) S.history[exIdx].total = curTot;
-                else S.history.push({ date: todayISO(), total: curTot });
-                S.history.sort((a, b) => a.date.localeCompare(b.date));
-                
-                S.syncLog.push({ date: todayISO(), mode: silent ? `자동(${cp.timeLabel})` : "자동", detail: codes.length + "종목 중 " + okCount + "종목 반영" });
-            }
-            if (okCount < codes.length) {
-                if (silent) {
-                    if (okCount > 0) { save(true); render(); toast(okCount + "개 종목 종가를 자동 반영했습니다 (일부만 성공)"); }
-                } else {
-                    openPriceModal(okCount === 0
-                        ? "자동 조회가 차단되었습니다. 증권사 앱이나 네이버 금융에서 " + priceWordLabel() + " 종가를 확인해 입력해 주세요."
-                        : "일부 종목만 자동 조회되었습니다. 나머지를 확인해 입력해 주세요.");
                 }
-            } else {
-                await syncLiveFx(false);
-                save(true); render(); toast(okCount + "개 종목 종가 및 환율을 반영했습니다" + (silent ? ` (${cp.timeLabel} 자동)` : ""));
+
+                // 2) 폴백: 브라우저에서 직접 조회 (구글시트 연동이 없거나 서버 조회가 실패한 경우)
+                const codes = [...new Set(S.holdings.map(h => h.code).filter(Boolean))];
+                const got = {}; let okCount = 0;
+                const ms = silent ? 4000 : 9000;
+                for (const c of codes) {
+                    if (btn) btn.textContent = "조회 중… " + c;
+                    if (dashBtn) dashBtn.innerHTML = '<span class="spin">🔄</span> 조회 중… ' + c;
+                    const v = await fetchPrice(c, ms);
+                    if (v > 0) { got[c] = v; okCount++; }
+                }
+
+                if (okCount > 0) {
+                    S.holdings.forEach(h => { if (got[h.code]) { h.price = got[h.code]; h.priceDate = todayISO(); } });
+                    S.lastSync = todayISO();
+                    S.lastSyncSlot = targetSlot;
+                    localStorage.setItem("toad_last_sync_slot", targetSlot);
+                    
+                    // 오늘 총자산 스냅샷을 history에 저장
+                    const curTot = totalAssets();
+                    S.history = S.history || [];
+                    const exIdx = S.history.findIndex(h => h.date === todayISO());
+                    if (exIdx >= 0) S.history[exIdx].total = curTot;
+                    else S.history.push({ date: todayISO(), total: curTot });
+                    S.history.sort((a, b) => a.date.localeCompare(b.date));
+                    
+                    S.syncLog.push({ date: todayISO(), mode: silent ? `자동(${cp.timeLabel})` : "자동", detail: codes.length + "종목 중 " + okCount + "종목 반영" });
+                }
+
+                if (okCount < codes.length) {
+                    if (silent) {
+                        if (okCount > 0) { save(false); render(); }
+                    } else {
+                        openPriceModal(okCount === 0
+                            ? "자동 조회가 차단되었습니다. 증권사 앱이나 네이버 금융에서 " + priceWordLabel() + " 종가를 확인해 입력해 주세요."
+                            : "일부 종목만 자동 조회되었습니다. 나머지를 확인해 입력해 주세요.");
+                    }
+                } else {
+                    await syncLiveFx(false);
+                    save(false);
+                    render();
+                    if (!silent) {
+                        toast(okCount + "개 종목 종가 및 환율을 반영했습니다" + (silent ? ` (${cp.timeLabel} 자동)` : ""));
+                    }
+                }
+            } finally {
+                restoreBtns();
             }
         }
 
@@ -4757,12 +4793,16 @@
             try {
                 const sep = sync.url.includes("?") ? "&" : "?";
                 const r = await fetch(sync.url + sep + "action=setupTriggers");
-                const j = await r.json();
+                const text = await r.text();
+                let j = null;
+                try { j = JSON.parse(text); } catch (parseErr) {}
                 if (btn) { btn.disabled = false; btn.textContent = "⏰ 구글 서버 16시/06시 자동 트리거 등록"; }
                 if (j && j.ok) {
                     toast("✅ 구글 서버 자동 트리거 등록 완료! (한국 장 마감 16:00 / 아침 06:00)");
+                } else if (j && j.error) {
+                    toast("⚠️ 등록 실패: " + j.error);
                 } else {
-                    toast("⚠️ 등록 실패: " + ((j && j.error) || "응답 오류"));
+                    toast("ℹ️ 구글 서버 트리거는 앱스스크립트 콘솔(트리거 메뉴)에서 scheduledMarketRefresh_ 함수로 등록하실 수 있습니다.");
                 }
             } catch (e) {
                 if (btn) { btn.disabled = false; btn.textContent = "⏰ 구글 서버 16시/06시 자동 트리거 등록"; }
@@ -5148,7 +5188,7 @@
                     await syncLiveFx(false); // 16:00 한국 장 마감 / 06:00 아침 정산 동일 시각에 환율도 자동 업데이트
                     localStorage.setItem("toad_last_sync_slot", cp.slotId);
                     S.lastSyncSlot = cp.slotId;
-                    save(true);
+                    save(false);
                     
                     const m = document.getElementById("toadAlertModal");
                     if (m && m.classList.contains("show")) {
