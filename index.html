@@ -3041,6 +3041,24 @@
                               "isUsd": true,
                               "divYield": 0,
                               "order": 11
+                    },
+                    {
+                              "id": "h_hyundai_esop",
+                              "bucketId": "b_stock",
+                              "name": "현대자동차 (우리사주)",
+                              "code": "005380",
+                              "account": "우리사주",
+                              "owner": "남편",
+                              "qty": 1,
+                              "avgPrice": 8000000,
+                              "price": 8000000,
+                              "priceDate": "2026-09-15",
+                              "isUsd": false,
+                              "divYield": 0,
+                              "isFixed": true,
+                              "excludeFromGoal": true,
+                              "order": 12,
+                              "prevPrice": 8000000
                     }
           ],
           "entries": [
@@ -3318,6 +3336,29 @@
             if (d.loan.ltv === 70) d.loan.ltv = 80;
             d.buckets = Array.isArray(d.buckets) && d.buckets.length ? d.buckets : base.buckets;
             d.holdings = Array.isArray(d.holdings) ? d.holdings : base.holdings;
+            // 현대자동차 우리사주 종목 보장
+            const hasWoori = d.holdings.some(h => (h.name && h.name.indexOf("현대차") >= 0) || h.account === "우리사주" || h.id === "h_hyundai_esop");
+            if (!hasWoori) {
+                const stockBucket = (d.buckets && d.buckets.find(b => b.kind === "stock")) || { id: "b_stock" };
+                d.holdings.push({
+                    id: "h_hyundai_esop",
+                    bucketId: stockBucket.id || "b_stock",
+                    name: "현대자동차 (우리사주)",
+                    code: "005380",
+                    account: "우리사주",
+                    owner: "남편",
+                    qty: 1,
+                    avgPrice: 8000000,
+                    price: 8000000,
+                    priceDate: todayISO(),
+                    isUsd: false,
+                    divYield: 0,
+                    isFixed: true,
+                    excludeFromGoal: true,
+                    order: 12,
+                    prevPrice: 8000000
+                });
+            }
             d.holdings.forEach(h => {
                 if (typeof h.avgPrice !== "number") h.avgPrice = 0;
                 if (typeof h.account !== "string") h.account = "";
@@ -3329,6 +3370,13 @@
                 }
                 // 계좌 필드에는 더 이상 소유자를 표기하지 않음 (소유자는 owner 필드로만 구분) — 남아있는 접두어 제거
                 h.account = (h.account || "").replace(/^(남편|아내)\s*/, "");
+                // 우리사주 항목 설정 보장
+                if (h.account === "우리사주" || (h.name && h.name.indexOf("우리사주") >= 0) || h.id === "h_hyundai_esop") {
+                    h.account = "우리사주";
+                    h.isFixed = true;
+                    h.excludeFromGoal = true;
+                    if (!h.owner) h.owner = "남편";
+                }
                 if (typeof h.divYield !== "number") {
                     if ((h.name || "").indexOf("다우존스") >= 0 || (h.name || "").indexOf("타미당") >= 0) h.divYield = 3.5;
                     else if ((h.name || "").indexOf("S&P") >= 0 || (h.name || "").indexOf("나스닥") >= 0) h.divYield = 1.0;
@@ -3342,7 +3390,8 @@
                     "379810": 26470, // KODEX 미국나스닥100
                     "476800": 4225,  // KODEX 한국부동산리츠인프라
                     "455660": 9425,  // ACE 미국하이일드액티브(H)
-                    "SOXL": 117.28
+                    "SOXL": 117.28,
+                    "005380": 8000000 // 우리사주 고정금액
                 };
                 if (typeof h.prevPrice !== "number" || h.prevPrice <= 0) {
                     h.prevPrice = BASE_PREV_PRICES[h.code] || h.price;
@@ -3619,6 +3668,13 @@
             return b.amount || 0;
         }
         const totalAssets = () => S.buckets.reduce((s, b) => s + bucketAmount(b), 0);
+        // 잔금 치룰 때 쓸 수 없는 자산 (우리사주 등 인출제한 자산)
+        const lockedAssets = () => {
+            const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
+            return (S.holdings || []).filter(h => h.account === "우리사주" || h.excludeFromGoal).reduce((s, h) => s + (h.qty || 0) * (h.price || 0) * (h.isUsd ? fxRate : 1), 0);
+        };
+        // 실제 잔금 치룰 때 쓸 수 있는 가용 자산
+        const usableAssets = () => Math.max(0, totalAssets() - lockedAssets());
         const acqTax = () => Math.round((S.goal.totalPrice || 0) * (S.goal.acqTaxRate || 0) / 100);
         const extraTaxes = () => S.goal.useExtraTaxes ? (S.goal.bondDiscount || 0) + (S.goal.legalFee || 0) + (S.goal.stampDuty || 0) + (S.goal.moveInDeposit || 0) : 0;
         const goalTotal = () => (S.goal.balance || 0) + acqTax() + (S.goal.optionCost || 0) + (S.goal.moveCost || 0) + (S.goal.extraCost || 0) + extraTaxes();
@@ -3630,11 +3686,12 @@
             return Math.max(0, n);
         }
         function calc() {
-            const total = totalAssets(), goal = goalTotal(), gap = Math.max(0, goal - total), n = monthsLeft();
+            const total = totalAssets(), locked = lockedAssets(), usable = usableAssets(), goal = goalTotal();
+            const gap = Math.max(0, goal - usable), n = monthsLeft();
             const need = n > 0 ? gap / n : gap;
             const plan = S.goal.monthlySaving || 0;
-            const projected = total + plan * n;
-            return { total, goal, gap, n, need, plan, projected, diff: projected - goal };
+            const projected = usable + plan * n;
+            return { total, locked, usable, goal, gap, n, need, plan, projected, diff: projected - goal };
         }
 
         /* ---------- 렌더 ---------- */
@@ -3927,18 +3984,21 @@
                 const targetPill = document.getElementById("dashTargetMonthPill");
                 if (targetPill) targetPill.textContent = (S.goal.targetMonth || "2028-05").replace("-", "년 ") + "월 목표";
                 set("dashHeroTotal", kfmt(c.total));
-                set("dashHeroWon", won(c.total) + "원");
+                set("dashHeroWon", c.locked > 0 ? `${won(c.total)}원 (잔금 가용: ${kfmt(c.usable)})` : won(c.total) + "원");
                 set("dashHeroGoal", kfmt(c.goal));
-                set("dashHeroGap", "취득세 " + kfmt(acqTax()) + " 포함 · " + (c.gap > 0 ? "부족액 " + kfmt(c.gap) : "목표 달성 완료! 🎉"));
-                const heroPctVal = Math.min(100, c.goal > 0 ? c.total / c.goal * 100 : 0);
+                const gapText = c.locked > 0
+                    ? `취득세 ${kfmt(acqTax())} 포함 · 잔금 가용 ${kfmt(c.usable)} (우리사주 ${kfmt(c.locked)} 제외) · ` + (c.gap > 0 ? `부족액 ${kfmt(c.gap)}` : "목표 달성 완료! 🎉")
+                    : "취득세 " + kfmt(acqTax()) + " 포함 · " + (c.gap > 0 ? "부족액 " + kfmt(c.gap) : "목표 달성 완료! 🎉");
+                set("dashHeroGap", gapText);
+                const heroPctVal = Math.min(100, c.goal > 0 ? c.usable / c.goal * 100 : 0);
                 set("dashHeroPct", heroPctVal.toFixed(1) + "%");
                 const heroProg = document.getElementById("dashHeroProgFill");
                 if (heroProg) heroProg.style.width = heroPctVal + "%";
                 const heroCheer = document.getElementById("dashHeroCheer");
                 if (heroCheer) {
                     if (c.gap <= 0) heroCheer.innerHTML = "🎉 축하합니다! 필요 잔금 목표를 100% 조기 달성하셨습니다!";
-                    else if (c.diff >= 0) heroCheer.innerHTML = `✨ 지금 추세라면 목표 달성 후 <b>${moneyText(c.diff)}</b>의 여유 자금이 남아요! (잔여 ${c.n}개월)`;
-                    else heroCheer.innerHTML = `💪 매달 <b>${moneyText(c.need)}</b>씩 저축하면 잔금 목표를 100% 달성할 수 있어요! (잔여 ${c.n}개월)`;
+                    else if (c.diff >= 0) heroCheer.innerHTML = `✨ 지금 추세라면 목표 달성 후 <b>${moneyText(c.diff)}</b>의 여유 자금이 남아요! (잔금 가용 기준 · 잔여 ${c.n}개월)`;
+                    else heroCheer.innerHTML = `💪 매달 <b>${moneyText(c.need)}</b>씩 저축하면 잔금 목표를 100% 달성할 수 있어요! (우리사주 제외 가용 기준 · 잔여 ${c.n}개월)`;
                 }
             } catch (errDday) { console.error("Dday calc error:", errDday); }
 
@@ -4057,7 +4117,8 @@
                 set("txtWifeCount", `주식/ETF ${wifeCount}종목`);
                 set("txtHusbandAmt", moneyText(husbandStock));
                 set("txtHusbandPct", husbandPct.toFixed(1) + "%");
-                set("txtHusbandCount", `주식/ETF ${husbandCount}종목`);
+                const husbandWooriCount = (S.holdings || []).filter(h => h.owner === "남편" && (h.account === "우리사주" || h.excludeFromGoal)).length;
+                set("txtHusbandCount", husbandWooriCount > 0 ? `주식/우리사주 ${husbandCount}종목` : `주식/ETF ${husbandCount}종목`);
                 set("txtJointAmt", moneyText(jointCash));
                 set("txtJointPct", jointPct.toFixed(1) + "%");
                 const cheerBanner = document.getElementById("coupleCheerBanner");
@@ -4104,9 +4165,11 @@
 
             document.getElementById("headline").textContent =
                 (S.goal.targetMonth || "").replace("-", "년 ") + "월 잔금 납부 · 남은 기간 " + c.n + "개월";
-            set("k-total", kfmt(c.total)); set("k-total-note", won(c.total) + "원");
+            set("k-total", kfmt(c.total));
+            set("k-total-note", c.locked > 0 ? `${won(c.total)}원 (잔금 가용 ${kfmt(c.usable)})` : won(c.total) + "원");
             set("k-goal", kfmt(c.goal)); set("k-goal-note", "취득세 " + kfmt(acqTax()) + " 포함");
-            set("k-gap", kfmt(c.gap)); set("k-gap-note", c.gap > 0 ? "달성률 " + (c.total / c.goal * 100).toFixed(1) + "%" : "목표 달성");
+            set("k-gap", kfmt(c.gap));
+            set("k-gap-note", c.gap > 0 ? (c.locked > 0 ? "가용자산 기준 " : "") + "달성률 " + (c.usable / c.goal * 100).toFixed(1) + "%" : "목표 달성");
             set("k-months", c.n + "개월"); set("k-months-note", (S.goal.targetMonth || "") + " 기준");
             set("k-need", kfmt(c.need)); set("k-need-note", "매달 이만큼 모으면 목표 도달");
             set("k-plan", kfmt(c.plan));
@@ -4115,10 +4178,10 @@
             else planNote.innerHTML = '<span class="pill bad">' + kfmt(-c.diff) + ' 부족</span>';
 
             const gTot = goalTotal();
-            const pct = Math.min(100, gTot > 0 ? c.total / gTot * 100 : 0);
+            const pct = Math.min(100, gTot > 0 ? c.usable / gTot * 100 : 0);
             document.getElementById("progbar").style.width = pct + "%";
             document.getElementById("progbar").style.background = pct >= 100 ? "var(--good)" : "var(--s1)";
-            set("prog-l", "현재 " + kfmt(S.history && S.history.length ? S.history[S.history.length - 1].total : c.total));
+            set("prog-l", "잔금 가용 " + kfmt(c.usable) + (c.locked > 0 ? " (총 " + kfmt(c.total) + ")" : ""));
             set("prog-r", "목표 " + kfmt(gTot) + " (" + pct.toFixed(1) + "%)");
             renderHistory();
 
@@ -4194,7 +4257,7 @@
         function renderAssets() {
             const hb = document.getElementById("holdBody"); hb.innerHTML = "";
             const stockBuckets = S.buckets.filter(b => b.kind === "stock");
-            const ACCOUNTS = ["", "일반계좌", "ISA"];
+            const ACCOUNTS = ["", "일반계좌", "ISA", "우리사주"];
             const OWNERS = ["", "아내", "남편"];
             const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
 
@@ -4224,9 +4287,11 @@
                     const plCls = pl > 0 ? "gain" : pl < 0 ? "loss" : "";
                     const plTxt = cost > 0 ? (pl >= 0 ? "+" : "") + won(pl) + " (" + (pl >= 0 ? "+" : "") + plPct.toFixed(1) + "%)" : "—";
                     const isFirst = idx === 0, isLast = idx === g.items.length - 1;
+                    const isWoori = h.account === "우리사주" || h.excludeFromGoal;
                     const tr = document.createElement("tr");
                     tr.innerHTML =
-                        '<td><input value="' + esc(h.name) + '" data-h="' + h.id + '" data-f="name" style="width:100%"></td>' +
+                        '<td><input value="' + esc(h.name) + '" data-h="' + h.id + '" data-f="name" style="width:100%">' +
+                        (isWoori ? '<div style="margin-top:3px"><span style="display:inline-block;padding:2px 6px;background:rgba(239,68,68,0.1);color:#e11d48;border-radius:4px;font-size:10.5px;font-weight:700;">🔒 잔금제외 자산</span></div>' : '') + '</td>' +
                         '<td><input value="' + esc(h.code) + '" data-h="' + h.id + '" data-f="code" style="width:100%"></td>' +
                         '<td style="width:132px"><select data-h="' + h.id + '" data-f="account" style="width:100%">' +
                         ACCOUNTS.map(a => '<option value="' + a + '"' + (a === (h.account || "") ? " selected" : "") + '>' + (a || "미지정") + '</option>').join("") +
@@ -4822,7 +4887,7 @@
                 }
 
                 // 2) 폴백: 브라우저에서 직접 조회 (구글시트 연동이 없거나 서버 조회가 실패한 경우)
-                const codes = [...new Set(S.holdings.map(h => h.code).filter(Boolean))];
+                const codes = [...new Set(S.holdings.filter(h => !h.isFixed && h.account !== "우리사주").map(h => h.code).filter(Boolean))];
                 const got = {}; let okCount = 0;
                 const ms = silent ? 4000 : 9000;
                 for (const c of codes) {
@@ -4834,6 +4899,7 @@
 
                 if (okCount > 0) {
                     S.holdings.forEach(h => {
+                        if (h.isFixed || h.account === "우리사주") return;
                         if (got[h.code]) {
                             if (h.price && h.priceDate && h.priceDate !== todayISO()) {
                                 h.prevPrice = h.price;
@@ -4911,6 +4977,7 @@
             document.getElementById("priceModalSub").textContent = msg || "각 종목의 " + priceWordLabel() + " 종가를 입력해 주세요.";
             const tb = document.getElementById("priceModalBody"); tb.innerHTML = "";
             S.holdings.forEach(h => {
+                if (h.isFixed || h.account === "우리사주") return;
                 const tr = document.createElement("tr");
                 tr.innerHTML = '<td>' + esc(h.name) + ' <span class="muted">' + esc(h.code) + '</span></td>' +
                     '<td style="width:120px"><input class="num" value="' + won(h.price) + '" data-pm="' + h.id + '"></td>';
@@ -5030,6 +5097,15 @@
                 const f = el.dataset.f;
                 if (f === "isUsd") { h[f] = el.checked; }
                 else { h[f] = (f === "qty" || f === "price" || f === "avgPrice") ? parseNum(el.value) : el.value; }
+                if (f === "account") {
+                    if (el.value === "우리사주") {
+                        h.excludeFromGoal = true;
+                        h.isFixed = true;
+                    } else {
+                        h.excludeFromGoal = false;
+                        h.isFixed = false;
+                    }
+                }
                 if (f === "price") h.priceDate = todayISO();
                 autosave(); renderAssets(); renderDash();
             } else if (el.dataset.b) {
