@@ -131,18 +131,19 @@ function refreshMarket_() {
   var prices = {};
   codes.forEach(function (code) {
     var p = fetchStockPrice_(code, fxRate);
-    if (p > 0) { prices[code] = p; priceOk++; }
+    if (p && p.price > 0) { prices[code] = p; priceOk++; }
   });
   if (priceOk > 0) {
     (data.holdings || []).forEach(function (h) {
       if (h.account === "우리사주" || h.isFixed) return;
       if (prices[h.code]) {
-        if (h.price && h.priceDate && h.priceDate !== today) {
-          h.prevPrice = h.price;
-        } else if (!h.prevPrice && h.price) {
+        var pInfo = prices[h.code];
+        h.price = pInfo.price;
+        if (pInfo.prevPrice && pInfo.prevPrice > 0) {
+          h.prevPrice = pInfo.prevPrice;
+        } else if (h.price && h.priceDate && h.priceDate !== today) {
           h.prevPrice = h.price;
         }
-        h.price = prices[h.code];
         h.priceDate = today;
       }
     });
@@ -194,17 +195,17 @@ function fetchStockPrice_(code, fxRate) {
   if (isNumeric) {
     // 국내(KRX) 종목: 네이버가 야후보다 국내 종목 시세를 훨씬 정확하고 최신으로 제공하므로 먼저 시도.
     var vNaverPoll = fetchFromNaverPolling_(code);
-    if (vNaverPoll > 0) return vNaverPoll;
+    if (vNaverPoll && vNaverPoll.price > 0) return vNaverPoll;
     var vNaverBasic = fetchFromNaverBasic_(code);
-    if (vNaverBasic > 0) return vNaverBasic;
+    if (vNaverBasic && vNaverBasic.price > 0) return vNaverBasic;
     var vYahooKr = fetchFromYahoo_(code + ".KS");
-    if (vYahooKr > 0) return vYahooKr;
-    return 0;
+    if (vYahooKr && vYahooKr.price > 0) return vYahooKr;
+    return null;
   } else {
     // 해외(미국 등) 종목: 야후 파이낸스가 정확하고 빠르게 반영됨
     var vYahoo = fetchFromYahoo_(code);
-    if (vYahoo > 0) return vYahoo;
-    return 0;
+    if (vYahoo && vYahoo.price > 0) return vYahoo;
+    return null;
   }
 }
 
@@ -215,11 +216,12 @@ function fetchFromYahoo_(symbol) {
     if (res.getResponseCode() === 200) {
       var j = JSON.parse(res.getContentText());
       var m = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
-      var v = m && (m.regularMarketPrice || m.chartPreviousClose);
-      if (v > 0) return v;
+      var cur = m && (m.regularMarketPrice || m.chartPreviousClose);
+      var prev = m && m.chartPreviousClose;
+      if (cur > 0) return { price: cur, prevPrice: (prev > 0 ? prev : cur) };
     }
-  } catch (e) { /* 실패 시 0 반환 */ }
-  return 0;
+  } catch (e) { /* 실패 시 null 반환 */ }
+  return null;
 }
 
 function fetchFromNaverPolling_(code) {
@@ -229,12 +231,17 @@ function fetchFromNaverPolling_(code) {
     if (res2.getResponseCode() === 200) {
       var j2 = JSON.parse(res2.getContentText());
       var d = j2 && j2.datas && j2.datas[0];
-      var v2 = d && (d.closePrice || d.nv);
-      var num2 = v2 ? Number(String(v2).replace(/[^0-9.-]/g, "")) : 0;
-      if (num2 > 0) return Math.round(num2);
+      var v2 = d && (d.closePriceRaw || d.closePrice || d.nv);
+      var cur = v2 ? Number(String(v2).replace(/[^0-9.-]/g, "")) : 0;
+      if (cur > 0) {
+        var diff = d.compareToPreviousClosePriceRaw ? Number(d.compareToPreviousClosePriceRaw) : 0;
+        var isFalling = d.compareToPreviousPrice && (d.compareToPreviousPrice.name === "FALLING" || d.compareToPreviousPrice.code === "5");
+        var prev = isFalling ? (cur + diff) : (cur - diff);
+        return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
+      }
     }
-  } catch (e) { /* 실패 시 0 반환 */ }
-  return 0;
+  } catch (e) { /* 실패 시 null 반환 */ }
+  return null;
 }
 
 function fetchFromNaverBasic_(code) {
@@ -244,11 +251,16 @@ function fetchFromNaverBasic_(code) {
     if (res3.getResponseCode() === 200) {
       var j3 = JSON.parse(res3.getContentText());
       var v3 = j3 && (j3.closePrice || j3.nowPrice);
-      var num3 = v3 ? Number(String(v3).replace(/[^0-9.-]/g, "")) : 0;
-      if (num3 > 0) return Math.round(num3);
+      var cur = v3 ? Number(String(v3).replace(/[^0-9.-]/g, "")) : 0;
+      if (cur > 0) {
+        var diff = j3.compareToPreviousClosePrice ? Number(j3.compareToPreviousClosePrice) : 0;
+        var isFalling = j3.compareToPreviousPrice && (j3.compareToPreviousPrice.name === "FALLING" || j3.compareToPreviousPrice.code === "5");
+        var prev = isFalling ? (cur + diff) : (cur - diff);
+        return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
+      }
     }
-  } catch (e) { /* 실패 시 0 반환 */ }
-  return 0;
+  } catch (e) { /* 실패 시 null 반환 */ }
+  return null;
 }
 
 function fetchFx_() {

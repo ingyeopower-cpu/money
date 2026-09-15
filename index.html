@@ -4809,18 +4809,39 @@
         const SOURCES = [
             {
                 name: "naver-poll", url: c => "https://polling.finance.naver.com/api/realtime/domestic/stock/" + c,
-                pick: j => parseNum(j && j.datas && j.datas[0] && (j.datas[0].closePrice || j.datas[0].nv))
+                pick: j => {
+                    const d = j && j.datas && j.datas[0];
+                    if (!d) return null;
+                    const cur = parseNum(d.closePrice || d.closePriceRaw || d.nv);
+                    if (cur <= 0) return null;
+                    const diff = parseNum(d.compareToPreviousClosePriceRaw || d.compareToPreviousClosePrice || 0);
+                    const isDown = d.compareToPreviousPrice && (d.compareToPreviousPrice.name === "FALLING" || d.compareToPreviousPrice.code === "5");
+                    const prev = isDown ? (cur + diff) : (cur - diff);
+                    return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
+                }
             },
             {
                 name: "yahoo", url: c => "https://query1.finance.yahoo.com/v8/finance/chart/" + (/^\d+$/.test(c) ? c + ".KS" : c) + "?range=5d&interval=1d",
                 pick: j => {
                     const m = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
-                    return m ? parseNum(m.regularMarketPrice || m.chartPreviousClose) : 0;
+                    if (!m) return null;
+                    const cur = parseNum(m.regularMarketPrice || m.chartPreviousClose);
+                    const prev = parseNum(m.chartPreviousClose);
+                    if (cur <= 0) return null;
+                    return { price: cur, prevPrice: prev > 0 ? prev : cur };
                 }
             },
             {
                 name: "naver-basic", url: c => "https://api.stock.naver.com/stock/" + c + "/basic",
-                pick: j => parseNum(j && (j.closePrice || j.nowPrice))
+                pick: j => {
+                    if (!j) return null;
+                    const cur = parseNum(j.closePrice || j.nowPrice);
+                    if (cur <= 0) return null;
+                    const diff = parseNum(j.compareToPreviousClosePrice || 0);
+                    const isDown = j.compareToPreviousPrice && (j.compareToPreviousPrice.name === "FALLING" || j.compareToPreviousPrice.code === "5");
+                    const prev = isDown ? (cur + diff) : (cur - diff);
+                    return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
+                }
             }
         ];
         const PROXIES = [
@@ -4844,11 +4865,11 @@
                     try {
                         const j = await getJSON(p(s.url(code)), ms);
                         let v = s.pick(j);
-                        if (v > 0) return v;
+                        if (v && v.price > 0) return v;
                     } catch (e) { /* 다음 경로 시도 */ }
                 }
             }
-            return 0;
+            return null;
         }
         async function syncPrices(opts) {
             const silent = !!(opts && opts.silent);
@@ -4895,19 +4916,18 @@
                     if (btn) btn.textContent = "조회 중… " + c;
                     if (dashBtn) dashBtn.innerHTML = '<span class="spin">🔄</span> 조회 중… ' + c;
                     const v = await fetchPrice(c, ms);
-                    if (v > 0) { got[c] = v; okCount++; }
+                    if (v && v.price > 0) { got[c] = v; okCount++; }
                 }
 
                 if (okCount > 0) {
                     S.holdings.forEach(h => {
                         if (h.isFixed || h.account === "우리사주") return;
                         if (got[h.code]) {
-                            if (h.price && h.priceDate && h.priceDate !== todayISO()) {
-                                h.prevPrice = h.price;
-                            } else if (!h.prevPrice && h.price) {
-                                h.prevPrice = h.price;
+                            const res = got[h.code];
+                            h.price = res.price;
+                            if (res.prevPrice && res.prevPrice > 0) {
+                                h.prevPrice = res.prevPrice;
                             }
-                            h.price = got[h.code];
                             h.priceDate = todayISO();
                         }
                     });
