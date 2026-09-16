@@ -1901,9 +1901,14 @@
         }
         .stock-chart-stats {
             display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 3px;
+        }
+        .stock-stat-top-row {
+            display: inline-flex;
             align-items: baseline;
-            gap: 7px;
-            flex-wrap: wrap;
+            gap: 6px;
         }
         .stock-stat-label {
             font-size: 11px;
@@ -2157,9 +2162,11 @@
                 <div class="fx-chart-section">
                     <div class="stock-chart-header">
                         <div class="stock-chart-stats">
-                            <span class="stock-stat-label">기간 등락</span>
-                            <span class="stock-stat-val" id="fxChartPeriodDiff">—</span>
-                            <span class="stock-stat-badge" id="fxChartPeriodRange">최저 — · 최고 —</span>
+                            <div class="stock-stat-top-row">
+                                <span class="stock-stat-label">기간 등락</span>
+                                <span class="stock-stat-val" id="fxChartPeriodDiff">—</span>
+                            </div>
+                            <span class="stock-stat-badge" id="fxChartPeriodRange">최저 —, 최고 —</span>
                         </div>
                         <div class="stock-period-tabs" id="fxPeriodTabs">
                             <button type="button" class="stock-period-btn active" data-period="1W" onclick="setFxChartPeriod('1W')">1주일</button>
@@ -2355,9 +2362,11 @@
                 <div class="asset-chart-section">
                     <div class="stock-chart-header">
                         <div class="stock-chart-stats">
-                            <span class="stock-stat-label">기간 변동</span>
-                            <span class="stock-stat-val" id="assetChartPeriodDiff">—</span>
-                            <span class="stock-stat-badge" id="assetChartPeriodRange">최저 — · 최고 —</span>
+                            <div class="stock-stat-top-row">
+                                <span class="stock-stat-label">기간 변동</span>
+                                <span class="stock-stat-val" id="assetChartPeriodDiff">—</span>
+                            </div>
+                            <span class="stock-stat-badge" id="assetChartPeriodRange">최저 —, 최고 —</span>
                         </div>
                         <div class="stock-period-tabs" id="assetPeriodTabs">
                             <button type="button" class="stock-period-btn active" data-period="1W" onclick="setAssetChartPeriod('1W')">1주일</button>
@@ -5133,7 +5142,7 @@
                 svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
                 svg.innerHTML = `<text x="${W / 2}" y="${H / 2}" text-anchor="middle" font-size="12" fill="var(--muted)">데이터를 불러오는 중이거나 기록이 2건 이상 필요합니다.</text>`;
                 if (hudDiff) hudDiff.textContent = "—";
-                if (hudRange) hudRange.textContent = "최저 — · 최고 —";
+                if (hudRange) hudRange.textContent = "최저 —, 최고 —";
                 return;
             }
 
@@ -5162,7 +5171,7 @@
                 hudDiff.className = "stock-stat-val " + (isUp ? "up" : "down");
             }
             if (hudRange) {
-                hudRange.textContent = `최저 ${fmtVal(minV, false)} · 최고 ${fmtVal(maxV, false)}`;
+                hudRange.textContent = `최저 ${fmtVal(minV, false)}, 최고 ${fmtVal(maxV, false)}`;
             }
 
             // 라인 및 면적 패스
