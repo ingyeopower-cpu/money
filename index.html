@@ -1876,6 +1876,156 @@
         .fx-link-btn:hover {
             text-decoration: underline;
         }
+
+        /* ==================== 주식형 꺾은선 차트 (환율 & 자산 시계열 공통 스타일) ==================== */
+        .fx-chart-section {
+            margin: 12px 0 10px 0;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+        .asset-chart-section {
+            margin: 12px 0 16px 0;
+            padding: 14px 16px 12px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+        }
+        .stock-chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .stock-chart-stats {
+            display: flex;
+            align-items: baseline;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+        .stock-stat-label {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+        .stock-stat-val {
+            font-size: 14px;
+            font-weight: 750;
+            font-variant-numeric: tabular-nums;
+            color: var(--ink);
+            letter-spacing: -0.01em;
+        }
+        .stock-stat-val.up {
+            color: #f04452;
+        }
+        .stock-stat-val.down {
+            color: #3182f6;
+        }
+        .stock-stat-badge {
+            font-size: 10.5px;
+            color: var(--muted);
+            font-variant-numeric: tabular-nums;
+            background: var(--chip);
+            padding: 2px 7px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-weight: 500;
+        }
+        .stock-period-tabs {
+            display: inline-flex;
+            align-items: center;
+            background: var(--chip);
+            border: 1px solid var(--border);
+            border-radius: 99px;
+            padding: 2px;
+            gap: 2px;
+        }
+        .stock-period-btn {
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 4px 9px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 650;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.16s ease;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .stock-period-btn:hover {
+            color: var(--ink);
+        }
+        .stock-period-btn.active {
+            background: #3182f6;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(49, 130, 246, 0.28);
+        }
+        .stock-chart-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: pan-y;
+            border-radius: 8px;
+        }
+        .stock-svg {
+            width: 100%;
+            display: block;
+            overflow: visible;
+        }
+        .stock-tooltip {
+            position: absolute;
+            pointer-events: none;
+            z-index: 30;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 7px 11px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+            transform: translate(-50%, -108%);
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: opacity 0.08s ease;
+        }
+        .stt-date {
+            font-size: 10.5px;
+            color: var(--muted);
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        .stt-val {
+            font-size: 13.5px;
+            font-weight: 800;
+            color: var(--ink);
+            font-variant-numeric: tabular-nums;
+        }
+        .stt-sub {
+            font-size: 11px;
+            font-weight: 650;
+            font-variant-numeric: tabular-nums;
+            margin-top: 1px;
+        }
+        .stt-sub.up {
+            color: #f04452;
+        }
+        .stt-sub.down {
+            color: #3182f6;
+        }
+        :root[data-theme="dark"] .asset-chart-section {
+            background: #15181e;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+        :root[data-theme="dark"] .stock-tooltip {
+            background: rgba(22, 27, 34, 0.95);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
 
@@ -2002,6 +2152,32 @@
                         <span class="fx-dxy-pill" id="dashFxDxyPill">DXY 99.16</span>
                     </div>
                 </div>
+
+                <!-- 원·달러 환율 일간 시계열 주식 차트 -->
+                <div class="fx-chart-section">
+                    <div class="stock-chart-header">
+                        <div class="stock-chart-stats">
+                            <span class="stock-stat-label">기간 등락</span>
+                            <span class="stock-stat-val" id="fxChartPeriodDiff">—</span>
+                            <span class="stock-stat-badge" id="fxChartPeriodRange">최저 — · 최고 —</span>
+                        </div>
+                        <div class="stock-period-tabs" id="fxPeriodTabs">
+                            <button type="button" class="stock-period-btn active" data-period="1W" onclick="setFxChartPeriod('1W')">1주일</button>
+                            <button type="button" class="stock-period-btn" data-period="1M" onclick="setFxChartPeriod('1M')">1개월</button>
+                            <button type="button" class="stock-period-btn" data-period="3M" onclick="setFxChartPeriod('3M')">분기</button>
+                            <button type="button" class="stock-period-btn" data-period="1Y" onclick="setFxChartPeriod('1Y')">1년</button>
+                        </div>
+                    </div>
+                    <div class="stock-chart-container" id="fxChartContainer">
+                        <svg id="chartFxSeries" class="stock-svg" height="175"></svg>
+                        <div class="stock-tooltip" id="fxChartTooltip" style="display:none">
+                            <div class="stt-date" id="fxTooltipDate">—</div>
+                            <div class="stt-val" id="fxTooltipVal">—원</div>
+                            <div class="stt-sub" id="fxTooltipDiff">—</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="fx-bottom-meta">
                     <div class="fx-meta-left">
                         <span class="fx-clock-icon">🕒</span>
@@ -2174,6 +2350,33 @@
                         </select>
                     </div>
                 </div>
+
+                <!-- 자산 변동 기록 일간 시계열 주식 차트 -->
+                <div class="asset-chart-section">
+                    <div class="stock-chart-header">
+                        <div class="stock-chart-stats">
+                            <span class="stock-stat-label">기간 변동</span>
+                            <span class="stock-stat-val" id="assetChartPeriodDiff">—</span>
+                            <span class="stock-stat-badge" id="assetChartPeriodRange">최저 — · 최고 —</span>
+                        </div>
+                        <div class="stock-period-tabs" id="assetPeriodTabs">
+                            <button type="button" class="stock-period-btn active" data-period="1W" onclick="setAssetChartPeriod('1W')">1주일</button>
+                            <button type="button" class="stock-period-btn" data-period="1M" onclick="setAssetChartPeriod('1M')">1개월</button>
+                            <button type="button" class="stock-period-btn" data-period="3M" onclick="setAssetChartPeriod('3M')">분기</button>
+                            <button type="button" class="stock-period-btn" data-period="1Y" onclick="setAssetChartPeriod('1Y')">1년</button>
+                            <button type="button" class="stock-period-btn" data-period="ALL" onclick="setAssetChartPeriod('ALL')">전체</button>
+                        </div>
+                    </div>
+                    <div class="stock-chart-container" id="assetChartContainer">
+                        <svg id="chartAssetSeries" class="stock-svg" height="190"></svg>
+                        <div class="stock-tooltip" id="assetChartTooltip" style="display:none">
+                            <div class="stt-date" id="assetTooltipDate">—</div>
+                            <div class="stt-val" id="assetTooltipVal">—원</div>
+                            <div class="stt-sub" id="assetTooltipDiff">—</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="tablewrap">
                     <table style="min-width:640px">
                         <thead>
@@ -3806,6 +4009,7 @@
                 }
                 hb.appendChild(tr);
             });
+            drawAssetHistoryChart();
         }
 
         /* ---------- 환율/달러인덱스 자동 조회 ---------- */
@@ -4253,6 +4457,7 @@
             });
             set("summaryTotal", won(c.total));
             drawProjection(c); drawDonut(compRows, c.total);
+            drawFxChart(); drawAssetHistoryChart();
         }
 
         function renderAssets() {
@@ -4802,6 +5007,432 @@
                 row.innerHTML = '<i class="dot" style="background:' + r.color + '"></i><span class="nm">' + esc(r.name) + '</span>' +
                     '<span class="amt">' + kfmt(r.amt) + '</span><span class="pct">' + pct.toFixed(1) + '%</span>';
                 lg.appendChild(row);
+            });
+        }
+
+        /* ==================== 주식형 일간 시계열 차트 모듈 (환율 & 자산 변동) ==================== */
+        let currentFxPeriod = "1W";      // '1W', '1M', '3M', '1Y'
+        let currentAssetPeriod = "1W";   // '1W', '1M', '3M', '1Y', 'ALL'
+        let fxHistoryData = null;        // [{ date: 'YYYY-MM-DD', rate: 1350.5 }, ...]
+        let fxFetchPromise = null;
+
+        // 1) 안전한 베이스라인 1년 환율 데이터 (오프라인 / 첫 로드 시 0초 렌더링 보장)
+        const BASELINE_FX_SERIES = [
+            ["2025-09-16", 1381.93], ["2025-09-23", 1389.41], ["2025-09-30", 1405.12],
+            ["2025-10-07", 1421.35], ["2025-10-14", 1428.80], ["2025-10-21", 1436.50], ["2025-10-28", 1432.10],
+            ["2025-11-04", 1445.20], ["2025-11-11", 1458.70], ["2025-11-18", 1464.30], ["2025-11-25", 1459.80],
+            ["2025-12-02", 1451.60], ["2025-12-09", 1442.30], ["2025-12-16", 1438.90], ["2025-12-23", 1447.50], ["2025-12-30", 1453.20],
+            ["2026-01-06", 1462.10], ["2026-01-13", 1471.40], ["2026-01-20", 1465.80], ["2026-01-27", 1458.20],
+            ["2026-02-03", 1450.90], ["2026-02-10", 1443.50], ["2026-02-17", 1439.10], ["2026-02-24", 1445.60],
+            ["2026-03-03", 1452.80], ["2026-03-10", 1459.30], ["2026-03-17", 1463.70], ["2026-03-24", 1455.40], ["2026-03-31", 1448.90],
+            ["2026-04-07", 1441.20], ["2026-04-14", 1435.60], ["2026-04-21", 1430.10], ["2026-04-28", 1424.50],
+            ["2026-05-05", 1418.30], ["2026-05-12", 1411.90], ["2026-05-19", 1405.40], ["2026-05-26", 1398.70],
+            ["2026-06-02", 1392.10], ["2026-06-09", 1385.50], ["2026-06-16", 1379.20], ["2026-06-23", 1374.80], ["2026-06-30", 1369.40],
+            ["2026-07-07", 1365.10], ["2026-07-14", 1361.20], ["2026-07-21", 1358.40], ["2026-07-28", 1354.70],
+            ["2026-08-04", 1352.10], ["2026-08-11", 1355.80], ["2026-08-18", 1351.40], ["2026-08-25", 1348.60],
+            ["2026-08-28", 1346.50], ["2026-09-01", 1345.10], ["2026-09-02", 1362.56], ["2026-09-03", 1357.29],
+            ["2026-09-04", 1350.35], ["2026-09-07", 1347.93], ["2026-09-08", 1341.67], ["2026-09-09", 1336.20],
+            ["2026-09-10", 1343.80], ["2026-09-11", 1342.79], ["2026-09-14", 1346.24], ["2026-09-15", 1359.15]
+        ];
+
+        // 환율 과거 시계열 초기화 및 백그라운드 API 동기화
+        function initFxHistory() {
+            try {
+                const cached = localStorage.getItem("money_fx_series_cache_v1");
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (Array.isArray(parsed.data) && parsed.data.length > 5) {
+                        fxHistoryData = parsed.data;
+                    }
+                }
+            } catch (e) { }
+
+            if (!fxHistoryData || fxHistoryData.length === 0) {
+                fxHistoryData = BASELINE_FX_SERIES.map(([d, r]) => ({ date: d, rate: r }));
+            }
+
+            // 백그라운드에서 최신 1년 일간 환율 공식 API(ECB 기반 Frankfurter) 실시간 갱신
+            if (!fxFetchPromise) {
+                fxFetchPromise = (async () => {
+                    try {
+                        const end = todayISO();
+                        const d = new Date();
+                        d.setDate(d.getDate() - 366);
+                        const start = d.toISOString().slice(0, 10);
+                        const url = `https://api.frankfurter.dev/v1/${start}..${end}?base=USD&symbols=KRW`;
+                        const res = await fetch(url);
+                        if (!res.ok) throw new Error("Status " + res.status);
+                        const json = await res.json();
+                        const rates = json && json.rates;
+                        if (rates && Object.keys(rates).length > 10) {
+                            const fresh = Object.keys(rates).sort().map(dt => ({
+                                date: dt,
+                                rate: Math.round(rates[dt].KRW * 100) / 100
+                            }));
+                            fxHistoryData = fresh;
+                            try {
+                                localStorage.setItem("money_fx_series_cache_v1", JSON.stringify({
+                                    updatedAt: Date.now(),
+                                    data: fresh
+                                }));
+                            } catch (e) { }
+                            drawFxChart();
+                        }
+                    } catch (netErr) {
+                        console.warn("Frankfurter API fetch failed, keeping baseline:", netErr);
+                    }
+                })();
+            }
+        }
+
+        // 환율 차트 기간 변경 (1W, 1M, 3M, 1Y)
+        function setFxChartPeriod(period) {
+            currentFxPeriod = period;
+            document.querySelectorAll("#fxPeriodTabs .stock-period-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.period === period);
+            });
+            drawFxChart();
+        }
+
+        // 자산 변동 차트 기간 변경 (1W, 1M, 3M, 1Y, ALL)
+        function setAssetChartPeriod(period) {
+            currentAssetPeriod = period;
+            document.querySelectorAll("#assetPeriodTabs .stock-period-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.period === period);
+            });
+            drawAssetHistoryChart();
+        }
+
+        // 공통: 주식형 SVG 꺾은선 차트 렌더러 (반응형, 그라데이션 면적 채움, 크로스헤어 & 터치 스크럽 툴팁)
+        function renderStockSvgChart({
+            svgId,
+            containerId,
+            tooltipId,
+            hudDiffId,
+            hudRangeId,
+            pts,
+            isAsset,
+            fmtVal,
+            fmtY
+        }) {
+            const svg = document.getElementById(svgId);
+            const container = document.getElementById(containerId);
+            const tooltip = document.getElementById(tooltipId);
+            const hudDiff = document.getElementById(hudDiffId);
+            const hudRange = document.getElementById(hudRangeId);
+            if (!svg || !container) return;
+
+            const W = Math.max(300, (container.clientWidth || 360) - 2);
+            const H = isAsset ? 190 : 175;
+            const P = { t: 14, r: W < 420 ? 46 : 56, b: 24, l: 10 };
+            const iw = W - P.l - P.r, ih = H - P.t - P.b;
+
+            if (!pts || pts.length < 2) {
+                svg.setAttribute("width", W);
+                svg.setAttribute("height", H);
+                svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+                svg.innerHTML = `<text x="${W / 2}" y="${H / 2}" text-anchor="middle" font-size="12" fill="var(--muted)">데이터를 불러오는 중이거나 기록이 2건 이상 필요합니다.</text>`;
+                if (hudDiff) hudDiff.textContent = "—";
+                if (hudRange) hudRange.textContent = "최저 — · 최고 —";
+                return;
+            }
+
+            const n = pts.length;
+            const vals = pts.map(p => p.v);
+            const minV = Math.min(...vals), maxV = Math.max(...vals);
+            const range = (maxV - minV) || (maxV * 0.05 || 1);
+            const pad = range * 0.08;
+            const yMin = minV - pad;
+            const yMax = maxV + pad;
+
+            const X = i => P.l + (n <= 1 ? iw / 2 : (iw * i / (n - 1)));
+            const Y = v => P.t + ih - ih * ((v - yMin) / (yMax - yMin));
+
+            const firstV = pts[0].v, lastV = pts[n - 1].v;
+            const periodDiff = lastV - firstV;
+            const periodDiffPct = firstV > 0 ? (periodDiff / firstV * 100) : 0;
+            const isUp = periodDiff >= 0;
+            const strokeColor = isUp ? "#f04452" : "#3182f6";
+            const gradId = `grad_${svgId}`;
+
+            // HUD 기본값 세팅
+            const defaultHudText = (periodDiff > 0 ? "+" : "") + fmtVal(periodDiff, true) + " (" + (periodDiff > 0 ? "+" : "") + periodDiffPct.toFixed(2) + "%)";
+            if (hudDiff) {
+                hudDiff.textContent = defaultHudText;
+                hudDiff.className = "stock-stat-val " + (isUp ? "up" : "down");
+            }
+            if (hudRange) {
+                hudRange.textContent = `최저 ${fmtVal(minV, false)} · 최고 ${fmtVal(maxV, false)}`;
+            }
+
+            // 라인 및 면적 패스
+            const lineD = pts.map((p, i) => (i === 0 ? "M" : "L") + X(i).toFixed(1) + " " + Y(p.v).toFixed(1)).join(" ");
+            const areaD = lineD + " L" + X(n - 1).toFixed(1) + " " + (P.t + ih).toFixed(1) + " L" + X(0).toFixed(1) + " " + (P.t + ih).toFixed(1) + " Z";
+
+            // Y축 수평 점선 그리드 & 우측 가격 라벨
+            let gridSvg = "";
+            const gridRatios = [0.15, 0.50, 0.85];
+            gridRatios.forEach(r => {
+                const val = yMin + (yMax - yMin) * r;
+                const y = Y(val);
+                gridSvg += `<line x1="${P.l}" y1="${y.toFixed(1)}" x2="${(W - P.r).toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--grid)" stroke-dasharray="3 3" stroke-width="1"/>`;
+                gridSvg += `<text x="${W - 4}" y="${(y + 3.5).toFixed(1)}" text-anchor="end" font-size="9.5" fill="var(--muted)" style="font-variant-numeric:tabular-nums">${fmtY(val)}</text>`;
+            });
+
+            // X축 날짜 라벨
+            let dateSvg = "";
+            const xSteps = W < 400 ? 3 : 4;
+            const stepIdx = Math.max(1, Math.floor((n - 1) / xSteps));
+            const xIndices = [];
+            for (let i = 0; i < n; i += stepIdx) xIndices.push(i);
+            if (xIndices[xIndices.length - 1] !== n - 1) xIndices.push(n - 1);
+            xIndices.forEach((idx) => {
+                const anchor = idx === 0 ? "start" : idx === n - 1 ? "end" : "middle";
+                const dx = idx === 0 ? 2 : idx === n - 1 ? -2 : 0;
+                dateSvg += `<text x="${(X(idx) + dx).toFixed(1)}" y="${(H - 6).toFixed(1)}" text-anchor="${anchor}" font-size="10" fill="var(--muted)">${pts[idx].label}</text>`;
+            });
+
+            // 마지막 점 하이라이트
+            const endX = X(n - 1).toFixed(1), endY = Y(lastV).toFixed(1);
+            const endMarkerSvg = `
+                <circle cx="${endX}" cy="${endY}" r="6.5" fill="${strokeColor}" opacity="0.2"/>
+                <circle cx="${endX}" cy="${endY}" r="3.5" fill="${strokeColor}" stroke="var(--surface)" stroke-width="1.5"/>
+            `;
+
+            // 크로스헤어 및 스크럽 레이어
+            const scrubSvg = `
+                <g class="scrub-layer" style="pointer-events:none">
+                    <line class="scrub-crosshair" x1="0" y1="${P.t}" x2="0" y2="${P.t + ih}" stroke="var(--ink2)" stroke-dasharray="2 2" stroke-width="1.2" opacity="0.6" style="display:none"/>
+                    <circle class="scrub-marker" cx="0" cy="0" r="4.5" fill="${strokeColor}" stroke="#ffffff" stroke-width="2" style="display:none"/>
+                </g>
+                <rect class="scrub-overlay" x="0" y="0" width="${W}" height="${H}" fill="transparent" style="cursor:crosshair; touch-action:pan-y;"/>
+            `;
+
+            svg.setAttribute("width", W);
+            svg.setAttribute("height", H);
+            svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+            svg.innerHTML = `
+                <defs>
+                    <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="${strokeColor}" stop-opacity="0.24"/>
+                        <stop offset="100%" stop-color="${strokeColor}" stop-opacity="0.0"/>
+                    </linearGradient>
+                </defs>
+                ${gridSvg}
+                <path d="${areaD}" fill="url(#${gradId})"/>
+                <path d="${lineD}" fill="none" stroke="${strokeColor}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+                ${endMarkerSvg}
+                ${dateSvg}
+                ${scrubSvg}
+            `;
+
+            // 마우스/터치 스크럽 상호작용 바인딩
+            const overlay = svg.querySelector(".scrub-overlay");
+            const crosshair = svg.querySelector(".scrub-crosshair");
+            const marker = svg.querySelector(".scrub-marker");
+
+            const doScrub = (e) => {
+                const rect = svg.getBoundingClientRect();
+                const clientX = (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX;
+                if (clientX == null) return;
+                const relX = clientX - rect.left;
+                let ratio = (relX - P.l) / iw;
+                ratio = Math.max(0, Math.min(1, ratio));
+                const idx = Math.round(ratio * (n - 1));
+                const pt = pts[idx];
+                if (!pt) return;
+
+                const sx = X(idx), sy = Y(pt.v);
+                if (crosshair) {
+                    crosshair.setAttribute("x1", sx);
+                    crosshair.setAttribute("x2", sx);
+                    crosshair.style.display = "block";
+                }
+                if (marker) {
+                    marker.setAttribute("cx", sx);
+                    marker.setAttribute("cy", sy);
+                    marker.style.display = "block";
+                }
+
+                // 툴팁 노출
+                if (tooltip) {
+                    tooltip.style.display = "block";
+                    const diffFromStart = pt.v - firstV;
+                    const diffFromStartPct = firstV > 0 ? (diffFromStart / firstV * 100) : 0;
+                    const ptIsUp = diffFromStart >= 0;
+
+                    const dtEl = tooltip.querySelector(".stt-date");
+                    const valEl = tooltip.querySelector(".stt-val");
+                    const subEl = tooltip.querySelector(".stt-sub");
+                    if (dtEl) dtEl.textContent = pt.fullDate || pt.date;
+                    if (valEl) valEl.textContent = fmtVal(pt.v, false);
+                    if (subEl) {
+                        subEl.textContent = (diffFromStart > 0 ? "+" : "") + fmtVal(diffFromStart, true) + " (" + (diffFromStart > 0 ? "+" : "") + diffFromStartPct.toFixed(2) + "%)";
+                        subEl.className = "stt-sub " + (ptIsUp ? "up" : "down");
+                    }
+
+                    const ttW = 126;
+                    let ttX = sx;
+                    if (ttX - ttW / 2 < 8) ttX = 8 + ttW / 2;
+                    if (ttX + ttW / 2 > W - 8) ttX = W - 8 - ttW / 2;
+                    tooltip.style.left = ttX + "px";
+                    tooltip.style.top = Math.max(22, sy) + "px";
+                }
+
+                // 상단 HUD 동적 반영
+                if (hudDiff) {
+                    const diffFromStart = pt.v - firstV;
+                    const diffFromStartPct = firstV > 0 ? (diffFromStart / firstV * 100) : 0;
+                    const ptIsUp = diffFromStart >= 0;
+                    hudDiff.textContent = (diffFromStart > 0 ? "+" : "") + fmtVal(diffFromStart, true) + " (" + (diffFromStart > 0 ? "+" : "") + diffFromStartPct.toFixed(2) + "%)";
+                    hudDiff.className = "stock-stat-val " + (ptIsUp ? "up" : "down");
+                }
+            };
+
+            const endScrub = () => {
+                if (crosshair) crosshair.style.display = "none";
+                if (marker) marker.style.display = "none";
+                if (tooltip) tooltip.style.display = "none";
+                if (hudDiff) {
+                    hudDiff.textContent = defaultHudText;
+                    hudDiff.className = "stock-stat-val " + (isUp ? "up" : "down");
+                }
+            };
+
+            if (overlay) {
+                overlay.addEventListener("pointerdown", doScrub);
+                overlay.addEventListener("pointermove", doScrub);
+                overlay.addEventListener("pointerup", endScrub);
+                overlay.addEventListener("pointercancel", endScrub);
+                overlay.addEventListener("pointerleave", endScrub);
+            }
+        }
+
+        // 1) 원·달러 환율 시계열 주식 차트 그리기
+        function drawFxChart() {
+            if (!fxHistoryData || fxHistoryData.length === 0) {
+                initFxHistory();
+            }
+
+            // 오늘 실시간 고시 환율을 최신 데이터 포인트로 안전하게 통합
+            const data = (fxHistoryData || []).slice();
+            const today = todayISO();
+            const curFx = (S.fx && S.fx.usdKrw > 0) ? S.fx.usdKrw : null;
+            if (curFx) {
+                const lastIdx = data.findIndex(x => x.date === today);
+                if (lastIdx >= 0) {
+                    data[lastIdx] = { date: today, rate: curFx };
+                } else {
+                    data.push({ date: today, rate: curFx });
+                }
+            }
+            data.sort((a, b) => a.date.localeCompare(b.date));
+
+            // 기간 필터링: 1W, 1M, 3M, 1Y
+            const now = new Date();
+            let daysBack = 7;
+            if (currentFxPeriod === "1W") daysBack = 7;
+            else if (currentFxPeriod === "1M") daysBack = 30;
+            else if (currentFxPeriod === "3M") daysBack = 90;
+            else if (currentFxPeriod === "1Y") daysBack = 365;
+
+            const cutoffDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+            let filtered = data.filter(x => x.date >= cutoffDate);
+            if (filtered.length < 2) {
+                const fallbackCounts = { "1W": 5, "1M": 20, "3M": 60, "1Y": 250 };
+                const count = fallbackCounts[currentFxPeriod] || 7;
+                filtered = data.slice(-Math.min(data.length, count));
+            }
+
+            const pts = filtered.map(x => {
+                const parts = x.date.split("-");
+                const y = parts[0], m = parts[1], d = parts[2];
+                let lbl = `${m}.${d}`;
+                if (currentFxPeriod === "1Y") lbl = `${y.slice(2)}.${m}`;
+                return {
+                    date: x.date,
+                    fullDate: `${y}.${m}.${d}`,
+                    v: x.rate,
+                    label: lbl
+                };
+            });
+
+            renderStockSvgChart({
+                svgId: "chartFxSeries",
+                containerId: "fxChartContainer",
+                tooltipId: "fxChartTooltip",
+                hudDiffId: "fxChartPeriodDiff",
+                hudRangeId: "fxChartPeriodRange",
+                pts: pts,
+                isAsset: false,
+                fmtVal: (v, isDiff) => isDiff
+                    ? `${Math.abs(v).toFixed(2)}원`
+                    : `${v.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}원`,
+                fmtY: v => Math.round(v).toLocaleString('ko-KR')
+            });
+        }
+
+        // 2) 자산 변동 기록 시계열 주식 차트 그리기
+        function drawAssetHistoryChart() {
+            // S.history 배열 복사 및 오늘 최신 총자산 병합
+            const historyList = (S.history || []).map(h => ({ date: h.date, total: h.total }));
+            const today = todayISO();
+            const curTotal = totalAssets();
+            if (curTotal > 0) {
+                const todayIdx = historyList.findIndex(h => h.date === today);
+                if (todayIdx >= 0) {
+                    historyList[todayIdx].total = curTotal;
+                } else {
+                    historyList.push({ date: today, total: curTotal });
+                }
+            }
+            historyList.sort((a, b) => a.date.localeCompare(b.date));
+
+            // 기간 필터링: 1W, 1M, 3M, 1Y, ALL
+            let filtered = historyList;
+            if (currentAssetPeriod !== "ALL") {
+                const now = new Date();
+                let daysBack = 7;
+                if (currentAssetPeriod === "1W") daysBack = 7;
+                else if (currentAssetPeriod === "1M") daysBack = 30;
+                else if (currentAssetPeriod === "3M") daysBack = 90;
+                else if (currentAssetPeriod === "1Y") daysBack = 365;
+
+                const cutoffDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+                filtered = historyList.filter(h => h.date >= cutoffDate);
+                if (filtered.length < 2 && historyList.length >= 2) {
+                    const fallbackCounts = { "1W": 5, "1M": 15, "3M": 40, "1Y": 100 };
+                    filtered = historyList.slice(-Math.min(historyList.length, fallbackCounts[currentAssetPeriod] || 5));
+                }
+            }
+
+            const pts = filtered.map(x => {
+                const parts = x.date.split("-");
+                const y = parts[0], m = parts[1], d = parts[2];
+                let lbl = `${m}.${d}`;
+                if (currentAssetPeriod === "1Y" || currentAssetPeriod === "ALL") {
+                    lbl = `${y.slice(2)}.${m}`;
+                }
+                return {
+                    date: x.date,
+                    fullDate: `${y}.${m}.${d}`,
+                    v: x.total,
+                    label: lbl
+                };
+            });
+
+            renderStockSvgChart({
+                svgId: "chartAssetSeries",
+                containerId: "assetChartContainer",
+                tooltipId: "assetChartTooltip",
+                hudDiffId: "assetChartPeriodDiff",
+                hudRangeId: "assetChartPeriodRange",
+                pts: pts,
+                isAsset: true,
+                fmtVal: (v, isDiff) => isDiff
+                    ? `${moneyText(Math.abs(v))}`
+                    : `${kfmt(v)} (${won(v)}원)`,
+                fmtY: v => kfmt(v)
             });
         }
 
@@ -5822,6 +6453,7 @@
         document.getElementById("sync-url").value = sync.url;
         render();
         stamp(new Date());
+        initFxHistory();
 
         // 앱 켜자마자 0.15초 만에 해당 체크포인트 두꺼비 알림 즉각 실행!
         checkDailyToadAlert();
