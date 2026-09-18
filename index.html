@@ -1451,6 +1451,11 @@
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
             background: #000000;
             aspect-ratio: 1 / 1;
+            transition: all 0.3s ease;
+        }
+        .toad-modal-box.is-gain .toad-gif-container {
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.35), 0 0 25px rgba(16, 185, 129, 0.25);
+            border: 2px solid rgba(245, 158, 11, 0.45);
         }
         .toad-gif-img {
             width: 100%;
@@ -2944,14 +2949,14 @@
             
             <div class="toad-status-pill" id="toadStatusPill">
                 <span id="toadStatusIcon">👑</span>
-                <span id="toadStatusText">대왕 두꺼비의 축배</span>
+                <span id="toadStatusText">황금 두꺼비의 축복</span>
             </div>
             
             <h2 class="toad-headline" id="toadHeadline">자산이 상승했습니다!</h2>
             <div class="toad-date-note" id="toadDateNote">2026년 9월 8일 · 전일 대비 리포트</div>
             
             <div class="toad-gif-container" id="toadGifContainer">
-                <img id="toadGifImg" class="toad-gif-img" src="./assets/toad_gain_v3.gif?v=20260908_v3" alt="두꺼비 움짤">
+                <img id="toadGifImg" class="toad-gif-img" src="./assets/toad_gain_v3.gif?v=20260918_v4" alt="두꺼비 움짤">
             </div>
             
             <!-- 자산 변동 디테일 카드 -->
@@ -3004,7 +3009,7 @@
                 <div class="toad-test-row">
                     <span style="font-size:11.5px;color:var(--muted)">연출 테스트:</span>
                     <button class="toad-mini-btn" onclick="switchModalMode('loss')">🗡️ 강도 두꺼비 (하락)</button>
-                    <button class="toad-mini-btn" onclick="switchModalMode('gain')">🍷 대왕 두꺼비 (상승)</button>
+                    <button class="toad-mini-btn" onclick="switchModalMode('gain')">👑 황금 두꺼비 (상승)</button>
                 </div>
             </div>
         </div>
@@ -4230,9 +4235,9 @@
                     card.classList.remove("is-gain", "is-loss");
                     if (change.direction === "up") {
                         card.classList.add("is-gain");
-                        avatar.textContent = "🍷";
-                        title.textContent = `대왕 두꺼비의 축배! 자산 +${moneyText(change.diff)} 상승`;
-                        sub.textContent = `${cp.name} · 전일 대비 +${change.diffPct.toFixed(2)}% · 터치하여 축배 움짤 보기`;
+                        avatar.textContent = "👑";
+                        title.textContent = `황금 두꺼비의 축복! 자산 +${moneyText(change.diff)} 상승`;
+                        sub.textContent = `${cp.name} · 전일 대비 +${change.diffPct.toFixed(2)}% · 터치하여 황금 두꺼비 보기`;
                         badge.textContent = `+${moneyText(change.diff)}`;
                     } else if (change.direction === "down") {
                         card.classList.add("is-loss");
@@ -6144,7 +6149,7 @@
         }
 
         function getToadAssetUrl(filename) {
-            const ver = "20260908_v3";
+            const ver = "20260918_v4";
             const actualFile = filename.replace(/\.gif$/, "_v3.gif");
             if (location.hostname.includes("github.io")) {
                 return "https://ingyeopower-cpu.github.io/money/assets/" + actualFile + "?v=" + ver;
@@ -6380,15 +6385,14 @@
                 bubbleIcon.textContent = "🗡️";
                 const moverComment = (top1Mover && top1Mover.diff < 0) ? `특히 <b>${top1Mover.name}</b>에서 <b>${moneyText(top1Mover.diff)}</b>을 썰어갔네요.<br>` : '';
                 bubbleText.innerHTML = `“<b>실사 강도 두꺼비가 폴짝폴짝 뛰어와 정면으로 칼질을 푹! 푹! 찌르고 도망쳤습니다!</b> 😱💨<br>${moverComment}하지만 2028년 5월 잔금일까지 우리는 적립식 장기 투자자! 흔들림 없이 꾸준히 모아가면 반드시 승리합니다!”`;
-            } else {
                 box.classList.add("is-gain");
                 icon.textContent = "👑";
-                text.textContent = "대왕 두꺼비의 축배 · 자산 상승";
+                text.textContent = "황금 두꺼비의 축복 · 자산 상승";
                 headline.textContent = "🎉 만세! 자산이 상승했습니다!";
                 gifImg.src = getToadAssetUrl("toad_gain.gif");
-                bubbleIcon.textContent = "🍷";
+                bubbleIcon.textContent = "💰";
                 const moverComment = (top1Mover && top1Mover.diff > 0) ? `특히 <b>${top1Mover.name}</b>이 <b>+${moneyText(top1Mover.diff)}</b> 기분 좋게 올랐네요!<br>` : '';
-                bubbleText.innerHTML = `“<b>실사 대왕 두꺼비가 폴짝폴짝 뛰어와 당신에게 축배의 와인을 권합니다! 짠~!</b> 🍷✨<br>${moverComment}전일 대비 자산이 늘어 입주 잔금 완납에 한 걸음 더 가까워졌습니다! 멋지게 자산을 불려낸 두 분을 축하합니다!”`;
+                bubbleText.innerHTML = `“<b>황금 왕관을 쓴 대왕 두꺼비가 신나게 폴짝폴짝 뛰며 하늘에서 황금비가 쏟아집니다!</b> 👑💰✨<br>${moverComment}전일 대비 자산이 늘어 입주 잔금 완납에 한 걸음 더 가까워졌습니다! 멋지게 자산을 불려낸 두 분을 축하합니다!”`;
             }
         }
 
