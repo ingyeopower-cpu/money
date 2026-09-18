@@ -2036,6 +2036,46 @@
             background: rgba(22, 27, 34, 0.95);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
         }
+        .hist-more-wrap {
+            text-align: center;
+            margin-top: 14px;
+            margin-bottom: 4px;
+        }
+        .hist-more-btn {
+            background: var(--chip);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 12.5px;
+            font-weight: 650;
+            padding: 8px 18px;
+            border-radius: 99px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hist-more-btn:hover {
+            color: var(--ink);
+            border-color: var(--s1);
+            background: var(--grid);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+        .hist-more-btn:active {
+            transform: translateY(1px);
+        }
+        :root[data-theme="dark"] .hist-more-btn {
+            background: #1c2128;
+            border-color: #30363d;
+            color: #8b949e;
+        }
+        :root[data-theme="dark"] .hist-more-btn:hover {
+            background: #21262d;
+            color: #c9d1d9;
+            border-color: #58a6ff;
+        }
     </style>
 </head>
 
@@ -2405,6 +2445,11 @@
                         </thead>
                         <tbody id="historyBody"></tbody>
                     </table>
+                </div>
+                <div class="hist-more-wrap" id="histMoreWrap" style="display:none;">
+                    <button type="button" id="btnHistMore" class="hist-more-btn" onclick="toggleHistoryRows()">
+                        <span id="histMoreArrow">▼</span> <span id="histMoreText">지난 기록 더보기</span>
+                    </button>
                 </div>
             </div>
 
@@ -3953,6 +3998,36 @@
             else selectEl.value = "recent";
         }
 
+        let isHistoryExpanded = false;
+        function toggleHistoryRows() {
+            isHistoryExpanded = !isHistoryExpanded;
+            const extraRows = document.querySelectorAll(".hist-extra-row");
+            extraRows.forEach(tr => {
+                tr.style.display = isHistoryExpanded ? "" : "none";
+            });
+            updateHistMoreBtn(extraRows.length);
+        }
+
+        function updateHistMoreBtn(extraCount) {
+            const moreWrap = document.getElementById("histMoreWrap");
+            const btn = document.getElementById("btnHistMore");
+            const arrow = document.getElementById("histMoreArrow");
+            const text = document.getElementById("histMoreText");
+            if (!moreWrap || !btn) return;
+            if (extraCount > 0) {
+                moreWrap.style.display = "block";
+                if (isHistoryExpanded) {
+                    if (arrow) arrow.textContent = "▲";
+                    if (text) text.textContent = "기록 간략히 접기 (최신 3개만 보기)";
+                } else {
+                    if (arrow) arrow.textContent = "▼";
+                    if (text) text.textContent = `지난 기록 더보기 (${extraCount}개 더 있음)`;
+                }
+            } else {
+                moreWrap.style.display = "none";
+            }
+        }
+
         function renderHistory() {
             const period = document.getElementById("historyPeriod").value;
             const hb = document.getElementById("historyBody");
@@ -3966,6 +4041,7 @@
                 : (S.history || []).filter(h => h.date.substring(0, 7) === sel);
             if (historyData.length === 0) {
                 hb.innerHTML = '<tr><td colspan="6" class="muted" style="text-align:center;padding:20px">해당 기간에 기록이 없습니다.</td></tr>';
+                updateHistMoreBtn(0);
                 return;
             }
             const getWeek = (dStr) => {
@@ -4007,8 +4083,14 @@
                 rowsData.unshift({ label: keys[i], total: g.lastTotal, totalChange, priceChange, priceChangePct, inflow });
                 prevTotal = g.lastTotal;
             }
-            rowsData.forEach(r => {
+            rowsData.forEach((r, idx) => {
                 const tr = document.createElement("tr");
+                if (idx >= 3) {
+                    tr.classList.add("hist-extra-row");
+                    if (!isHistoryExpanded) {
+                        tr.style.display = "none";
+                    }
+                }
                 if (r.totalChange === null) {
                     tr.innerHTML = '<td>' + r.label + '</td><td class="num">' + won(r.total) + '</td><td colspan="4" class="muted" style="text-align:center;font-size:12px">첫 기록일 (비교값 없음)</td>';
                 } else {
@@ -4023,6 +4105,8 @@
                 }
                 hb.appendChild(tr);
             });
+            const extraCount = Math.max(0, rowsData.length - 3);
+            updateHistMoreBtn(extraCount);
             drawAssetHistoryChart();
         }
 
