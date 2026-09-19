@@ -46,6 +46,10 @@
             --warn: #fab219;
             --crit: #d03b3b;
             --goodtext: #006300;
+            --gain: #f04452;
+            --loss: #3182f6;
+            --gain-bg: rgba(240, 68, 82, 0.12);
+            --loss-bg: rgba(49, 130, 246, 0.12);
             --chip: #f0efec;
         }
 
@@ -71,6 +75,10 @@
             --warn: #fab219;
             --crit: #d03b3b;
             --goodtext: #0ca30c;
+            --gain: #f87171;
+            --loss: #60a5fa;
+            --gain-bg: rgba(240, 68, 82, 0.22);
+            --loss-bg: rgba(49, 130, 246, 0.22);
             --chip: #232322;
         }
 
@@ -514,11 +522,13 @@
         }
 
         .gain {
-            color: var(--goodtext)
+            color: var(--gain);
+            font-weight: 600;
         }
 
         .loss {
-            color: var(--crit)
+            color: var(--loss);
+            font-weight: 600;
         }
 
         .donutRow {
@@ -1281,12 +1291,12 @@
             box-shadow: var(--card-shadow-hover);
         }
         .toad-briefing-card.is-gain {
-            background: linear-gradient(135deg, var(--surface) 0%, rgba(16, 185, 129, 0.08) 100%);
-            border-color: rgba(16, 185, 129, 0.35);
+            background: linear-gradient(135deg, var(--surface) 0%, rgba(240, 68, 82, 0.08) 100%);
+            border-color: rgba(240, 68, 82, 0.35);
         }
         .toad-briefing-card.is-loss {
-            background: linear-gradient(135deg, var(--surface) 0%, rgba(239, 68, 68, 0.08) 100%);
-            border-color: rgba(239, 68, 68, 0.35);
+            background: linear-gradient(135deg, var(--surface) 0%, rgba(49, 130, 246, 0.08) 100%);
+            border-color: rgba(49, 130, 246, 0.35);
         }
         .toad-briefing-left {
             display: flex;
@@ -1311,12 +1321,12 @@
             transform: scale(1.1) rotate(5deg);
         }
         .is-gain .toad-avatar-badge {
-            background: rgba(16, 185, 129, 0.15);
-            border-color: rgba(16, 185, 129, 0.4);
+            background: rgba(240, 68, 82, 0.15);
+            border-color: rgba(240, 68, 82, 0.4);
         }
         .is-loss .toad-avatar-badge {
-            background: rgba(239, 68, 68, 0.15);
-            border-color: rgba(239, 68, 68, 0.4);
+            background: rgba(49, 130, 246, 0.15);
+            border-color: rgba(49, 130, 246, 0.4);
         }
         .toad-briefing-texts {
             min-width: 0;
@@ -1355,20 +1365,12 @@
             color: var(--ink);
         }
         .is-gain .toad-diff-badge {
-            color: #008300;
-            background: rgba(16, 185, 129, 0.14);
-        }
-        :root[data-theme="dark"] .is-gain .toad-diff-badge {
-            color: #10b981;
-            background: rgba(16, 185, 129, 0.22);
+            color: var(--gain);
+            background: var(--gain-bg);
         }
         .is-loss .toad-diff-badge {
-            color: #d03b3b;
-            background: rgba(239, 68, 68, 0.14);
-        }
-        :root[data-theme="dark"] .is-loss .toad-diff-badge {
-            color: #f87171;
-            background: rgba(239, 68, 68, 0.22);
+            color: var(--loss);
+            background: var(--loss-bg);
         }
         .toad-play-hint {
             font-size: 11px;
@@ -1397,13 +1399,13 @@
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
         .toad-modal-box.is-loss {
-            border-color: rgba(239, 68, 68, 0.45);
-            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.25);
+            border-color: rgba(49, 130, 246, 0.45);
+            box-shadow: 0 10px 40px rgba(49, 130, 246, 0.25);
             animation: toadModalScaleIn 0.28s cubic-bezier(0.16, 1, 0.3, 1), toadShake 0.45s 0.3s ease-in-out;
         }
         .toad-modal-box.is-gain {
-            border-color: rgba(16, 185, 129, 0.45);
-            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.25);
+            border-color: rgba(240, 68, 82, 0.45);
+            box-shadow: 0 10px 40px rgba(240, 68, 82, 0.25);
         }
         @keyframes toadShake {
             0%, 100% { transform: translate(0, 0); }
@@ -1446,20 +1448,14 @@
             margin-bottom: 10px;
         }
         .toad-modal-box.is-gain .toad-status-pill {
-            background: rgba(16, 185, 129, 0.15);
-            color: #008300;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-        :root[data-theme="dark"] .toad-modal-box.is-gain .toad-status-pill {
-            color: #34d399;
+            background: var(--gain-bg);
+            color: var(--gain);
+            border: 1px solid rgba(240, 68, 82, 0.3);
         }
         .toad-modal-box.is-loss .toad-status-pill {
-            background: rgba(239, 68, 68, 0.15);
-            color: #d03b3b;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-        :root[data-theme="dark"] .toad-modal-box.is-loss .toad-status-pill {
-            color: #f87171;
+            background: var(--loss-bg);
+            color: var(--loss);
+            border: 1px solid rgba(49, 130, 246, 0.3);
         }
         .toad-headline {
             font-size: 20px;
@@ -1486,7 +1482,7 @@
             transition: all 0.3s ease;
         }
         .toad-modal-box.is-gain .toad-gif-container {
-            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.35), 0 0 25px rgba(16, 185, 129, 0.25);
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.35), 0 0 25px rgba(240, 68, 82, 0.25);
             border: 2px solid rgba(245, 158, 11, 0.45);
         }
         .toad-gif-img {
@@ -1544,16 +1540,10 @@
             letter-spacing: -0.02em;
         }
         .toad-modal-box.is-gain .toad-diff-val {
-            color: #008300;
-        }
-        :root[data-theme="dark"] .toad-modal-box.is-gain .toad-diff-val {
-            color: #10b981;
+            color: var(--gain);
         }
         .toad-modal-box.is-loss .toad-diff-val {
-            color: #d03b3b;
-        }
-        :root[data-theme="dark"] .toad-modal-box.is-loss .toad-diff-val {
-            color: #f87171;
+            color: var(--loss);
         }
         .toad-diff-desc {
             font-size: 12px;
