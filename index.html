@@ -2992,7 +2992,7 @@
                     </div>
                 </div>
                 <div class="toad-diff-highlight" id="toadDiffHighlight">
-                    <span class="toad-diff-val" id="toadDiffVal">+0원 (+0.0%)</span>
+                    <span class="toad-diff-val" id="toadDiffVal">—</span>
                     <span class="toad-diff-desc" id="toadDiffDesc">전일 대비 변동액</span>
                 </div>
                 <!-- 주요 원인 항목 분석 배너 (Top 3 변동 요인 & 환율 비교) -->
@@ -3490,35 +3490,35 @@
           "history": [
                     {
                               "date": "2026-08-20",
-                              "total": 204179052.6
+                              "total": 212179052.6
                     },
                     {
                               "date": "2026-08-23",
-                              "total": 204150449.12
+                              "total": 212150449.12
                     },
                     {
                               "date": "2026-08-26",
-                              "total": 203380805.808
+                              "total": 211380805.808
                     },
                     {
                               "date": "2026-08-30",
-                              "total": 203380805.808
+                              "total": 211380805.808
                     },
                     {
                               "date": "2026-09-02",
-                              "total": 201981978.72
+                              "total": 209981978.72
                     },
                     {
                               "date": "2026-09-03",
-                              "total": 212292340.78
+                              "total": 220292340.78
                     },
                     {
                               "date": "2026-09-04",
-                              "total": 212528213.204
+                              "total": 220528213.204
                     },
                     {
                               "date": "2026-09-05",
-                              "total": 212411791.944
+                              "total": 220411791.944
                     }
           ],
           "loan": {
@@ -6587,12 +6587,10 @@
                 const hideToday = localStorage.getItem("toad_hide_today_" + today);
                 const slotShown = sessionStorage.getItem("toad_shown_slot_" + cp.slotId);
                 
-                // 오늘 하루 끄기를 누르지 않았고, 이번 체크 슬롯(16시 한국 장종료 or 06시 아침 정산)에서 아직 안 떴다면 0.15초 만에 즉각 팝업!
+                // 오늘 하루 끄기를 누르지 않았고, 이번 체크 슬롯(16시 한국 장종료 or 06시 아침 정산)에서 아직 안 떴다면 팝업 실행!
                 if (!hideToday && !slotShown) {
                     sessionStorage.setItem("toad_shown_slot_" + cp.slotId, "1");
-                    setTimeout(() => {
-                        openToadAlertModal(false);
-                    }, 150);
+                    openToadAlertModal(false);
                 }
             } catch (e) {
                 console.error("Daily check error:", e);
@@ -6613,30 +6611,42 @@
         stamp(new Date());
         initFxHistory();
 
-        // 앱 켜자마자 0.15초 만에 해당 체크포인트 두꺼비 알림 즉각 실행!
-        checkDailyToadAlert();
-
+        // 구글 시트 동기화 및 최신 시세 갱신이 완료된 후 두꺼비 알림을 정확한 데이터로 팝업
         (async () => {
             if (sync.url) {
                 setSyncStatus("연결됨 · 불러오는 중…");
                 try { 
-                    await doSync(); 
-                    const m = document.getElementById("toadAlertModal");
-                    if (m && m.classList.contains("show")) {
-                        const freshChange = getDailyAssetChange();
-                        const freshMode = (freshChange.direction === "down") ? "loss" : "gain";
-                        renderToadModalContent(freshMode, freshChange, false);
-                    }
+                    // 구글 시트 최신 데이터 동기화 완료 대기 (최대 2초 타임아웃)
+                    await Promise.race([
+                        doSync(),
+                        new Promise(resolve => setTimeout(resolve, 2000))
+                    ]);
                 } catch (e) { }
             }
             // 한국 장 종료(16:00) 및 아침 정산(06:00) 기준 자동 시세 갱신 검사
-            await checkCheckpointMarketSync();
+            try {
+                await Promise.race([
+                    checkCheckpointMarketSync(),
+                    new Promise(resolve => setTimeout(resolve, 2000))
+                ]);
+            } catch (e) { }
+
+            // 최신 데이터와 시세가 100% 반영된 상태에서 두꺼비 일간 알림 팝업 실행!
+            checkDailyToadAlert();
         })();
 
-        document.addEventListener("visibilitychange", () => {
+        document.addEventListener("visibilitychange", async () => {
             if (document.visibilityState === "visible") {
+                if (sync.url) {
+                    try {
+                        await Promise.race([
+                            doSync(),
+                            new Promise(resolve => setTimeout(resolve, 2000))
+                        ]);
+                    } catch (e) {}
+                }
+                await checkCheckpointMarketSync();
                 checkDailyToadAlert();
-                checkCheckpointMarketSync();
             }
         });
     </script>
