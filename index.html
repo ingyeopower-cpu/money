@@ -2190,16 +2190,6 @@
                 </div>
             </div>
 
-            <div class="card">
-                <h2>목표 달성률</h2>
-                <div class="bar"><i id="progbar" style="width:0%"></i></div>
-                <div class="rowflex" style="justify-content:space-between">
-                    <span class="muted" id="prog-l">—</span>
-                    <span class="muted" id="prog-r">—</span>
-                </div>
-            </div>
-
-
 
             <div class="card">
                 <div class="sec-actions">
@@ -4251,13 +4241,6 @@
             const planNote = document.getElementById("k-plan-note");
             if (c.diff >= 0) planNote.innerHTML = '<span class="pill ok">' + kfmt(c.diff) + ' 여유</span>';
             else planNote.innerHTML = '<span class="pill bad">' + kfmt(-c.diff) + ' 부족</span>';
-
-            const gTot = goalTotal();
-            const pct = Math.min(100, gTot > 0 ? c.usable / gTot * 100 : 0);
-            document.getElementById("progbar").style.width = pct + "%";
-            document.getElementById("progbar").style.background = pct >= 100 ? "var(--good)" : "var(--s1)";
-            set("prog-l", "잔금 가용 " + kfmt(c.usable) + (c.locked > 0 ? " (총 " + kfmt(c.total) + ")" : ""));
-            set("prog-r", "목표 " + kfmt(gTot) + " (" + pct.toFixed(1) + "%)");
             renderHistory();
 
             // fxRate already defined at top of renderDash
