@@ -2285,41 +2285,20 @@
             </div>
 
             <div class="card">
-                <div class="sec-actions">
+                <div class="sec-actions" style="margin-bottom: 6px;">
                     <div>
-                        <h2 style="margin:0">참고 지표 및 배당 예상</h2>
-                        <div class="sub" id="fxStamp">환율 등락과 종목별 예상 배당금 입금일자를 확인합니다.</div>
+                        <h2 style="margin:0; font-size:16.5px; font-weight:700;">💰 월 예상 배당금 (세전)</h2>
+                        <div class="sub">전체 보유 종목의 연 배당률 기준 월 평균 합계 및 지급 주기별 1회 예상 수령액입니다.</div>
                     </div>
-                    <button class="sm" id="btnFxSync">자동 조회</button>
-                </div>
-                <div class="grid2">
-                    <div class="field"><label>원달러 환율 (원)</label><input class="num" data-fx="usdKrw"></div>
-                    <div class="field"><label>달러인덱스 (DXY)</label><input class="num" data-fx="dxy"></div>
-                </div>
-                <div class="grid2" style="margin-top:8px">
-                    <div class="field"><label>환율 기준일</label><input type="date" data-fx="usdKrwDate"></div>
-                    <div class="field"><label>달러인덱스 기준일</label><input type="date" data-fx="dxyDate"></div>
-                </div>
-                <div class="hint">"자동 조회"는 원달러 환율은 무료 환율 API(open.er-api.com)에서, 달러인덱스는 야후 파이낸스에 실제 고시되는 지수(DX-Y.NYB)를
-                    그대로 가져옵니다. 이 조회가 안 될 때만 유로·엔·파운드·캐나다달러·스웨덴크로나·스위스프랑 환율로 근사 계산한 값을 대신 씁니다(이 경우 공식 값과 약간 오차가 있을 수
-                    있어요). 자동 조회 자체가 실패하면(브라우저 보안 등으로) 직접 입력하신 값이 그대로 유지됩니다.</div>
-
-                <hr style="border:none; border-top:1px solid var(--grid); margin:18px 0">
-                <div class="sec-actions">
-                    <div>
-                        <h3 style="margin:0; font-size:14.5px;">월 예상 배당금 (세전)</h3>
-                        <div class="sub">위 금액은 전체 종목 연 배당률 기준 월 평균 합계입니다. 아래 표는 종목별 실제 지급 주기(월배당/분기배당 등)에 맞춘 1회 지급 예상액과
-                            입금일자입니다.</div>
-                    </div>
-                    <div class="val" id="dashExpectedDiv"
-                        style="color:var(--s1); font-size:18px; font-weight:650; font-variant-numeric:tabular-nums;">0원
+                    <div class="val text-toss-blue" id="dashExpectedDiv"
+                        style="font-size:18.5px; font-weight:800; font-variant-numeric:tabular-nums;">0원
                     </div>
                 </div>
                 <div class="tablewrap">
                     <table style="min-width:400px; margin-top:8px;">
                         <thead>
                             <tr>
-                                <th>종목명</th>
+                                <th>종목명 / 보유 정보</th>
                                 <th class="num">예상 1회 지급액</th>
                                 <th>예상 입금일자 (참고치)</th>
                             </tr>
@@ -4314,7 +4293,7 @@
                     else payoutDateStr = "종목별 상이 (분배금 현황 페이지 확인 권장)";
                 }
                 const payoutAmt = yDiv / payoutFreq;
-                divList.push({ name: h.name, code: h.code, mDiv: mDiv, payoutAmt: payoutAmt, date: payoutDateStr });
+                divList.push({ name: h.name, code: h.code, qty: h.qty, divYield: h.divYield, mDiv: mDiv, payoutAmt: payoutAmt, date: payoutDateStr });
             });
 
             const monthlyDiv = yearlyDiv / 12;
@@ -4330,7 +4309,13 @@
                     divList.sort((a, b) => b.mDiv - a.mDiv).forEach(d => {
                         if (d.mDiv > 0) {
                             const tr = document.createElement("tr");
-                            tr.innerHTML = '<td>' + esc(d.name) + '</td><td class="num" style="color:var(--s1)">' + won(d.payoutAmt) + '원</td><td class="muted">' + d.date + '</td>';
+                            tr.innerHTML =
+                                '<td>' +
+                                    '<div style="font-weight:600; color:var(--ink);">' + esc(d.name) + '</div>' +
+                                    '<div class="muted" style="font-size:11.5px; margin-top:2px;">보유 ' + won(d.qty) + '주 · 연 배당률 ' + (d.divYield || 0) + '%</div>' +
+                                '</td>' +
+                                '<td class="num" style="color:var(--toss-blue); font-weight:700;">' + won(d.payoutAmt) + '원</td>' +
+                                '<td class="muted" style="font-size:12.5px;">' + d.date + '</td>';
                             divBody.appendChild(tr);
                         }
                     });
@@ -5715,7 +5700,7 @@
 
         // 시세
         document.getElementById("btnSync").addEventListener("click", syncPrices);
-        document.getElementById("btnFxSync").addEventListener("click", syncFx);
+        const btnFx = document.getElementById("btnFxSync"); if (btnFx) btnFx.addEventListener("click", syncFx);
         document.getElementById("btnManualPrice").addEventListener("click", () => openPriceModal());
         document.getElementById("pmCancel").addEventListener("click", () => document.getElementById("priceModal").classList.remove("show"));
         document.getElementById("pmSave").addEventListener("click", () => {
