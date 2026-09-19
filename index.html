@@ -860,7 +860,158 @@
             background: var(--toss-blue-hover);
         }
 
-
+        /* Monthly Dividend Visualizer */
+        .div-summary-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 12px 0 14px;
+            padding: 12px 14px;
+            background: var(--chip);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+        }
+        @media (max-width: 600px) {
+            .div-summary-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+        .div-sum-box {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .div-sum-box .lbl {
+            font-size: 11.5px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+        .div-sum-box .val {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--ink);
+            font-variant-numeric: tabular-nums;
+        }
+        .div-sum-box.highlight .val {
+            color: var(--toss-blue);
+        }
+        .text-good { color: #00b06f !important; }
+        .div-calendar-wrap {
+            margin-bottom: 14px;
+            padding: 14px 12px 10px;
+            background: var(--chip);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .div-cal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .div-cal-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+        .div-cal-sub {
+            font-size: 11.5px;
+            color: var(--muted);
+        }
+        .div-months-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 4px;
+            align-items: flex-end;
+            min-height: 110px;
+            min-width: 440px;
+            padding: 6px 2px 2px;
+        }
+        .div-month-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 4px 1px;
+            transition: all 0.15s ease;
+            position: relative;
+            user-select: none;
+        }
+        .div-month-col:hover {
+            background: var(--surface);
+        }
+        .div-month-col.selected {
+            background: var(--surface);
+            box-shadow: 0 0 0 2px var(--toss-blue);
+        }
+        .div-month-col .m-amt {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--muted);
+            margin-bottom: 6px;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .div-month-col.selected .m-amt,
+        .div-month-col.current .m-amt {
+            color: var(--toss-blue);
+            font-weight: 800;
+        }
+        .div-month-col .m-bar-track {
+            width: 100%;
+            max-width: 22px;
+            height: 52px;
+            background: var(--grid);
+            border-radius: 6px;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+        }
+        .div-month-col .m-bar-fill {
+            width: 100%;
+            background: linear-gradient(180deg, #3182f6 0%, #1b64da 100%);
+            border-radius: 6px 6px 0 0;
+            transition: height 0.4s ease;
+        }
+        .div-month-col.quarterly .m-bar-fill {
+            background: linear-gradient(180deg, #00b06f 0%, #059669 100%);
+        }
+        .div-month-col .m-lbl {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+        .div-month-col.current .m-lbl {
+            color: var(--toss-blue);
+            font-weight: 800;
+        }
+        .div-cur-badge {
+            font-size: 8.5px;
+            font-weight: 700;
+            color: #ffffff;
+            background: var(--toss-blue);
+            padding: 1px 3px;
+            border-radius: 4px;
+            margin-top: 2px;
+            line-height: 1.1;
+        }
+        .div-q-badge {
+            font-size: 8.5px;
+            font-weight: 700;
+            color: #ffffff;
+            background: #00b06f;
+            padding: 1px 3px;
+            border-radius: 4px;
+            margin-top: 2px;
+            line-height: 1.1;
+        }
 
         /* Monthly Savings Tracker Widget */
         .monthly-saving-card {
@@ -2274,23 +2425,56 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card dividend-card">
                 <div class="sec-actions" style="margin-bottom: 6px;">
                     <div>
-                        <h2 style="margin:0; font-size:16.5px; font-weight:700;">💰 월 예상 배당금 (세전)</h2>
-                        <div class="sub">전체 보유 종목의 연 배당률 기준 월 평균 합계 및 지급 주기별 1회 예상 수령액입니다.</div>
-                    </div>
-                    <div class="val text-toss-blue" id="dashExpectedDiv"
-                        style="font-size:18.5px; font-weight:800; font-variant-numeric:tabular-nums;">0원
+                        <h2 style="margin:0; font-size:16.5px; font-weight:700;">💰 월별 예상 배당금 (세전)</h2>
+                        <div class="sub">1년 12개월 매달 실제로 입금되는 예상 배당금과 주기별 수령 일정입니다.</div>
                     </div>
                 </div>
+
+                <!-- 3단 요약 박스: 이번 달 / 분기 배당월 / 연간 총액 -->
+                <div class="div-summary-row">
+                    <div class="div-sum-box highlight">
+                        <div class="lbl" id="lblDivCurMonth">이번 달 예상</div>
+                        <div class="val" id="valDivCurMonth">—</div>
+                    </div>
+                    <div class="div-sum-box">
+                        <div class="lbl">분기 배당월 (2·5·8·11월)</div>
+                        <div class="val text-good" id="valDivQuarterMonth">—</div>
+                    </div>
+                    <div class="div-sum-box">
+                        <div class="lbl">연간 총 예상 배당금</div>
+                        <div class="val" id="valDivYearlyTotal">—</div>
+                    </div>
+                </div>
+
+                <!-- 12개월 월별 배당 바 비주얼라이저 -->
+                <div class="div-calendar-wrap">
+                    <div class="div-cal-header">
+                        <span class="div-cal-title">📅 1년 12개월 월별 배당 캘린더</span>
+                        <span class="div-cal-sub" id="divCalHint">월을 터치하면 해당 월 입금 종목만 필터링됩니다</span>
+                    </div>
+                    <div class="div-months-grid" id="divMonthsGrid"></div>
+                </div>
+
+                <!-- 종목별 상세 지급 테이블 -->
+                <div class="sec-actions" style="margin: 14px 0 6px;">
+                    <div style="font-size: 13.5px; font-weight: 700; color: var(--ink);" id="divTableTitle">
+                        📋 전체 종목별 배당 주기 및 입금일자
+                    </div>
+                    <button type="button" class="sm" id="btnDivResetFilter" style="display:none;" onclick="selectDividendMonth(null)">
+                        전체 종목 보기
+                    </button>
+                </div>
                 <div class="tablewrap">
-                    <table style="min-width:400px; margin-top:8px;">
+                    <table style="min-width:440px; margin-top:4px;">
                         <thead>
                             <tr>
                                 <th>종목명 / 보유 정보</th>
-                                <th class="num">예상 1회 지급액</th>
-                                <th>예상 입금일자 (참고치)</th>
+                                <th class="num">1회 예상 지급액</th>
+                                <th>입금 주기 (해당 월)</th>
+                                <th>입금 예정일자</th>
                             </tr>
                         </thead>
                         <tbody id="dividendScheduleBody"></tbody>
@@ -4264,46 +4448,76 @@
                 const mDiv = yDiv / 12;
 
                 let payoutDateStr = "종목별 상이 (분배금 현황 페이지 확인 권장)";
-                let payoutFreq = 12; // 정확한 주기를 모르는 종목은 월 평균으로 대신 표시
+                let payoutFreq = 12;
+                let payoutMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                let payoutCycleStr = "매월 (1~12월)";
+                let isQuarterly = false;
+
                 if (h.isUsd || !/^\d+$/.test(h.code)) {
                     payoutDateStr = "종목별 상이 (보통 분기/월말)";
+                    payoutFreq = 4;
+                    payoutMonths = [3, 6, 9, 12];
+                    payoutCycleStr = "분기 (3·6·9·12월)";
+                    isQuarterly = true;
                 } else {
-                    // 실제 상품별 분배 주기 기준 (운용사 고시 기준, 변경될 수 있음)
-                    if (h.name.indexOf("다우존스") >= 0 || h.name.indexOf("타미당") >= 0) { payoutDateStr = "월배당 · 매월 말 기준, 익월 초(약 7영업일 이내) 지급"; payoutFreq = 12; }
-                    else if (h.name.indexOf("하이일드") >= 0) { payoutDateStr = "월배당 · 매월 말(27일경) 기준, 익월 초(1~2영업일) 지급"; payoutFreq = 12; }
-                    else if (h.name.indexOf("리츠") >= 0 || h.name.indexOf("인프라") >= 0) { payoutDateStr = "월배당 · 매월 말 기준, 익월 초 지급"; payoutFreq = 12; }
-                    else if (h.name.indexOf("S&P") >= 0 || h.name.indexOf("나스닥") >= 0) { payoutDateStr = "분기배당 · 1·4·7·10월 말경 기준, 분기 초 지급 (월배당 아님)"; payoutFreq = 4; }
-                    else payoutDateStr = "종목별 상이 (분배금 현황 페이지 확인 권장)";
+                    if (h.name.indexOf("다우존스") >= 0 || h.name.indexOf("타미당") >= 0) {
+                        payoutDateStr = "매월 말 기준, 익월 초(약 7영업일 이내) 지급";
+                        payoutFreq = 12;
+                        payoutMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                        payoutCycleStr = "매월 (1~12월)";
+                    } else if (h.name.indexOf("하이일드") >= 0) {
+                        payoutDateStr = "매월 말(27일경) 기준, 익월 초(1~2영업일) 지급";
+                        payoutFreq = 12;
+                        payoutMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                        payoutCycleStr = "매월 (1~12월)";
+                    } else if (h.name.indexOf("리츠") >= 0 || h.name.indexOf("인프라") >= 0) {
+                        payoutDateStr = "매월 말 기준, 익월 초 지급";
+                        payoutFreq = 12;
+                        payoutMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                        payoutCycleStr = "매월 (1~12월)";
+                    } else if (h.name.indexOf("S&P") >= 0 || h.name.indexOf("나스닥") >= 0) {
+                        payoutDateStr = "1·4·7·10월 말경 기준, 분기 초 지급";
+                        payoutFreq = 4;
+                        payoutMonths = [2, 5, 8, 11];
+                        payoutCycleStr = "분기 (2·5·8·11월)";
+                        isQuarterly = true;
+                    } else {
+                        payoutDateStr = "종목별 상이 (분배금 현황 페이지 확인 권장)";
+                        payoutFreq = 12;
+                        payoutMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                        payoutCycleStr = "매월 (1~12월)";
+                    }
                 }
                 const payoutAmt = yDiv / payoutFreq;
-                divList.push({ name: h.name, code: h.code, qty: h.qty, divYield: h.divYield, mDiv: mDiv, payoutAmt: payoutAmt, date: payoutDateStr });
+                divList.push({
+                    name: h.name,
+                    code: h.code,
+                    qty: h.qty,
+                    divYield: h.divYield,
+                    yDiv: yDiv,
+                    mDiv: mDiv,
+                    payoutAmt: payoutAmt,
+                    payoutFreq: payoutFreq,
+                    payoutMonths: payoutMonths,
+                    payoutCycleStr: payoutCycleStr,
+                    isQuarterly: isQuarterly,
+                    date: payoutDateStr
+                });
             });
 
-            const monthlyDiv = yearlyDiv / 12;
-            const dashDivEl = document.getElementById("dashExpectedDiv");
-            if (dashDivEl) dashDivEl.textContent = kfmt(monthlyDiv) + "  (" + won(monthlyDiv) + "원)";
+            const monthlyTotals = {};
+            for (let m = 1; m <= 12; m++) monthlyTotals[m] = 0;
+            divList.forEach(d => {
+                d.payoutMonths.forEach(m => {
+                    monthlyTotals[m] += d.payoutAmt;
+                });
+            });
 
-            const divBody = document.getElementById("dividendScheduleBody");
-            if (divBody) {
-                divBody.innerHTML = "";
-                if (divList.length === 0) {
-                    divBody.innerHTML = '<tr><td colspan="3" class="muted" style="text-align:center;padding:12px">배당 수익이 기대되는 종목이 없습니다.</td></tr>';
-                } else {
-                    divList.sort((a, b) => b.mDiv - a.mDiv).forEach(d => {
-                        if (d.mDiv > 0) {
-                            const tr = document.createElement("tr");
-                            tr.innerHTML =
-                                '<td>' +
-                                    '<div style="font-weight:600; color:var(--ink);">' + esc(d.name) + '</div>' +
-                                    '<div class="muted" style="font-size:11.5px; margin-top:2px;">보유 ' + won(d.qty) + '주 · 연 배당률 ' + (d.divYield || 0) + '%</div>' +
-                                '</td>' +
-                                '<td class="num" style="color:var(--toss-blue); font-weight:700;">' + won(d.payoutAmt) + '원</td>' +
-                                '<td class="muted" style="font-size:12.5px;">' + d.date + '</td>';
-                            divBody.appendChild(tr);
-                        }
-                    });
-                }
-            }
+            window._currentDivList = divList;
+            window._currentMonthlyTotals = monthlyTotals;
+            window._currentYearlyDiv = yearlyDiv;
+
+            renderDividendSection();
 
             // 요약 테이블 + 자산 구성 원그래프 (같은 데이터, 항목별로 고정된 색상 사용)
             const compRows = buildCompositionRows();
@@ -4317,6 +4531,101 @@
             set("summaryTotal", won(c.total));
             drawProjection(c); drawDonut(compRows, c.total);
             drawFxChart(); drawAssetHistoryChart();
+        }
+
+        window.selectedDividendMonth = null;
+        function selectDividendMonth(m) {
+            window.selectedDividendMonth = (window.selectedDividendMonth === m) ? null : m;
+            renderDividendSection();
+        }
+
+        function renderDividendSection() {
+            const divList = window._currentDivList || [];
+            const monthlyTotals = window._currentMonthlyTotals || {};
+            const yearlyDiv = window._currentYearlyDiv || 0;
+            const curM = new Date().getMonth() + 1; // 1 ~ 12
+            const curMonthAmt = monthlyTotals[curM] || 0;
+            const qMonthAmt = monthlyTotals[2] || monthlyTotals[5] || monthlyTotals[8] || monthlyTotals[11] || 0;
+            const monthlyAvg = Math.round(yearlyDiv / 12);
+
+            set("lblDivCurMonth", `이번 달 (${curM}월) 예상`);
+            set("valDivCurMonth", won(curMonthAmt) + "원");
+            set("valDivQuarterMonth", won(qMonthAmt) + "원");
+            set("valDivYearlyTotal", `${won(yearlyDiv)}원 (월평균 ${kfmt(monthlyAvg)})`);
+
+            // 12개월 바 렌더링
+            const gridEl = document.getElementById("divMonthsGrid");
+            if (gridEl) {
+                gridEl.innerHTML = "";
+                const valArr = Object.values(monthlyTotals);
+                const maxVal = Math.max(...valArr, 1);
+                const minVal = Math.min(...valArr);
+                for (let m = 1; m <= 12; m++) {
+                    const amt = monthlyTotals[m] || 0;
+                    const isQuarterly = amt > minVal;
+                    const isCurrent = m === curM;
+                    const isSelected = window.selectedDividendMonth === m;
+                    const fillPct = Math.max(16, Math.round((amt / maxVal) * 100));
+
+                    const col = document.createElement("div");
+                    col.className = "div-month-col" + (isQuarterly ? " quarterly" : "") + (isCurrent ? " current" : "") + (isSelected ? " selected" : "");
+                    col.title = `${m}월 예상 배당금: ${won(amt)}원 (터치하여 해당 월 종목 보기)`;
+                    col.onclick = () => selectDividendMonth(m);
+
+                    col.innerHTML =
+                        `<div class="m-amt">${kfmt(amt)}</div>` +
+                        `<div class="m-bar-track"><div class="m-bar-fill" style="height:${fillPct}%"></div></div>` +
+                        `<div class="m-lbl">${m}월</div>` +
+                        (isCurrent ? `<span class="div-cur-badge">당월</span>` : (isQuarterly ? `<span class="div-q-badge">분기</span>` : ''));
+
+                    gridEl.appendChild(col);
+                }
+            }
+
+            renderDividendTable();
+        }
+
+        function renderDividendTable() {
+            const divList = window._currentDivList || [];
+            const selM = window.selectedDividendMonth;
+            const divBody = document.getElementById("dividendScheduleBody");
+            const titleEl = document.getElementById("divTableTitle");
+            const resetBtn = document.getElementById("btnDivResetFilter");
+
+            if (selM) {
+                const selAmt = (window._currentMonthlyTotals && window._currentMonthlyTotals[selM]) || 0;
+                if (titleEl) titleEl.innerHTML = `📅 <span style="color:var(--toss-blue); font-weight:800;">${selM}월 입금 예정 종목</span> (합계: ${won(selAmt)}원)`;
+                if (resetBtn) resetBtn.style.display = "inline-block";
+            } else {
+                if (titleEl) titleEl.innerHTML = `📋 전체 종목별 배당 주기 및 입금일자 (${divList.length}종목)`;
+                if (resetBtn) resetBtn.style.display = "none";
+            }
+
+            if (divBody) {
+                divBody.innerHTML = "";
+                const displayList = selM ? divList.filter(d => d.payoutMonths && d.payoutMonths.includes(selM)) : divList;
+
+                if (displayList.length === 0) {
+                    divBody.innerHTML = '<tr><td colspan="4" class="muted" style="text-align:center;padding:16px">해당 월에 입금 예정인 배당 종목이 없습니다.</td></tr>';
+                } else {
+                    displayList.sort((a, b) => b.mDiv - a.mDiv).forEach(d => {
+                        const tr = document.createElement("tr");
+                        const cycleBadge = d.isQuarterly
+                            ? `<span class="pill" style="background:rgba(0,176,111,0.12); color:#00b06f; font-weight:700;">${d.payoutCycleStr}</span>`
+                            : `<span class="pill ok">${d.payoutCycleStr}</span>`;
+
+                        tr.innerHTML =
+                            '<td>' +
+                                '<div style="font-weight:600; color:var(--ink);">' + esc(d.name) + '</div>' +
+                                '<div class="muted" style="font-size:11.5px; margin-top:2px;">보유 ' + won(d.qty) + '주 · 연 배당률 ' + (d.divYield || 0) + '%</div>' +
+                            '</td>' +
+                            '<td class="num" style="color:var(--toss-blue); font-weight:800; font-size:14.5px;">' + won(d.payoutAmt) + '원</td>' +
+                            '<td>' + cycleBadge + '</td>' +
+                            '<td class="muted" style="font-size:12px;">' + d.date + '</td>';
+                        divBody.appendChild(tr);
+                    });
+                }
+            }
         }
 
         function renderAssets() {
