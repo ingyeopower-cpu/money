@@ -13,7 +13,8 @@
     <!-- 두꺼비 미디어 빠른 로딩을 위한 Preload -->
     <link rel="preload" as="video" type="video/mp4" href="./assets/toad_gain.mp4?v=20260920_v1">
     <link rel="preload" as="image" href="./assets/toad_gain_poster.jpg">
-    <link rel="preload" as="image" href="./assets/toad_loss_v3.gif?v=20260908_v3">
+    <link rel="preload" as="video" type="video/mp4" href="./assets/toad_loss.mp4?v=20260920_v1">
+    <link rel="preload" as="image" href="./assets/toad_loss_poster.jpg">
     <!-- iOS / Android 모바일 웹앱(PWA) 전용 설정 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1489,10 +1490,10 @@
             border: 2px solid rgba(245, 158, 11, 0.45);
         }
         .toad-modal-box.is-loss .toad-gif-container {
-            max-width: 280px;
-            aspect-ratio: 1 / 1;
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.25);
-            border: 2px solid rgba(59, 130, 246, 0.4);
+            max-width: 360px;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.35), 0 0 25px rgba(37, 99, 235, 0.25);
+            border: 2px solid rgba(59, 130, 246, 0.5);
         }
         .toad-gif-img,
         .toad-video {
@@ -2989,6 +2990,10 @@
                     <source src="./assets/toad_gain.mp4?v=20260920_v1" type="video/mp4">
                     <source src="./폴짝_뛰면서_와인을_건배하는_두꺼비.mp4" type="video/mp4">
                 </video>
+                <video id="toadLossVideo" class="toad-video" autoplay loop muted playsinline webkit-playsinline preload="auto" poster="./assets/toad_loss_poster.jpg" style="display:none;">
+                    <source src="./assets/toad_loss.mp4?v=20260920_v1" type="video/mp4">
+                    <source src="./마지막엔_저금통이_어디에선가_굴러와서_그_저금통을_세로.mp4" type="video/mp4">
+                </video>
                 <img id="toadGifImg" class="toad-gif-img" src="./assets/toad_loss_v3.gif?v=20260918_v4" alt="두꺼비 움짤" style="display:none;">
             </div>
             
@@ -3041,7 +3046,7 @@
                 </div>
                 <div class="toad-test-row">
                     <span style="font-size:11.5px;color:var(--muted)">연출 테스트:</span>
-                    <button class="toad-mini-btn" onclick="switchModalMode('loss')">🗡️ 강도 두꺼비 (하락)</button>
+                    <button class="toad-mini-btn" onclick="switchModalMode('loss')">🗡️ 낭인 두꺼비 (하락)</button>
                     <button class="toad-mini-btn" onclick="switchModalMode('gain')">👑 황금 두꺼비 (상승)</button>
                 </div>
             </div>
@@ -6323,7 +6328,7 @@
 
         try {
             const _p1 = new Image(); _p1.src = "./assets/toad_gain_poster.jpg";
-            const _p2 = new Image(); _p2.src = getToadAssetUrl("toad_loss.gif");
+            const _p2 = new Image(); _p2.src = "./assets/toad_loss_poster.jpg";
         } catch (e) {}
 
         function getTopMovers(limit = 3) {
@@ -6379,6 +6384,8 @@
             const text = document.getElementById("toadStatusText");
             const headline = document.getElementById("toadHeadline");
             const dateNote = document.getElementById("toadDateNote");
+            const gainVideo = document.getElementById("toadGainVideo");
+            const lossVideo = document.getElementById("toadLossVideo");
             const gifImg = document.getElementById("toadGifImg");
             const prevDateLbl = document.getElementById("toadPrevDateLbl");
             const prevAmt = document.getElementById("toadPrevAmt");
@@ -6539,38 +6546,46 @@
                 }
             }
             
-            const videoEl = document.getElementById("toadGainVideo");
             const top1Mover = topMovers && topMovers.length > 0 ? topMovers[0] : null;
             if (mode === "loss") {
                 box.classList.remove("is-gain");
                 box.classList.add("is-loss");
                 icon.textContent = "🗡️";
-                text.textContent = "강도 두꺼비의 습격 · 자산 하락";
+                text.textContent = "낭인 두꺼비의 습격 · 자산 하락";
                 headline.textContent = "🚨 으악! 계좌가 습격당했습니다!";
-                if (videoEl) {
-                    videoEl.pause();
-                    videoEl.style.display = "none";
+                if (gainVideo) {
+                    gainVideo.pause();
+                    gainVideo.style.display = "none";
                 }
                 if (gifImg) {
-                    gifImg.style.display = "block";
-                    gifImg.src = getToadAssetUrl("toad_loss.gif");
+                    gifImg.style.display = "none";
+                }
+                if (lossVideo) {
+                    lossVideo.style.display = "block";
+                    lossVideo.currentTime = 0;
+                    const p = lossVideo.play();
+                    if (p !== undefined) p.catch(() => {});
                 }
                 bubbleIcon.textContent = "🗡️";
                 const moverComment = (top1Mover && top1Mover.diff < 0) ? `특히 <b>${top1Mover.name}</b>에서 <b>${moneyText(top1Mover.diff)}</b>을 썰어갔네요.<br>` : '';
-                bubbleText.innerHTML = `“<b>실사 강도 두꺼비가 폴짝폴짝 뛰어와 정면으로 칼질을 푹! 푹! 찌르고 도망쳤습니다!</b> 😱💨<br>${moverComment}하지만 2028년 5월 잔금일까지 우리는 적립식 장기 투자자! 흔들림 없이 꾸준히 모아가면 반드시 승리합니다!”`;
+                bubbleText.innerHTML = `“<b>삿갓을 쓴 낭인 두꺼비가 날카로운 검기로 저금통을 쩍 갈랐습니다!</b> 😱💨⚔️<br>${moverComment}하지만 2028년 5월 잔금일까지 우리는 적립식 장기 투자자! 흔들림 없이 꾸준히 모아가면 반드시 승리합니다!”`;
             } else {
                 box.classList.remove("is-loss");
                 box.classList.add("is-gain");
                 icon.textContent = "👑";
                 text.textContent = "황금 두꺼비의 축복 · 자산 상승";
                 headline.textContent = "🎉 만세! 자산이 상승했습니다!";
+                if (lossVideo) {
+                    lossVideo.pause();
+                    lossVideo.style.display = "none";
+                }
                 if (gifImg) {
                     gifImg.style.display = "none";
                 }
-                if (videoEl) {
-                    videoEl.style.display = "block";
-                    videoEl.currentTime = 0;
-                    const playPromise = videoEl.play();
+                if (gainVideo) {
+                    gainVideo.style.display = "block";
+                    gainVideo.currentTime = 0;
+                    const playPromise = gainVideo.play();
                     if (playPromise !== undefined) {
                         playPromise.catch(() => {});
                     }
@@ -6612,10 +6627,10 @@
             const modal = document.getElementById("toadAlertModal");
             if (modal) modal.classList.remove("show");
             
-            const videoEl = document.getElementById("toadGainVideo");
-            if (videoEl) {
-                videoEl.pause();
-            }
+            const gainVideo = document.getElementById("toadGainVideo");
+            if (gainVideo) gainVideo.pause();
+            const lossVideo = document.getElementById("toadLossVideo");
+            if (lossVideo) lossVideo.pause();
             
             const chk = document.getElementById("chkDoNotShowToday");
             if (chk && chk.checked) {
