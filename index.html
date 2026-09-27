@@ -2687,7 +2687,7 @@
                     <div class="field"><label>취득세율 (%) <span class="tag" id="g-taxRateTag">2026 법정 누진</span></label><input class="num" data-goal="acqTaxRate" id="g-acqTaxRate"></div>
                     <div class="field"><label>취득세 <span class="tag" id="g-tax-tag">과세표준 연동</span></label><input class="num" id="g-tax"
                             disabled></div>
-                    <div class="field"><label>발코니 확장비</label><input class="num" data-goal="optionCost"></div>
+                    <div class="field"><label>발코니 확장 잔금 (90%) <span class="tag" style="background:#e8f3ff; color:var(--toss-blue);">계약금 10% 기납부</span></label><input class="num" data-goal="optionCost"></div>
                     <div class="field"><label>가전가구 · 옵션 · 이사비</label><input class="num" data-goal="moveCost"></div>
                     <div class="field"><label>기타 예비비</label><input class="num" data-goal="extraCost"></div>
                 </div>
@@ -2701,7 +2701,7 @@
                         <span style="font-weight:800; font-size:13.5px; color:var(--ink);" id="taxBaseVal">7억 1,600만원</span>
                     </div>
                     <div style="font-size:11.8px; color:var(--ink2); line-height:1.6;" id="taxCalcDesc">
-                        과세표준 = 분양가(6.92억) + 발코니(2,400만) = <b>7억 1,600만원</b><br>
+                        과세표준 = 분양가(6.92억) + 발코니 총액(2,400만) = <b>7억 1,600만원</b><br>
                         6~9억 사다리 법정 누진세율: <b>1.77%</b> (본세 1,270만원 + 지방교육세 127만원 = 1,397만원)<br>
                         생애최초 주택구입 감면(지방세특례제한법 36조의3): <b style="color:var(--toss-blue);">-200만원</b> 적용 ➔ <b>실부담 취득세 1,197만원</b>
                     </div>
@@ -2778,12 +2778,12 @@
                 <!-- 자금 조달 균형 명세 카드 (Toss 화이트/블루 톤) -->
                 <div style="margin-top:14px; margin-bottom:16px; background:linear-gradient(145deg, var(--surface) 0%, var(--toss-blue-light) 100%); border:1px solid rgba(49,130,246,0.18); border-radius:16px; padding:14px 18px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:12.5px; color:var(--ink2);">
-                        <span>① 입주 총 소요자금 <span class="tag">중도금 4.15억 + 잔금 2.08억 + 세금·옵션·비용 7,684만</span></span>
-                        <b id="l-allInNeed" style="color:var(--ink); font-size:13.5px;">6억 9,964만원</b>
+                        <span>① 입주 총 소요자금 <span class="tag">중도금 4.15억 + 잔금 2.08억 + 세금·옵션·비용 6,601만</span></span>
+                        <b id="l-allInNeed" style="color:var(--ink); font-size:13.5px;">6억 8,881만원</b>
                     </div>
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12.5px; color:var(--toss-blue);">
                         <span>② (-) 부부 준비자금 <span class="tag" style="background:#e8f3ff; color:var(--toss-blue);">대시보드 목표 · 전액 현금 납부</span></span>
-                        <b id="l-equityNeed" style="font-size:13.5px;">- 2억 8,444만원</b>
+                        <b id="l-equityNeed" style="font-size:13.5px;">- 2억 7,361만원</b>
                     </div>
                     <div style="border-top:1px dashed rgba(49,130,246,0.3); padding-top:8px; display:flex; justify-content:space-between; align-items:baseline;">
                         <span style="font-weight:750; font-size:13.5px; color:var(--ink);">(=) 순수 필요 대출액 (중도금 대환액)</span>
@@ -3273,10 +3273,11 @@
                     "contractPaid": 69200000,
                     "midLoan": 415200000,
                     "balance": 207600000,
-                    "acqTaxRate": 1.73,
+                    "acqTaxRate": 1.77,
                     "calcAutoAcqTax": true,
                     "isFirstHome": true,
-                    "optionCost": 24000000,
+                    "optionCost": 21600000,
+                    "optionPaid": 2400000,
                     "moveCost": 30000000,
                     "extraCost": 0,
                     "targetMonth": "2028-05",
@@ -3793,7 +3794,10 @@
             d.goal.useExtraTaxes = d.goal.useExtraTaxes !== false;
             if (d.goal.calcAutoAcqTax === undefined) d.goal.calcAutoAcqTax = true;
             if (d.goal.isFirstHome === undefined) d.goal.isFirstHome = true;
-            if (d.goal.optionCost === 31860000 || d.goal.optionCost === undefined) d.goal.optionCost = 24000000;
+            if (d.goal.optionPaid === undefined) d.goal.optionPaid = 2400000;
+            if (d.goal.optionCost === 24000000 || d.goal.optionCost === 31860000 || d.goal.optionCost === undefined) {
+                d.goal.optionCost = 21600000;
+            }
             if (d.goal.moveCost === undefined) d.goal.moveCost = 30000000;
             if (d.goal.bondDiscount === undefined) d.goal.bondDiscount = 1500000;
             if (d.goal.legalFee === undefined) d.goal.legalFee = 300000;
@@ -4221,14 +4225,15 @@
 
         const acqTax = () => {
             if (S.goal.calcAutoAcqTax !== false) {
-                const res = calcLegalAcqTax(S.goal.totalPrice, S.goal.optionCost, S.goal.isFirstHome !== false);
+                const balconyTotal = (S.goal.optionCost || 0) + (S.goal.optionPaid || 0);
+                const res = calcLegalAcqTax(S.goal.totalPrice, balconyTotal, S.goal.isFirstHome !== false);
                 return res.finalTax;
             }
             return Math.round((S.goal.totalPrice || 0) * (S.goal.acqTaxRate || 0) / 100);
         };
         const extraTaxes = () => S.goal.useExtraTaxes ? (S.goal.bondDiscount || 0) + (S.goal.legalFee || 0) + (S.goal.stampDuty || 0) + (S.goal.moveInDeposit || 0) : 0;
         const goalTotal = () => (S.goal.balance || 0) + acqTax() + (S.goal.optionCost || 0) + (S.goal.moveCost || 0) + (S.goal.extraCost || 0) + extraTaxes();
-        const totalFundingNeed = () => (S.goal.totalPrice || 0) + acqTax() + (S.goal.optionCost || 0) + (S.goal.moveCost || 0) + (S.goal.extraCost || 0) + extraTaxes();
+        const totalFundingNeed = () => (S.goal.totalPrice || 0) + acqTax() + (S.goal.optionCost || 0) + (S.goal.optionPaid || 0) + (S.goal.moveCost || 0) + (S.goal.extraCost || 0) + extraTaxes();
         function monthsLeft() {
             const [y, m] = (S.goal.targetMonth || "2028-05").split("-").map(Number);
             const kst = getKstDate();
@@ -5047,7 +5052,8 @@
         }
 
         function renderGoal() {
-            const taxDetail = calcLegalAcqTax(S.goal.totalPrice, S.goal.optionCost, S.goal.isFirstHome !== false);
+            const balconyTotal = (S.goal.optionCost || 0) + (S.goal.optionPaid || 0);
+            const taxDetail = calcLegalAcqTax(S.goal.totalPrice, balconyTotal, S.goal.isFirstHome !== false);
 
             document.querySelectorAll("[data-goal]").forEach(el => {
                 const k = el.dataset.goal, v = S.goal[k];
@@ -5082,7 +5088,7 @@
             if (taxBaseEl) taxBaseEl.textContent = kfmt(taxDetail.taxBase);
             if (taxDescEl) {
                 if (S.goal.calcAutoAcqTax !== false) {
-                    taxDescEl.innerHTML = `과세표준 = 분양가(${kfmt(S.goal.totalPrice)}) + 발코니(${kfmt(S.goal.optionCost)}) = <b>${kfmt(taxDetail.taxBase)}</b><br>` +
+                    taxDescEl.innerHTML = `과세표준 = 분양가(${kfmt(S.goal.totalPrice)}) + 발코니 총액(${kfmt(balconyTotal)}) = <b>${kfmt(taxDetail.taxBase)}</b><br>` +
                         `지방세법 6~9억 사다리 누진세율: <b>${taxDetail.rate.toFixed(2)}%</b> (본세 ${kfmt(taxDetail.baseTax)} + 지방교육세 ${kfmt(taxDetail.eduTax)} = ${kfmt(taxDetail.grossTax)})<br>` +
                         (S.goal.isFirstHome !== false
                             ? `생애최초 주택구입 감면(지방세특례제한법 36조의3): <b style="color:var(--toss-blue);">-200만원</b> 적용 ➔ <b>실부담 취득세 ${kfmt(taxDetail.finalTax)} (${won(taxDetail.finalTax)}원)</b>`
@@ -5216,7 +5222,7 @@
             const hintEl = document.getElementById("l-loanHint");
             if (hintEl) {
                 if (mode === "midLoan") {
-                    hintEl.innerHTML = "💡 <b>중도금 대환 플랜 (가장 추천):</b> 기존 중도금 대출(4억 1,520만원)만 주담대로 대환하고, 잔금 및 세금·옵션·이사비(2억 8,444만원)는 부부가 모은 현금으로 전액 납부하는 가장 정석적인 자금 조달 구조입니다.<br>입주 시점 예상 자산(" + kfmt(c.projected) + ") 기준, 잔금 치르고도 <b>" + kfmt(cashRemaining) + "의 비상금</b>이 남아 안전합니다.";
+                    hintEl.innerHTML = "💡 <b>중도금 대환 플랜 (가장 추천):</b> 기존 중도금 대출(4억 1,520만원)만 주담대로 대환하고, 잔금 및 세금·옵션·이사비(" + kfmt(gTotal) + ")는 부부가 모은 현금으로 전액 납부하는 가장 정석적인 자금 조달 구조입니다.<br>입주 시점 예상 자산(" + kfmt(c.projected) + ") 기준, 잔금 치르고도 <b>" + kfmt(cashRemaining) + "의 비상금</b>이 남아 안전합니다.";
                 } else if (mode === "fixed45") {
                     hintEl.innerHTML = "💡 <b>4.5억원 대출 플랜:</b> 대출을 4.5억원 실행해 중도금(4.15억)을 갚고 잔여 대출금 약 3,480만원을 입주비에 보태면, 부부 현금을 아껴 입주 후 <b>약 " + kfmt(cashRemaining) + "의 넉넉한 현금 비상금</b>을 손에 쥐게 됩니다.";
                 } else if (mode === "ltvMax") {
