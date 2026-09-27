@@ -3751,7 +3751,7 @@
             const el = document.getElementById("savestate");
             if (!storageOK) { el.textContent = "자동저장 불가"; el.style.color = "var(--crit)"; return; }
             if (dirty) { el.textContent = "저장 중…"; el.style.color = "var(--muted)"; }
-            else { const d = t || new Date(); el.textContent = "저장됨 " + String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); el.style.color = "var(--goodtext)"; }
+            else { el.textContent = "저장됨 " + nowHM_(); el.style.color = "var(--goodtext)"; }
         }
 
         /* ---------- 동기화 (구글시트 Apps Script) ---------- */
@@ -3932,12 +3932,50 @@
             if (code === "bad_json") return "요청 형식 오류";
             return code || "알 수 없는 오류";
         }
-        function nowHM_() { const d = new Date(); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); }
+        /* ---------- 한국 표준시(KST, Asia/Seoul) 시간 동기화 헬퍼 (터키 및 해외 접속 시 시간 왜곡 원천 차단) ---------- */
+        function getKstDate() {
+            try {
+                const now = new Date();
+                const formatter = new Intl.DateTimeFormat("en-US", {
+                    timeZone: "Asia/Seoul",
+                    year: "numeric", month: "numeric", day: "numeric",
+                    hour: "numeric", minute: "numeric", second: "numeric",
+                    hourCycle: "h23",
+                    weekday: "short"
+                });
+                const parts = formatter.formatToParts(now);
+                const m = {};
+                parts.forEach(p => m[p.type] = p.value);
+                const year = Number(m.year);
+                const month = Number(m.month);
+                const day = Number(m.day);
+                const hour = Number(m.hour);
+                const minute = Number(m.minute);
+                const second = Number(m.second);
+                const isoDate = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                return { year, month, day, hour, minute, second, weekday: m.weekday, isoDate };
+            } catch (e) {
+                const d = new Date();
+                return {
+                    year: d.getFullYear(),
+                    month: d.getMonth() + 1,
+                    day: d.getDate(),
+                    hour: d.getHours(),
+                    minute: d.getMinutes(),
+                    second: d.getSeconds(),
+                    weekday: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getDay()],
+                    isoDate: d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0")
+                };
+            }
+        }
+        function nowHM_() {
+            const kst = getKstDate();
+            return String(kst.hour).padStart(2, "0") + ":" + String(kst.minute).padStart(2, "0");
+        }
         function isKrMarketClosedToday() {
-            const kst = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-            const day = kst.getDay();
-            if (day === 0 || day === 6) return false;
-            return (kst.getHours() * 60 + kst.getMinutes()) >= (15 * 60 + 30);
+            const kst = getKstDate();
+            if (kst.weekday === "Sun" || kst.weekday === "Sat") return false;
+            return (kst.hour * 60 + kst.minute) >= (15 * 60 + 30);
         }
         function priceBtnLabel() { return isKrMarketClosedToday() ? "당일 종가 반영" : "전일 종가 반영"; }
 
@@ -3959,7 +3997,7 @@
             return s.endsWith("원") ? s : s + "원";
         }
         const parseNum = v => { const n = Number(String(v == null ? "" : v).replace(/[^0-9.-]/g, "")); return isFinite(n) ? n : 0; };
-        const todayISO = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
+        const todayISO = () => getKstDate().isoDate;
 
         /* ---------- 계산 ---------- */
         const stockValue = () => {
@@ -3987,8 +4025,8 @@
         const totalFundingNeed = () => (S.goal.totalPrice || 0) + acqTax() + (S.goal.optionCost || 0) + (S.goal.moveCost || 0) + (S.goal.extraCost || 0) + extraTaxes();
         function monthsLeft() {
             const [y, m] = (S.goal.targetMonth || "2028-05").split("-").map(Number);
-            const now = new Date();
-            const n = (y - now.getFullYear()) * 12 + (m - (now.getMonth() + 1));
+            const kst = getKstDate();
+            const n = (y - kst.year) * 12 + (m - kst.month);
             return Math.max(0, n);
         }
         function calc() {
@@ -4030,7 +4068,10 @@
 
         // 자산 변동 기록 / 저축·유입·이동 기록 공통: 기본은 이번 달+전달만 표시하고, 그 이전은 달을 선택해야 보이도록 함
         function recentWindowStart() {
-            const d = new Date(); d.setMonth(d.getMonth() - 1, 1); return d.toISOString().substring(0, 10);
+            const kst = getKstDate();
+            const prevMonth = kst.month === 1 ? 12 : kst.month - 1;
+            const prevYear = kst.month === 1 ? kst.year - 1 : kst.year;
+            return `${prevYear}-${String(prevMonth).padStart(2, "0")}-01`;
         }
         function populateMonthSelect(selectEl, dates) {
             const months = [...new Set(dates.map(d => d.substring(0, 7)))].sort().reverse();
@@ -4320,9 +4361,10 @@
             /* [위젯 1] Hero 잔금 D-day 카운트다운 카드 연산 */
             try {
                 const [ty, tm] = (S.goal.targetMonth || "2028-05").split("-").map(Number);
-                const targetDate = new Date(ty, tm - 1, 1);
-                const now = new Date();
-                const diffDays = Math.ceil((targetDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                const kst = getKstDate();
+                const todayUtc = Date.UTC(kst.year, kst.month - 1, kst.day);
+                const targetUtc = Date.UTC(ty, tm - 1, 1);
+                const diffDays = Math.round((targetUtc - todayUtc) / (1000 * 60 * 60 * 24));
                 const dDayBadge = document.getElementById("dashDdayBadge");
                 if (dDayBadge) {
                     dDayBadge.textContent = diffDays > 0 ? `⏳ 입주 잔금까지 D-${diffDays}일` : (diffDays === 0 ? "🎉 오늘이 입주 잔금일입니다!" : `입주 경과 D+${Math.abs(diffDays)}일`);
@@ -4428,7 +4470,7 @@
                 // 체크포인트 및 업데이트 안내
                 const cpNoteEl = document.getElementById("fxCheckpointNote");
                 if (cpNoteEl) {
-                    const updatedTimeStr = (S.fx && S.fx.lastUpdated) ? ` · 최근 ${new Date(S.fx.lastUpdated).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}` : ` (${fxDateStr})`;
+                    const updatedTimeStr = (S.fx && S.fx.lastUpdated) ? ` · 최근 ${new Date(S.fx.lastUpdated).toLocaleTimeString('ko-KR', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit' })}` : ` (${fxDateStr})`;
                     cpNoteEl.textContent = `1일 2회 자동 (16:00 · 06:00)${updatedTimeStr} · 미국 직투(SOXL) 연동`;
                 }
             } catch (errFx) {
@@ -4602,7 +4644,7 @@
             const divList = window._currentDivList || [];
             const monthlyTotals = window._currentMonthlyTotals || {};
             const yearlyDiv = window._currentYearlyDiv || 0;
-            const curM = new Date().getMonth() + 1; // 1 ~ 12
+            const curM = getKstDate().month; // 1 ~ 12 (KST 기준)
             const curMonthAmt = monthlyTotals[curM] || 0;
             const qMonthAmt = monthlyTotals[2] || monthlyTotals[5] || monthlyTotals[8] || monthlyTotals[11] || 0;
             const monthlyAvg = Math.round(yearlyDiv / 12);
@@ -6201,14 +6243,9 @@
 
         /* ---------- 자산 변화 체크 시점 시스템 (한국 장 종료 16:00 / 아침 정산 06:00) ---------- */
         function getCurrentMarketCheckpoint() {
-            const now = new Date();
-            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const kst = new Date(utc + (9 * 3600000));
-            const kstHour = kst.getHours();
-            const kstMin = kst.getMinutes();
-            const totalMinutes = kstHour * 60 + kstMin;
-            
-            const today = todayISO();
+            const kst = getKstDate();
+            const totalMinutes = kst.hour * 60 + kst.minute;
+            const today = kst.isoDate;
             
             // 06:00 (360분) ~ 15:59 (959분): 아침 정산 시점 (미국장 종가 & 야간 환율 반영)
             // 16:00 (960분) ~ 익일 05:59 (359분): 한국 장 마감 시점 (국내 주식/ETF 당일 확정 종가)
@@ -6224,9 +6261,9 @@
             } else {
                 let slotDate = today;
                 if (totalMinutes < 360) {
-                    const d = new Date(kst);
-                    d.setDate(d.getDate() - 1);
-                    slotDate = d.toISOString().slice(0, 10);
+                    // 00:00 ~ 05:59 KST: 전날 16:00 종가 리포트 기준
+                    const yDate = new Date(Date.now() - 24 * 3600 * 1000);
+                    slotDate = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul" }).format(yDate);
                 }
                 return {
                     period: "krx_close",
