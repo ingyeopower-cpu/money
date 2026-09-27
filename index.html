@@ -2771,27 +2771,46 @@
                 <div class="sec-actions">
                     <div>
                         <h2 style="margin:0">필요 대출 금액 (잔금 대출)</h2>
-                        <div class="sub">잔금 납부 시 받아야 할 총 주택담보대출 금액입니다. (이미 납부한 계약금은 제외됨)</div>
+                        <div class="sub">입주 총 소요비용 중 부부 모은 현금(대시보드 목표)을 제외한 순수 대출 필요액입니다.</div>
                     </div>
-                    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12.5px;">
-                        <input type="checkbox" data-loan="customAmount" style="width:auto;"> 직접 입력
-                    </label>
                 </div>
+
+                <!-- 자금 조달 균형 명세 카드 (Toss 화이트/블루 톤) -->
+                <div style="margin-top:14px; margin-bottom:16px; background:linear-gradient(145deg, var(--surface) 0%, var(--toss-blue-light) 100%); border:1px solid rgba(49,130,246,0.18); border-radius:16px; padding:14px 18px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:12.5px; color:var(--ink2);">
+                        <span>① 입주 총 소요자금 <span class="tag">중도금 4.15억 + 잔금 2.08억 + 세금·옵션·비용 7,684만</span></span>
+                        <b id="l-allInNeed" style="color:var(--ink); font-size:13.5px;">6억 9,964만원</b>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12.5px; color:var(--toss-blue);">
+                        <span>② (-) 부부 준비자금 <span class="tag" style="background:#e8f3ff; color:var(--toss-blue);">대시보드 목표 · 전액 현금 납부</span></span>
+                        <b id="l-equityNeed" style="font-size:13.5px;">- 2억 8,444만원</b>
+                    </div>
+                    <div style="border-top:1px dashed rgba(49,130,246,0.3); padding-top:8px; display:flex; justify-content:space-between; align-items:baseline;">
+                        <span style="font-weight:750; font-size:13.5px; color:var(--ink);">(=) 순수 필요 대출액 (중도금 대환액)</span>
+                        <b style="color:var(--toss-blue); font-size:18px; font-weight:800;" id="l-pureLoanNeed">4억 1,520만원</b>
+                    </div>
+                </div>
+
+                <!-- 빠른 대출 시뮬레이션 금액 프리셋 칩 -->
+                <div style="margin-bottom:14px;">
+                    <div style="font-size:12px; font-weight:600; color:var(--ink2); margin-bottom:8px;">대출 시뮬레이션 금액 선택</div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;" id="loanPresetGroup">
+                        <button type="button" class="sm" id="btnLoanMid" onclick="setLoanAmountPreset('midLoan')" style="font-weight:600;">중도금 대환 (4.15억)</button>
+                        <button type="button" class="sm" id="btnLoan45" onclick="setLoanAmountPreset('fixed45')" style="font-weight:600;">여유 자금 (4.5억)</button>
+                        <button type="button" class="sm" id="btnLoanLtv" onclick="setLoanAmountPreset('ltvMax')" style="font-weight:600;">LTV 80% 최대 (5.54억)</button>
+                        <button type="button" class="sm" id="btnLoanCustom" onclick="setLoanAmountPreset('custom')" style="font-weight:600;">직접 입력</button>
+                    </div>
+                </div>
+
                 <div class="grid2">
-                    <div class="field"><label>준비해야 할 자금 (잔금+세금+비용)</label><input class="num" id="l-goalTotal" disabled>
+                    <div class="field"><label>시뮬레이션 대출 실행액 (원) <span class="tag" id="l-reqTag">중도금 대환</span></label>
+                        <input class="num" id="l-reqLoan" data-loan="manualAmount">
                     </div>
-                    <div class="field">
-                        <label style="display:flex; justify-content:space-between;">중도금 대출 (대환 예정)
-                            <span style="font-size:11.5px;font-weight:normal;"><input type="checkbox"
-                                    data-loan="includeMidLoan" style="width:auto;" checked> 대출에 포함</span>
-                        </label>
-                        <input class="num" id="l-midLoan" disabled>
+                    <div class="field"><label>대출 실행 후 부부 현금 잔여액 <span class="tag" id="l-surplusTag">비상금/여유자금</span></label>
+                        <input class="num" id="l-cashSurplus" disabled>
                     </div>
-                    <div class="field"><label>목표 대출 금액 <span class="tag" id="l-reqTag">준비 자금 + 중도금</span></label><input
-                            class="num" id="l-reqLoan" data-loan="manualAmount" disabled></div>
                 </div>
-                <div class="hint" style="margin-top:8px">※ 잔금 대출(주택담보대출)을 받으면 보통 그 돈으로 기존 중도금 대출을 먼저 상환(대환)하고, 남은 돈으로 잔금
-                    및 세금을 냅니다. 따라서 목표 대출 금액은 <b>(분양가 - 기납부 계약금) + 부대비용</b>과 동일합니다.</div>
+                <div class="hint" id="l-loanHint" style="margin-top:10px; line-height:1.6;"></div>
             </div>
 
             <div class="card">
@@ -3728,9 +3747,8 @@
                     }
           ],
           "loan": {
-                    "customAmount": false,
-                    "manualAmount": 0,
-                    "includeMidLoan": true,
+                    "amountMode": "midLoan",
+                    "manualAmount": 415200000,
                     "useStressDsr": true,
                     "region": "non_metro",
                     "rateType": "periodic",
@@ -3780,7 +3798,8 @@
             if (d.goal.stampDuty === undefined || d.goal.stampDuty === 150000) d.goal.stampDuty = 240000;
             if (d.goal.moveInDeposit === undefined) d.goal.moveInDeposit = 400000;
             d.loan = Object.assign({}, base.loan, d.loan || {});
-            if (d.loan.includeMidLoan === undefined) d.loan.includeMidLoan = true;
+            if (d.loan.amountMode === undefined) d.loan.amountMode = "midLoan";
+            if (!d.loan.manualAmount || d.loan.manualAmount === 699637328 || d.loan.manualAmount === 699637300) d.loan.manualAmount = 415200000;
             if (d.loan.useStressDsr === undefined) d.loan.useStressDsr = true;
             if (d.loan.region === undefined) d.loan.region = "non_metro";
             if (d.loan.rateType === undefined) d.loan.rateType = "periodic";
@@ -5085,6 +5104,25 @@
                     : "목표에 <b style='color:var(--crit)'>" + kfmt(-c.diff) + " 부족</b>합니다.");
         }
 
+        function setLoanAmountPreset(mode) {
+            S.loan.amountMode = mode;
+            const pureNeed = S.goal.midLoan || 415200000;
+            const estV = S.loan.estValue || 692000000;
+            const ltvMax = estV * (S.loan.ltv || 80) / 100;
+            const ded = S.loan.useDeduction ? (S.loan.deduction || 0) : 0;
+            const maxLoan = Math.max(0, ltvMax - ded);
+
+            if (mode === "midLoan") {
+                S.loan.manualAmount = pureNeed;
+            } else if (mode === "fixed45") {
+                S.loan.manualAmount = 450000000;
+            } else if (mode === "ltvMax") {
+                S.loan.manualAmount = maxLoan;
+            }
+            autosave();
+            renderLoan();
+        }
+
         function selectLoanType(type) {
             S.loan.type = type;
             const sel = document.querySelector('[data-loan="type"]');
@@ -5098,29 +5136,94 @@
                 const k = el.dataset.loan, v = S.loan[k];
                 if (el.type === "checkbox") el.checked = !!v;
                 else if (el.tagName === "SELECT") el.value = v;
-                else el.value = won(v);
+                else if (k === "manualAmount") {
+                    if (document.activeElement !== el) el.value = won(v);
+                } else {
+                    el.value = won(v);
+                }
             });
 
             const gTotal = goalTotal();
-            const mLoan = S.loan.includeMidLoan ? (S.goal.midLoan || 0) : 0;
-            const targetReq = Math.max(0, gTotal + mLoan);
+            const pureLoanNeed = S.goal.midLoan || 415200000;
+            const allInNeed = pureLoanNeed + gTotal;
 
-            const elTotal = document.getElementById("l-goalTotal");
-            if (elTotal) elTotal.value = won(gTotal);
+            set("l-allInNeed", kfmt(allInNeed) + " (" + won(allInNeed) + "원)");
+            set("l-equityNeed", "- " + kfmt(gTotal) + " (" + won(gTotal) + "원)");
+            set("l-pureLoanNeed", kfmt(pureLoanNeed) + " (" + won(pureLoanNeed) + "원)");
 
-            const elPaid = document.getElementById("l-midLoan");
-            if (elPaid) elPaid.value = won(S.goal.midLoan || 0);
+            const estV = S.loan.estValue || 692000000;
+            const ltvMax = estV * (S.loan.ltv || 80) / 100;
+            const ded = S.loan.useDeduction ? (S.loan.deduction || 0) : 0;
+            const maxLoan = Math.max(0, ltvMax - ded);
+
+            let mode = S.loan.amountMode || "midLoan";
+            let P = pureLoanNeed;
+            if (mode === "midLoan") {
+                P = pureLoanNeed;
+                S.loan.manualAmount = P;
+            } else if (mode === "fixed45") {
+                P = 450000000;
+                S.loan.manualAmount = P;
+            } else if (mode === "ltvMax") {
+                P = maxLoan;
+                S.loan.manualAmount = P;
+            } else {
+                P = S.loan.manualAmount || pureLoanNeed;
+            }
 
             const reqInput = document.getElementById("l-reqLoan");
-            if (!S.loan.customAmount) {
-                if (reqInput) reqInput.value = won(targetReq);
-                set("l-reqTag", S.loan.includeMidLoan ? "준비 자금 + 중도금" : "준비 자금만");
-            } else {
-                set("l-reqTag", "직접 입력 중");
+            if (reqInput && document.activeElement !== reqInput) {
+                reqInput.value = won(P);
             }
-            if (reqInput) reqInput.disabled = !S.loan.customAmount;
 
-            const P = S.loan.customAmount ? (S.loan.manualAmount || 0) : targetReq;
+            // 프리셋 버튼 활성화 스타일
+            const presetBtns = {
+                "midLoan": document.getElementById("btnLoanMid"),
+                "fixed45": document.getElementById("btnLoan45"),
+                "ltvMax": document.getElementById("btnLoanLtv"),
+                "custom": document.getElementById("btnLoanCustom")
+            };
+            Object.keys(presetBtns).forEach(k => {
+                const b = presetBtns[k];
+                if (b) {
+                    const isActive = (k === mode);
+                    b.style.background = isActive ? "var(--toss-blue)" : "var(--chip)";
+                    b.style.color = isActive ? "#ffffff" : "var(--ink2)";
+                    b.style.borderColor = isActive ? "var(--toss-blue)" : "var(--border)";
+                    b.style.boxShadow = isActive ? "0 2px 8px rgba(49, 130, 246, 0.25)" : "none";
+                }
+            });
+
+            const modeLabels = {
+                "midLoan": "중도금 대환 (정석)",
+                "fixed45": "4.5억 여유자금",
+                "ltvMax": "LTV 80% 최대",
+                "custom": "직접 입력"
+            };
+            set("l-reqTag", modeLabels[mode] || "대출 실행액");
+
+            // 대출 실행 후 부부 현금 잔여액
+            const c = calc();
+            const cashRemaining = (c.projected + P) - allInNeed;
+            const cashSurplusEl = document.getElementById("l-cashSurplus");
+            if (cashSurplusEl) {
+                cashSurplusEl.value = (cashRemaining >= 0 ? "+" : "-") + won(Math.abs(cashRemaining)) + "원 (" + kfmt(cashRemaining) + ")";
+                cashSurplusEl.style.color = cashRemaining >= 0 ? "var(--goodtext)" : "var(--crit)";
+            }
+
+            const hintEl = document.getElementById("l-loanHint");
+            if (hintEl) {
+                if (mode === "midLoan") {
+                    hintEl.innerHTML = "💡 <b>중도금 대환 플랜 (가장 추천):</b> 기존 중도금 대출(4억 1,520만원)만 주담대로 대환하고, 잔금 및 세금·옵션·이사비(2억 8,444만원)는 부부가 모은 현금으로 전액 납부하는 가장 정석적인 자금 조달 구조입니다.<br>입주 시점 예상 자산(" + kfmt(c.projected) + ") 기준, 잔금 치르고도 <b>" + kfmt(cashRemaining) + "의 비상금</b>이 남아 안전합니다.";
+                } else if (mode === "fixed45") {
+                    hintEl.innerHTML = "💡 <b>4.5억원 대출 플랜:</b> 대출을 4.5억원 실행해 중도금(4.15억)을 갚고 잔여 대출금 약 3,480만원을 입주비에 보태면, 부부 현금을 아껴 입주 후 <b>약 " + kfmt(cashRemaining) + "의 넉넉한 현금 비상금</b>을 손에 쥐게 됩니다.";
+                } else if (mode === "ltvMax") {
+                    hintEl.innerHTML = "💡 <b>LTV 80% 최대한도 플랜:</b> 생애최초 LTV 80% 한도(" + kfmt(maxLoan) + ")를 전액 대출받는 경우입니다. 입주 후 약 " + kfmt(cashRemaining) + "의 현금을 보존할 수 있으나 매달 갚아야 하는 원리금이 늘어납니다.";
+                } else {
+                    hintEl.innerHTML = "💡 <b>직접 입력 플랜:</b> 원하는 대출 금액을 입력해 월 상환액과 DSR 및 입주 후 남는 현금을 자유롭게 시뮬레이션할 수 있습니다.";
+                }
+            }
+
             const R = (S.loan.rate || 0) / 100 / 12;
             const N = (S.loan.term || 30) * 12;
             const G = (S.loan.grace || 0) * 12;
@@ -5226,11 +5329,6 @@
             set("dsr-r", "연간 상환액(DSR 심사용) " + kfmt(annualMortgageForDsr + (S.loan.otherDebt || 0)));
 
             set("dti-l", "현재 DTI " + dti.toFixed(1) + "%" + (dti > 60 ? " (60% 초과 주의!)" : ""));
-
-            const estV = S.loan.estValue || 0;
-            const ltvMax = estV * (S.loan.ltv || 70) / 100;
-            const ded = S.loan.useDeduction ? (S.loan.deduction || 0) : 0;
-            const maxLoan = Math.max(0, ltvMax - ded);
 
             set("l-maxLtv", kfmt(maxLoan));
             const ltvNote = P > maxLoan
@@ -6229,9 +6327,8 @@
             if (el.dataset && el.dataset.loan) {
                 const k = el.dataset.loan;
                 S.loan[k] = el.type === "checkbox" ? el.checked : (el.tagName === "SELECT" ? el.value : parseNum(el.value));
-                if (k === "customAmount" && !S.loan.customAmount) {
-                    const totalNeed = totalFundingNeed();
-                    S.loan.manualAmount = Math.max(0, totalNeed - (S.goal.contractPaid || 0));
+                if (k === "manualAmount") {
+                    S.loan.amountMode = "custom";
                 }
                 autosave(); renderLoan();
             }
