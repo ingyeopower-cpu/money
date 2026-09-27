@@ -3618,6 +3618,10 @@
         /* ---------- 저장 ---------- */
         let storageOK = true;
         try { localStorage.setItem("__t", "1"); localStorage.removeItem("__t"); } catch (e) { storageOK = false; }
+        function safeSetItem(k, v) {
+            if (!storageOK) return;
+            try { localStorage.setItem(k, v); } catch (e) {}
+        }
         let S = migrate(defaults());
         function load() {
             if (!storageOK) return;
@@ -3839,13 +3843,15 @@
                 if (!j || j.ok === false) throw new Error((j && j.error) || "서버 갱신 실패");
                 let remoteData = j.data ? JSON.parse(j.data) : null;
                 if (remoteData && remoteData.goal && remoteData.buckets) {
-                    // 서버 최신 시세 반영 시 오프라인 기록 누락 방지를 위해 entries 안전 병합
+                    // 서버 최신 시세 반영 시 오프라인 기록 누락 방지를 위해 entries 및 history 안전 병합
                     const mergedEntries = mergeEntries_(S.entries, remoteData.entries);
+                    const mergedHistory = mergeHistory_(S.history, remoteData.history);
                     S = migrate(remoteData);
                     S.entries = mergedEntries;
+                    S.history = mergedHistory;
                     if (targetSlot) {
                         S.lastSyncSlot = targetSlot;
-                        localStorage.setItem("toad_last_sync_slot", targetSlot);
+                        safeSetItem("toad_last_sync_slot", targetSlot);
                     }
                     document.documentElement.setAttribute("data-theme", S.theme || "light");
                     save(false);
@@ -3860,6 +3866,12 @@
             (localEntries || []).forEach(e => { if (e && e.id) map.set(e.id, e); });
             return Array.from(map.values()).sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.id || "").localeCompare(a.id || ""));
         }
+        function mergeHistory_(localHist, remoteHist) {
+            const map = new Map();
+            (remoteHist || []).forEach(h => { if (h && h.date) map.set(h.date, h); });
+            (localHist || []).forEach(h => { if (h && h.date) map.set(h.date, h); });
+            return Array.from(map.values()).sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+        }
 
         async function doSync() {
             if (!sync.url || syncing) return;
@@ -3873,17 +3885,20 @@
                 const localAt = S.updatedAt;
 
                 if (remoteData && (!localAt || (remoteAt && remoteAt > localAt))) {
-                    // 서버에 더 최신 데이터가 있는 경우: entries는 병합하여 두 사람 기록 모두 보존
+                    // 서버에 더 최신 데이터가 있는 경우: entries와 history는 병합하여 두 사람 기록 모두 보존
                     const mergedEntries = mergeEntries_(S.entries, remoteData.entries);
+                    const mergedHistory = mergeHistory_(S.history, remoteData.history);
                     S = migrate(remoteData);
                     S.entries = mergedEntries;
+                    S.history = mergedHistory;
                     document.documentElement.setAttribute("data-theme", S.theme || "light");
                     save(false); render();
                     setSyncStatus("구글시트의 최신 데이터를 불러왔습니다 · " + nowHM_(), "ok");
                 } else {
                     // 이 기기에서 수정한 내용을 서버로 보낼 때도 혹시 서버에 새로 추가된 기록과 병합
-                    if (remoteData && remoteData.entries) {
-                        S.entries = mergeEntries_(S.entries, remoteData.entries);
+                    if (remoteData) {
+                        if (remoteData.entries) S.entries = mergeEntries_(S.entries, remoteData.entries);
+                        if (remoteData.history) S.history = mergeHistory_(S.history, remoteData.history);
                     }
                     const pushed = await syncPush();
                     if (!pushed || pushed.ok === false) throw new Error(errText_(pushed && pushed.error));
@@ -4905,7 +4920,7 @@
                 if (P > 0 && rRate > 0 && L > 0) {
                     if (S.loan.type === "원리금균등") {
                         const pmt = P * rRate * Math.pow(1 + rRate, L) / (Math.pow(1 + rRate, L) - 1);
-                        p1 = G === 0 ? P * rRate : pmt;
+                        p1 = G === 0 ? pmt : P * rRate;
                         tI = (P * rRate * G) + (pmt * L - P);
                         aP = (P + tI) / N;
                     } else if (S.loan.type === "원금균등") {
@@ -4941,6 +4956,8 @@
             const res = calcPmt(R);
             pmt1 = res.pmt1; totalInt = res.totalInt; avgPmt = res.avgPmt;
 
+            const pmtLbl = document.getElementById("l-pmt-lbl");
+            if (pmtLbl) pmtLbl.textContent = G > 0 ? "거치기간 월 상환액 (이자만)" : "1회차 월 상환액";
             set("l-pmt", kfmt(pmt1));
             set("l-avgPmt", won(avgPmt) + "원");
             set("l-totalInt", kfmt(totalInt));
@@ -5839,7 +5856,7 @@
                     });
                     S.lastSync = todayISO();
                     S.lastSyncSlot = targetSlot;
-                    localStorage.setItem("toad_last_sync_slot", targetSlot);
+                    safeSetItem("toad_last_sync_slot", targetSlot);
                     
                     // 오늘 총자산 스냅샷을 history에 저장
                     const curTot = totalAssets();
@@ -6105,6 +6122,12 @@
         const btnFx = document.getElementById("btnFxSync"); if (btnFx) btnFx.addEventListener("click", syncFx);
         document.getElementById("btnManualPrice").addEventListener("click", () => openPriceModal());
         document.getElementById("pmCancel").addEventListener("click", () => document.getElementById("priceModal").classList.remove("show"));
+        const pmEl = document.getElementById("priceModal");
+        if (pmEl) {
+            pmEl.addEventListener("click", e => {
+                if (e.target.id === "priceModal") pmEl.classList.remove("show");
+            });
+        }
         document.getElementById("pmSave").addEventListener("click", () => {
             let n = 0;
             document.querySelectorAll("[data-pm]").forEach(inp => {
@@ -6285,7 +6308,7 @@
                 try {
                     await syncPrices({ silent: true, slotId: cp.slotId });
                     await syncLiveFx(false); // 16:00 한국 장 마감 / 06:00 아침 정산 동일 시각에 환율도 자동 업데이트
-                    localStorage.setItem("toad_last_sync_slot", cp.slotId);
+                    safeSetItem("toad_last_sync_slot", cp.slotId);
                     S.lastSyncSlot = cp.slotId;
                     save(false);
                     
@@ -6755,6 +6778,21 @@
 
         document.getElementById("toadAlertModal").addEventListener("click", e => {
             if (e.target.id === "toadAlertModal") closeToadAlertModal();
+        });
+
+        // ESC 키로 열려있는 모달(두꺼비 알림, 시세 직접 입력) 닫기 지원
+        document.addEventListener("keydown", e => {
+            if (e.key === "Escape" || e.keyCode === 27) {
+                const toadModal = document.getElementById("toadAlertModal");
+                if (toadModal && toadModal.classList.contains("show")) {
+                    closeToadAlertModal();
+                    return;
+                }
+                const priceModal = document.getElementById("priceModal");
+                if (priceModal && priceModal.classList.contains("show")) {
+                    priceModal.classList.remove("show");
+                }
+            }
         });
 
         /* ---------- 시작 ---------- */
