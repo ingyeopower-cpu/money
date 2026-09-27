@@ -4427,36 +4427,7 @@
             } finally { clearTimeout(t); }
         }
         async function syncFx() {
-            const btn = document.getElementById("btnFxSync");
-            const stampEl = document.getElementById("fxStamp");
-            if (btn) btn.disabled = true;
-            if (stampEl) stampEl.textContent = "조회 중…";
-            try {
-                // 1) 서버(Apps Script)를 통한 조회 우선 — CORS 제약이 없어 훨씬 안정적
-                if (sync.url) {
-                    try {
-                        const res = await serverRefreshMarket();
-                        if (res && res.fxOk) {
-                            renderFx();
-                            const dxyNote = S.fx.dxyIsExact ? "(달러인덱스는 야후 파이낸스 실제 고시값)" : "(달러인덱스는 근사치)";
-                            const skipNote = res.pushSkipped ? " · ⚠ 서버에 이 기기가 모르는 기록이 있어 이 기기 값 저장은 건너뛰었습니다" : "";
-                            if (stampEl) stampEl.textContent = "서버에서 자동 조회 완료 · " + nowHM_() + " " + dxyNote + skipNote;
-                            toast("환율/달러인덱스를 갱신했습니다" + (res.priceOk > 0 ? " (종가도 " + res.priceOk + "/" + res.priceTotal + " 갱신됨)" : ""));
-                            render();
-                            return;
-                        }
-                    } catch (e) { /* 서버 방식 실패 시 아래 클라이언트 폴백으로 진행 */ }
-                }
-                // 2) 폴백: 브라우저에서 직접 조회 (구글시트 연동이 없거나 서버 조회가 실패한 경우)
-                await syncFxClientFallback();
-                if (stampEl) stampEl.textContent = "자동 조회 완료 · " + nowHM_() + " (달러인덱스는 근사치입니다)";
-                toast("환율/달러인덱스를 갱신했습니다");
-            } catch (e) {
-                if (stampEl) stampEl.textContent = "자동 조회 실패 — 직접 입력하신 값이 유지됩니다";
-                toast("자동 조회에 실패했습니다. 직접 입력해 주세요");
-            } finally {
-                if (btn) btn.disabled = false;
-            }
+            return syncLiveFx(true);
         }
 
         /* ---------- 실시간 원·달러 환율 즉시 업데이트 (수동 및 16시/06시 자동) ---------- */
@@ -6460,7 +6431,6 @@
 
         // 시세
         document.getElementById("btnSync").addEventListener("click", syncPrices);
-        const btnFx = document.getElementById("btnFxSync"); if (btnFx) btnFx.addEventListener("click", syncFx);
         document.getElementById("btnManualPrice").addEventListener("click", () => openPriceModal());
         document.getElementById("pmCancel").addEventListener("click", () => document.getElementById("priceModal").classList.remove("show"));
         const pmEl = document.getElementById("priceModal");
