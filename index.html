@@ -255,6 +255,26 @@
             box-shadow: var(--card-shadow-hover);
         }
 
+        .loan-type-card {
+            cursor: pointer;
+            border-radius: 16px;
+            padding: 13px 15px;
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .loan-type-card:hover {
+            border-color: var(--toss-blue) !important;
+            transform: translateY(-1px);
+        }
+
+        .loan-type-card.active {
+            border-color: var(--toss-blue) !important;
+            background: linear-gradient(145deg, var(--surface) 0%, var(--toss-blue-light) 100%) !important;
+            box-shadow: 0 4px 16px rgba(49, 130, 246, 0.16);
+        }
+
         .tabs {
             display: flex;
             gap: 5px;
@@ -2647,21 +2667,50 @@
             </div>
 
             <div class="card">
-                <h2>준비해야 할 자금</h2>
+                <div class="sec-actions" style="margin-bottom:12px;">
+                    <div>
+                        <h2 style="margin:0">준비해야 할 자금</h2>
+                        <div class="sub">잔금 및 취득세·옵션·입주 부대비용 종합</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                        <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--ink2);">
+                            <input type="checkbox" data-goal="calcAutoAcqTax" style="width:auto;" checked> 2026 누진세율 자동계산
+                        </label>
+                        <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--toss-blue);font-weight:700;">
+                            <input type="checkbox" data-goal="isFirstHome" style="width:auto;" checked> 생애최초 200만 감면
+                        </label>
+                    </div>
+                </div>
                 <div class="grid2">
-                    <div class="field"><label>잔금 <span class="tag">위 값 연동</span></label><input class="num"
+                    <div class="field"><label>잔금 <span class="tag">분양가-계약금-중도금</span></label><input class="num"
                             id="g-balance" disabled></div>
-                    <div class="field"><label>취득세율 (%)</label><input class="num" data-goal="acqTaxRate"></div>
-                    <div class="field"><label>취득세 <span class="tag">분양가 × 세율</span></label><input class="num" id="g-tax"
+                    <div class="field"><label>취득세율 (%) <span class="tag" id="g-taxRateTag">2026 법정 누진</span></label><input class="num" data-goal="acqTaxRate" id="g-acqTaxRate"></div>
+                    <div class="field"><label>취득세 <span class="tag" id="g-tax-tag">과세표준 연동</span></label><input class="num" id="g-tax"
                             disabled></div>
                     <div class="field"><label>발코니 확장 · 옵션 잔금</label><input class="num" data-goal="optionCost"></div>
                     <div class="field"><label>이사 · 인테리어 · 가전가구</label><input class="num" data-goal="moveCost"></div>
                     <div class="field"><label>기타 예비비</label><input class="num" data-goal="extraCost"></div>
                 </div>
 
+                <!-- 2026 세법상 취득세 및 과세표준 브리핑 카드 -->
+                <div id="taxCalcDetail" style="margin-top:12px; background:linear-gradient(145deg, var(--surface) 0%, var(--toss-blue-light) 100%); border-radius:14px; padding:13px 15px; font-size:12px; color:var(--ink); border:1px solid rgba(49,130,246,0.18);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                        <span style="font-weight:750; color:var(--toss-blue); display:flex; align-items:center; gap:5px;">
+                            🏛 2026 지방세법 취득세 과세표준 분석
+                        </span>
+                        <span style="font-weight:800; font-size:13.5px; color:var(--ink);" id="taxBaseVal">7억 2,386만원</span>
+                    </div>
+                    <div style="font-size:11.8px; color:var(--ink2); line-height:1.6;" id="taxCalcDesc">
+                        과세표준 = 분양가(6.92억) + 옵션가액(3,186만) = <b>7억 2,386만원</b><br>
+                        6~9억 사다리 법정 누진세율: <b>1.83%</b> (본세 1,322만원 + 지방교육세 132만원 = 1,454만원)<br>
+                        생애최초 주택구입 감면(지방세특례제한법 36조의3): <b style="color:var(--toss-blue);">-200만원</b> 적용 ➔ <b>실부담 취득세 1,254만원</b>
+                    </div>
+                </div>
+
                 <div class="sec-actions" style="margin-top:20px; margin-bottom:8px;">
                     <div>
                         <h3 style="margin:0">기타 입주/등기 비용 (선택)</h3>
+                        <div class="sub">인지세 현실화 (등기 15만 + 대출 50% 분담 7.5만 + 증지대 1.5만 = 24만원)</div>
                     </div>
                     <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12.5px;">
                         <input type="checkbox" data-goal="useExtraTaxes" style="width:auto;"> 적용하기
@@ -2766,6 +2815,67 @@
                             <option value="체증식">체증식 분할상환</option>
                         </select></div>
                 </div>
+
+                <!-- 3대 상환방식 한눈에 비교 인터랙티브 카드 -->
+                <div style="margin-top: 16px;">
+                    <div style="font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                        <span>📊 상환 방식별 월 부담액 및 총 이자 비교</span>
+                        <span style="font-size:11px; font-weight:normal; color:var(--muted);">카드를 누르면 즉시 선택됩니다</span>
+                    </div>
+                    <div class="loan-compare-grid" id="loanCompareGrid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                        <!-- 체증식 카드 -->
+                        <div class="loan-type-card" data-loan-pick="체증식" onclick="selectLoanType('체증식')">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                                <span style="font-weight:750; font-size:13.5px; color:var(--ink);">체증식 분할</span>
+                                <span class="tag" style="background:#e8f3ff; color:var(--toss-blue); font-weight:700;">만 40세 미만 정책</span>
+                            </div>
+                            <div style="font-size:11px; color:var(--muted); margin-bottom:8px;">1회차 최저 부담 · 현금흐름 극대화</div>
+                            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                                <span style="font-size:12px; color:var(--ink2);">1회차</span>
+                                <b style="font-size:15px; color:var(--toss-blue);" id="lc-first-che">—</b>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--muted); margin-top:3px;">
+                                <span>총 이자</span>
+                                <span id="lc-total-che">—</span>
+                            </div>
+                        </div>
+
+                        <!-- 원리금균등 카드 -->
+                        <div class="loan-type-card" data-loan-pick="원리금균등" onclick="selectLoanType('원리금균등')">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                                <span style="font-weight:750; font-size:13.5px; color:var(--ink);">원리금 균등</span>
+                                <span class="tag" style="background:var(--chip); color:var(--ink2); font-weight:700;">시중은행 5년주기형</span>
+                            </div>
+                            <div style="font-size:11px; color:var(--muted); margin-bottom:8px;">매월 고정액 지출로 안정적</div>
+                            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                                <span style="font-size:12px; color:var(--ink2);">매월 고정</span>
+                                <b style="font-size:15px; color:var(--ink);" id="lc-first-wonri">—</b>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--muted); margin-top:3px;">
+                                <span>총 이자</span>
+                                <span id="lc-total-wonri">—</span>
+                            </div>
+                        </div>
+
+                        <!-- 원금균등 카드 -->
+                        <div class="loan-type-card" data-loan-pick="원금균등" onclick="selectLoanType('원금균등')">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                                <span style="font-weight:750; font-size:13.5px; color:var(--ink);">원금 균등</span>
+                                <span class="tag" style="background:var(--chip); color:var(--ink2); font-weight:700;">총 이자 최소</span>
+                            </div>
+                            <div style="font-size:11px; color:var(--muted); margin-bottom:8px;">시간 지날수록 상환액 감소</div>
+                            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                                <span style="font-size:12px; color:var(--ink2);">1회차</span>
+                                <b style="font-size:15px; color:var(--ink);" id="lc-first-won">—</b>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--muted); margin-top:3px;">
+                                <span>총 이자</span>
+                                <span id="lc-total-won">—</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="kpis" style="margin-top:16px">
                     <div class="kpi hero">
                         <div class="lbl" id="l-pmt-lbl">1회차 월 상환액</div>
@@ -2802,11 +2912,29 @@
 
                 <div class="sec-actions" style="margin-top:16px; margin-bottom:8px;">
                     <div>
-                        <h3 style="margin:0">스트레스 DSR 3단계 (금리 가산)</h3>
+                        <h3 style="margin:0">2026 스트레스 DSR 3단계 (지역·금리유형별 차등)</h3>
                     </div>
                     <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12.5px;">
-                        <input type="checkbox" data-loan="useStressDsr" style="width:auto;" checked> 적용 (+1.5%p)
+                        <input type="checkbox" data-loan="useStressDsr" style="width:auto;" checked> 스트레스 금리 적용
                     </label>
+                </div>
+                <div class="grid2" style="margin-bottom:12px">
+                    <div class="field">
+                        <label>담보 소재지 (기본 스트레스 금리)</label>
+                        <select data-loan="region">
+                            <option value="non_metro">비수도권 지방 광역시 (+0.75%p 완화 기준)</option>
+                            <option value="metro">수도권 (+1.50%p 강화 기준)</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>금리 유형 (스트레스 가산비율)</label>
+                        <select data-loan="rateType">
+                            <option value="periodic">5년 주기형 (가산폭 30%만 반영 · 추천)</option>
+                            <option value="mixed">5년 혼합형 (가산폭 60% 반영)</option>
+                            <option value="variable">변동금리 (가산폭 100% 전액 반영)</option>
+                            <option value="fixed">순수 고정금리 (가산폭 0% 면제)</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="bar" style="margin-top:14px"><i id="dsrbar" style="width:0%"></i></div>
@@ -2831,8 +2959,15 @@
                         <input class="num" data-loan="deduction">
                     </div>
                 </div>
-                <div class="hint">스트레스 DSR 3단계 적용 시 DSR 산출용 금리에 1.5%p가 가산되어 한도가 더욱 깐깐하게 계산됩니다. (실제 납부하는 이자가 늘어나는 것은
-                    아닙니다)<br>생애최초 주택구입(디딤돌 등)의 경우 보통 LTV 80%, DTI 60%, DSR은 조건에 따라 유연하게 적용될 수 있습니다.</div>
+
+                <div style="margin-top:10px; display:flex; align-items:center; gap:8px; background:var(--toss-blue-light); border:1px solid rgba(49,130,246,0.18); padding:10px 14px; border-radius:12px; font-size:12px; color:var(--ink); line-height:1.5;">
+                    <span>💡 <b>MCG(모기지신용보증) 가입 팁:</b> 한국주택금융공사(HF) 또는 HUG 보증상품(연 수만원대) 가입 시 지방 광역시 방공제(2,800만원) 차감 없이 LTV 80% 한도 전액 대출이 가능합니다. (방공제를 적용하지 않으려면 위 '적용' 체크를 해제하세요)</span>
+                </div>
+
+                <div class="hint" style="margin-top:10px;">
+                    ※ 2026 가계부채 관리방안에 따라 <b>비수도권 지방 광역시</b>는 스트레스 기본 금리가 <b>+0.75%p</b>로 완화 적용됩니다. 특히 <b>5년 주기형</b> 상품을 선택하면 가산폭이 30%만 반영되어 실제 가산금리는 <b>+0.23%p</b>에 불과하므로 대출 한도 축소 부담이 거의 없습니다.<br>
+                    부부합산 연 소득 1억 4,000만원 기준 DSR 40% 한도는 연 5,600만원으로, 4.5억원 대출 시 DSR 약 19%로 매우 안전합니다.
+                </div>
                 <div class="kpis" style="margin-top:16px">
                     <div class="kpi hero">
                         <div class="lbl">규제상 최대 가능 금액 (LTV 기준)</div>
@@ -3119,7 +3254,9 @@
                     "contractPaid": 69200000,
                     "midLoan": 415200000,
                     "balance": 207600000,
-                    "acqTaxRate": 1.5,
+                    "acqTaxRate": 1.73,
+                    "calcAutoAcqTax": true,
+                    "isFirstHome": true,
                     "optionCost": 31860000,
                     "moveCost": 30000000,
                     "extraCost": 0,
@@ -3128,7 +3265,7 @@
                     "useExtraTaxes": true,
                     "bondDiscount": 1500000,
                     "legalFee": 300000,
-                    "stampDuty": 150000,
+                    "stampDuty": 240000,
                     "moveInDeposit": 400000
           },
           "buckets": [
@@ -3595,6 +3732,8 @@
                     "manualAmount": 0,
                     "includeMidLoan": true,
                     "useStressDsr": true,
+                    "region": "non_metro",
+                    "rateType": "periodic",
                     "rate": 4,
                     "term": 30,
                     "grace": 0,
@@ -3605,7 +3744,7 @@
                     "ltv": 80,
                     "estValue": 692000000,
                     "deduction": 28000000,
-                    "useDeduction": true
+                    "useDeduction": false
           },
           "tax": {
                     "rate": 4,
@@ -3634,13 +3773,17 @@
             const base = defaults();
             d.goal = Object.assign({}, base.goal, d.goal || {});
             d.goal.useExtraTaxes = d.goal.useExtraTaxes !== false;
+            if (d.goal.calcAutoAcqTax === undefined) d.goal.calcAutoAcqTax = true;
+            if (d.goal.isFirstHome === undefined) d.goal.isFirstHome = true;
             if (d.goal.bondDiscount === undefined) d.goal.bondDiscount = 1500000;
             if (d.goal.legalFee === undefined) d.goal.legalFee = 300000;
-            if (d.goal.stampDuty === undefined) d.goal.stampDuty = 150000;
+            if (d.goal.stampDuty === undefined || d.goal.stampDuty === 150000) d.goal.stampDuty = 240000;
             if (d.goal.moveInDeposit === undefined) d.goal.moveInDeposit = 400000;
             d.loan = Object.assign({}, base.loan, d.loan || {});
             if (d.loan.includeMidLoan === undefined) d.loan.includeMidLoan = true;
             if (d.loan.useStressDsr === undefined) d.loan.useStressDsr = true;
+            if (d.loan.region === undefined) d.loan.region = "non_metro";
+            if (d.loan.rateType === undefined) d.loan.rateType = "periodic";
             if (d.loan.salaryH === 50000000) d.loan.salaryH = 100000000;
             if (d.loan.ltv === 70) d.loan.ltv = 80;
             d.buckets = Array.isArray(d.buckets) && d.buckets.length ? d.buckets : base.buckets;
@@ -4034,7 +4177,34 @@
         };
         // 실제 잔금 치룰 때 쓸 수 있는 가용 자산
         const usableAssets = () => Math.max(0, totalAssets() - lockedAssets());
-        const acqTax = () => Math.round((S.goal.totalPrice || 0) * (S.goal.acqTaxRate || 0) / 100);
+        // 2026 지방세법 제11조 1주택자 취득세 산출 (6~9억 누진구간 및 생애최초 200만원 감면)
+        function calcLegalAcqTax(totalPrice, optionCost, isFirstHome) {
+            const taxBase = (totalPrice || 0) + (optionCost || 0); // 분양가 + 옵션 과세표준
+            if (taxBase <= 0) return { taxBase: 0, rate: 0, baseTax: 0, eduTax: 0, grossTax: 0, reduction: 0, finalTax: 0 };
+            let rate = 0;
+            if (taxBase <= 600000000) {
+                rate = 1.0;
+            } else if (taxBase <= 900000000) {
+                // (과세표준 * 2 / 3억원 - 3)%
+                rate = (taxBase * 2 / 300000000) - 3;
+            } else {
+                rate = 3.0;
+            }
+            const baseTax = Math.round(taxBase * (rate / 100));
+            const eduTax = Math.round(baseTax * 0.1);
+            const grossTax = baseTax + eduTax;
+            const reduction = isFirstHome ? Math.min(grossTax, 2000000) : 0;
+            const finalTax = Math.max(0, grossTax - reduction);
+            return { taxBase, rate, baseTax, eduTax, grossTax, reduction, finalTax };
+        }
+
+        const acqTax = () => {
+            if (S.goal.calcAutoAcqTax !== false) {
+                const res = calcLegalAcqTax(S.goal.totalPrice, S.goal.optionCost, S.goal.isFirstHome !== false);
+                return res.finalTax;
+            }
+            return Math.round((S.goal.totalPrice || 0) * (S.goal.acqTaxRate || 0) / 100);
+        };
         const extraTaxes = () => S.goal.useExtraTaxes ? (S.goal.bondDiscount || 0) + (S.goal.legalFee || 0) + (S.goal.stampDuty || 0) + (S.goal.moveInDeposit || 0) : 0;
         const goalTotal = () => (S.goal.balance || 0) + acqTax() + (S.goal.optionCost || 0) + (S.goal.moveCost || 0) + (S.goal.extraCost || 0) + extraTaxes();
         const totalFundingNeed = () => (S.goal.totalPrice || 0) + acqTax() + (S.goal.optionCost || 0) + (S.goal.moveCost || 0) + (S.goal.extraCost || 0) + extraTaxes();
@@ -4856,11 +5026,21 @@
         }
 
         function renderGoal() {
+            const taxDetail = calcLegalAcqTax(S.goal.totalPrice, S.goal.optionCost, S.goal.isFirstHome !== false);
+
             document.querySelectorAll("[data-goal]").forEach(el => {
                 const k = el.dataset.goal, v = S.goal[k];
                 if (el.type === "month") el.value = v || "";
                 else if (el.type === "checkbox") el.checked = !!v;
-                else if (k === "acqTaxRate") el.value = v;
+                else if (k === "acqTaxRate") {
+                    if (S.goal.calcAutoAcqTax !== false) {
+                        el.value = taxDetail.rate.toFixed(2);
+                        el.disabled = true;
+                    } else {
+                        el.value = v;
+                        el.disabled = false;
+                    }
+                }
                 else el.value = won(v);
             });
             const taxWrap = document.getElementById("extraTaxesWrap");
@@ -4868,6 +5048,30 @@
 
             document.getElementById("g-balance").value = won(S.goal.balance);
             document.getElementById("g-tax").value = won(acqTax());
+
+            const taxRateTag = document.getElementById("g-taxRateTag");
+            if (taxRateTag) taxRateTag.textContent = S.goal.calcAutoAcqTax !== false ? "2026 법정 누진" : "직접 입력";
+
+            const gTaxTag = document.getElementById("g-tax-tag");
+            if (gTaxTag) gTaxTag.textContent = S.goal.calcAutoAcqTax !== false ? (S.goal.isFirstHome !== false ? "생애최초 -200만 반영" : "과세표준 연동") : "분양가 × 세율";
+
+            // 취득세 분석 카드 렌더링
+            const taxDescEl = document.getElementById("taxCalcDesc");
+            const taxBaseEl = document.getElementById("taxBaseVal");
+            if (taxBaseEl) taxBaseEl.textContent = kfmt(taxDetail.taxBase);
+            if (taxDescEl) {
+                if (S.goal.calcAutoAcqTax !== false) {
+                    taxDescEl.innerHTML = `과세표준 = 분양가(${kfmt(S.goal.totalPrice)}) + 옵션(${kfmt(S.goal.optionCost)}) = <b>${kfmt(taxDetail.taxBase)}</b><br>` +
+                        `지방세법 6~9억 사다리 누진세율: <b>${taxDetail.rate.toFixed(2)}%</b> (본세 ${kfmt(taxDetail.baseTax)} + 지방교육세 ${kfmt(taxDetail.eduTax)} = ${kfmt(taxDetail.grossTax)})<br>` +
+                        (S.goal.isFirstHome !== false
+                            ? `생애최초 주택구입 감면(지방세특례제한법 36조의3): <b style="color:var(--toss-blue);">-200만원</b> 적용 ➔ <b>실부담 취득세 ${kfmt(taxDetail.finalTax)} (${won(taxDetail.finalTax)}원)</b>`
+                            : `생애최초 감면 미적용 ➔ <b>납부 취득세 ${kfmt(taxDetail.finalTax)} (${won(taxDetail.finalTax)}원)</b>`);
+                } else {
+                    taxDescEl.innerHTML = `현재 수동 취득세율 <b>${S.goal.acqTaxRate}%</b> 적용 중입니다. (분양가 기준 ${kfmt(acqTax())})<br>` +
+                        `※ 2026 세법상 정확한 누진세율과 생애최초 200만원 감면을 적용하려면 상단 '2026 누진세율 자동계산'을 체크하세요.`;
+                }
+            }
+
             set("g-total", kfmt(goalTotal()) + "  (" + won(goalTotal()) + "원)");
             const sum = (S.goal.contractPaid || 0) + (S.goal.midLoan || 0) + (S.goal.balance || 0);
             const ok = sum === (S.goal.totalPrice || 0);
@@ -4879,6 +5083,14 @@
                 "계획한 <b>" + kfmt(c.plan) + "</b>으로는 " + (c.diff >= 0
                     ? "목표보다 <b style='color:var(--goodtext)'>" + kfmt(c.diff) + " 여유</b>가 생깁니다."
                     : "목표에 <b style='color:var(--crit)'>" + kfmt(-c.diff) + " 부족</b>합니다.");
+        }
+
+        function selectLoanType(type) {
+            S.loan.type = type;
+            const sel = document.querySelector('[data-loan="type"]');
+            if (sel) sel.value = type;
+            autosave();
+            renderLoan();
         }
 
         function renderLoan() {
@@ -4915,22 +5127,22 @@
             const L = N - G;
 
             let pmt1 = 0, totalInt = 0, avgPmt = 0;
-            const calcPmt = (rRate) => {
+            const calcPmtFor = (rRate, loanType) => {
                 let p1 = 0, tI = 0, aP = 0;
                 if (P > 0 && rRate > 0 && L > 0) {
-                    if (S.loan.type === "원리금균등") {
+                    if (loanType === "원리금균등") {
                         const pmt = P * rRate * Math.pow(1 + rRate, L) / (Math.pow(1 + rRate, L) - 1);
                         p1 = G === 0 ? pmt : P * rRate;
                         tI = (P * rRate * G) + (pmt * L - P);
                         aP = (P + tI) / N;
-                    } else if (S.loan.type === "원금균등") {
+                    } else if (loanType === "원금균등") {
                         const princ = P / L;
                         p1 = G === 0 ? princ + P * rRate : P * rRate;
                         let tempInt = 0;
                         for (let i = 0; i < L; i++) tempInt += (P - princ * i) * rRate;
                         tI = (P * rRate * G) + tempInt;
                         aP = (P + tI) / N;
-                    } else if (S.loan.type === "체증식") {
+                    } else if (loanType === "체증식") {
                         const inc = 0.005;
                         let factor = 0;
                         for (let i = 0; i < L; i++) factor += Math.pow(1 + inc, i) / Math.pow(1 + rRate, i + 1);
@@ -4953,8 +5165,26 @@
                 return { pmt1: p1, totalInt: tI, avgPmt: aP };
             };
 
-            const res = calcPmt(R);
+            const res = calcPmtFor(R, S.loan.type);
             pmt1 = res.pmt1; totalInt = res.totalInt; avgPmt = res.avgPmt;
+
+            // 3대 상환방식 한눈에 비교 미니 카드 값 및 활성화 갱신
+            const resChe = calcPmtFor(R, "체증식");
+            const resWonri = calcPmtFor(R, "원리금균등");
+            const resWon = calcPmtFor(R, "원금균등");
+
+            set("lc-first-che", won(resChe.pmt1) + "원");
+            set("lc-total-che", kfmt(resChe.totalInt));
+            set("lc-first-wonri", won(resWonri.pmt1) + "원");
+            set("lc-total-wonri", kfmt(resWonri.totalInt));
+            set("lc-first-won", won(resWon.pmt1) + "원");
+            set("lc-total-won", kfmt(resWon.totalInt));
+
+            document.querySelectorAll(".loan-type-card").forEach(c => {
+                const pick = c.dataset.loanPick;
+                const isActive = pick === S.loan.type;
+                c.classList.toggle("active", isActive);
+            });
 
             const pmtLbl = document.getElementById("l-pmt-lbl");
             if (pmtLbl) pmtLbl.textContent = G > 0 ? "거치기간 월 상환액 (이자만)" : "1회차 월 상환액";
@@ -4963,20 +5193,26 @@
             set("l-totalInt", kfmt(totalInt));
 
             const income = (S.loan.salaryH || 0) + (S.loan.salaryW || 0);
-            const annualMortgage = avgPmt * 12;
-            const dsr_basic = income > 0 ? (annualMortgage + (S.loan.otherDebt || 0)) / income * 100 : 0;
 
             const dsrBar = document.getElementById("dsrbar");
 
-            // DSR 계산용 금리 (스트레스 DSR 적용 시 +1.5%p 가산)
-            const dsrRate = S.loan.useStressDsr ? (S.loan.rate || 0) + 1.5 : (S.loan.rate || 0);
+            // 스트레스 DSR 3단계 가산폭 계산 (비수도권 지방 완화 + 금리유형별 차등)
+            const baseStress = (S.loan.region === "metro") ? 1.50 : 0.75;
+            let stressRatio = 0.3; // periodic default
+            if (S.loan.rateType === "fixed") stressRatio = 0;
+            else if (S.loan.rateType === "periodic") stressRatio = 0.3;
+            else if (S.loan.rateType === "mixed") stressRatio = 0.6;
+            else if (S.loan.rateType === "variable") stressRatio = 1.0;
+
+            const stressAdd = S.loan.useStressDsr ? (baseStress * stressRatio) : 0;
+            const dsrRate = (S.loan.rate || 0) + stressAdd;
             const R_dsr = dsrRate / 100 / 12;
-            const resDsr = calcPmt(R_dsr);
+            const resDsr = calcPmtFor(R_dsr, S.loan.type);
 
             const annualMortgageForDsr = resDsr.avgPmt * 12;
             const dsr = income > 0 ? (annualMortgageForDsr + (S.loan.otherDebt || 0)) / income * 100 : 0;
 
-            // DTI는 통상 실제 금리 기준 (기타대출은 원리금상환액을 그대로 사용하거나 이자만 사용하지만 보수적으로 합산)
+            // DTI는 실제 금리 기준
             const annualMortgageForDti = avgPmt * 12;
             const dti = income > 0 ? (annualMortgageForDti + (S.loan.otherDebt || 0)) / income * 100 : 0;
 
@@ -4985,9 +5221,9 @@
                 dsrBar.style.background = dsr > 40 ? "var(--crit)" : dsr > 30 ? "var(--warn)" : "var(--s1)";
             }
 
-            const dsrNote = S.loan.useStressDsr ? " (스트레스 3단계 반영)" : "";
-            set("dsr-l", "현재 DSR " + dsr.toFixed(1) + "%" + dsrNote);
-            set("dsr-r", "연간 상환액(DSR용) " + kfmt(annualMortgageForDsr + (S.loan.otherDebt || 0)));
+            const stressNote = S.loan.useStressDsr ? ` (스트레스 +${stressAdd.toFixed(2)}%p 가산)` : "";
+            set("dsr-l", "현재 DSR " + dsr.toFixed(1) + "%" + stressNote);
+            set("dsr-r", "연간 상환액(DSR 심사용) " + kfmt(annualMortgageForDsr + (S.loan.otherDebt || 0)));
 
             set("dti-l", "현재 DTI " + dti.toFixed(1) + "%" + (dti > 60 ? " (60% 초과 주의!)" : ""));
 
@@ -4999,11 +5235,11 @@
             set("l-maxLtv", kfmt(maxLoan));
             const ltvNote = P > maxLoan
                 ? "<span class='pill bad'>목표 대출금(" + kfmt(P) + ") 한도 초과</span>"
-                : "<span class='pill ok'>대출 한도 내 가능</span>";
+                : "<span class='pill ok'>대출 한도 내 가능 (여유 " + kfmt(maxLoan - P) + ")</span>";
             const noteEl = document.getElementById("l-maxLtv-note");
             if (noteEl) noteEl.innerHTML = ltvNote;
 
-            drawLoanChart(P, S.loan.rate || 0, calcPmt);
+            drawLoanChart(P, S.loan.rate || 0, (r) => calcPmtFor(r, S.loan.type));
         }
 
         function drawLoanChart(P, baseRate, calcFn) {
@@ -5982,7 +6218,7 @@
 
             if (el.dataset && el.dataset.goal) {
                 const k = el.dataset.goal;
-                S.goal[k] = el.type === "checkbox" ? el.checked : (el.type === "month" ? el.value : parseNum(el.value));
+                S.goal[k] = el.type === "checkbox" ? el.checked : (el.type === "month" ? el.value : (k === "acqTaxRate" ? (parseFloat(el.value) || 0) : parseNum(el.value)));
                 if (k === "totalPrice" || k === "contractPaid" || k === "midLoan") {
                     const auto = (S.goal.totalPrice || 0) - (S.goal.contractPaid || 0) - (S.goal.midLoan || 0);
                     if (auto >= 0) S.goal.balance = auto;
