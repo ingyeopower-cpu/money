@@ -2687,8 +2687,8 @@
                     <div class="field"><label>취득세율 (%) <span class="tag" id="g-taxRateTag">2026 법정 누진</span></label><input class="num" data-goal="acqTaxRate" id="g-acqTaxRate"></div>
                     <div class="field"><label>취득세 <span class="tag" id="g-tax-tag">과세표준 연동</span></label><input class="num" id="g-tax"
                             disabled></div>
-                    <div class="field"><label>발코니 확장 · 옵션 잔금</label><input class="num" data-goal="optionCost"></div>
-                    <div class="field"><label>이사 · 인테리어 · 가전가구</label><input class="num" data-goal="moveCost"></div>
+                    <div class="field"><label>발코니 확장비</label><input class="num" data-goal="optionCost"></div>
+                    <div class="field"><label>가전가구 · 옵션 · 이사비</label><input class="num" data-goal="moveCost"></div>
                     <div class="field"><label>기타 예비비</label><input class="num" data-goal="extraCost"></div>
                 </div>
 
@@ -2698,12 +2698,12 @@
                         <span style="font-weight:750; color:var(--toss-blue); display:flex; align-items:center; gap:5px;">
                             🏛 2026 지방세법 취득세 과세표준 분석
                         </span>
-                        <span style="font-weight:800; font-size:13.5px; color:var(--ink);" id="taxBaseVal">7억 2,386만원</span>
+                        <span style="font-weight:800; font-size:13.5px; color:var(--ink);" id="taxBaseVal">7억 1,600만원</span>
                     </div>
                     <div style="font-size:11.8px; color:var(--ink2); line-height:1.6;" id="taxCalcDesc">
-                        과세표준 = 분양가(6.92억) + 옵션가액(3,186만) = <b>7억 2,386만원</b><br>
-                        6~9억 사다리 법정 누진세율: <b>1.83%</b> (본세 1,322만원 + 지방교육세 132만원 = 1,454만원)<br>
-                        생애최초 주택구입 감면(지방세특례제한법 36조의3): <b style="color:var(--toss-blue);">-200만원</b> 적용 ➔ <b>실부담 취득세 1,254만원</b>
+                        과세표준 = 분양가(6.92억) + 발코니(2,400만) = <b>7억 1,600만원</b><br>
+                        6~9억 사다리 법정 누진세율: <b>1.77%</b> (본세 1,270만원 + 지방교육세 127만원 = 1,397만원)<br>
+                        생애최초 주택구입 감면(지방세특례제한법 36조의3): <b style="color:var(--toss-blue);">-200만원</b> 적용 ➔ <b>실부담 취득세 1,197만원</b>
                     </div>
                 </div>
 
@@ -3276,7 +3276,7 @@
                     "acqTaxRate": 1.73,
                     "calcAutoAcqTax": true,
                     "isFirstHome": true,
-                    "optionCost": 31860000,
+                    "optionCost": 24000000,
                     "moveCost": 30000000,
                     "extraCost": 0,
                     "targetMonth": "2028-05",
@@ -3793,6 +3793,8 @@
             d.goal.useExtraTaxes = d.goal.useExtraTaxes !== false;
             if (d.goal.calcAutoAcqTax === undefined) d.goal.calcAutoAcqTax = true;
             if (d.goal.isFirstHome === undefined) d.goal.isFirstHome = true;
+            if (d.goal.optionCost === 31860000 || d.goal.optionCost === undefined) d.goal.optionCost = 24000000;
+            if (d.goal.moveCost === undefined) d.goal.moveCost = 30000000;
             if (d.goal.bondDiscount === undefined) d.goal.bondDiscount = 1500000;
             if (d.goal.legalFee === undefined) d.goal.legalFee = 300000;
             if (d.goal.stampDuty === undefined || d.goal.stampDuty === 150000) d.goal.stampDuty = 240000;
@@ -5080,7 +5082,7 @@
             if (taxBaseEl) taxBaseEl.textContent = kfmt(taxDetail.taxBase);
             if (taxDescEl) {
                 if (S.goal.calcAutoAcqTax !== false) {
-                    taxDescEl.innerHTML = `과세표준 = 분양가(${kfmt(S.goal.totalPrice)}) + 옵션(${kfmt(S.goal.optionCost)}) = <b>${kfmt(taxDetail.taxBase)}</b><br>` +
+                    taxDescEl.innerHTML = `과세표준 = 분양가(${kfmt(S.goal.totalPrice)}) + 발코니(${kfmt(S.goal.optionCost)}) = <b>${kfmt(taxDetail.taxBase)}</b><br>` +
                         `지방세법 6~9억 사다리 누진세율: <b>${taxDetail.rate.toFixed(2)}%</b> (본세 ${kfmt(taxDetail.baseTax)} + 지방교육세 ${kfmt(taxDetail.eduTax)} = ${kfmt(taxDetail.grossTax)})<br>` +
                         (S.goal.isFirstHome !== false
                             ? `생애최초 주택구입 감면(지방세특례제한법 36조의3): <b style="color:var(--toss-blue);">-200만원</b> 적용 ➔ <b>실부담 취득세 ${kfmt(taxDetail.finalTax)} (${won(taxDetail.finalTax)}원)</b>`
