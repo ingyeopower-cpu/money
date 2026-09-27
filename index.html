@@ -2973,6 +2973,34 @@
 
     </div>
 
+    <!-- 모바일 하단 내비게이션 바 (Toss Modern Dock) -->
+    <nav class="mobile-bottom-dock" aria-label="하단 빠른 내비게이션">
+        <button class="dock-item active" data-tab="dash" onclick="switchTab('dash')" aria-label="대시보드">
+            <span class="dock-icon">🏠</span>
+            <span class="dock-label">대시보드</span>
+        </button>
+        <button class="dock-item" data-tab="assets" onclick="switchTab('assets')" aria-label="자산">
+            <span class="dock-icon">💎</span>
+            <span class="dock-label">자산</span>
+        </button>
+        <button class="dock-item" data-tab="goal" onclick="switchTab('goal')" aria-label="목표">
+            <span class="dock-icon">🎯</span>
+            <span class="dock-label">목표</span>
+        </button>
+        <button class="dock-item" data-tab="flow" onclick="switchTab('flow')" aria-label="저축">
+            <span class="dock-icon">💰</span>
+            <span class="dock-label">저축</span>
+        </button>
+        <button class="dock-item" data-tab="loan" onclick="switchTab('loan')" aria-label="대출">
+            <span class="dock-icon">📐</span>
+            <span class="dock-label">대출</span>
+        </button>
+        <button class="dock-item" data-tab="log" onclick="switchTab('log')" aria-label="기록">
+            <span class="dock-icon">📋</span>
+            <span class="dock-label">기록</span>
+        </button>
+    </nav>
+
     <!-- 수동 시세 입력 모달 -->
     <div class="modal" id="priceModal">
         <div class="box">
@@ -4921,8 +4949,8 @@
 
         function drawLoanChart(P, baseRate, calcFn) {
             const svg = document.getElementById("chartLoan");
-            if (!svg) return;
-            const cw = svg.parentElement.clientWidth;
+            if (!svg || !svg.parentElement) return;
+            const cw = svg.parentElement.clientWidth || 340;
             const W = Math.max(340, cw > 0 ? cw - 4 : 340), H = 180;
             const pad = { t: 16, r: 20, b: 24, l: 60 };
             svg.setAttribute("width", W); svg.setAttribute("viewBox", "0 0 " + W + " " + H);
@@ -5090,7 +5118,8 @@
         }
         function drawProjection(c) {
             const svg = document.getElementById("chartProj");
-            const W = Math.max(340, svg.parentElement.clientWidth - 4), H = 260;
+            if (!svg || !svg.parentElement) return;
+            const W = Math.max(340, (svg.parentElement.clientWidth || 340) - 4), H = 260;
             const P = { t: 18, r: W < 560 ? 14 : 16, b: 36, l: W < 560 ? 54 : 70 };
             svg.setAttribute("width", W); svg.setAttribute("viewBox", "0 0 " + W + " " + H);
             const iw = W - P.l - P.r, ih = H - P.t - P.b;
@@ -5172,7 +5201,9 @@
         }
         function drawDonut(rows, total) {
             const svg = document.getElementById("chartComp");
-            const wrapW = svg.parentElement.parentElement.clientWidth;
+            if (!svg || !svg.parentElement) return;
+            const wrapEl = svg.parentElement.parentElement || svg.parentElement;
+            const wrapW = wrapEl.clientWidth || 300;
             const size = Math.max(200, Math.min(300, wrapW < 420 ? wrapW - 32 : 280));
             const cx = size / 2, cy = size / 2, rOuter = size / 2 - 6, rInner = rOuter * 0.62, rMid = (rOuter + rInner) / 2, ringW = rOuter - rInner;
             svg.setAttribute("width", size); svg.setAttribute("height", size); svg.setAttribute("viewBox", "0 0 " + size + " " + size);
@@ -5199,14 +5230,17 @@
             g += '<text x="' + cx + '" y="' + (cy + 16) + '" text-anchor="middle" font-size="17" font-weight="700" fill="' + css("--ink") + '">' + kfmt(total) + '</text>';
             svg.innerHTML = g;
 
-            const lg = document.getElementById("compLegend"); lg.innerHTML = "";
-            rows.forEach(r => {
-                const pct = total > 0 ? (r.amt / total * 100) : 0;
-                const row = document.createElement("div"); row.className = "row";
-                row.innerHTML = '<i class="dot" style="background:' + r.color + '"></i><span class="nm">' + esc(r.name) + '</span>' +
-                    '<span class="amt">' + kfmt(r.amt) + '</span><span class="pct">' + pct.toFixed(1) + '%</span>';
-                lg.appendChild(row);
-            });
+            const lg = document.getElementById("compLegend");
+            if (lg) {
+                lg.innerHTML = "";
+                rows.forEach(r => {
+                    const pct = total > 0 ? (r.amt / total * 100) : 0;
+                    const row = document.createElement("div"); row.className = "row";
+                    row.innerHTML = '<i class="dot" style="background:' + r.color + '"></i><span class="nm">' + esc(r.name) + '</span>' +
+                        '<span class="amt">' + kfmt(r.amt) + '</span><span class="pct">' + pct.toFixed(1) + '%</span>';
+                    lg.appendChild(row);
+                });
+            }
         }
 
         /* ==================== 주식형 일간 시계열 차트 모듈 (환율 & 자산 변동) ==================== */
@@ -5846,6 +5880,9 @@
 
         /* ---------- 이벤트 ---------- */
         document.querySelectorAll(".tab").forEach(t => {
+            t.addEventListener("click", () => switchTab(t.dataset.tab));
+        });
+        document.querySelectorAll(".dock-item").forEach(t => {
             t.addEventListener("click", () => switchTab(t.dataset.tab));
         });
 
