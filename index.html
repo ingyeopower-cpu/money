@@ -1422,165 +1422,182 @@
             color: var(--ink2);
             font-variant-numeric: tabular-nums;
         }
-        .hold-card {
+        /* ============ 초슬림 주식앱 스타일 리스트 ============ */
+        .stock-list-container {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 15px 16px;
-            margin-bottom: 10px;
+            overflow: hidden;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            margin-bottom: 14px;
         }
-        .hold-card:hover {
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+        .stock-item-wrap {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s ease;
         }
-        .hold-card-top {
+        .stock-item-wrap:last-child {
+            border-bottom: none;
+        }
+        .stock-item {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 12px;
+            padding: 10px 14px;
+            cursor: pointer;
+            user-select: none;
+            gap: 8px;
+            transition: background 0.12s ease;
         }
-        .hold-card-name-wrap {
+        .stock-item:hover, .stock-item:active {
+            background: rgba(49, 130, 246, 0.04);
+        }
+        :root[data-theme="dark"] .stock-item:hover, :root[data-theme="dark"] .stock-item:active {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .stock-item-left {
             min-width: 0;
             flex: 1;
         }
-        .hold-card-name {
-            font-size: 15.5px;
+        .stock-item-name-row {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+            line-height: 1.25;
+        }
+        .stock-item-name {
+            font-size: 14.5px;
             font-weight: 750;
             color: var(--ink);
             letter-spacing: -0.01em;
             word-break: keep-all;
-            line-height: 1.3;
         }
-        .hold-card-badges {
+        .stock-item-sub {
+            font-size: 11.5px;
+            color: var(--muted);
+            margin-top: 3px;
+            font-variant-numeric: tabular-nums;
             display: flex;
             align-items: center;
             gap: 5px;
-            margin-top: 5px;
             flex-wrap: wrap;
         }
-        .hold-badge {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 2px 7px;
-            border-radius: 6px;
-            background: var(--chip);
-            color: var(--ink2);
-        }
-        .hold-badge.ticker {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-weight: 700;
-            background: #eef2f6;
-            color: #4b5563;
-        }
-        :root[data-theme="dark"] .hold-badge.ticker {
-            background: #232936;
-            color: #9ca3af;
-        }
-        .hold-badge.account {
-            background: var(--toss-blue-light);
-            color: var(--toss-blue);
-            font-weight: 700;
-        }
-        .hold-badge.woori {
-            background: rgba(239, 68, 68, 0.1);
-            color: #e11d48;
-            font-weight: 700;
-        }
-        .hold-badge.usd {
-            background: rgba(16, 185, 129, 0.1);
-            color: #059669;
-            font-weight: 700;
-        }
-        .hold-card-val-wrap {
+        .stock-item-right {
             text-align: right;
             flex-shrink: 0;
         }
-        .hold-card-val {
-            font-size: 16px;
+        .stock-item-val {
+            font-size: 14.5px;
             font-weight: 800;
             color: var(--ink);
             font-variant-numeric: tabular-nums;
+            letter-spacing: -0.01em;
         }
-        .hold-card-pl {
-            font-size: 12.5px;
+        .stock-item-pl {
+            font-size: 12px;
             font-weight: 700;
-            margin-top: 3px;
+            margin-top: 2px;
             font-variant-numeric: tabular-nums;
         }
-        .hold-card-pl.gain {
-            color: #f04452;
-        }
-        .hold-card-pl.loss {
-            color: #3182f6;
-        }
-        .hold-card-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            background: var(--chip);
-            border-radius: 12px;
-            padding: 10px 12px;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-        @media (max-width: 480px) {
-            .hold-card-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px 12px;
-            }
-        }
-        .hold-card-col {
-            display: flex;
-            flex-direction: column;
-        }
-        .hold-card-lbl {
-            font-size: 11px;
+        .stock-item-pl.gain { color: #f04452; }
+        .stock-item-pl.loss { color: #3182f6; }
+        .stock-item-arrow {
             color: var(--muted);
-            margin-bottom: 2px;
-            font-weight: 500;
-        }
-        .hold-card-data {
             font-size: 13px;
-            font-weight: 700;
-            color: var(--ink);
-            font-variant-numeric: tabular-nums;
+            margin-left: 2px;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
         }
-        .hold-card-actions {
+
+        .acc-chip {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 4px;
+            display: inline-block;
+            line-height: 1.3;
+        }
+        .acc-chip.isa {
+            background: rgba(16, 185, 129, 0.12);
+            color: #059669;
+        }
+        .acc-chip.normal {
+            background: var(--toss-blue-light);
+            color: var(--toss-blue);
+        }
+        .acc-chip.woori {
+            background: rgba(239, 68, 68, 0.12);
+            color: #e11d48;
+        }
+
+        /* 그룹 헤더 (아코디언 토글) */
+        .hold-group-section {
+            margin-bottom: 16px;
+        }
+        .hold-group-header.clickable {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid var(--border);
-            padding-top: 10px;
-            gap: 8px;
-        }
-        .hold-card-edit-btn {
-            font-size: 12.5px;
-            font-weight: 600;
-            padding: 6px 12px;
-            border-radius: 8px;
+            padding: 9px 13px;
             background: var(--chip);
-            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 13.5px;
             color: var(--ink);
+            border: 1px solid var(--border);
             cursor: pointer;
-            transition: all 0.15s ease;
+            user-select: none;
+            transition: background 0.15s ease;
         }
-        .hold-card-edit-btn:hover {
-            background: var(--border);
+        .hold-group-header.clickable:hover {
+            opacity: 0.9;
         }
-        .hold-card-edit-drawer {
+        .hold-group-toggle-icon {
+            font-size: 12px;
+            color: var(--toss-blue);
+            font-weight: 700;
+            margin-left: 5px;
+        }
+        .hold-group-sub {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--ink2);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* 인라인 상세/편집 아코디언 */
+        .stock-detail-drawer {
             display: none;
-            margin-top: 12px;
-            padding-top: 14px;
+            background: var(--chip);
+            padding: 12px;
             border-top: 1px dashed var(--border);
         }
-        .hold-card-edit-drawer.open {
+        .stock-detail-drawer.open {
             display: block;
+        }
+        .sub-holding-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 11px 12px;
+            margin-bottom: 8px;
+        }
+        .sub-holding-card:last-child {
+            margin-bottom: 0;
+        }
+        .sub-holding-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border);
         }
         .hold-edit-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 8px;
         }
         @media (max-width: 480px) {
             .hold-edit-grid {
@@ -1590,19 +1607,19 @@
         .hold-field-item {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
         .hold-field-item label {
-            font-size: 11.5px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--ink2);
         }
         .hold-field-item input,
         .hold-field-item select {
             width: 100%;
-            padding: 8px 10px;
+            padding: 7px 9px;
             border-radius: 8px;
-            font-size: 13px;
+            font-size: 12.5px;
             box-sizing: border-box;
         }
 
@@ -3032,35 +3049,42 @@
                 </div>
             </div>
 
-            <div class="card">
-                <div class="sec-actions">
+            <div class="card" id="bucketCard">
+                <div class="sec-actions" style="cursor:pointer;" onclick="toggleBucketCard()">
                     <div>
-                        <h2 style="margin:0">자산 항목</h2>
-                        <div class="sub">이름·금액을 바로 고칠 수 있고, 항목을 추가·삭제할 수 있습니다</div>
+                        <h2 style="margin:0;display:flex;align-items:center;gap:8px;">
+                            <span>📁 자산 항목</span>
+                            <span id="bucketToggleIcon" style="font-size:13px;color:var(--toss-blue);font-weight:700;">▸ 펼치기</span>
+                        </h2>
+                        <div class="sub" id="bucketCardSub">총자산: 계산 중… (터치하여 펼치기)</div>
                     </div>
-                    <button class="sm" id="btnAddBucket">+ 항목 추가</button>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <button class="sm" id="btnAddBucket">+ 항목 추가</button>
+                    </div>
                 </div>
-                <div class="tablewrap" style="overflow-x:auto;">
-                    <table class="bucket-table" style="width:100%; min-width:320px;">
-                        <thead>
-                            <tr>
-                                <th>항목명</th>
-                                <th style="width:115px;">유형</th>
-                                <th class="num" style="width:130px;">금액(원)</th>
-                                <th style="width:48px;"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="bucketBody"></tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="2">총자산</td>
-                                <td class="num" id="bucketTotal"></td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                <div id="bucketWrap" style="display:none;margin-top:14px;">
+                    <div class="tablewrap" style="overflow-x:auto;">
+                        <table class="bucket-table" style="width:100%; min-width:320px;">
+                            <thead>
+                                <tr>
+                                    <th>항목명</th>
+                                    <th style="width:115px;">유형</th>
+                                    <th class="num" style="width:130px;">금액(원)</th>
+                                    <th style="width:48px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="bucketBody"></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">총자산</td>
+                                    <td class="num" id="bucketTotal"></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="hint">‘주식 계좌’ 유형의 금액은 위 보유 종목 평가액으로 자동 계산되어 직접 입력할 수 없습니다.</div>
                 </div>
-                <div class="hint">‘주식 계좌’ 유형의 금액은 위 보유 종목 평가액으로 자동 계산되어 직접 입력할 수 없습니다.</div>
             </div>
         </section>
 
@@ -5336,7 +5360,9 @@
         }
 
         let holdViewMode = localStorage.getItem("holdViewMode") || "card";
-        let openStockEditIds = new Set();
+        let isBucketCardOpen = localStorage.getItem("isBucketCardOpen") === "true"; // default false (기본값 접어둠)
+        let collapsedGroupOwners = new Set(JSON.parse(localStorage.getItem("collapsedGroupOwners") || "[]"));
+        let openStockDrawerKeys = new Set();
 
         function setHoldViewMode(mode) {
             holdViewMode = mode;
@@ -5363,17 +5389,42 @@
             }
         }
 
-        function toggleStockEdit(id) {
-            if (openStockEditIds.has(id)) {
-                openStockEditIds.delete(id);
+        function toggleHoldGroup(owner) {
+            if (collapsedGroupOwners.has(owner)) {
+                collapsedGroupOwners.delete(owner);
             } else {
-                openStockEditIds.add(id);
+                collapsedGroupOwners.add(owner);
             }
-            const drawer = document.getElementById("hold-drawer-" + id);
-            const btn = document.getElementById("hold-btn-edit-" + id);
-            const isOpen = openStockEditIds.has(id);
+            localStorage.setItem("collapsedGroupOwners", JSON.stringify([...collapsedGroupOwners]));
+            renderAssets();
+        }
+
+        function toggleStockDrawer(key) {
+            if (openStockDrawerKeys.has(key)) {
+                openStockDrawerKeys.delete(key);
+            } else {
+                openStockDrawerKeys.add(key);
+            }
+            const drawer = document.getElementById("hold-drawer-" + key);
+            const arrow = document.getElementById("arrow-" + key);
+            const isOpen = openStockDrawerKeys.has(key);
             if (drawer) drawer.classList.toggle("open", isOpen);
-            if (btn) btn.innerHTML = isOpen ? "▲ 접기" : "✏️ 빠른 수정";
+            if (arrow) arrow.textContent = isOpen ? "▴" : "▾";
+        }
+
+        function toggleBucketCard() {
+            isBucketCardOpen = !isBucketCardOpen;
+            localStorage.setItem("isBucketCardOpen", isBucketCardOpen ? "true" : "false");
+            updateBucketCardUI();
+        }
+
+        function updateBucketCardUI() {
+            const wrap = document.getElementById("bucketWrap");
+            const icon = document.getElementById("bucketToggleIcon");
+            const sub = document.getElementById("bucketCardSub");
+            if (wrap) wrap.style.display = isBucketCardOpen ? "block" : "none";
+            if (icon) icon.textContent = isBucketCardOpen ? "▾ 접기" : "▸ 펼치기";
+            if (sub) sub.textContent = "총자산: " + won(totalAssets()) + "원 (터치하여 " + (isBucketCardOpen ? "접기" : "펼치기") + ")";
         }
 
         function renderAssets() {
@@ -5388,9 +5439,9 @@
             const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
 
             const groups = [
-                { title: "👩 아내 계좌", items: [] },
-                { title: "🧑 남편 계좌", items: [] },
-                { title: "⚪ 미지정", items: [] }
+                { owner: "아내", title: "👩 아내 계좌", items: [] },
+                { owner: "남편", title: "🧑 남편 계좌", items: [] },
+                { owner: "", title: "⚪ 미지정", items: [] }
             ];
             S.holdings.forEach(h => {
                 if (h.owner === "아내") groups[0].items.push(h);
@@ -5406,13 +5457,16 @@
             const totalPlCls = totalPL > 0 ? "gain" : totalPL < 0 ? "loss" : "";
             const totalPlTxt = totalCost > 0 ? (totalPL >= 0 ? "+" : "") + won(totalPL) + "원 (" + (totalPL >= 0 ? "+" : "") + totalPlPct.toFixed(1) + "%)" : "—";
 
-            // 1. 카드 뷰 상단 서머리 헤로 렌더링
+            // 고유 종목 수 계산
+            const allUniqueKeys = new Set(S.holdings.map(h => (h.code || "").trim().toUpperCase() || (h.name || "").trim().replace(/\s+/g, "").toUpperCase() || h.id));
+
+            // 1. 카드 뷰 상단 서머리 헤로
             if (cl) {
                 const hero = document.createElement("div");
                 hero.className = "hold-summary-hero";
                 hero.innerHTML =
                     '<div>' +
-                        '<div class="hold-summary-title">보유 주식 총 평가액 (' + S.holdings.length + '개 종목)</div>' +
+                        '<div class="hold-summary-title">보유 주식 총 평가액 (' + allUniqueKeys.size + '개 종목 · ' + S.holdings.length + '건)</div>' +
                         '<div class="hold-summary-val">' + won(totalStockVal) + '원</div>' +
                     '</div>' +
                     '<div class="hold-summary-pl-wrap">' +
@@ -5432,48 +5486,33 @@
                 }
             }
 
-            // 2. 그룹별 렌더링 (테이블 뷰 & 카드 뷰 동시 생성)
+            // 2. 그룹별 렌더링
             groups.forEach(g => {
                 if (g.items.length === 0) return;
                 g.items.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-                // 카드 뷰 그룹 컨테이너
-                let groupSec = null;
-                if (cl) {
-                    groupSec = document.createElement("div");
-                    groupSec.className = "hold-group-section";
-                }
+                let gValue = 0, gCost = 0;
 
-                // 테이블 뷰 그룹 헤더
+                // A. 테이블 뷰 (표로 보기)
                 if (hb) {
                     const sep = document.createElement("tr");
                     sep.innerHTML = '<td colspan="13" style="background:var(--chip); font-weight:600; font-size:13px; color:var(--ink2); padding:8px 12px; border-bottom:1px solid var(--grid);">' + g.title + '</td>';
                     hb.appendChild(sep);
-                }
 
-                let gValue = 0, gCost = 0;
-                const cardNodes = [];
+                    g.items.forEach((h, idx) => {
+                        const rate = h.isUsd ? fxRate : 1;
+                        const value = (h.qty || 0) * (h.price || 0) * rate;
+                        const cost = (h.qty || 0) * (h.avgPrice || 0) * rate;
+                        const pl = value - cost;
+                        const plPct = cost > 0 ? (pl / cost * 100) : 0;
+                        gValue += value;
+                        gCost += cost;
 
-                g.items.forEach((h, idx) => {
-                    const rate = h.isUsd ? fxRate : 1;
-                    const value = (h.qty || 0) * (h.price || 0) * rate;
-                    const cost = (h.qty || 0) * (h.avgPrice || 0) * rate;
-                    const pl = value - cost;
-                    const plPct = cost > 0 ? (pl / cost * 100) : 0;
-                    gValue += value;
-                    gCost += cost;
+                        const plCls = pl > 0 ? "gain" : pl < 0 ? "loss" : "";
+                        const plTxt = cost > 0 ? (pl >= 0 ? "+" : "") + won(pl) + " (" + (pl >= 0 ? "+" : "") + plPct.toFixed(1) + "%)" : "—";
+                        const isFirst = idx === 0, isLast = idx === g.items.length - 1;
+                        const isWoori = h.account === "우리사주" || h.excludeFromGoal;
 
-                    const plCls = pl > 0 ? "gain" : pl < 0 ? "loss" : "";
-                    const plTxt = cost > 0 ? (pl >= 0 ? "+" : "") + won(pl) + " (" + (pl >= 0 ? "+" : "") + plPct.toFixed(1) + "%)" : "—";
-                    const isFirst = idx === 0, isLast = idx === g.items.length - 1;
-                    const isWoori = h.account === "우리사주" || h.excludeFromGoal;
-                    const displayPrice = h.isUsd ? '$' + usd(h.price) : won(h.price) + '원';
-                    const displayAvgPrice = h.isUsd ? '$' + usd(h.avgPrice) : won(h.avgPrice) + '원';
-                    const divYieldText = (h.divYield && h.divYield > 0) ? (h.divYield + '%') : '—';
-                    const isOpen = openStockEditIds.has(h.id);
-
-                    // A. 테이블 뷰 tr
-                    if (hb) {
                         const tr = document.createElement("tr");
                         tr.innerHTML =
                             '<td><input value="' + esc(h.name) + '" data-h="' + h.id + '" data-f="name" style="width:100%">' +
@@ -5501,119 +5540,14 @@
                             '<td style="width:54px;white-space:nowrap"><button class="sm" data-moveh="' + h.id + '" data-dir="-1" title="위로"' + (isFirst ? ' disabled' : '') + '>▲</button><button class="sm" data-moveh="' + h.id + '" data-dir="1" title="아래로"' + (isLast ? ' disabled' : '') + '>▼</button></td>' +
                             '<td style="width:58px"><button class="sm danger" data-delh="' + h.id + '">삭제</button></td>';
                         hb.appendChild(tr);
-                    }
+                    });
 
-                    // B. 카드 뷰 Card
-                    if (cl) {
-                        const card = document.createElement("div");
-                        card.className = "hold-card";
-                        card.innerHTML =
-                            '<div class="hold-card-top">' +
-                                '<div class="hold-card-name-wrap">' +
-                                    '<div class="hold-card-name">' + esc(h.name || "미지정 종목") + '</div>' +
-                                    '<div class="hold-card-badges">' +
-                                        (h.code ? '<span class="hold-badge ticker">' + esc(h.code) + '</span>' : '') +
-                                        (h.account ? '<span class="hold-badge account">' + esc(h.account) + '</span>' : '') +
-                                        (isWoori ? '<span class="hold-badge woori">🔒 잔금제외 자산</span>' : '') +
-                                        (h.isUsd ? '<span class="hold-badge usd">USD($)</span>' : '') +
-                                    '</div>' +
-                                '</div>' +
-                                '<div class="hold-card-val-wrap">' +
-                                    '<div class="hold-card-val">' + won(value) + '원</div>' +
-                                    '<div class="hold-card-pl ' + plCls + '">' + plTxt + '</div>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="hold-card-grid">' +
-                                '<div class="hold-card-col">' +
-                                    '<span class="hold-card-lbl">보유 수량</span>' +
-                                    '<span class="hold-card-data">' + won(h.qty) + '주</span>' +
-                                '</div>' +
-                                '<div class="hold-card-col">' +
-                                    '<span class="hold-card-lbl">현재 종가</span>' +
-                                    '<span class="hold-card-data">' + displayPrice + '</span>' +
-                                '</div>' +
-                                '<div class="hold-card-col">' +
-                                    '<span class="hold-card-lbl">매수 평단</span>' +
-                                    '<span class="hold-card-data">' + displayAvgPrice + '</span>' +
-                                '</div>' +
-                                '<div class="hold-card-col">' +
-                                    '<span class="hold-card-lbl">연 배당률</span>' +
-                                    '<span class="hold-card-data" style="color:var(--toss-blue);">' + divYieldText + '</span>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="hold-card-actions">' +
-                                '<button type="button" class="hold-card-edit-btn" id="hold-btn-edit-' + h.id + '" onclick="toggleStockEdit(\'' + h.id + '\')">' +
-                                    (isOpen ? '▲ 접기' : '✏️ 빠른 수정') +
-                                '</button>' +
-                                '<div style="display:flex;align-items:center;gap:6px;">' +
-                                    '<button class="sm" data-moveh="' + h.id + '" data-dir="-1" title="위로"' + (isFirst ? ' disabled' : '') + '>▲</button>' +
-                                    '<button class="sm" data-moveh="' + h.id + '" data-dir="1" title="아래로"' + (isLast ? ' disabled' : '') + '>▼</button>' +
-                                    '<button class="sm danger" data-delh="' + h.id + '">삭제</button>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="hold-card-edit-drawer ' + (isOpen ? 'open' : '') + '" id="hold-drawer-' + h.id + '">' +
-                                '<div class="hold-edit-grid">' +
-                                    '<div class="hold-field-item">' +
-                                        '<label>종목명</label>' +
-                                        '<input value="' + esc(h.name) + '" data-h="' + h.id + '" data-f="name">' +
-                                    '</div>' +
-                                    '<div class="hold-field-item">' +
-                                        '<label>티커 코드</label>' +
-                                        '<input value="' + esc(h.code) + '" data-h="' + h.id + '" data-f="code" placeholder="예: 005930, AAPL">' +
-                                    '</div>' +
-                                    '<div class="hold-field-item">' +
-                                        '<label>계좌 구분</label>' +
-                                        '<select data-h="' + h.id + '" data-f="account">' +
-                                            ACCOUNTS.map(a => '<option value="' + a + '"' + (a === (h.account || "") ? ' selected' : '') + '>' + (a || '미지정') + '</option>').join('') +
-                                        '</select>' +
-                                    '</div>' +
-                                    '<div class="hold-field-item">' +
-                                        '<label>소유자</label>' +
-                                        '<select data-h="' + h.id + '" data-f="owner">' +
-                                            OWNERS.map(o => '<option value="' + o + '"' + (o === (h.owner || "") ? ' selected' : '') + '>' + (o || '미지정') + '</option>').join('') +
-                                        '</select>' +
-                                    '</div>' +
-                                    '<div class="hold-field-item">' +
-                                        '<label>소속 항목</label>' +
-                                        '<select data-h="' + h.id + '" data-f="bucketId">' +
-                                            stockBuckets.map(b => '<option value="' + b.id + '"' + (b.id === h.bucketId ? ' selected' : '') + '>' + esc(b.name) + '</option>').join('') +
-                                        '</select>' +
-                                    '</div>' +
-                                    '<div class="hold-field-item">' +
-                                        '<label>보유 수량</label>' +
-                                        '<input class="num" value="' + won(h.qty) + '" data-h="' + h.id + '" data-f="qty">' +
-                                    '</div>' +
-                                    '<div class="hold-field-item">' +
-                                        '<label style="display:flex;justify-content:space-between;align-items:center;">' +
-                                            '<span>매수 평단가</span>' +
-                                            '<label style="cursor:pointer;display:inline-flex;align-items:center;gap:3px;font-size:11.5px;color:var(--toss-blue);font-weight:700;">' +
-                                                '<input type="checkbox" data-h="' + h.id + '" data-f="isUsd" ' + (h.isUsd ? 'checked' : '') + ' style="width:auto;"> 달러($)' +
-                                            '</label>' +
-                                        '</label>' +
-                                        '<input class="num" value="' + (h.isUsd ? usd(h.avgPrice) : won(h.avgPrice)) + '" data-h="' + h.id + '" data-f="avgPrice">' +
-                                    '</div>' +
-                                    '<div class="hold-field-item">' +
-                                        '<label>현재 종가 (' + (h.isUsd ? '$' : '원') + ')</label>' +
-                                        '<input class="num" value="' + (h.isUsd ? usd(h.price) : won(h.price)) + '" data-h="' + h.id + '" data-f="price">' +
-                                    '</div>' +
-                                    '<div class="hold-field-item">' +
-                                        '<label>연 배당수익률 (%)</label>' +
-                                        '<input class="num" value="' + (h.divYield || 0) + '" data-h="' + h.id + '" data-f="divYield">' +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>';
-                        cardNodes.push(card);
-                    }
-                });
+                    const gPl = gValue - gCost;
+                    const gPlPct = gCost > 0 ? (gPl / gCost * 100) : 0;
+                    const gPlCls = gPl > 0 ? "gain" : gPl < 0 ? "loss" : "";
+                    const gPlTxt = gCost > 0 ? (gPl >= 0 ? "+" : "") + won(gPl) + " (" + (gPl >= 0 ? "+" : "") + gPlPct.toFixed(1) + "%)" : "—";
+                    const gPlPctTxt = gCost > 0 ? (gPlPct >= 0 ? "+" : "") + gPlPct.toFixed(1) + "%" : "—";
 
-                const gPl = gValue - gCost;
-                const gPlPct = gCost > 0 ? (gPl / gCost * 100) : 0;
-                const gPlCls = gPl > 0 ? "gain" : gPl < 0 ? "loss" : "";
-                const gPlTxt = gCost > 0 ? (gPl >= 0 ? "+" : "") + won(gPl) + " (" + (gPl >= 0 ? "+" : "") + gPlPct.toFixed(1) + "%)" : "—";
-                const gPlPctTxt = gCost > 0 ? (gPlPct >= 0 ? "+" : "") + gPlPct.toFixed(1) + "%" : "—";
-
-                // 테이블 뷰 서브토탈
-                if (hb) {
                     const subtotal = document.createElement("tr");
                     subtotal.innerHTML =
                         '<td colspan="9" style="text-align:right;font-weight:600;color:var(--ink2);padding:6px 12px;border-bottom:2px solid var(--grid)">' + g.title + ' 합계 (' + g.items.length + '건) · 총 평가손익률 <span class="' + gPlCls + '">' + gPlPctTxt + '</span></td>' +
@@ -5622,17 +5556,209 @@
                         '<td style="border-bottom:2px solid var(--grid)"></td>' +
                         '<td style="border-bottom:2px solid var(--grid)"></td>';
                     hb.appendChild(subtotal);
+                } else {
+                    g.items.forEach(h => {
+                        const rate = h.isUsd ? fxRate : 1;
+                        gValue += (h.qty || 0) * (h.price || 0) * rate;
+                        gCost += (h.qty || 0) * (h.avgPrice || 0) * rate;
+                    });
                 }
 
-                // 카드 뷰 그룹 헤더 및 카드 추가
-                if (groupSec && cl) {
+                // B. 카드 뷰 (모바일 주식앱 스타일 초슬림 리스트 & 중복 종목 통합)
+                if (cl) {
+                    const isGroupCollapsed = collapsedGroupOwners.has(g.owner);
+
+                    // 종목 병합 처리
+                    const stockMap = new Map();
+                    g.items.forEach(h => {
+                        const rawCode = (h.code || "").trim().toUpperCase();
+                        const rawName = (h.name || "").trim().replace(/\s+/g, "").toUpperCase();
+                        const key = (g.owner || "") + "_" + (rawCode ? rawCode : (rawName && rawName !== "새종목" ? rawName : h.id));
+
+                        if (!stockMap.has(key)) {
+                            stockMap.set(key, {
+                                key: key,
+                                name: h.name,
+                                code: h.code,
+                                isUsd: !!h.isUsd,
+                                price: h.price || 0,
+                                divYield: h.divYield || 0,
+                                items: []
+                            });
+                        }
+                        stockMap.get(key).items.push(h);
+                    });
+
+                    const mergedStocks = Array.from(stockMap.values());
+                    const gPl = gValue - gCost;
+                    const gPlPct = gCost > 0 ? (gPl / gCost * 100) : 0;
+                    const gPlCls = gPl > 0 ? "gain" : gPl < 0 ? "loss" : "";
+                    const gPlTxt = gCost > 0 ? (gPl >= 0 ? "+" : "") + won(gPl) + " (" + (gPl >= 0 ? "+" : "") + gPlPct.toFixed(1) + "%)" : "—";
+
+                    const groupSec = document.createElement("div");
+                    groupSec.className = "hold-group-section";
+
+                    // 그룹 아코디언 헤더
                     const groupHdr = document.createElement("div");
-                    groupHdr.className = "hold-group-header";
+                    groupHdr.className = "hold-group-header clickable";
+                    groupHdr.onclick = () => toggleHoldGroup(g.owner);
                     groupHdr.innerHTML =
-                        '<span>' + g.title + ' (' + g.items.length + '건)</span>' +
-                        '<span class="hold-group-sub">' + won(gValue) + '원 · <span class="' + gPlCls + '">' + gPlTxt + '</span></span>';
+                        '<div style="display:flex;align-items:center;gap:6px;">' +
+                            '<span>' + g.title + ' (' + mergedStocks.length + '개 종목 · ' + g.items.length + '건)</span>' +
+                            '<span class="hold-group-toggle-icon">' + (isGroupCollapsed ? '▸ 펼치기' : '▾ 접기') + '</span>' +
+                        '</div>' +
+                        '<div class="hold-group-sub">' + won(gValue) + '원 · <span class="' + gPlCls + '">' + gPlTxt + '</span></div>';
                     groupSec.appendChild(groupHdr);
-                    cardNodes.forEach(c => groupSec.appendChild(c));
+
+                    // 그룹이 접혀있지 않은 경우에만 종목 리스트 컨테이너 노출
+                    if (!isGroupCollapsed) {
+                        const listWrap = document.createElement("div");
+                        listWrap.className = "stock-list-container";
+
+                        mergedStocks.forEach(mStock => {
+                            let mQty = 0, mVal = 0, mCost = 0;
+                            const accounts = [];
+                            let hasWoori = false;
+
+                            mStock.items.forEach(h => {
+                                const rate = h.isUsd ? fxRate : 1;
+                                const val = (h.qty || 0) * (h.price || 0) * rate;
+                                const cost = (h.qty || 0) * (h.avgPrice || 0) * rate;
+                                mQty += (h.qty || 0);
+                                mVal += val;
+                                mCost += cost;
+                                if (h.account && !accounts.includes(h.account)) accounts.push(h.account);
+                                if (h.account === "우리사주" || h.excludeFromGoal) hasWoori = true;
+                            });
+
+                            const smPl = mVal - mCost;
+                            const smPlPct = mCost > 0 ? (smPl / mCost * 100) : 0;
+                            const smPlCls = smPl > 0 ? "gain" : smPl < 0 ? "loss" : "";
+                            const smPlTxt = mCost > 0 ? (smPl >= 0 ? "+" : "") + won(smPl) + " (" + (smPl >= 0 ? "+" : "") + smPlPct.toFixed(1) + "%)" : "—";
+                            const displayPrice = mStock.isUsd ? '$' + usd(mStock.price) : won(mStock.price) + '원';
+
+                            let subAccountSummary = "";
+                            if (mStock.items.length > 1) {
+                                subAccountSummary = " (" + mStock.items.map(h => (h.account || "미지정") + " " + won(h.qty) + "주").join(" · ") + ")";
+                            }
+
+                            const isOpen = openStockDrawerKeys.has(mStock.key);
+
+                            const itemWrap = document.createElement("div");
+                            itemWrap.className = "stock-item-wrap";
+                            itemWrap.innerHTML =
+                                '<div class="stock-item" onclick="toggleStockDrawer(\'' + esc(mStock.key) + '\')">' +
+                                    '<div class="stock-item-left">' +
+                                        '<div class="stock-item-name-row">' +
+                                            '<span class="stock-item-name">' + esc(mStock.name || "미지정 종목") + '</span>' +
+                                            (mStock.code ? '<span class="hold-badge ticker">' + esc(mStock.code) + '</span>' : '') +
+                                            accounts.map(acc => {
+                                                const cls = acc === "ISA" ? "isa" : acc === "우리사주" ? "woori" : "normal";
+                                                return '<span class="acc-chip ' + cls + '">' + esc(acc) + '</span>';
+                                            }).join('') +
+                                            (hasWoori ? '<span class="acc-chip woori">🔒잔금제외</span>' : '') +
+                                            (mStock.isUsd ? '<span class="acc-chip" style="background:rgba(16,185,129,0.12);color:#059669;">$</span>' : '') +
+                                        '</div>' +
+                                        '<div class="stock-item-sub">' +
+                                            '<span>' + won(mQty) + '주' + subAccountSummary + '</span>' +
+                                            '<span>·</span>' +
+                                            '<span>현재가 ' + displayPrice + '</span>' +
+                                            (mStock.divYield > 0 ? '<span>· 배당 ' + mStock.divYield + '%</span>' : '') +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="stock-item-right">' +
+                                        '<div class="stock-item-val">' + won(mVal) + '원</div>' +
+                                        '<div class="stock-item-pl ' + smPlCls + '">' + smPlTxt + '</div>' +
+                                    '</div>' +
+                                    '<div class="stock-item-arrow" id="arrow-' + esc(mStock.key) + '">' +
+                                        (isOpen ? '▴' : '▾') +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="stock-detail-drawer ' + (isOpen ? 'open' : '') + '" id="hold-drawer-' + esc(mStock.key) + '">' +
+                                    mStock.items.map((h, subIdx) => {
+                                        const isFirst = subIdx === 0, isLast = subIdx === mStock.items.length - 1;
+                                        const hRate = h.isUsd ? fxRate : 1;
+                                        const hVal = (h.qty || 0) * (h.price || 0) * hRate;
+                                        const hCost = (h.qty || 0) * (h.avgPrice || 0) * hRate;
+                                        const hPl = hVal - hCost;
+                                        const hPlPct = hCost > 0 ? (hPl / hCost * 100) : 0;
+                                        const hPlCls = hPl > 0 ? "gain" : hPl < 0 ? "loss" : "";
+                                        const hPlTxt = hCost > 0 ? (hPl >= 0 ? "+" : "") + won(hPl) + " (" + (hPl >= 0 ? "+" : "") + hPlPct.toFixed(1) + "%)" : "—";
+
+                                        return (
+                                            '<div class="sub-holding-card">' +
+                                                '<div class="sub-holding-header">' +
+                                                    '<div style="font-size:12.5px;font-weight:750;color:var(--ink);display:flex;align-items:center;gap:6px;">' +
+                                                        '<span class="acc-chip ' + (h.account === 'ISA' ? 'isa' : h.account === '우리사주' ? 'woori' : 'normal') + '">' + esc(h.account || '계좌 미지정') + '</span>' +
+                                                        '<span>' + won(h.qty) + '주 · ' + won(hVal) + '원</span>' +
+                                                        '<span class="' + hPlCls + '" style="font-size:11.5px;">(' + hPlTxt + ')</span>' +
+                                                    '</div>' +
+                                                    '<div style="display:flex;align-items:center;gap:4px;">' +
+                                                        '<button class="sm" data-moveh="' + h.id + '" data-dir="-1" title="위로"' + (isFirst ? ' disabled' : '') + '>▲</button>' +
+                                                        '<button class="sm" data-moveh="' + h.id + '" data-dir="1" title="아래로"' + (isLast ? ' disabled' : '') + '>▼</button>' +
+                                                        '<button class="sm danger" data-delh="' + h.id + '">삭제</button>' +
+                                                    '</div>' +
+                                                '</div>' +
+                                                '<div class="hold-edit-grid">' +
+                                                    '<div class="hold-field-item">' +
+                                                        '<label>종목명</label>' +
+                                                        '<input value="' + esc(h.name) + '" data-h="' + h.id + '" data-f="name">' +
+                                                    '</div>' +
+                                                    '<div class="hold-field-item">' +
+                                                        '<label>티커 코드</label>' +
+                                                        '<input value="' + esc(h.code) + '" data-h="' + h.id + '" data-f="code" placeholder="예: 005930, AAPL">' +
+                                                    '</div>' +
+                                                    '<div class="hold-field-item">' +
+                                                        '<label>계좌 구분</label>' +
+                                                        '<select data-h="' + h.id + '" data-f="account">' +
+                                                            ACCOUNTS.map(a => '<option value="' + a + '"' + (a === (h.account || "") ? ' selected' : '') + '>' + (a || '미지정') + '</option>').join('') +
+                                                        '</select>' +
+                                                    '</div>' +
+                                                    '<div class="hold-field-item">' +
+                                                        '<label>소유자</label>' +
+                                                        '<select data-h="' + h.id + '" data-f="owner">' +
+                                                            OWNERS.map(o => '<option value="' + o + '"' + (o === (h.owner || "") ? ' selected' : '') + '>' + (o || '미지정') + '</option>').join('') +
+                                                        '</select>' +
+                                                    '</div>' +
+                                                    '<div class="hold-field-item">' +
+                                                        '<label>소속 항목</label>' +
+                                                        '<select data-h="' + h.id + '" data-f="bucketId">' +
+                                                            stockBuckets.map(b => '<option value="' + b.id + '"' + (b.id === h.bucketId ? ' selected' : '') + '>' + esc(b.name) + '</option>').join('') +
+                                                        '</select>' +
+                                                    '</div>' +
+                                                    '<div class="hold-field-item">' +
+                                                        '<label>보유 수량</label>' +
+                                                        '<input class="num" value="' + won(h.qty) + '" data-h="' + h.id + '" data-f="qty">' +
+                                                    '</div>' +
+                                                    '<div class="hold-field-item">' +
+                                                        '<label style="display:flex;justify-content:space-between;align-items:center;">' +
+                                                            '<span>매수 평단가</span>' +
+                                                            '<label style="cursor:pointer;display:inline-flex;align-items:center;gap:3px;font-size:11px;color:var(--toss-blue);font-weight:700;">' +
+                                                                '<input type="checkbox" data-h="' + h.id + '" data-f="isUsd" ' + (h.isUsd ? 'checked' : '') + ' style="width:auto;"> 달러($)' +
+                                                            '</label>' +
+                                                        '</label>' +
+                                                        '<input class="num" value="' + (h.isUsd ? usd(h.avgPrice) : won(h.avgPrice)) + '" data-h="' + h.id + '" data-f="avgPrice">' +
+                                                    '</div>' +
+                                                    '<div class="hold-field-item">' +
+                                                        '<label>현재 종가 (' + (h.isUsd ? '$' : '원') + ')</label>' +
+                                                        '<input class="num" value="' + (h.isUsd ? usd(h.price) : won(h.price)) + '" data-h="' + h.id + '" data-f="price">' +
+                                                    '</div>' +
+                                                    '<div class="hold-field-item">' +
+                                                        '<label>연 배당수익률 (%)</label>' +
+                                                        '<input class="num" value="' + (h.divYield || 0) + '" data-h="' + h.id + '" data-f="divYield">' +
+                                                    '</div>' +
+                                                '</div>' +
+                                            '</div>'
+                                        );
+                                    }).join('') +
+                                '</div>';
+
+                            listWrap.appendChild(itemWrap);
+                        });
+
+                        groupSec.appendChild(listWrap);
+                    }
+
                     cl.appendChild(groupSec);
                 }
             });
@@ -5662,7 +5788,7 @@
             // 뷰 모드 적용 (카드 보기 vs 표로 보기)
             updateHoldViewUI();
 
-            // 자산 항목 렌더링
+            // 자산 항목 렌더링 & 토글 상태 업데이트
             const bb = document.getElementById("bucketBody");
             if (bb) {
                 bb.innerHTML = "";
@@ -5682,6 +5808,7 @@
                 });
             }
             set("bucketTotal", won(totalAssets()));
+            updateBucketCardUI();
         }
 
         function renderGoal() {
@@ -7092,8 +7219,10 @@
             const sb = S.buckets.find(b => b.kind === "stock");
             if (!sb) { alert("먼저 ‘주식 계좌’ 유형의 자산 항목을 만들어 주세요."); return; }
             const newId = uid();
-            S.holdings.push({ id: newId, bucketId: sb.id, name: "새 종목", code: "", account: "", owner: "", qty: 0, avgPrice: 0, price: 0, priceDate: "", order: nextHoldingOrder() });
-            openStockEditIds.add(newId);
+            const newH = { id: newId, bucketId: sb.id, name: "새 종목", code: "", account: "", owner: "", qty: 0, avgPrice: 0, price: 0, priceDate: "", order: nextHoldingOrder() };
+            S.holdings.push(newH);
+            const newKey = (newH.owner || "") + "_" + newId;
+            openStockDrawerKeys.add(newKey);
             autosave(); renderAssets(); renderDash();
         });
         document.getElementById("btnAddBucket").addEventListener("click", () => {
