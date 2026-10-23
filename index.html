@@ -1416,6 +1416,11 @@
             color: var(--loss);
             background: var(--loss-bg);
         }
+        .toad-diff-badge.is-loading {
+            color: var(--toss-blue, #3182f6);
+            background: rgba(49, 130, 246, 0.12);
+            animation: toadPulse 1.2s ease-in-out infinite;
+        }
         .toad-play-hint {
             font-size: 11px;
             color: var(--toss-blue);
@@ -1450,6 +1455,14 @@
         .toad-modal-box.is-gain {
             border-color: rgba(240, 68, 82, 0.45);
             box-shadow: 0 10px 40px rgba(240, 68, 82, 0.25);
+        }
+        .toad-modal-box.is-loading {
+            border-color: rgba(49, 130, 246, 0.45);
+            box-shadow: 0 10px 40px rgba(49, 130, 246, 0.2);
+        }
+        .toad-modal-box.is-flat {
+            border-color: var(--border);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
         }
         @keyframes toadShake {
             0%, 100% { transform: translate(0, 0); }
@@ -1500,6 +1513,16 @@
             background: var(--loss-bg);
             color: var(--loss);
             border: 1px solid rgba(49, 130, 246, 0.3);
+        }
+        .toad-modal-box.is-loading .toad-status-pill {
+            background: rgba(49, 130, 246, 0.12);
+            color: var(--toss-blue, #3182f6);
+            border: 1px solid rgba(49, 130, 246, 0.3);
+        }
+        .toad-modal-box.is-flat .toad-status-pill {
+            background: var(--chip);
+            color: var(--muted);
+            border: 1px solid var(--border);
         }
         .toad-headline {
             font-size: 20px;
@@ -1598,6 +1621,12 @@
         .toad-modal-box.is-loss .toad-diff-val {
             color: var(--loss);
         }
+        .toad-modal-box.is-loading .toad-diff-val {
+            color: var(--toss-blue, #3182f6);
+        }
+        .toad-modal-box.is-flat .toad-diff-val {
+            color: var(--ink);
+        }
         .toad-diff-desc {
             font-size: 12px;
             color: var(--muted);
@@ -1689,6 +1718,45 @@
         }
         .toad-mini-btn:active {
             transform: scale(0.96);
+        }
+        .toad-loading-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 24px 20px;
+            box-sizing: border-box;
+            background: radial-gradient(circle at center, rgba(49, 130, 246, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%);
+            color: #ffffff;
+            text-align: center;
+            gap: 12px;
+        }
+        .toad-spinner {
+            width: 38px;
+            height: 38px;
+            border: 3.5px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #3182f6;
+            border-radius: 50%;
+            animation: toadSpin 0.85s linear infinite;
+        }
+        .toad-loading-msg {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #f8fafc;
+            letter-spacing: -0.01em;
+        }
+        .toad-loading-sub {
+            font-size: 11.5px;
+            color: #94a3b8;
+        }
+        @keyframes toadPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.62; transform: scale(0.97); }
+        }
+        @keyframes toadSpin {
+            to { transform: rotate(360deg); }
         }
 
         /* 메인화면 상단 구석 '두꺼비 보기' 테스트 버튼 */
@@ -3190,7 +3258,12 @@
             <div class="toad-date-note" id="toadDateNote">2026년 9월 8일 · 전일 대비 리포트</div>
             
             <div class="toad-gif-container" id="toadGifContainer">
-                <video id="toadGainVideo" class="toad-video" autoplay loop muted playsinline webkit-playsinline preload="auto" poster="./assets/toad_gain_poster.jpg" style="display:block;">
+                <div id="toadLoadingBox" class="toad-loading-box" style="display:none;">
+                    <div class="toad-spinner"></div>
+                    <div class="toad-loading-msg">🐸 두꺼비가 거래소 시세와 환율을 확인 중입니다…</div>
+                    <div class="toad-loading-sub">오늘의 변동 리포트를 실시간 계산하고 있어요 (2~3초 소요)</div>
+                </div>
+                <video id="toadGainVideo" class="toad-video" autoplay loop muted playsinline webkit-playsinline preload="auto" poster="./assets/toad_gain_poster.jpg" style="display:none;">
                     <source src="./assets/toad_gain.mp4?v=20260920_v1" type="video/mp4">
                     <source src="./폴짝_뛰면서_와인을_건배하는_두꺼비.mp4" type="video/mp4">
                 </video>
@@ -4584,7 +4657,14 @@
                 if (card && avatar && title && sub && badge) {
                     const cp = getCurrentMarketCheckpoint();
                     card.classList.remove("is-gain", "is-loss");
-                    if (change.direction === "up") {
+                    badge.classList.remove("is-loading");
+                    if (isDailyAssetSyncing) {
+                        avatar.textContent = "⏳";
+                        title.textContent = "두꺼비의 자산 브리핑 계산 중…";
+                        sub.textContent = `${cp.name} · 주가 및 환율 업데이트 중 (2~3초 소요)`;
+                        badge.textContent = "로딩 중…";
+                        badge.classList.add("is-loading");
+                    } else if (change.direction === "up") {
                         card.classList.add("is-gain");
                         avatar.textContent = "👑";
                         title.textContent = `황금 두꺼비의 축복! 자산 +${moneyText(change.diff)} 상승`;
@@ -4599,8 +4679,8 @@
                     } else {
                         avatar.textContent = "🐸";
                         title.textContent = "두꺼비의 전일 대비 자산 브리핑";
-                        sub.textContent = `${cp.name} · ` + (change.hasPrev ? `어제(${change.prevDate})와 자산 동일` : "어제 기록 데이터 대기 중") + " · 터치하여 리포트 보기";
-                        badge.textContent = "보합";
+                        sub.textContent = `${cp.name} · ` + (change.hasPrev ? `어제(${change.prevDate})와 자산 동일 (보합)` : "어제 기록 데이터 대기 중") + " · 터치하여 리포트 보기";
+                        badge.textContent = "보합 (0원)";
                     }
                 }
             } catch (errToadCard) {
@@ -6121,6 +6201,8 @@
 
             if (btn) { btn.disabled = true; btn.textContent = "조회 중…"; }
             if (dashBtn) { dashBtn.disabled = true; dashBtn.innerHTML = '<span class="spin">🔄</span> 시세 갱신 중…'; }
+            isDailyAssetSyncing = true;
+            render();
 
             try {
                 // 1) 서버(Apps Script)를 통한 조회 우선 시도 — CORS 제약이 없어 가장 빠르고 안정적
@@ -6199,7 +6281,13 @@
                     }
                 }
             } finally {
+                isDailyAssetSyncing = false;
                 restoreBtns();
+                render();
+                const m = document.getElementById("toadAlertModal");
+                if (m && m.classList.contains("show")) {
+                    renderToadModalContent(activeToadMode, getDailyAssetChange(), false);
+                }
             }
         }
 
@@ -6634,7 +6722,8 @@
         }
 
         /* ---------- 두꺼비 전일 대비 자산 브리핑 & 모달 시스템 ---------- */
-        let activeToadMode = "gain"; // 'gain' or 'loss' or 'flat'
+        let activeToadMode = "gain"; // 'gain' or 'loss' or 'flat' or 'loading'
+        let isDailyAssetSyncing = true; // 최초 앱 실행 시 주가/환율/구글시트 동기화 진행 상태 플래그
 
         function getDailyAssetChange() {
             const curTotal = totalAssets();
@@ -6802,7 +6891,8 @@
 
         function renderToadModalContent(mode, change, isTest) {
             if (!isTest) {
-                if (change.diff < 0) mode = "loss";
+                if (isDailyAssetSyncing) mode = "loading";
+                else if (change.diff < 0) mode = "loss";
                 else if (change.diff > 0) mode = "gain";
                 else mode = "flat";
             }
@@ -6817,6 +6907,7 @@
             const gainVideo = document.getElementById("toadGainVideo");
             const lossVideo = document.getElementById("toadLossVideo");
             const gifImg = document.getElementById("toadGifImg");
+            const loadingBox = document.getElementById("toadLoadingBox");
             const prevDateLbl = document.getElementById("toadPrevDateLbl");
             const prevAmt = document.getElementById("toadPrevAmt");
             const curAmt = document.getElementById("toadCurAmt");
@@ -6832,9 +6923,47 @@
             const today = todayISO();
             const [ty, tm, td] = today.split("-");
             const cp = getCurrentMarketCheckpoint();
-            if (dateNote) dateNote.textContent = `${ty}년 ${Number(tm)}월 ${Number(td)}일 · ${cp.name} (${cp.timeLabel} 기준)` + (isTest ? " (테스트)" : "");
             
-            box.classList.remove("is-gain", "is-loss");
+            box.classList.remove("is-gain", "is-loss", "is-loading", "is-flat");
+
+            const moneyText = (n) => {
+                const s = kfmt(Math.abs(n));
+                return s.endsWith("원") ? s : s + "원";
+            };
+
+            if (mode === "loading") {
+                box.classList.add("is-loading");
+                if (dateNote) dateNote.textContent = `${ty}년 ${Number(tm)}월 ${Number(td)}일 · 실시간 시세·환율 동기화 중`;
+                icon.textContent = "⏳";
+                text.textContent = "실시간 자산 변동 업데이트 중";
+                headline.textContent = "오늘의 자산 변동을 계산하고 있습니다";
+                
+                if (gainVideo) { gainVideo.pause(); gainVideo.style.display = "none"; }
+                if (lossVideo) { lossVideo.pause(); lossVideo.style.display = "none"; }
+                if (gifImg) { gifImg.style.display = "none"; }
+                if (loadingBox) { loadingBox.style.display = "flex"; }
+                
+                prevDateLbl.textContent = change.hasPrev ? `어제 자산 (${change.prevDate})` : "어제 자산";
+                prevAmt.textContent = change.hasPrev ? moneyText(change.prevTotal) : "확인 중…";
+                curAmt.textContent = "계산 중…";
+                diffVal.textContent = "로딩 중…";
+                diffDesc.textContent = "최신 주가·환율 반영 중";
+                
+                if (causeBanner) {
+                    causeBanner.style.display = "block";
+                    if (causeDateHint) causeDateHint.textContent = "실시간 수집 중";
+                    if (causeList) causeList.innerHTML = `<div style="font-size:12px;color:var(--muted);text-align:center;padding:8px 0;">증권 거래소에서 최신 종가를 불러오는 중입니다… ⏳</div>`;
+                    if (causeFx) causeFx.innerHTML = `<div style="font-size:11.5px;color:var(--muted);text-align:center;padding:4px 0;">원·달러 환율 확인 중…</div>`;
+                }
+                
+                bubbleIcon.textContent = "⏳";
+                bubbleText.innerHTML = `“<b>두꺼비가 증권 거래소와 외환 시장에서 최신 시세를 수집하고 있습니다.</b> 🐸📊<br>약 2~3초 후 주가와 환율이 반영된 최종 자산 변동 리포트가 완성됩니다. 잠시만 기다려 주세요!”`;
+                return;
+            }
+
+            if (loadingBox) loadingBox.style.display = "none";
+
+            if (dateNote) dateNote.textContent = `${ty}년 ${Number(tm)}월 ${Number(td)}일 · ${cp.name} (${cp.timeLabel} 기준)` + (isTest ? " (테스트)" : "");
             
             let displayPrev = change.hasPrev ? change.prevTotal : 210621447;
             let displayCur = change.curTotal;
@@ -6853,11 +6982,6 @@
                 }
             }
             
-            const moneyText = (n) => {
-                const s = kfmt(Math.abs(n));
-                return s.endsWith("원") ? s : s + "원";
-            };
-
             prevDateLbl.textContent = change.hasPrev ? `어제 자산 (${change.prevDate})` : "이전 자산";
             prevAmt.textContent = moneyText(displayPrev);
             curAmt.textContent = moneyText(displayCur);
@@ -6869,8 +6993,8 @@
                 diffVal.textContent = `+${moneyText(displayDiff)} (+${displayPct.toFixed(2)}%)`;
                 diffDesc.textContent = "전일 대비 증가액";
             } else {
-                diffVal.textContent = "0원 (0.00%)";
-                diffDesc.textContent = "전일 대비 변동 없음";
+                diffVal.textContent = "0원 (보합)";
+                diffDesc.textContent = "전일 대비 변동 없음 (보합)";
             }
             
             // Top 3 movers & FX
@@ -6978,7 +7102,6 @@
             
             const top1Mover = topMovers && topMovers.length > 0 ? topMovers[0] : null;
             if (mode === "loss") {
-                box.classList.remove("is-gain");
                 box.classList.add("is-loss");
                 icon.textContent = "🗡️";
                 text.textContent = "낭인 두꺼비의 습격 · 자산 하락";
@@ -6999,8 +7122,7 @@
                 bubbleIcon.textContent = "🗡️";
                 const moverComment = (top1Mover && top1Mover.diff < 0) ? `특히 <b>${top1Mover.name}</b>에서 <b>${moneyText(top1Mover.diff)}</b>을 썰어갔네요.<br>` : '';
                 bubbleText.innerHTML = `“<b>삿갓을 쓴 낭인 두꺼비가 날카로운 검기로 저금통을 쩍 갈랐습니다!</b> 😱💨⚔️<br>${moverComment}하지만 2028년 5월 잔금일까지 우리는 적립식 장기 투자자! 흔들림 없이 꾸준히 모아가면 반드시 승리합니다!”`;
-            } else {
-                box.classList.remove("is-loss");
+            } else if (mode === "gain") {
                 box.classList.add("is-gain");
                 icon.textContent = "👑";
                 text.textContent = "황금 두꺼비의 축복 · 자산 상승";
@@ -7023,23 +7145,44 @@
                 bubbleIcon.textContent = "🍷";
                 const moverComment = (top1Mover && top1Mover.diff > 0) ? `특히 <b>${top1Mover.name}</b>이 <b>+${moneyText(top1Mover.diff)}</b> 기분 좋게 올랐네요!<br>` : '';
                 bubbleText.innerHTML = `“<b>멋진 턱시도를 차려입은 대왕 두꺼비가 신나게 폴짝폴짝 뛰며 와인잔으로 축배를 건넵니다!</b> 🍷✨🥂<br>${moverComment}전일 대비 자산이 늘어 입주 잔금 완납에 한 걸음 더 가까워졌습니다! 멋지게 자산을 불려낸 두 분을 축하합니다!”`;
+            } else {
+                box.classList.add("is-flat");
+                icon.textContent = "🐸";
+                text.textContent = "두꺼비의 평온 · 자산 보합";
+                headline.textContent = "어제와 동일하게 평온한 하루입니다 🍵";
+                if (lossVideo) {
+                    lossVideo.pause();
+                    lossVideo.style.display = "none";
+                }
+                if (gifImg) {
+                    if (gainVideo) { gainVideo.pause(); gainVideo.style.display = "none"; }
+                    gifImg.style.display = "block";
+                } else if (gainVideo) {
+                    gainVideo.style.display = "block";
+                    gainVideo.pause();
+                }
+                bubbleIcon.textContent = "🍵";
+                bubbleText.innerHTML = `“<b>오늘은 자산 변동 없이 평온한 보합세(0원)입니다!</b> 🐸🍵<br>시장 변동이 잔잔한 날에는 차 한 잔의 여유를 즐겨보세요. 우리는 2028년 5월 잔금일까지 흔들림 없이 나아갑니다!”`;
             }
         }
 
         function openToadAlertModal(isManual) {
             const change = getDailyAssetChange();
             let mode = "gain";
-            if (change.direction === "down") mode = "loss";
+            if (isDailyAssetSyncing) mode = "loading";
+            else if (change.direction === "down") mode = "loss";
             else if (change.direction === "up") mode = "gain";
-            else mode = "gain";
+            else mode = "flat";
             
             renderToadModalContent(mode, change, false);
             const modal = document.getElementById("toadAlertModal");
             if (modal) modal.classList.add("show");
-            playToadSound(mode);
+            if (mode === "loss" || mode === "gain") {
+                playToadSound(mode);
+            }
             if (navigator.vibrate) {
                 if (mode === "loss") navigator.vibrate([100, 60, 140]);
-                else navigator.vibrate([40, 40, 40, 40]);
+                else if (mode === "gain") navigator.vibrate([40, 40, 40, 40]);
             }
         }
 
@@ -7071,6 +7214,8 @@
         }
 
         function checkDailyToadAlert() {
+            // 시세/환율/구글시트 초기 업데이트가 진행 중이면, 완료 후 안전하게 팝업하도록 대기
+            if (isDailyAssetSyncing) return;
             try {
                 const today = todayISO();
                 const cp = getCurrentMarketCheckpoint();
@@ -7118,40 +7263,72 @@
 
         // 구글 시트 동기화 및 최신 시세 갱신이 완료된 후 두꺼비 알림을 정확한 데이터로 팝업
         (async () => {
-            if (sync.url) {
-                setSyncStatus("연결됨 · 불러오는 중…");
-                try { 
-                    // 구글 시트 최신 데이터 동기화 완료 대기 (최대 2초 타임아웃)
-                    await Promise.race([
-                        doSync(),
-                        new Promise(resolve => setTimeout(resolve, 2000))
-                    ]);
-                } catch (e) { }
-            }
-            // 한국 장 종료(16:00) 및 아침 정산(06:00) 기준 자동 시세 갱신 검사
             try {
+                // 구글 시트 최신 데이터 및 장종료/아침 정산 시세 갱신 대기 (최대 3.5초 타임아웃)
                 await Promise.race([
-                    checkCheckpointMarketSync(),
-                    new Promise(resolve => setTimeout(resolve, 2000))
+                    (async () => {
+                        if (sync.url) {
+                            setSyncStatus("연결됨 · 불러오는 중…");
+                            try { await doSync(); } catch (e) { console.warn("Startup doSync err:", e); }
+                        }
+                        try {
+                            await checkCheckpointMarketSync();
+                        } catch (e) { console.warn("Startup checkpoint sync err:", e); }
+                    })(),
+                    new Promise(resolve => setTimeout(resolve, 3500))
                 ]);
-            } catch (e) { }
-
-            // 최신 데이터와 시세가 100% 반영된 상태에서 두꺼비 일간 알림 팝업 실행!
-            checkDailyToadAlert();
+            } catch (e) {
+                console.warn("Startup sync timed out or error:", e);
+            } finally {
+                isDailyAssetSyncing = false;
+                render(); // 확정된 데이터로 대시보드 브리핑 카드 즉시 갱신
+                
+                // 로딩 중에 사용자가 두꺼비 모달을 이미 열어두었다면 최종 데이터와 적절한 연출로 갱신
+                const m = document.getElementById("toadAlertModal");
+                if (m && m.classList.contains("show")) {
+                    const finalChange = getDailyAssetChange();
+                    let finalMode = finalChange.direction === "down" ? "loss" : (finalChange.direction === "up" ? "gain" : "flat");
+                    renderToadModalContent(finalMode, finalChange, false);
+                    if (finalMode === "loss" || finalMode === "gain") playToadSound(finalMode);
+                }
+                
+                // 최신 데이터와 시세가 100% 반영된 상태에서 두꺼비 일간 알림 팝업 실행!
+                checkDailyToadAlert();
+            }
         })();
 
         document.addEventListener("visibilitychange", async () => {
             if (document.visibilityState === "visible") {
-                if (sync.url) {
-                    try {
-                        await Promise.race([
-                            doSync(),
-                            new Promise(resolve => setTimeout(resolve, 2000))
-                        ]);
-                    } catch (e) {}
+                const cp = getCurrentMarketCheckpoint();
+                const lastSlot = localStorage.getItem("toad_last_sync_slot") || S.lastSyncSlot;
+                const needSlotSync = lastSlot !== cp.slotId;
+                
+                if (needSlotSync || sync.url) {
+                    isDailyAssetSyncing = true;
+                    render();
                 }
-                await checkCheckpointMarketSync();
-                checkDailyToadAlert();
+                try {
+                    await Promise.race([
+                        (async () => {
+                            if (sync.url) {
+                                try { await doSync(); } catch (e) {}
+                            }
+                            await checkCheckpointMarketSync();
+                        })(),
+                        new Promise(resolve => setTimeout(resolve, 3000))
+                    ]);
+                } catch (e) {}
+                finally {
+                    isDailyAssetSyncing = false;
+                    render();
+                    const m = document.getElementById("toadAlertModal");
+                    if (m && m.classList.contains("show")) {
+                        const finalChange = getDailyAssetChange();
+                        let finalMode = finalChange.direction === "down" ? "loss" : (finalChange.direction === "up" ? "gain" : "flat");
+                        renderToadModalContent(finalMode, finalChange, false);
+                    }
+                    checkDailyToadAlert();
+                }
             }
         });
     </script>
