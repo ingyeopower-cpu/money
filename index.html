@@ -2840,6 +2840,193 @@
             color: var(--toss-blue, #3182f6) !important;
             transition: color 0.1s ease;
         }
+
+        /* 주요 은행 실제 대출 금리 비교 카드 스타일 */
+        .bank-loans-card {
+            margin-top: 16px;
+        }
+        .bank-loans-filter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 14px 0 16px 0;
+            padding: 10px 14px;
+            background: var(--chip);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .bank-loan-basis {
+            font-size: 12.5px;
+            color: var(--ink2);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .bank-loan-basis b {
+            color: var(--toss-blue, #3182f6);
+            font-size: 14px;
+        }
+        .bank-filter-chips {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .bank-filter-btn {
+            font-size: 11.5px;
+            font-weight: 650;
+            padding: 5px 12px;
+            border-radius: 99px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+        .bank-filter-btn.active {
+            background: var(--toss-blue, #3182f6);
+            color: #fff;
+            border-color: var(--toss-blue, #3182f6);
+        }
+        .bank-rates-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .bank-rate-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 15px 16px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .bank-rate-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(49, 130, 246, 0.4);
+            box-shadow: 0 6px 16px rgba(49, 130, 246, 0.08);
+        }
+        .bank-item-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .bank-item-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .bank-logo-badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+        }
+        .bank-name-title {
+            font-size: 14px;
+            font-weight: 750;
+            color: var(--ink);
+        }
+        .bank-product-sub {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+        .bank-rate-display {
+            text-align: right;
+        }
+        .bank-rate-val {
+            font-size: 19px;
+            font-weight: 850;
+            color: var(--toss-blue, #3182f6);
+            letter-spacing: -0.02em;
+        }
+        .bank-rate-range {
+            font-size: 10.5px;
+            color: var(--muted);
+            margin-top: 1px;
+        }
+        .bank-pmt-box {
+            background: var(--chip);
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+        }
+        .bank-pmt-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+        .bank-pmt-row + .bank-pmt-row {
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px dashed var(--border);
+        }
+        .bank-pmt-val {
+            font-size: 13.5px;
+            font-weight: 800;
+            color: var(--ink);
+        }
+        .bank-pmt-val b {
+            color: var(--toss-blue, #3182f6);
+        }
+        .bank-pmt-int {
+            font-size: 11px;
+            color: var(--muted);
+            margin-left: 4px;
+        }
+        .bank-item-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 11px;
+            color: var(--muted);
+            padding-top: 8px;
+            border-top: 1px solid var(--border);
+        }
+        .bank-apply-btn {
+            background: transparent;
+            border: 1px solid rgba(49, 130, 246, 0.4);
+            color: var(--toss-blue, #3182f6);
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+        .bank-apply-btn:hover {
+            background: var(--toss-blue, #3182f6);
+            color: #fff;
+            border-color: var(--toss-blue, #3182f6);
+            box-shadow: 0 2px 6px rgba(49, 130, 246, 0.25);
+        }
+        .bank-loan-tips-box {
+            background: linear-gradient(145deg, var(--surface) 0%, var(--toss-blue-light) 100%);
+            border: 1px solid rgba(49, 130, 246, 0.2);
+            border-radius: 14px;
+            padding: 14px 16px;
+        }
         
         /* 리포트 섹션 & 검색/필터 툴바 */
         .reports-filter-bar {
@@ -3168,13 +3355,6 @@
                     <div class="dday-cheer-msg" id="dashHeroCheer">
                         ✨ 지금 페이스를 유지하면 목표 잔금을 안정적으로 마련할 수 있어요!
                     </div>
-                </div>
-                <div class="hero-quick-actions">
-                    <button class="quick-btn primary" onclick="switchTab('flow')">💰 저축 기록하기</button>
-                    <button class="quick-btn" id="btnDashSyncPrices" onclick="syncPrices()">⚡ 실시간 시세 갱신</button>
-                    <button class="quick-btn" onclick="switchTab('insights')">📊 시장·리포트 분석</button>
-                    <button class="quick-btn" onclick="switchTab('loan')">📐 대출 시뮬레이션</button>
-                    <button class="quick-btn" onclick="switchTab('assets')">💎 보유 종목 보기</button>
                 </div>
             </div>
 
@@ -3954,6 +4134,51 @@
                         <div class="val" id="l-maxLtv">—</div>
                         <div class="note" id="l-maxLtv-note"></div>
                     </div>
+                </div>
+            </div>
+
+            <!-- 주요 은행 실제 주택담보대출 금리 비교 & 상환액 계산 카드 -->
+            <div class="card bank-loans-card">
+                <div class="sec-actions">
+                    <div>
+                        <h2 style="margin:0;display:flex;align-items:center;gap:8px;">
+                            <span>🏦 시중 주요 은행 실제 주택담보대출 금리 비교</span>
+                        </h2>
+                        <div class="sub">5대 시중은행 · 인터넷은행 · 정책모기지의 실제 최신 금리와 30년/40년 원리금 상환액을 한눈에 비교합니다.</div>
+                    </div>
+                    <span class="tag" style="background:#e8f3ff;color:var(--toss-blue);font-weight:700;">2026 공시 기준</span>
+                </div>
+
+                <!-- 기준 대출액 안내 & 카테고리 필터 바 -->
+                <div class="bank-loans-filter-bar">
+                    <div class="bank-loan-basis">
+                        <span>현재 시뮬레이션 대출액:</span>
+                        <b id="bankLoanBasisAmt">4억 1,520만원</b>
+                        <span style="font-size:11px;color:var(--muted);">(상단 대출액과 자동 연동)</span>
+                    </div>
+                    <div class="bank-filter-chips" id="bankLoanFilterGroup">
+                        <button type="button" class="bank-filter-btn active" data-bank-cat="all" onclick="filterBankLoanCategory('all', this)">전체보기 (8)</button>
+                        <button type="button" class="bank-filter-btn" data-bank-cat="major" onclick="filterBankLoanCategory('major', this)">5대 시중은행 (5)</button>
+                        <button type="button" class="bank-filter-btn" data-bank-cat="internet" onclick="filterBankLoanCategory('internet', this)">인터넷은행 (2)</button>
+                        <button type="button" class="bank-filter-btn" data-bank-cat="policy" onclick="filterBankLoanCategory('policy', this)">정책모기지 (1)</button>
+                    </div>
+                </div>
+
+                <!-- 은행별 금리 및 상환액 카드 리스트 컨테이너 -->
+                <div class="bank-rates-list" id="bankRatesListContainer">
+                    <!-- JS renderRealBankRates()에서 동적으로 렌더링 -->
+                </div>
+
+                <!-- 주담대 실행 실전 전략 팁 박스 -->
+                <div class="bank-loan-tips-box">
+                    <div style="font-weight:750;font-size:13px;color:var(--ink);margin-bottom:6px;display:flex;align-items:center;gap:6px;">
+                        <span>💡 부부를 위한 주택담보대출 실행 핵심 3대 전략</span>
+                    </div>
+                    <ul style="margin:0;padding-left:18px;font-size:12px;color:var(--ink2);line-height:1.65;">
+                        <li><b>5년 주기형(혼합형) 최우선 고려:</b> 2026 스트레스 DSR 3단계 하에서 5년 주기형은 가산폭이 30%만 반영되어 변동금리 대비 대출 한도 축소가 거의 발생하지 않습니다.</li>
+                        <li><b>중도상환수수료 면제 활용 (카카오·케이뱅크):</b> 인터넷은행은 상시 중도상환해약금이 0원입니다. 향후 배당금이나 성과급 목돈으로 원금을 수시 상환할 계획이라면 수백만 원의 수수료를 절감할 수 있습니다.</li>
+                        <li><b>만 40세 미만 정책 보금자리론 체증식 상환:</b> 입주 시점(2028년 5월)까지 만 40세 미만이라면 한국주택금융공사의 체증식 분할상환을 활용해 초기 월 납입금을 30% 이상 크게 낮출 수 있습니다.</li>
+                    </ul>
                 </div>
             </div>
         </section>
@@ -7048,6 +7273,7 @@
             if (noteEl) noteEl.innerHTML = ltvNote;
 
             drawLoanChart(P, S.loan.rate || 0, (r) => calcPmtFor(r, S.loan.type));
+            renderRealBankRates(P);
         }
 
         function drawLoanChart(P, baseRate, calcFn) {
@@ -7087,6 +7313,240 @@
                 g += '<text x="' + X(idx) + '" y="' + (y - 10) + '" text-anchor="middle" font-size="10.5" fill="var(--ink)" font-weight="600" paint-order="stroke" stroke="var(--surface)" stroke-width="3">' + won(p.pmt) + '</text>';
             });
             svg.innerHTML = g;
+        }
+
+        // ==========================================
+        // 주요 시중은행 실제 주택담보대출 금리 데이터 & 렌더링 엔진
+        // ==========================================
+        const REAL_BANK_RATES = [
+            {
+                id: "kb",
+                bank: "KB국민은행",
+                product: "KB 주택담보대출 (혼합금리 5년 주기형)",
+                category: "major",
+                badge: "KB",
+                badgeBg: "linear-gradient(135deg, #ffbc00, #f5a623)",
+                badgeColor: "#4a3c10",
+                baseRate: 4.15,
+                minRate: 3.85,
+                maxRate: 4.45,
+                method: "원리금 균등상환",
+                discountInfo: "KB국민카드 실적, 급여이체, 주택청약, 스타뱅킹 우대 최대 -0.90%p",
+                note: "5년 주기형으로 스트레스 DSR 가산폭 30%만 적용되어 한도에 유리"
+            },
+            {
+                id: "shinhan",
+                bank: "신한은행",
+                product: "신한 주택대출 (신규취급 5년 주기형)",
+                category: "major",
+                badge: "신한",
+                badgeBg: "linear-gradient(135deg, #0046ff, #002699)",
+                badgeColor: "#ffffff",
+                baseRate: 4.10,
+                minRate: 3.82,
+                maxRate: 4.42,
+                method: "원리금 균등상환",
+                discountInfo: "신한카드 결제계좌, 공과금/급여이체, 쏠(SOL) 앱 이용 우대 최대 -0.85%p",
+                note: "비대면 신규 우대 및 신한 금융그룹 주거래 고객 우대 패키지"
+            },
+            {
+                id: "hana",
+                bank: "하나은행",
+                product: "하나원큐 아파트론 (혼합 5년 주기형)",
+                category: "major",
+                badge: "하나",
+                badgeBg: "linear-gradient(135deg, #008485, #005a5a)",
+                badgeColor: "#ffffff",
+                baseRate: 4.08,
+                minRate: 3.79,
+                maxRate: 4.39,
+                method: "원리금 균등상환",
+                discountInfo: "하나카드 실적, 주택청약, 급여이체, 하나원큐 이체 우대 최대 -0.90%p",
+                note: "비대면 원큐 신청 시 가산금리 추가 인하 혜택 제공"
+            },
+            {
+                id: "woori",
+                bank: "우리은행",
+                product: "우리WON주택대출 (5년 주기형)",
+                category: "major",
+                badge: "우리",
+                badgeBg: "linear-gradient(135deg, #0072ce, #004b87)",
+                badgeColor: "#ffffff",
+                baseRate: 4.18,
+                minRate: 3.88,
+                maxRate: 4.48,
+                method: "원리금 균등상환",
+                discountInfo: "우리카드 실적, 급여이체, 주택청약, 공과금 자동납부 우대 최대 -0.80%p",
+                note: "부부 공동명의 아파트 담보대출 비대면 간편 심사 지원"
+            },
+            {
+                id: "nh",
+                bank: "NH농협은행",
+                product: "NH채움주택담보대출 (5년 주기형)",
+                category: "major",
+                badge: "농협",
+                badgeBg: "linear-gradient(135deg, #00a651, #006633)",
+                badgeColor: "#ffffff",
+                baseRate: 4.12,
+                minRate: 3.80,
+                maxRate: 4.40,
+                method: "원리금 균등상환",
+                discountInfo: "농협카드 이용, 급여이체, 공과금 자동이체 실적 우대 최대 -0.80%p",
+                note: "농협 계좌 주거래 및 농협 금융상품 보유 시 우대금리 추가 적용"
+            },
+            {
+                id: "kakaobank",
+                bank: "카카오뱅크",
+                product: "카카오뱅크 주택담보대출 (혼합금리 5년)",
+                category: "internet",
+                badge: "카뱅",
+                badgeBg: "linear-gradient(135deg, #fee500, #fada0a)",
+                badgeColor: "#191919",
+                baseRate: 3.85,
+                minRate: 3.65,
+                maxRate: 4.25,
+                method: "원리금 균등상환",
+                discountInfo: "복잡한 카드·실적 조건 없이 무조건 최저 우대금리 자동 반영",
+                note: "✨ 중도상환수수료 100% 면제! 입주 후 여유자금 조기 상환 시 압도적 유리"
+            },
+            {
+                id: "kbank",
+                bank: "케이뱅크",
+                product: "아파트담보대출 (혼합금리 5년)",
+                category: "internet",
+                badge: "케이",
+                badgeBg: "linear-gradient(135deg, #00c8b3, #008f80)",
+                badgeColor: "#ffffff",
+                baseRate: 3.88,
+                minRate: 3.68,
+                maxRate: 4.28,
+                method: "원리금 균등상환",
+                discountInfo: "100% 모바일 비대면 심사 시 우대금리 기본 제공",
+                note: "✨ 중도상환해약금 전액 면제 (수시 조기 상환 가능)"
+            },
+            {
+                id: "hf",
+                bank: "한국주택금융공사",
+                product: "아낌e-보금자리론 (순수 장기고정 / 정책모기지)",
+                category: "policy",
+                badge: "HF",
+                badgeBg: "linear-gradient(135deg, #1c3f94, #0f2459)",
+                badgeColor: "#ffffff",
+                baseRate: 3.75,
+                minRate: 3.75,
+                maxRate: 4.15,
+                method: "체증식 분할상환(만40세미만) / 원리금균등",
+                discountInfo: "신혼부부(-0.2%p), 다자녀, 한부모, 전자약정(-0.1%p) 우대 패키지",
+                note: "👑 청년·신혼(만 40세 미만) '체증식 분할상환' 선택 가능 (초기 월 불입액 30% 절감)"
+            }
+        ];
+
+        let currentBankLoanFilter = "all";
+
+        function filterBankLoanCategory(cat, btn) {
+            currentBankLoanFilter = cat;
+            const group = document.getElementById("bankLoanFilterGroup");
+            if (group) {
+                group.querySelectorAll(".bank-filter-btn").forEach(b => b.classList.remove("active"));
+            }
+            if (btn) btn.classList.add("active");
+            const pureLoanNeed = (S && S.loan && S.loan.manualAmount) ? S.loan.manualAmount : (S.goal.midLoan || 415200000);
+            renderRealBankRates(pureLoanNeed);
+        }
+
+        function calcPmtAmortization(P, annualRatePct, years) {
+            if (P <= 0 || annualRatePct <= 0 || years <= 0) return { monthlyPmt: 0, totalInterest: 0 };
+            const r = annualRatePct / 100 / 12;
+            const n = years * 12;
+            const pmt = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+            const totalInt = (pmt * n) - P;
+            return { monthlyPmt: Math.round(pmt), totalInterest: Math.round(totalInt) };
+        }
+
+        function renderRealBankRates(loanPrincipal) {
+            const container = document.getElementById("bankRatesListContainer");
+            const basisEl = document.getElementById("bankLoanBasisAmt");
+            const P = loanPrincipal > 0 ? loanPrincipal : (S.goal.midLoan || 415200000);
+            if (basisEl) {
+                basisEl.textContent = kfmt(P) + " (" + won(P) + "원)";
+            }
+            if (!container) return;
+
+            let list = [...REAL_BANK_RATES];
+            if (currentBankLoanFilter && currentBankLoanFilter !== "all") {
+                list = list.filter(b => b.category === currentBankLoanFilter);
+            }
+
+            container.innerHTML = list.map(item => {
+                const res30 = calcPmtAmortization(P, item.baseRate, 30);
+                const res40 = calcPmtAmortization(P, item.baseRate, 40);
+
+                return `
+                    <div class="bank-rate-item">
+                        <div>
+                            <div class="bank-item-top">
+                                <div class="bank-item-info">
+                                    <div class="bank-logo-badge" style="background:${item.badgeBg};color:${item.badgeColor};">
+                                        ${item.badge}
+                                    </div>
+                                    <div>
+                                        <div class="bank-name-title">${esc(item.bank)}</div>
+                                        <div class="bank-product-sub">${esc(item.product)}</div>
+                                    </div>
+                                </div>
+                                <div class="bank-rate-display">
+                                    <div class="bank-rate-val">${item.baseRate.toFixed(2)}%</div>
+                                    <div class="bank-rate-range">범위 ${item.minRate.toFixed(2)}% ~ ${item.maxRate.toFixed(2)}%</div>
+                                </div>
+                            </div>
+
+                            <div class="bank-pmt-box">
+                                <div class="bank-pmt-row">
+                                    <span><b>30년 만기</b> 원리금</span>
+                                    <div class="bank-pmt-val">
+                                        <b>월 ${(res30.monthlyPmt / 10000).toFixed(1)}만 원</b>
+                                        <span class="bank-pmt-int">(총이자 ${(res30.totalInterest / 100000000).toFixed(2)}억)</span>
+                                    </div>
+                                </div>
+                                <div class="bank-pmt-row">
+                                    <span><b>40년 만기</b> 원리금</span>
+                                    <div class="bank-pmt-val">
+                                        <b>월 ${(res40.monthlyPmt / 10000).toFixed(1)}만 원</b>
+                                        <span class="bank-pmt-int">(총이자 ${(res40.totalInterest / 100000000).toFixed(2)}억)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="font-size:11.5px;color:var(--ink2);margin-bottom:8px;line-height:1.5;">
+                                💡 ${esc(item.note)}
+                            </div>
+                        </div>
+
+                        <div class="bank-item-footer">
+                            <span style="font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;" title="${esc(item.discountInfo)}">
+                                🎁 ${esc(item.discountInfo)}
+                            </span>
+                            <button type="button" class="bank-apply-btn" onclick="applyBankLoanRate(${item.baseRate}, '${esc(item.bank)}', '${esc(item.product)}')">
+                                이 금리로 계산
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function applyBankLoanRate(rate, bankName, productName) {
+            if (!S.loan) S.loan = {};
+            S.loan.rate = rate;
+            const rateInput = document.querySelector('[data-loan="rate"]');
+            if (rateInput) rateInput.value = won(rate);
+            autosave();
+            renderLoan();
+            const target = document.getElementById("tab-loan");
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            toast(`✅ ${bankName} 기준금리 연 ${rate}%가 상단 계산기에 적용되었습니다!`);
         }
 
         function renderSelects() {
