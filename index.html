@@ -3563,26 +3563,6 @@
                 </div>
             </div>
 
-            <div class="card">
-                <h2>자산 항목별 요약</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>항목</th>
-                            <th class="num">금액</th>
-                            <th class="num">비중</th>
-                        </tr>
-                    </thead>
-                    <tbody id="summaryBody"></tbody>
-                    <tfoot>
-                        <tr>
-                            <td>합계</td>
-                            <td class="num" id="summaryTotal"></td>
-                            <td class="num">100%</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
         </section>
 
         <!-- ============ 자산 ============ -->
@@ -6284,15 +6264,18 @@
 
             renderDividendSection();
 
-            // 요약 테이블 + 자산 구성 원그래프 (같은 데이터, 항목별로 고정된 색상 사용)
+            // 자산 구성 원그래프 (항목별 고정 색상 사용)
             const compRows = buildCompositionRows();
-            const tb = document.getElementById("summaryBody"); tb.innerHTML = "";
-            compRows.forEach(r => {
-                const tr = document.createElement("tr");
-                tr.innerHTML = '<td><i class="dot" style="background:' + r.color + '"></i> ' + esc(r.name) + '</td><td class="num">' + won(r.amt) + '</td><td class="num">' +
-                    (c.total > 0 ? (r.amt / c.total * 100).toFixed(1) : "0.0") + '%</td>';
-                tb.appendChild(tr);
-            });
+            const tb = document.getElementById("summaryBody");
+            if (tb) {
+                tb.innerHTML = "";
+                compRows.forEach(r => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = '<td><i class="dot" style="background:' + r.color + '"></i> ' + esc(r.name) + '</td><td class="num">' + won(r.amt) + '</td><td class="num">' +
+                        (c.total > 0 ? (r.amt / c.total * 100).toFixed(1) : "0.0") + '%</td>';
+                    tb.appendChild(tr);
+                });
+            }
             set("summaryTotal", won(c.total));
             drawProjection(c); drawDonut(compRows, c.total);
             drawFxChart(); drawAssetHistoryChart();
