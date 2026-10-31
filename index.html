@@ -11,9 +11,9 @@
     <meta http-equiv="Expires" content="0">
     <title>고석현의 돈통 · 자산관리</title>
     <!-- 두꺼비 미디어 빠른 로딩을 위한 Preload -->
-    <link rel="preload" as="video" type="video/mp4" href="./assets/toad_gain.mp4?v=20260920_v1">
+    <link rel="preload" as="video" type="video/mp4" href="./assets/toad_gain.mp4?v=20261031_v2">
     <link rel="preload" as="image" href="./assets/toad_gain_poster.jpg">
-    <link rel="preload" as="video" type="video/mp4" href="./assets/toad_loss.mp4?v=20260920_v1">
+    <link rel="preload" as="video" type="video/mp4" href="./assets/toad_loss.mp4?v=20261031_v2">
     <link rel="preload" as="image" href="./assets/toad_loss_poster.jpg">
     <!-- iOS / Android 모바일 웹앱(PWA) 전용 설정 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -3631,14 +3631,16 @@
                     <div class="toad-loading-sub">오늘의 변동 리포트를 실시간 계산하고 있어요 (2~3초 소요)</div>
                 </div>
                 <video id="toadGainVideo" class="toad-video" autoplay loop muted playsinline webkit-playsinline preload="auto" poster="./assets/toad_gain_poster.jpg" style="display:none;">
-                    <source src="./assets/toad_gain.mp4?v=20260920_v1" type="video/mp4">
+                    <source src="./assets/toad_gain.mp4?v=20261031_v2" type="video/mp4">
+                    <source src="./%ED%8F%B4%EC%A7%9D_%EB%97%80%EB%A9%B4%EC%84%9C_%EC%99%80%EC%9D%B8%EC%9D%84_%EA%B5%AC%EB%B0%B0%ED%95%98%EB%8A%94_%EB%91%90%EA%BB%80%EB%B9%84.mp4" type="video/mp4">
                     <source src="./폴짝_뛰면서_와인을_건배하는_두꺼비.mp4" type="video/mp4">
                 </video>
                 <video id="toadLossVideo" class="toad-video" autoplay loop muted playsinline webkit-playsinline preload="auto" poster="./assets/toad_loss_poster.jpg" style="display:none;">
-                    <source src="./assets/toad_loss.mp4?v=20260920_v1" type="video/mp4">
+                    <source src="./assets/toad_loss.mp4?v=20261031_v2" type="video/mp4">
+                    <source src="./%EB%A7%88%EC%A7%80%EB%A7%89%EC%97%94_%EC%A0%80%EA%B8%88%ED%86%B5%EC%9D%B4_%EC%96%B4%EB%94%94%EC%97%90%EC%84%A0%EA%B0%80_%EA%B5%B4%EB%9F%AC%EC%99%80%EC%84%9C_%EA%B7%B8_%EC%A0%80%EA%B8%88%ED%86%B5%EC%9D%84_%EC%84%B8%EB%A1%9C.mp4" type="video/mp4">
                     <source src="./마지막엔_저금통이_어디에선가_굴러와서_그_저금통을_세로.mp4" type="video/mp4">
                 </video>
-                <img id="toadGifImg" class="toad-gif-img" src="./assets/toad_loss_v3.gif?v=20260918_v4" alt="두꺼비 움짤" style="display:none;">
+                <img id="toadFlatImg" class="toad-flat-img" src="./assets/toad_gain_poster.jpg" alt="평온한 두꺼비" style="display:none; width:100%; height:100%; object-fit:cover;">
             </div>
             
             <!-- 자산 변동 디테일 카드 -->
@@ -7619,7 +7621,7 @@
             const dateNote = document.getElementById("toadDateNote");
             const gainVideo = document.getElementById("toadGainVideo");
             const lossVideo = document.getElementById("toadLossVideo");
-            const gifImg = document.getElementById("toadGifImg");
+            const flatImg = document.getElementById("toadFlatImg");
             const loadingBox = document.getElementById("toadLoadingBox");
             const prevDateLbl = document.getElementById("toadPrevDateLbl");
             const prevAmt = document.getElementById("toadPrevAmt");
@@ -7653,7 +7655,7 @@
                 
                 if (gainVideo) { gainVideo.pause(); gainVideo.style.display = "none"; }
                 if (lossVideo) { lossVideo.pause(); lossVideo.style.display = "none"; }
-                if (gifImg) { gifImg.style.display = "none"; }
+                if (flatImg) { flatImg.style.display = "none"; }
                 if (loadingBox) { loadingBox.style.display = "flex"; }
                 
                 prevDateLbl.textContent = change.hasPrev ? `어제 자산 (${change.prevDate})` : "어제 자산";
@@ -7823,8 +7825,8 @@
                     gainVideo.pause();
                     gainVideo.style.display = "none";
                 }
-                if (gifImg) {
-                    gifImg.style.display = "none";
+                if (flatImg) {
+                    flatImg.style.display = "none";
                 }
                 if (lossVideo) {
                     lossVideo.style.display = "block";
@@ -7844,8 +7846,8 @@
                     lossVideo.pause();
                     lossVideo.style.display = "none";
                 }
-                if (gifImg) {
-                    gifImg.style.display = "none";
+                if (flatImg) {
+                    flatImg.style.display = "none";
                 }
                 if (gainVideo) {
                     gainVideo.style.display = "block";
@@ -7867,12 +7869,12 @@
                     lossVideo.pause();
                     lossVideo.style.display = "none";
                 }
-                if (gifImg) {
-                    if (gainVideo) { gainVideo.pause(); gainVideo.style.display = "none"; }
-                    gifImg.style.display = "block";
-                } else if (gainVideo) {
-                    gainVideo.style.display = "block";
+                if (gainVideo) {
                     gainVideo.pause();
+                    gainVideo.style.display = "none";
+                }
+                if (flatImg) {
+                    flatImg.style.display = "block";
                 }
                 bubbleIcon.textContent = "🍵";
                 bubbleText.innerHTML = `“<b>오늘은 자산 변동 없이 평온한 보합세(0원)입니다!</b> 🐸🍵<br>시장 변동이 잔잔한 날에는 차 한 잔의 여유를 즐겨보세요. 우리는 2028년 5월 잔금일까지 흔들림 없이 나아갑니다!”`;
@@ -7909,6 +7911,8 @@
             }
         }
 
+        const TOAD_AUTO_POPUP_KEY = "toad_auto_popup_shown_";
+
         function closeToadAlertModal(saveRemember) {
             const modal = document.getElementById("toadAlertModal");
             if (modal) modal.classList.remove("show");
@@ -7918,28 +7922,54 @@
             const lossVideo = document.getElementById("toadLossVideo");
             if (lossVideo) lossVideo.pause();
             
+            // 모달을 닫았을 때도 해당 기기에서는 오늘 이미 팝업을 본 것으로 기록하여 재팝업 원천 차단
+            const today = todayISO();
+            try {
+                localStorage.setItem(TOAD_AUTO_POPUP_KEY + today, "1");
+            } catch (e) {}
+
             const chk = document.getElementById("chkDoNotShowToday");
             if (chk && chk.checked) {
                 try {
-                    localStorage.setItem("toad_hide_today_" + todayISO(), "1");
+                    localStorage.setItem("toad_hide_today_" + today, "1");
                 } catch (e) {}
             }
         }
 
         function checkDailyToadAlert() {
-            // 시세/환율/구글시트 초기 업데이트가 진행 중이면, 완료 후 안전하게 팝업하도록 대기
+            // 시세/환율/구글시트 초기 업데이트가 진행 중이면 절대 팝업하지 않고 대기
             if (isDailyAssetSyncing) return;
             try {
                 const today = todayISO();
-                const cp = getCurrentMarketCheckpoint();
-                const hideToday = localStorage.getItem("toad_hide_today_" + today);
-                const slotShown = sessionStorage.getItem("toad_shown_slot_" + cp.slotId);
+                const todayKey = TOAD_AUTO_POPUP_KEY + today;
                 
-                // 오늘 하루 끄기를 누르지 않았고, 이번 체크 슬롯(16시 한국 장종료 or 06시 아침 정산)에서 아직 안 떴다면 팝업 실행!
-                if (!hideToday && !slotShown) {
-                    sessionStorage.setItem("toad_shown_slot_" + cp.slotId, "1");
-                    openToadAlertModal(false);
+                // 각 기기별(localStorage) 1일 최초 1회만 자동 팝업
+                // ex) 남편 기기에서 1번 보면 남편 기기는 그날 더 이상 팝업이 뜨지 않음.
+                // 아내 기기에서 오늘 아직 접속하지 않은 상태로 접속하면 아내 기기에서 1회 팝업이 뜸.
+                if (localStorage.getItem(todayKey)) {
+                    return;
                 }
+                
+                // 사용자가 체크박스로 명시적인 '오늘 하루 안 보기'를 설정한 경우
+                if (localStorage.getItem("toad_hide_today_" + today)) {
+                    return;
+                }
+                
+                // 해당 기기에서 오늘 1회 팝업 표시됨을 영구 기록
+                localStorage.setItem(todayKey, "1");
+                
+                // 7일 이상 지난 과거 자동 팝업 키 정리 (localStorage 용량 관리)
+                try {
+                    for (let i = localStorage.length - 1; i >= 0; i--) {
+                        const k = localStorage.key(i);
+                        if (k && k.startsWith(TOAD_AUTO_POPUP_KEY) && k !== todayKey) {
+                            const dateStr = k.replace(TOAD_AUTO_POPUP_KEY, "");
+                            if (dateStr < today) localStorage.removeItem(k);
+                        }
+                    }
+                } catch (cleanupErr) {}
+                
+                openToadAlertModal(false);
             } catch (e) {
                 console.error("Daily check error:", e);
             }
@@ -7974,29 +8004,26 @@
         stamp(new Date());
         initFxHistory();
 
-        // 구글 시트 동기화 및 최신 시세 갱신이 완료된 후 두꺼비 알림을 정확한 데이터로 팝업
-        (async () => {
+        // 구글 시트 원격 데이터 및 최신 시세 갱신이 100% 완료된 후 두꺼비 알림을 정확한 데이터로 팝업
+        let isInitialSyncDone = false;
+        async function runInitialDataAndMarketSync() {
+            if (isInitialSyncDone) return;
             try {
-                // 구글 시트 최신 데이터 및 장종료/아침 정산 시세 갱신 대기 (최대 3.5초 타임아웃)
-                await Promise.race([
-                    (async () => {
-                        if (sync.url) {
-                            setSyncStatus("연결됨 · 불러오는 중…");
-                            try { await doSync(); } catch (e) { console.warn("Startup doSync err:", e); }
-                        }
-                        try {
-                            await checkCheckpointMarketSync();
-                        } catch (e) { console.warn("Startup checkpoint sync err:", e); }
-                    })(),
-                    new Promise(resolve => setTimeout(resolve, 3500))
-                ]);
-            } catch (e) {
-                console.warn("Startup sync timed out or error:", e);
+                if (sync.url) {
+                    setSyncStatus("연결됨 · 불러오는 중…");
+                    try { await doSync(); } catch (e) { console.warn("Startup doSync err:", e); }
+                }
+                try {
+                    await checkCheckpointMarketSync();
+                } catch (e) { console.warn("Startup checkpoint sync err:", e); }
+            } catch (err) {
+                console.warn("Initial sync error:", err);
             } finally {
+                isInitialSyncDone = true;
                 isDailyAssetSyncing = false;
                 render(); // 확정된 데이터로 대시보드 브리핑 카드 즉시 갱신
                 
-                // 로딩 중에 사용자가 두꺼비 모달을 이미 열어두었다면 최종 데이터와 적절한 연출로 갱신
+                // 로딩 중에 사용자가 두꺼비 모달을 수동으로 이미 열어두었다면 최종 데이터와 적절한 연출로 갱신
                 const m = document.getElementById("toadAlertModal");
                 if (m && m.classList.contains("show")) {
                     const finalChange = getDailyAssetChange();
@@ -8005,13 +8032,24 @@
                     if (finalMode === "loss" || finalMode === "gain") playToadSound(finalMode);
                 }
                 
-                // 최신 데이터와 시세가 100% 반영된 상태에서 두꺼비 일간 알림 팝업 실행!
+                // 최신 데이터와 시세가 100% 반영된 다음에야 1일 최초 1회 자동 팝업 실행!
                 checkDailyToadAlert();
             }
+        }
+
+        // 앱 시작 시 안전 타임아웃(최대 6초)과 함께 초기 동기화 진행
+        (async () => {
+            await Promise.race([
+                runInitialDataAndMarketSync(),
+                new Promise(resolve => setTimeout(resolve, 6000))
+            ]);
         })();
 
         document.addEventListener("visibilitychange", async () => {
             if (document.visibilityState === "visible") {
+                const today = todayISO();
+                const todayKey = TOAD_AUTO_POPUP_KEY + today;
+                
                 const cp = getCurrentMarketCheckpoint();
                 const lastSlot = localStorage.getItem("toad_last_sync_slot") || S.lastSyncSlot;
                 const needSlotSync = lastSlot !== cp.slotId;
@@ -8019,28 +8057,31 @@
                 if (needSlotSync || sync.url) {
                     isDailyAssetSyncing = true;
                     render();
-                }
-                try {
-                    await Promise.race([
-                        (async () => {
-                            if (sync.url) {
-                                try { await doSync(); } catch (e) {}
-                            }
-                            await checkCheckpointMarketSync();
-                        })(),
-                        new Promise(resolve => setTimeout(resolve, 3000))
-                    ]);
-                } catch (e) {}
-                finally {
-                    isDailyAssetSyncing = false;
-                    render();
-                    const m = document.getElementById("toadAlertModal");
-                    if (m && m.classList.contains("show")) {
-                        const finalChange = getDailyAssetChange();
-                        let finalMode = finalChange.direction === "down" ? "loss" : (finalChange.direction === "up" ? "gain" : "flat");
-                        renderToadModalContent(finalMode, finalChange, false);
+                    try {
+                        await Promise.race([
+                            (async () => {
+                                if (sync.url) {
+                                    try { await doSync(); } catch (e) {}
+                                }
+                                await checkCheckpointMarketSync();
+                            })(),
+                            new Promise(resolve => setTimeout(resolve, 5000))
+                        ]);
+                    } catch (e) {}
+                    finally {
+                        isDailyAssetSyncing = false;
+                        render();
+                        const m = document.getElementById("toadAlertModal");
+                        if (m && m.classList.contains("show")) {
+                            const finalChange = getDailyAssetChange();
+                            let finalMode = finalChange.direction === "down" ? "loss" : (finalChange.direction === "up" ? "gain" : "flat");
+                            renderToadModalContent(finalMode, finalChange, false);
+                        }
+                        // 아직 오늘 1회 자동 팝업을 보지 않은 기기인 경우에만 팝업 실행
+                        if (!localStorage.getItem(todayKey)) {
+                            checkDailyToadAlert();
+                        }
                     }
-                    checkDailyToadAlert();
                 }
             }
         });
