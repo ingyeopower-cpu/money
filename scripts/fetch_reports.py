@@ -230,6 +230,7 @@ def main():
     fx_quote = fetch_yahoo_quote('KRW=X')
     schd_quote = fetch_yahoo_quote('SCHD')
     tiger_quote = fetch_yahoo_quote('458730.KS')
+    nasdaq_quote = fetch_yahoo_quote('^NDX')
     tnx_quote = fetch_yahoo_quote('^TNX')
 
     # 기본값 보정 (Fallback)
@@ -244,6 +245,10 @@ def main():
     current_tiger = tiger_quote['price'] if tiger_quote and tiger_quote.get('price') else 15175.0
     tiger_diff = tiger_quote['diff'] if tiger_quote and tiger_quote.get('diff') is not None else 1020.0
     tiger_diff_pct = tiger_quote['diffPct'] if tiger_quote and tiger_quote.get('diffPct') is not None else 7.21
+
+    current_nasdaq = nasdaq_quote['price'] if nasdaq_quote and nasdaq_quote.get('price') else 20384.8
+    nasdaq_diff = nasdaq_quote['diff'] if nasdaq_quote and nasdaq_quote.get('diff') is not None else 185.2
+    nasdaq_diff_pct = nasdaq_quote['diffPct'] if nasdaq_quote and nasdaq_quote.get('diffPct') is not None else 0.92
 
     current_tnx = tnx_quote['price'] if tnx_quote and tnx_quote.get('price') else 4.185
     tnx_diff = tnx_quote['diff'] if tnx_quote and tnx_quote.get('diff') is not None else -0.04
@@ -480,6 +485,7 @@ def main():
     fx_history = fx_quote.get('history', []) if fx_quote else []
     schd_history = schd_quote.get('history', []) if schd_quote else []
     tiger_history = tiger_quote.get('history', []) if tiger_quote else []
+    nasdaq_history = nasdaq_quote.get('history', []) if nasdaq_quote else []
     tnx_history = tnx_quote.get('history', []) if tnx_quote else []
 
     # 한국 국채 10년물 금리 히스토리 생성 (날짜 및 일봉 시계열은 tnx_history 또는 fx_history 기반 동조)
@@ -546,7 +552,26 @@ def main():
                 'diff': tiger_diff,
                 'diffPct': tiger_diff_pct,
                 'holdingQty': tiger_qty,
+                'divYield': 3.65,
+                'divGrowth5Y': 11.8,
+                'peRatio': 15.4,
+                'desc': "💡 부부 합산 5,062주 보유 중! 매월 약 23.6만 원 배당금이 잔금 준비 통장으로 자동 기여합니다.",
                 'history': tiger_history
+            },
+            'nasdaq': {
+                'name': '미국 나스닥 100',
+                'symbol': '^NDX',
+                'price': current_nasdaq,
+                'diff': nasdaq_diff,
+                'diffPct': nasdaq_diff_pct,
+                'peRatio': 28.5,
+                'topSectors': [
+                    {'name': '정보기술 (Technology)', 'pct': 49.8},
+                    {'name': '통신서비스 (Communication)', 'pct': 15.2},
+                    {'name': '경기소비재 (Consumer Discretionary)', 'pct': 13.5}
+                ],
+                'desc': "💡 애플·MS·엔비디아 등 글로벌 혁신 기술주 100대 기업 추종 지수. 기술 혁신 및 성장 벤치마크",
+                'history': nasdaq_history
             },
             'us10y': {
                 'current': current_tnx,

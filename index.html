@@ -2614,7 +2614,98 @@
             color: #60a5fa;
         }
 
-        /* 3대 거시지표 라이브 카드 그리드 */
+        /* 6대 거시지표 공통 기간 동기화 바 */
+        .macro-sync-period-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 18px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: var(--card-shadow);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .msp-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .msp-icon {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(49, 130, 246, 0.12);
+        }
+        .msp-title {
+            font-size: 13.5px;
+            font-weight: 750;
+            color: var(--ink);
+            letter-spacing: -0.01em;
+        }
+        .msp-desc {
+            font-size: 11.5px;
+            color: var(--muted);
+            margin-top: 1px;
+        }
+        .macro-sync-tabs {
+            display: inline-flex;
+            background: var(--chip);
+            border-radius: 10px;
+            padding: 3px;
+            gap: 2px;
+            border: 1px solid var(--border);
+        }
+        .macro-sync-tab-btn {
+            padding: 5px 12px;
+            background: transparent;
+            border: none;
+            border-radius: 7px;
+            font-size: 11.5px;
+            font-weight: 650;
+            color: var(--ink2);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+        .macro-sync-tab-btn:hover {
+            color: var(--ink);
+        }
+        .macro-sync-tab-btn.active {
+            background: var(--surface);
+            color: var(--toss-blue, #3182F6);
+            font-weight: 800;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        }
+        :root[data-theme="dark"] .macro-sync-tab-btn.active {
+            color: #60a5fa;
+            background: rgba(255, 255, 255, 0.12);
+        }
+        @media (max-width: 600px) {
+            .macro-sync-period-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 12px 14px;
+            }
+            .macro-sync-tabs {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .macro-sync-tab-btn {
+                flex: 1;
+                text-align: center;
+                padding: 5px 6px;
+                font-size: 11px;
+            }
+        }
+
+        /* 6대 거시지표 라이브 카드 그리드 */
         .macro-cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
@@ -5295,7 +5386,25 @@
                 </div>
             </div>
 
-            <!-- 2. 4대 핵심 거시경제 지표 라이브 주식형 차트 그리드 -->
+            <!-- 지표 공통 기간 동기화 바 (1주, 1개월, 3개월, 6개월, 1년 원클릭 일괄 전환) -->
+            <div class="macro-sync-period-bar">
+                <div class="msp-left">
+                    <span class="msp-icon">⚡</span>
+                    <div>
+                        <div class="msp-title">6대 핵심 지표 공통 기간</div>
+                        <div class="msp-desc">하나만 누르면 6개 전 종목 차트가 같은 기간으로 바뀝니다</div>
+                    </div>
+                </div>
+                <div class="macro-sync-tabs" id="macroCommonSyncTabs">
+                    <button type="button" class="macro-sync-tab-btn" data-range="1w" onclick="setAllMacroChartsRange('1w')">1주</button>
+                    <button type="button" class="macro-sync-tab-btn active" data-range="1m" onclick="setAllMacroChartsRange('1m')">1개월</button>
+                    <button type="button" class="macro-sync-tab-btn" data-range="3m" onclick="setAllMacroChartsRange('3m')">3개월</button>
+                    <button type="button" class="macro-sync-tab-btn" data-range="6m" onclick="setAllMacroChartsRange('6m')">6개월</button>
+                    <button type="button" class="macro-sync-tab-btn" data-range="1y" onclick="setAllMacroChartsRange('1y')">1년</button>
+                </div>
+            </div>
+
+            <!-- 2. 6대 핵심 거시경제 지표 라이브 주식형 차트 그리드 -->
             <div class="macro-cards-grid">
                 <!-- 카드 1: 원·달러 환율 (USD/KRW) & DXY -->
                 <div class="macro-card">
@@ -5436,7 +5545,141 @@
                     </div>
                 </div>
 
-                <!-- 카드 3: 미국 국채 10년물 금리 (^TNX) -->
+                <!-- 카드 3: 타이거미국배당다우존스 (TIGER) -->
+                <div class="macro-card">
+                    <div class="macro-card-header">
+                        <div class="macro-card-title-group">
+                            <span class="macro-card-icon">🐯</span>
+                            <div>
+                                <div class="macro-card-title">타이거미국배당다우존스</div>
+                                <div class="macro-card-sub">한국판 SCHD · 458730 · 월분배 ETF</div>
+                            </div>
+                        </div>
+                        <span class="macro-diff-pill up" id="macroTigerDiffPill">+1,020 (+7.21%)</span>
+                    </div>
+
+                    <div class="macro-price-row">
+                        <span class="macro-price-big" id="macroTigerPrice">15,175</span>
+                        <span style="font-size:15px;color:var(--muted);font-weight:600;">원</span>
+                    </div>
+
+                    <!-- 주식 꺾은선 차트 영역 -->
+                    <div class="macro-chart-section" id="chartSection_tiger">
+                        <div class="macro-chart-top-bar">
+                            <span class="macro-chart-legend" id="chartLegend_tiger">📈 1개월 추이</span>
+                            <div class="macro-chart-range-group">
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('tiger', '1w', this)">1주</button>
+                                <button type="button" class="macro-chart-range-btn active" onclick="changeChartRange('tiger', '1m', this)">1개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('tiger', '3m', this)">3개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('tiger', '6m', this)">6개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('tiger', '1y', this)">1년</button>
+                            </div>
+                        </div>
+                        <div class="macro-chart-svg-wrap" id="chartWrap_tiger" onmousemove="handleChartScrub(event, 'tiger')" onmouseleave="resetChartScrub('tiger')" ontouchmove="handleChartTouchScrub(event, 'tiger')" ontouchend="resetChartScrub('tiger')">
+                            <div class="macro-chart-tooltip" id="chartTip_tiger"></div>
+                            <svg class="macro-chart-svg" id="chartSvg_tiger" viewBox="0 0 300 70" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="chartGrad_tiger" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#f04452" stop-opacity="0.25" id="gradStop0_tiger"/>
+                                        <stop offset="100%" stop-color="#f04452" stop-opacity="0.0" id="gradStop1_tiger"/>
+                                    </linearGradient>
+                                </defs>
+                                <path class="macro-chart-area" id="chartArea_tiger" fill="url(#chartGrad_tiger)" d=""/>
+                                <path class="macro-chart-line" id="chartLine_tiger" stroke="#f04452" d=""/>
+                                <line class="macro-chart-crosshair" id="chartCross_tiger" x1="0" y1="0" x2="0" y2="70" stroke="var(--ink)" stroke-width="1.2" opacity="0"/>
+                                <circle class="macro-chart-dot" id="chartDot_tiger" cx="0" cy="0" r="4.5" fill="#f04452" stroke="#fff" stroke-width="2" opacity="0"/>
+                            </svg>
+                        </div>
+                        <div class="macro-chart-axis">
+                            <span id="chartMinDate_tiger">10.01</span>
+                            <span id="chartMinMax_tiger" style="font-size:9.5px;opacity:0.75;">-</span>
+                            <span id="chartMaxDate_tiger">10.31</span>
+                        </div>
+                    </div>
+
+                    <div class="macro-details-box">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                            <span>배당수익률 / 월 분배</span>
+                            <b style="color:var(--toss-blue,#3182f6);" id="macroTigerYieldVal">연 3.65% (월 약 23.6만 원)</b>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                            <span>부부 보유 수량</span>
+                            <b id="macroTigerHoldingVal" style="color:var(--ink);">5,062주 보유 중</b>
+                        </div>
+                        <div style="margin-top:8px;font-size:11.5px;color:var(--ink2);" id="macroTigerDesc">
+                            💡 부부 합산 5,062주 보유! 매월 분배금이 잔금 통장으로 자동 누적되어 저축을 가속합니다.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카드 4: 미국 나스닥 100 지수 (NASDAQ 100) -->
+                <div class="macro-card">
+                    <div class="macro-card-header">
+                        <div class="macro-card-title-group">
+                            <span class="macro-card-icon">⚡</span>
+                            <div>
+                                <div class="macro-card-title">미국 나스닥 100 지수</div>
+                                <div class="macro-card-sub">NASDAQ 100 (^NDX) · 빅테크 혁신성장</div>
+                            </div>
+                        </div>
+                        <span class="macro-diff-pill up" id="macroNasdaqDiffPill">+185.2 (+0.92%)</span>
+                    </div>
+
+                    <div class="macro-price-row">
+                        <span class="macro-price-big" id="macroNasdaqPrice">28,384.8</span>
+                        <span style="font-size:15px;color:var(--muted);font-weight:600;">pt</span>
+                    </div>
+
+                    <!-- 주식 꺾은선 차트 영역 -->
+                    <div class="macro-chart-section" id="chartSection_nasdaq">
+                        <div class="macro-chart-top-bar">
+                            <span class="macro-chart-legend" id="chartLegend_nasdaq">📈 1개월 추이</span>
+                            <div class="macro-chart-range-group">
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('nasdaq', '1w', this)">1주</button>
+                                <button type="button" class="macro-chart-range-btn active" onclick="changeChartRange('nasdaq', '1m', this)">1개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('nasdaq', '3m', this)">3개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('nasdaq', '6m', this)">6개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('nasdaq', '1y', this)">1년</button>
+                            </div>
+                        </div>
+                        <div class="macro-chart-svg-wrap" id="chartWrap_nasdaq" onmousemove="handleChartScrub(event, 'nasdaq')" onmouseleave="resetChartScrub('nasdaq')" ontouchmove="handleChartTouchScrub(event, 'nasdaq')" ontouchend="resetChartScrub('nasdaq')">
+                            <div class="macro-chart-tooltip" id="chartTip_nasdaq"></div>
+                            <svg class="macro-chart-svg" id="chartSvg_nasdaq" viewBox="0 0 300 70" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="chartGrad_nasdaq" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#f04452" stop-opacity="0.25" id="gradStop0_nasdaq"/>
+                                        <stop offset="100%" stop-color="#f04452" stop-opacity="0.0" id="gradStop1_nasdaq"/>
+                                    </linearGradient>
+                                </defs>
+                                <path class="macro-chart-area" id="chartArea_nasdaq" fill="url(#chartGrad_nasdaq)" d=""/>
+                                <path class="macro-chart-line" id="chartLine_nasdaq" stroke="#f04452" d=""/>
+                                <line class="macro-chart-crosshair" id="chartCross_nasdaq" x1="0" y1="0" x2="0" y2="70" stroke="var(--ink)" stroke-width="1.2" opacity="0"/>
+                                <circle class="macro-chart-dot" id="chartDot_nasdaq" cx="0" cy="0" r="4.5" fill="#f04452" stroke="#fff" stroke-width="2" opacity="0"/>
+                            </svg>
+                        </div>
+                        <div class="macro-chart-axis">
+                            <span id="chartMinDate_nasdaq">10.01</span>
+                            <span id="chartMinMax_nasdaq" style="font-size:9.5px;opacity:0.75;">-</span>
+                            <span id="chartMaxDate_nasdaq">10.31</span>
+                        </div>
+                    </div>
+
+                    <div class="macro-details-box">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                            <span>빅테크 비중 (Top 3)</span>
+                            <b style="color:var(--toss-blue,#3182f6);" id="macroNasdaqTechVal">기술주 약 50% 추종</b>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                            <span>성장성 모멘텀</span>
+                            <b id="macroNasdaqPeVal" style="color:var(--ink);">글로벌 AI·테크 선도</b>
+                        </div>
+                        <div style="margin-top:8px;font-size:11.5px;color:var(--ink2);" id="macroNasdaqDesc">
+                            💡 애플·MS·엔비디아 등 글로벌 혁신 기술주 100대 기업 추종. 성장 자산 벤치마크 지표
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카드 5: 미국 국채 10년물 금리 (^TNX) -->
                 <div class="macro-card">
                     <div class="macro-card-header">
                         <div class="macro-card-title-group">
@@ -5503,7 +5746,7 @@
                     </div>
                 </div>
 
-                <!-- 카드 4: 한국 국고채 10년물 금리 (KR 10Y Yield) -->
+                <!-- 카드 6: 한국 국고채 10년물 금리 (KR 10Y Yield) -->
                 <div class="macro-card">
                     <div class="macro-card-header">
                         <div class="macro-card-title-group">
@@ -9801,12 +10044,22 @@
                     peRatio: 15.4
                 },
                 tiger: {
-                    name: "TIGER 미국배당다우존스",
+                    name: "타이거미국배당다우존스",
                     code: "458730",
                     price: 15175,
                     diff: 1020,
                     diffPct: 7.21,
-                    holdingQty: 5062
+                    holdingQty: 5062,
+                    divYield: 3.65,
+                    desc: "💡 부부 합산 5,062주 보유! 매월 분배금이 잔금 통장으로 자동 누적되어 저축을 가속합니다."
+                },
+                nasdaq: {
+                    name: "미국 나스닥 100 지수",
+                    symbol: "^NDX",
+                    price: 28384.8,
+                    diff: 185.2,
+                    diffPct: 0.92,
+                    desc: "💡 애플·MS·엔비디아 등 글로벌 혁신 기술주 100대 기업 추종 지수. 기술 혁신 및 성장 벤치마크"
                 },
                 us10y: {
                     current: 4.929,
@@ -9992,7 +10245,53 @@
                 }
             }
 
-            // (3) 미국 국채 10년물 (^TNX)
+            // (3) 타이거미국배당다우존스 (TIGER)
+            if (macro.tiger) {
+                const t = macro.tiger;
+                const priceEl = document.getElementById("macroTigerPrice");
+                if (priceEl) priceEl.textContent = t.price ? Math.round(t.price).toLocaleString() : "15,175";
+                const diffEl = document.getElementById("macroTigerDiffPill");
+                if (diffEl) {
+                    const isUp = (t.diff || 0) >= 0;
+                    diffEl.className = "macro-diff-pill " + (isUp ? "up" : "down");
+                    diffEl.textContent = `${isUp ? "+" : ""}${t.diff != null ? Math.round(t.diff).toLocaleString() : "0"} (${isUp ? "+" : ""}${t.diffPct != null ? t.diffPct.toFixed(2) : "0.00"}%)`;
+                }
+                const yieldEl = document.getElementById("macroTigerYieldVal");
+                if (yieldEl) {
+                    yieldEl.textContent = `연 ${t.divYield ? t.divYield.toFixed(2) : "3.65"}% (월분배 약 23.6만 원)`;
+                }
+                const holdEl = document.getElementById("macroTigerHoldingVal");
+                if (holdEl) {
+                    holdEl.textContent = `${(t.holdingQty || 5062).toLocaleString()}주 보유 중`;
+                }
+                const descEl = document.getElementById("macroTigerDesc");
+                if (descEl && t.desc) {
+                    descEl.innerHTML = t.desc;
+                }
+            }
+
+            // (4) 미국 나스닥 100 지수 (NASDAQ 100)
+            if (macro.nasdaq) {
+                const n = macro.nasdaq;
+                const priceEl = document.getElementById("macroNasdaqPrice");
+                if (priceEl) priceEl.textContent = n.price ? n.price.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : "28,384.8";
+                const diffEl = document.getElementById("macroNasdaqDiffPill");
+                if (diffEl) {
+                    const isUp = (n.diff || 0) >= 0;
+                    diffEl.className = "macro-diff-pill " + (isUp ? "up" : "down");
+                    diffEl.textContent = `${isUp ? "+" : ""}${n.diff != null ? n.diff.toFixed(1) : "0.0"} (${isUp ? "+" : ""}${n.diffPct != null ? n.diffPct.toFixed(2) : "0.00"}%)`;
+                }
+                const peEl = document.getElementById("macroNasdaqPeVal");
+                if (peEl) {
+                    peEl.textContent = n.peRatio ? `PER ${n.peRatio.toFixed(1)}배 (글로벌 테크)` : "글로벌 AI·테크 선도";
+                }
+                const descEl = document.getElementById("macroNasdaqDesc");
+                if (descEl && n.desc) {
+                    descEl.innerHTML = n.desc;
+                }
+            }
+
+            // (5) 미국 국채 10년물 (^TNX)
             if (macro.us10y) {
                 const y = macro.us10y;
                 const priceEl = document.getElementById("macroYieldPrice");
@@ -10011,7 +10310,7 @@
                 }
             }
 
-            // (4) 한국 국고채 10년물 (KR 10Y Yield)
+            // (6) 한국 국고채 10년물 (KR 10Y Yield)
             if (macro.kr10y) {
                 const k = macro.kr10y;
                 const priceEl = document.getElementById("macroKr10yPrice");
@@ -10030,8 +10329,8 @@
                 }
             }
 
-            // 2-2. 4개 핵심 지표 주식형 인터랙티브 꺾은선 차트 일괄 렌더링
-            ['fx', 'schd', 'us10y', 'kr10y'].forEach(key => renderSingleChart(key));
+            // 2-2. 6개 핵심 지표 주식형 인터랙티브 꺾은선 차트 일괄 렌더링
+            ALL_MACRO_KEYS.forEach(key => renderSingleChart(key));
 
             // 3. 기관 리포트 피드 렌더링
             renderReportsGrid();
@@ -10040,13 +10339,48 @@
         // ==========================================
         // 거시지표 주식형 인터랙티브 꺾은선 차트 엔진
         // ==========================================
+        const ALL_MACRO_KEYS = ['fx', 'schd', 'tiger', 'nasdaq', 'us10y', 'kr10y'];
         const chartRangeState = {
             fx: '1m',
             schd: '1m',
+            tiger: '1m',
+            nasdaq: '1m',
             us10y: '1m',
             kr10y: '1m'
         };
+        let currentMacroCommonRange = '1m';
         const chartCoordsCache = {};
+
+        // 상단 공통 기간 동기화 핸들러 (1주, 1개월, 3개월, 6개월, 1년 원클릭 일괄 전환)
+        function setAllMacroChartsRange(range) {
+            currentMacroCommonRange = range;
+            document.querySelectorAll("#macroCommonSyncTabs .macro-sync-tab-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.range === range);
+            });
+
+            const labelMap = {
+                '1w': '📈 1주 추이',
+                '1m': '📈 1개월 추이',
+                '3m': '📈 3개월 추이',
+                '6m': '📈 6개월 추이',
+                '1y': '📈 1년 추이'
+            };
+
+            ALL_MACRO_KEYS.forEach(key => {
+                chartRangeState[key] = range;
+                const sec = document.getElementById(`chartSection_${key}`);
+                if (sec) {
+                    sec.querySelectorAll('.macro-chart-range-btn').forEach(b => {
+                        b.classList.toggle('active', b.getAttribute('onclick')?.includes(`'${range}'`));
+                    });
+                }
+                const legendEl = document.getElementById(`chartLegend_${key}`);
+                if (legendEl) {
+                    legendEl.textContent = labelMap[range] || '📈 추이';
+                }
+                renderSingleChart(key);
+            });
+        }
 
         function changeChartRange(key, range, btn) {
             chartRangeState[key] = range;
@@ -10066,6 +10400,11 @@
                 };
                 legendEl.textContent = labelMap[range] || '📈 1개월 추이';
             }
+            // 상단 공통 버튼 활성화 상태 동기화 (전체 카드가 같은 기간인지 확인)
+            const allSame = ALL_MACRO_KEYS.every(k => chartRangeState[k] === range);
+            document.querySelectorAll("#macroCommonSyncTabs .macro-sync-tab-btn").forEach(b => {
+                b.classList.toggle("active", allSame && b.dataset.range === range);
+            });
             renderSingleChart(key);
         }
 
@@ -10074,7 +10413,8 @@
             const item = (data && data.macro && data.macro[key]) ? data.macro[key] : null;
             let hist = (item && Array.isArray(item.history) && item.history.length > 0) ? [...item.history] : [];
             if (hist.length === 0) {
-                const cur = (item && (item.current || item.price)) ? (item.current || item.price) : (key === 'fx' ? 1335.1 : key === 'schd' ? 35.78 : key === 'us10y' ? 4.93 : 3.08);
+                const cur = (item && (item.current || item.price)) ? (item.current || item.price) : 
+                    (key === 'fx' ? 1335.1 : key === 'schd' ? 35.78 : key === 'tiger' ? 15175 : key === 'nasdaq' ? 28384.8 : key === 'us10y' ? 4.93 : 3.08);
                 hist = [
                     { date: '10.21', val: cur * 0.994 },
                     { date: '10.23', val: cur * 0.998 },
@@ -10160,13 +10500,33 @@
             const lastP = coords[coords.length - 1];
             const periodDiff = lastP.val - firstP.val;
             const periodDiffPct = firstP.val > 0 ? (periodDiff / firstP.val * 100) : 0;
-            const pillId = key === 'fx' ? 'macroFxDiffPill' : key === 'schd' ? 'macroSchdDiffPill' : key === 'us10y' ? 'macroYieldDiffPill' : 'macroKr10yDiffPill';
+            const pillIdMap = {
+                fx: 'macroFxDiffPill',
+                schd: 'macroSchdDiffPill',
+                tiger: 'macroTigerDiffPill',
+                nasdaq: 'macroNasdaqDiffPill',
+                us10y: 'macroYieldDiffPill',
+                kr10y: 'macroKr10yDiffPill'
+            };
+            const pillId = pillIdMap[key];
             const diffEl = document.getElementById(pillId);
             if (diffEl) {
-                if (key === 'fx' || key === 'schd') {
+                if (key === 'fx') {
                     const isDiffUp = periodDiff >= 0;
                     diffEl.className = "macro-diff-pill " + (isDiffUp ? "up" : "down");
                     diffEl.textContent = `${isDiffUp ? "+" : ""}${periodDiff.toFixed(2)} (${isDiffUp ? "+" : ""}${periodDiffPct.toFixed(2)}%)`;
+                } else if (key === 'schd') {
+                    const isDiffUp = periodDiff >= 0;
+                    diffEl.className = "macro-diff-pill " + (isDiffUp ? "up" : "down");
+                    diffEl.textContent = `${isDiffUp ? "+" : ""}${periodDiff.toFixed(2)} (${isDiffUp ? "+" : ""}${periodDiffPct.toFixed(2)}%)`;
+                } else if (key === 'tiger') {
+                    const isDiffUp = periodDiff >= 0;
+                    diffEl.className = "macro-diff-pill " + (isDiffUp ? "up" : "down");
+                    diffEl.textContent = `${isDiffUp ? "+" : ""}${Math.round(periodDiff).toLocaleString()} (${isDiffUp ? "+" : ""}${periodDiffPct.toFixed(2)}%)`;
+                } else if (key === 'nasdaq') {
+                    const isDiffUp = periodDiff >= 0;
+                    diffEl.className = "macro-diff-pill " + (isDiffUp ? "up" : "down");
+                    diffEl.textContent = `${isDiffUp ? "+" : ""}${periodDiff.toFixed(1)} (${isDiffUp ? "+" : ""}${periodDiffPct.toFixed(2)}%)`;
                 } else {
                     const isDiffDown = periodDiff <= 0;
                     diffEl.className = "macro-diff-pill " + (isDiffDown ? "down" : "up");
@@ -10179,6 +10539,8 @@
             if (val == null || isNaN(val)) return "-";
             if (key === 'fx') return val.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "원";
             if (key === 'schd') return "$" + val.toFixed(2);
+            if (key === 'tiger') return Math.round(val).toLocaleString() + "원";
+            if (key === 'nasdaq') return val.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " pt";
             if (key === 'us10y' || key === 'kr10y') return val.toFixed(2) + "%";
             return String(val);
         }
@@ -10186,6 +10548,8 @@
         function getMacroPriceEl(key) {
             if (key === 'fx') return document.getElementById("macroFxPrice");
             if (key === 'schd') return document.getElementById("macroSchdPrice");
+            if (key === 'tiger') return document.getElementById("macroTigerPrice");
+            if (key === 'nasdaq') return document.getElementById("macroNasdaqPrice");
             if (key === 'us10y') return document.getElementById("macroYieldPrice");
             if (key === 'kr10y') return document.getElementById("macroKr10yPrice");
             return null;
@@ -10198,6 +10562,8 @@
             if (!priceEl || !item) return;
             if (key === 'fx') priceEl.textContent = item.current ? item.current.toLocaleString() : "1,335.1";
             else if (key === 'schd') priceEl.textContent = "$" + (item.price ? item.price.toFixed(2) : "35.78");
+            else if (key === 'tiger') priceEl.textContent = item.price ? Math.round(item.price).toLocaleString() : "15,175";
+            else if (key === 'nasdaq') priceEl.textContent = item.price ? item.price.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : "28,384.8";
             else if (key === 'us10y') priceEl.textContent = (item.current ? item.current.toFixed(2) : "4.93") + "%";
             else if (key === 'kr10y') priceEl.textContent = (item.current ? item.current.toFixed(2) : "3.08") + "%";
         }
@@ -10249,6 +10615,8 @@
             if (priceEl) {
                 if (key === 'fx') priceEl.textContent = closest.val.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
                 else if (key === 'schd') priceEl.textContent = "$" + closest.val.toFixed(2);
+                else if (key === 'tiger') priceEl.textContent = Math.round(closest.val).toLocaleString();
+                else if (key === 'nasdaq') priceEl.textContent = closest.val.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
                 else if (key === 'us10y' || key === 'kr10y') priceEl.textContent = closest.val.toFixed(2) + "%";
                 priceEl.classList.add('scrubbing');
             }
