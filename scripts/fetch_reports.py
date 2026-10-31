@@ -425,9 +425,9 @@ def main():
     est_annual_div_per_share = 560  # 주당 약 560원 연간 배당 추정
     total_tiger_div = tiger_qty * est_annual_div_per_share
 
-    # 두꺼비의 통합 인사이트 코멘터리 생성
-    toad_icon = "🐸"
-    toad_title = "두꺼비의 거시경제 & 부부 자산 종합 브리핑"
+    # 통합 거시경제 & 부부 자산 브리핑 코멘터리 생성
+    toad_icon = ""
+    toad_title = ""
     
     if current_fx > 1360:
         fx_comment = f"현재 원·달러 환율({current_fx:,.1f}원)은 상단 구간입니다. 보유하신 외화자산(미국 단기국채 983만원, SOXL 등)의 원화 평가액이 든든하게 올라섰습니다! 💵"
