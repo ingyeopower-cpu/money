@@ -2747,7 +2747,7 @@
         }
         .macro-chart-range-group {
             display: flex;
-            gap: 3px;
+            gap: 2px;
             background: var(--chip);
             padding: 2px;
             border-radius: 6px;
@@ -2758,10 +2758,11 @@
             font-size: 10px;
             font-weight: 750;
             color: var(--muted);
-            padding: 2px 7px;
+            padding: 2px 6px;
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.15s ease;
+            white-space: nowrap;
         }
         .macro-chart-range-btn.active {
             background: var(--surface);
@@ -2771,6 +2772,19 @@
         :root[data-theme="dark"] .macro-chart-range-btn.active {
             color: #60a5fa;
             background: rgba(255, 255, 255, 0.12);
+        }
+        @media (max-width: 480px) {
+            .macro-chart-range-btn {
+                padding: 2px 4px;
+                font-size: 9.5px;
+            }
+            .macro-chart-range-group {
+                gap: 1.5px;
+            }
+            .stock-sync-btn {
+                padding: 5px 8px !important;
+                font-size: 11px !important;
+            }
         }
         .macro-chart-svg-wrap {
             position: relative;
@@ -4337,7 +4351,9 @@
                         <div class="stock-sync-tabs" id="stockSyncTabs">
                             <button type="button" class="stock-sync-btn" data-period="1W" onclick="setStocksSyncPeriod('1W')">1주일</button>
                             <button type="button" class="stock-sync-btn active" data-period="1M" onclick="setStocksSyncPeriod('1M')">1개월</button>
-                            <button type="button" class="stock-sync-btn" data-period="3M" onclick="setStocksSyncPeriod('3M')">분기(3M)</button>
+                            <button type="button" class="stock-sync-btn" data-period="3M" onclick="setStocksSyncPeriod('3M')">3개월</button>
+                            <button type="button" class="stock-sync-btn" data-period="6M" onclick="setStocksSyncPeriod('6M')">6개월</button>
+                            <button type="button" class="stock-sync-btn" data-period="1Y" onclick="setStocksSyncPeriod('1Y')">1년</button>
                         </div>
                     </div>
                 </div>
@@ -5181,6 +5197,9 @@
                             <div class="macro-chart-range-group">
                                 <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('fx', '1w', this)">1주</button>
                                 <button type="button" class="macro-chart-range-btn active" onclick="changeChartRange('fx', '1m', this)">1개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('fx', '3m', this)">3개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('fx', '6m', this)">6개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('fx', '1y', this)">1년</button>
                             </div>
                         </div>
                         <div class="macro-chart-svg-wrap" id="chartWrap_fx" onmousemove="handleChartScrub(event, 'fx')" onmouseleave="resetChartScrub('fx')" ontouchmove="handleChartTouchScrub(event, 'fx')" ontouchend="resetChartScrub('fx')">
@@ -5250,6 +5269,9 @@
                             <div class="macro-chart-range-group">
                                 <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('schd', '1w', this)">1주</button>
                                 <button type="button" class="macro-chart-range-btn active" onclick="changeChartRange('schd', '1m', this)">1개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('schd', '3m', this)">3개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('schd', '6m', this)">6개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('schd', '1y', this)">1년</button>
                             </div>
                         </div>
                         <div class="macro-chart-svg-wrap" id="chartWrap_schd" onmousemove="handleChartScrub(event, 'schd')" onmouseleave="resetChartScrub('schd')" ontouchmove="handleChartTouchScrub(event, 'schd')" ontouchend="resetChartScrub('schd')">
@@ -5314,6 +5336,9 @@
                             <div class="macro-chart-range-group">
                                 <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('us10y', '1w', this)">1주</button>
                                 <button type="button" class="macro-chart-range-btn active" onclick="changeChartRange('us10y', '1m', this)">1개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('us10y', '3m', this)">3개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('us10y', '6m', this)">6개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('us10y', '1y', this)">1년</button>
                             </div>
                         </div>
                         <div class="macro-chart-svg-wrap" id="chartWrap_us10y" onmousemove="handleChartScrub(event, 'us10y')" onmouseleave="resetChartScrub('us10y')" ontouchmove="handleChartTouchScrub(event, 'us10y')" ontouchend="resetChartScrub('us10y')">
@@ -5378,6 +5403,9 @@
                             <div class="macro-chart-range-group">
                                 <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('kr10y', '1w', this)">1주</button>
                                 <button type="button" class="macro-chart-range-btn active" onclick="changeChartRange('kr10y', '1m', this)">1개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('kr10y', '3m', this)">3개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('kr10y', '6m', this)">6개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('kr10y', '1y', this)">1년</button>
                             </div>
                         </div>
                         <div class="macro-chart-svg-wrap" id="chartWrap_kr10y" onmousemove="handleChartScrub(event, 'kr10y')" onmouseleave="resetChartScrub('kr10y')" ontouchmove="handleChartTouchScrub(event, 'kr10y')" ontouchend="resetChartScrub('kr10y')">
@@ -9154,7 +9182,7 @@
             if (!data || !data.macro) return;
 
             const period = currentStocksSyncPeriod || "1M";
-            const sliceCount = period === "1W" ? 5 : (period === "1M" ? 22 : 65);
+            const sliceCount = period === "1W" ? 5 : (period === "1M" ? 22 : (period === "3M" ? 65 : (period === "6M" ? 130 : 260)));
 
             // 1) 원·달러 환율 데이터 준비
             let fxHist = (data.macro.fx && data.macro.fx.history) ? [...data.macro.fx.history] : [];
@@ -9871,7 +9899,14 @@
             }
             const legendEl = document.getElementById(`chartLegend_${key}`);
             if (legendEl) {
-                legendEl.textContent = range === '1w' ? '📈 1주 추이' : '📈 1개월 추이';
+                const labelMap = {
+                    '1w': '📈 1주 추이',
+                    '1m': '📈 1개월 추이',
+                    '3m': '📈 3개월 추이',
+                    '6m': '📈 6개월 추이',
+                    '1y': '📈 1년 추이'
+                };
+                legendEl.textContent = labelMap[range] || '📈 1개월 추이';
             }
             renderSingleChart(key);
         }
@@ -9891,9 +9926,11 @@
                 ];
             }
             const range = chartRangeState[key] || '1m';
-            if (range === '1w') {
-                hist = hist.slice(-5);
-            }
+            if (range === '1w') return hist.slice(-5);
+            if (range === '1m') return hist.slice(-22);
+            if (range === '3m') return hist.slice(-65);
+            if (range === '6m') return hist.slice(-130);
+            if (range === '1y') return hist.slice(-260);
             return hist;
         }
 
@@ -9958,6 +9995,25 @@
             const minMaxEl = document.getElementById(`chartMinMax_${key}`);
             if (minMaxEl) {
                 minMaxEl.textContent = `최저 ${formatMacroVal(key, minVal)} ~ 최고 ${formatMacroVal(key, maxVal)}`;
+            }
+
+            // 선택 기간에 따른 카드 상단 diff pill 동적 업데이트
+            const firstP = coords[0];
+            const lastP = coords[coords.length - 1];
+            const periodDiff = lastP.val - firstP.val;
+            const periodDiffPct = firstP.val > 0 ? (periodDiff / firstP.val * 100) : 0;
+            const pillId = key === 'fx' ? 'macroFxDiffPill' : key === 'schd' ? 'macroSchdDiffPill' : key === 'us10y' ? 'macroYieldDiffPill' : 'macroKr10yDiffPill';
+            const diffEl = document.getElementById(pillId);
+            if (diffEl) {
+                if (key === 'fx' || key === 'schd') {
+                    const isDiffUp = periodDiff >= 0;
+                    diffEl.className = "macro-diff-pill " + (isDiffUp ? "up" : "down");
+                    diffEl.textContent = `${isDiffUp ? "+" : ""}${periodDiff.toFixed(2)} (${isDiffUp ? "+" : ""}${periodDiffPct.toFixed(2)}%)`;
+                } else {
+                    const isDiffDown = periodDiff <= 0;
+                    diffEl.className = "macro-diff-pill " + (isDiffDown ? "down" : "up");
+                    diffEl.textContent = `${periodDiff > 0 ? "+" : ""}${periodDiff.toFixed(2)}%p (${periodDiff > 0 ? "+" : ""}${periodDiffPct.toFixed(2)}%)`;
+                }
             }
         }
 

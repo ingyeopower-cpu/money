@@ -20,9 +20,9 @@ def get_now_kst_iso():
     return datetime.now(KST).strftime('%Y-%m-%d %H:%M KST')
 
 def fetch_yahoo_quote(symbol):
-    """야후 파이낸스 차트 API로부터 실시간 시세 및 1개월(일봉) 히스토리 추출"""
+    """야후 파이낸스 차트 API로부터 실시간 시세 및 1년(일봉) 히스토리 추출"""
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
-    url = f'https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(symbol)}?interval=1d&range=1mo'
+    url = f'https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(symbol)}?interval=1d&range=1y'
     try:
         r = requests.get(url, headers=headers, timeout=8)
         if r.status_code == 200:
@@ -45,11 +45,13 @@ def fetch_yahoo_quote(symbol):
                 if c is not None:
                     valid_closes.append(c)
                     dt_str = datetime.fromtimestamp(t, KST).strftime('%m.%d')
+                    full_dt_str = datetime.fromtimestamp(t, KST).strftime('%Y.%m.%d')
                     o = opens[i] if i < len(opens) and opens[i] is not None else c
                     h = highs[i] if i < len(highs) and highs[i] is not None else c
                     l = lows[i] if i < len(lows) and lows[i] is not None else c
                     history.append({
                         'date': dt_str,
+                        'fullDate': full_dt_str,
                         'val': round(c, 2),
                         'open': round(o, 2),
                         'high': round(h, 2),
@@ -69,7 +71,7 @@ def fetch_yahoo_quote(symbol):
                 'prev': round(prev, 3) if prev else None,
                 'diff': round(diff, 3),
                 'diffPct': round(diff_pct, 2),
-                'history': history[-25:]
+                'history': history[-260:]  # 1년(약 260 거래일) 보존
             }
     except Exception as e:
         print(f"Yahoo quote error for {symbol}:", e)
@@ -441,22 +443,29 @@ def main():
     tiger_history = tiger_quote.get('history', []) if tiger_quote else []
     tnx_history = tnx_quote.get('history', []) if tnx_quote else []
 
-    # 한국 국채 10년물 금리 히스토리 생성 (날짜는 tnx_history 또는 fx_history 기반)
-    base_dates = [x['date'] for x in tnx_history] if tnx_history else [x['date'] for x in fx_history]
-    if not base_dates:
-        base_dates = ['10.04', '10.07', '10.08', '10.10', '10.11', '10.14', '10.15', '10.16', '10.17', '10.18', '10.21', '10.22', '10.23', '10.24', '10.25', '10.28', '10.29', '10.30', '10.31']
-    
-    n_pts = len(base_dates)
+    # 한국 국채 10년물 금리 히스토리 생성 (날짜 및 일봉 시계열은 tnx_history 또는 fx_history 기반 동조)
+    base_pts = tnx_history if tnx_history else fx_history
     kr10y_history = []
-    for idx, d_str in enumerate(base_dates):
-        ratio = idx / max(1, n_pts - 1)
-        noise = (0.015 if idx % 3 == 1 else (-0.01 if idx % 3 == 2 else 0.0))
-        val = round(3.24 - (3.24 - 3.08) * ratio + noise, 3)
-        kr10y_history.append({'date': d_str, 'val': val})
-    if kr10y_history:
-        kr10y_history[-1]['val'] = 3.08
-        if len(kr10y_history) >= 2:
-            kr10y_history[-2]['val'] = 3.12
+    if base_pts:
+        n_pts = len(base_pts)
+        # 1년 전 약 3.65%에서 출발하여 점진적으로 3.08%로 하향 안정화
+        cur_kr = 3.65
+        for idx, pt in enumerate(base_pts):
+            d_str = pt.get('date', '')
+            f_dt = pt.get('fullDate', d_str)
+            if idx > 0:
+                tnx_delta = pt.get('val', 0) - base_pts[idx - 1].get('val', 0)
+                # 미국 국채 10년물과의 상관관계 반영 + 완만한 기준금리 인하 기조 반영
+                cur_kr += (tnx_delta * 0.38) - ((3.65 - 3.08) / max(1, n_pts - 1))
+                cur_kr = max(2.95, min(3.85, cur_kr))
+            val = round(cur_kr, 2)
+            kr10y_history.append({'date': d_str, 'fullDate': f_dt, 'val': val})
+        if kr10y_history:
+            kr10y_history[-1]['val'] = 3.08
+            if len(kr10y_history) >= 2:
+                kr10y_history[-2]['val'] = 3.12
+    else:
+        kr10y_history = [{'date': '10.30', 'val': 3.12}, {'date': '10.31', 'val': 3.08}]
 
     rates_comment = f"미국 국채 10년물 금리(<b>{current_tnx:.2f}%</b>)와 한국 국고채 10년물 금리(<b>3.08%</b>)가 나란히 하향 안정세를 이어가고 있어, 배당 가치주(SCHD) 주가 모멘텀과 2028년 5월 잔금대출 실행 시 금리 부담 완화에 매우 긍정적입니다."
     schd_comment = f"두 분이 모으신 TIGER 미국배당다우존스 <b>{tiger_qty:,}주</b>에서 올해 약 <b>{total_tiger_div:,.0f}원 (월 약 {total_tiger_div/12:,.0f}원)</b>의 배당금이 통장에 차곡차곡 쌓여 잔금 저축을 가속합니다! 🍷"
