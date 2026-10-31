@@ -35,14 +35,27 @@ def fetch_yahoo_quote(symbol):
             timestamps = result.get('timestamp', [])
             indicators = result['indicators']['quote'][0]
             closes = indicators.get('close', [])
+            opens = indicators.get('open', [])
+            highs = indicators.get('high', [])
+            lows = indicators.get('low', [])
             
             history = []
             valid_closes = []
-            for t, c in zip(timestamps, closes):
+            for i, (t, c) in enumerate(zip(timestamps, closes)):
                 if c is not None:
                     valid_closes.append(c)
                     dt_str = datetime.fromtimestamp(t, KST).strftime('%m.%d')
-                    history.append({'date': dt_str, 'val': round(c, 2)})
+                    o = opens[i] if i < len(opens) and opens[i] is not None else c
+                    h = highs[i] if i < len(highs) and highs[i] is not None else c
+                    l = lows[i] if i < len(lows) and lows[i] is not None else c
+                    history.append({
+                        'date': dt_str,
+                        'val': round(c, 2),
+                        'open': round(o, 2),
+                        'high': round(h, 2),
+                        'low': round(l, 2),
+                        'close': round(c, 2)
+                    })
 
             if not price and valid_closes:
                 price = valid_closes[-1]
@@ -214,6 +227,7 @@ def main():
     # 1. 실시간 시세 데이터 조회
     fx_quote = fetch_yahoo_quote('KRW=X')
     schd_quote = fetch_yahoo_quote('SCHD')
+    tiger_quote = fetch_yahoo_quote('458730.KS')
     tnx_quote = fetch_yahoo_quote('^TNX')
 
     # 기본값 보정 (Fallback)
@@ -224,6 +238,10 @@ def main():
     current_schd = schd_quote['price'] if schd_quote and schd_quote.get('price') else 35.78
     schd_diff = schd_quote['diff'] if schd_quote and schd_quote.get('diff') is not None else 0.15
     schd_diff_pct = schd_quote['diffPct'] if schd_quote and schd_quote.get('diffPct') is not None else 0.42
+
+    current_tiger = tiger_quote['price'] if tiger_quote and tiger_quote.get('price') else 15175.0
+    tiger_diff = tiger_quote['diff'] if tiger_quote and tiger_quote.get('diff') is not None else 1020.0
+    tiger_diff_pct = tiger_quote['diffPct'] if tiger_quote and tiger_quote.get('diffPct') is not None else 7.21
 
     current_tnx = tnx_quote['price'] if tnx_quote and tnx_quote.get('price') else 4.185
     tnx_diff = tnx_quote['diff'] if tnx_quote and tnx_quote.get('diff') is not None else -0.04
@@ -420,6 +438,7 @@ def main():
 
     fx_history = fx_quote.get('history', []) if fx_quote else []
     schd_history = schd_quote.get('history', []) if schd_quote else []
+    tiger_history = tiger_quote.get('history', []) if tiger_quote else []
     tnx_history = tnx_quote.get('history', []) if tnx_quote else []
 
     # 한국 국채 10년물 금리 히스토리 생성 (날짜는 tnx_history 또는 fx_history 기반)
@@ -471,6 +490,15 @@ def main():
                     {'name': '정보기술 (Technology)', 'pct': 9.5}
                 ],
                 'history': schd_history
+            },
+            'tiger': {
+                'name': 'TIGER 미국배당다우존스',
+                'code': '458730',
+                'price': current_tiger,
+                'diff': tiger_diff,
+                'diffPct': tiger_diff_pct,
+                'holdingQty': tiger_qty,
+                'history': tiger_history
             },
             'us10y': {
                 'current': current_tnx,

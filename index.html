@@ -3275,6 +3275,335 @@
             border: 1px solid var(--border);
             margin-top: auto;
         }
+    
+        /* ===== [대시보드 1번: 핵심 KPI 4-Grid & 토글 상세] ===== */
+        .dash-kpis-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 14px;
+            margin-bottom: 14px;
+        }
+        @media (max-width: 768px) {
+            .dash-kpis-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+        }
+        .dash-kpi-subplan {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* 대시보드 자산구성 & 시계열 변동 접기/펴기 토글 카드 */
+        .dash-toggle-card {
+            margin-top: 14px;
+            padding: 16px 20px;
+            background: var(--surface);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease;
+        }
+        .dash-toggle-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .dash-toggle-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dash-toggle-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 8px;
+            background: rgba(49, 130, 246, 0.08);
+            color: #3182F6;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 750;
+        }
+        .dash-toggle-heading {
+            font-size: 15px;
+            font-weight: 750;
+            color: var(--ink);
+            letter-spacing: -0.02em;
+        }
+        .dash-toggle-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .dash-fold-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--chip);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 12.5px;
+            font-weight: 650;
+            color: var(--ink);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .dash-fold-btn:hover {
+            background: var(--surface);
+            border-color: rgba(49, 130, 246, 0.35);
+            color: var(--toss-blue);
+            transform: translateY(-1px);
+        }
+        .dash-fold-btn:active {
+            transform: scale(0.97);
+        }
+        .dash-fold-btn.active {
+            background: rgba(49, 130, 246, 0.1);
+            border-color: #3182F6;
+            color: #3182F6;
+            font-weight: 750;
+        }
+        .dash-fold-arrow {
+            display: inline-block;
+            font-size: 11px;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .dash-fold-btn.active .dash-fold-arrow {
+            transform: rotate(180deg);
+        }
+        .dash-toggle-panel {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px dashed var(--border);
+            animation: fadeInDashPanel 0.25s ease;
+        }
+        @keyframes fadeInDashPanel {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== [대시보드 2번: 원·달러 환율, SCHD, TIGER 주식 막대차트] ===== */
+        .stock-macro-card {
+            margin-top: 18px;
+            padding: 22px;
+            background: var(--surface);
+            border-radius: 22px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease;
+        }
+        .stock-macro-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .stock-macro-badge {
+            display: inline-block;
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: rgba(49, 130, 246, 0.08);
+            color: #3182F6;
+            font-size: 11.5px;
+            font-weight: 750;
+            margin-bottom: 4px;
+        }
+        .stock-macro-title {
+            margin: 0;
+            font-size: 17.5px;
+            font-weight: 800;
+            color: var(--ink);
+            letter-spacing: -0.02em;
+        }
+        .stock-macro-desc {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+        .stock-sync-tabs {
+            display: inline-flex;
+            background: var(--chip);
+            border-radius: 12px;
+            padding: 3px;
+            gap: 2px;
+            border: 1px solid var(--border);
+        }
+        .stock-sync-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: none;
+            border-radius: 9px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--ink2);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .stock-sync-btn:hover {
+            color: var(--ink);
+        }
+        .stock-sync-btn:active {
+            transform: scale(0.96);
+        }
+        .stock-sync-btn.active {
+            background: var(--surface);
+            color: var(--toss-blue, #3182F6);
+            font-weight: 750;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+        .stock-barcharts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+        @media (max-width: 860px) {
+            .stock-barcharts-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+        }
+        .stock-bar-item-card {
+            background: var(--plane);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+        .stock-bar-item-card:hover {
+            border-color: rgba(49, 130, 246, 0.3);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+        }
+        .sbi-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .sbi-name-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .sbi-flag {
+            font-size: 16px;
+        }
+        .sbi-name {
+            font-size: 13.5px;
+            font-weight: 750;
+            color: var(--ink);
+            letter-spacing: -0.01em;
+        }
+        .sbi-code {
+            font-size: 10px;
+            color: var(--muted);
+            font-weight: 600;
+            padding: 1px 4px;
+            background: var(--chip);
+            border-radius: 4px;
+        }
+        .sbi-diff-pill {
+            font-size: 11.5px;
+            font-weight: 750;
+            padding: 2.5px 7px;
+            border-radius: 6px;
+            font-variant-numeric: tabular-nums;
+        }
+        .sbi-diff-pill.up {
+            color: #F04452;
+            background: rgba(240, 68, 82, 0.09);
+        }
+        .sbi-diff-pill.down {
+            color: #3182F6;
+            background: rgba(49, 130, 246, 0.09);
+        }
+        .sbi-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 10px;
+        }
+        .sbi-price-big {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--ink);
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.02em;
+        }
+        .sbi-range-badge {
+            font-size: 10.5px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .sbi-chart-container {
+            position: relative;
+            width: 100%;
+            height: 145px;
+            margin-bottom: 10px;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .stock-bar-svg {
+            width: 100%;
+            height: 145px;
+            display: block;
+            overflow: visible;
+        }
+        .sbi-tooltip {
+            position: absolute;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 6px 9px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+            font-size: 11px;
+            pointer-events: none;
+            z-index: 10;
+            white-space: nowrap;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+        .sbi-tooltip .stt-date {
+            color: var(--muted);
+            font-size: 10px;
+            margin-bottom: 2px;
+        }
+        .sbi-tooltip .stt-val {
+            font-size: 12px;
+            font-weight: 750;
+            color: var(--ink);
+            font-variant-numeric: tabular-nums;
+        }
+        .sbi-tooltip .stt-sub {
+            font-size: 10.5px;
+            font-weight: 700;
+            margin-top: 1px;
+            font-variant-numeric: tabular-nums;
+        }
+        .sbi-footer-meta {
+            font-size: 11px;
+            color: var(--muted);
+            padding-top: 8px;
+            border-top: 1px dashed var(--border);
+            line-height: 1.4;
+        }
+        .sbi-footer-highlight {
+            color: #3182F6;
+            font-weight: 650;
+        }
+    
     </style>
 </head>
 
@@ -3324,7 +3653,7 @@
 
         <!-- ============ 대시보드 ============ -->
         <section id="tab-dash">
-            <!-- 1. Hero 잔금 D-day 카운트다운 카드 -->
+            <!-- 1. Hero 잔금 D-day 카운트다운 카드 (현재준비된 총자산 - 기존 동일) -->
             <div class="card hero-dday-card">
                 <div class="dday-top-row">
                     <div class="dday-badge" id="dashDdayBadge">⏳ 입주 잔금까지 계산 중…</div>
@@ -3358,69 +3687,37 @@
                 </div>
             </div>
 
-            <!-- 실시간 원·달러 환율 위젯 카드 -->
-            <div class="card live-fx-card" id="liveFxCard">
-                <div class="fx-card-top-row">
-                    <div class="fx-badge-wrap">
-                        <span class="fx-icon-pill">🇺🇸 USD</span>
-                        <span class="fx-title-main">원·달러 환율</span>
-                        <span class="fx-live-indicator" id="fxLiveIndicator" title="실시간 연동 상태"></span>
-                    </div>
-                    <button class="fx-refresh-btn" id="btnLiveFxRefresh" onclick="syncLiveFx(true)" title="지금 실시간 환율 조회">
-                        <span class="fx-refresh-icon" id="fxRefreshIcon">🔄</span>
-                        <span class="fx-refresh-text">실시간 조회</span>
-                    </button>
+            <!-- 1-1. 핵심 준비자금 KPI 4-Grid: 필요 준비자금, 부족액, 남은 기간, 필요 월저축액 (위치 이동) -->
+            <div class="dash-kpis-grid">
+                <div class="kpi">
+                    <div class="lbl">필요 준비자금</div>
+                    <div class="val" id="k-goal">—</div>
+                    <div class="note" id="k-goal-note"></div>
                 </div>
-                <div class="fx-main-rate-wrap">
-                    <div class="fx-rate-big">
-                        <span class="fx-rate-num" id="dashFxRate">1,348.99</span>
-                        <span class="fx-rate-unit">원</span>
-                    </div>
-                    <div class="fx-rate-tags">
-                        <span class="fx-diff-pill" id="dashFxDiffPill">실시간 고시</span>
-                        <span class="fx-dxy-pill" id="dashFxDxyPill">DXY 99.16</span>
-                    </div>
+                <div class="kpi">
+                    <div class="lbl">부족액</div>
+                    <div class="val text-danger" id="k-gap">—</div>
+                    <div class="note" id="k-gap-note"></div>
                 </div>
-
-                <!-- 원·달러 환율 일간 시계열 주식 차트 -->
-                <div class="fx-chart-section">
-                    <div class="stock-chart-header">
-                        <div class="stock-chart-stats">
-                            <div class="stock-stat-top-row">
-                                <span class="stock-stat-label">기간 등락</span>
-                                <span class="stock-stat-val" id="fxChartPeriodDiff">—</span>
-                            </div>
-                            <span class="stock-stat-badge" id="fxChartPeriodRange">최저 —, 최고 —</span>
-                        </div>
-                        <div class="stock-period-tabs" id="fxPeriodTabs">
-                            <button type="button" class="stock-period-btn active" data-period="1W" onclick="setFxChartPeriod('1W')">1주일</button>
-                            <button type="button" class="stock-period-btn" data-period="1M" onclick="setFxChartPeriod('1M')">1개월</button>
-                            <button type="button" class="stock-period-btn" data-period="3M" onclick="setFxChartPeriod('3M')">분기</button>
-                            <button type="button" class="stock-period-btn" data-period="1Y" onclick="setFxChartPeriod('1Y')">1년</button>
-                        </div>
-                    </div>
-                    <div class="stock-chart-container" id="fxChartContainer">
-                        <svg id="chartFxSeries" class="stock-svg" height="175"></svg>
-                        <div class="stock-tooltip" id="fxChartTooltip" style="display:none">
-                            <div class="stt-date" id="fxTooltipDate">—</div>
-                            <div class="stt-val" id="fxTooltipVal">—원</div>
-                            <div class="stt-sub" id="fxTooltipDiff">—</div>
-                        </div>
+                <div class="kpi">
+                    <div class="lbl">남은 기간</div>
+                    <div class="val" id="k-months">—</div>
+                    <div class="note" id="k-months-note"></div>
+                </div>
+                <div class="kpi">
+                    <div class="lbl">필요 월 저축액</div>
+                    <div class="val text-toss-blue" id="k-need">—</div>
+                    <div class="note" id="k-need-note"></div>
+                    <div class="dash-kpi-subplan" id="k-plan-wrap">
+                        <span>계획: </span><span id="k-plan">—</span> <span id="k-plan-note"></span>
                     </div>
                 </div>
-
-                <div class="fx-bottom-meta">
-                    <div class="fx-meta-left">
-                        <span class="fx-clock-icon">🕒</span>
-                        <span id="fxCheckpointNote">자동 체크: 16:00 (장 마감) · 06:00 (아침 정산)</span>
-                    </div>
-                    <button class="fx-link-btn" onclick="switchTab('assets')" title="자산 탭에서 환율 상세 및 미국 주식 확인">
-                        상세보기 ›
-                    </button>
-                </div>
+                <!-- JS 로직 호환용 숨김 엘리먼트 -->
+                <div id="k-total" style="display:none;"></div>
+                <div id="k-total-note" style="display:none;"></div>
             </div>
 
-            <!-- 2. 이번 달 저축 목표 달성 현황 -->
+            <!-- 이번 달 저축 목표 달성 현황 카드 -->
             <div class="card monthly-saving-card">
                 <div class="sec-actions" style="margin-bottom: 8px;">
                     <div>
@@ -3455,111 +3752,220 @@
                 </div>
             </div>
 
-            <div class="kpis">
-                <div class="kpi hero">
-                    <div class="lbl">현재 총자산</div>
-                    <div class="val" id="k-total">—</div>
-                    <div class="note" id="k-total-note"></div>
+            <!-- 1-2. 토글식 '자산구성 항목', '자산변동 기록(시계열)' (위치 이동 및 접기/펴기 버튼 추가) -->
+            <div class="dash-toggle-card">
+                <div class="dash-toggle-header-row">
+                    <div class="dash-toggle-title-wrap">
+                        <span class="dash-toggle-pill">📊 자산 상세</span>
+                        <span class="dash-toggle-heading">자산구성 및 시계열 변동 내역</span>
+                    </div>
+                    <div class="dash-toggle-buttons">
+                        <button type="button" class="dash-fold-btn" id="btnToggleComp" onclick="toggleDashSection('comp')" aria-expanded="false">
+                            <span class="dash-fold-icon">🥧</span>
+                            <span>자산구성 항목</span>
+                            <span class="dash-fold-arrow" id="arrowComp">▾</span>
+                        </button>
+                        <button type="button" class="dash-fold-btn" id="btnToggleAssetHist" onclick="toggleDashSection('assetHist')" aria-expanded="false">
+                            <span class="dash-fold-icon">📈</span>
+                            <span>자산변동 기록(시계열)</span>
+                            <span class="dash-fold-arrow" id="arrowAssetHist">▾</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="kpi">
-                    <div class="lbl">필요 준비자금</div>
-                    <div class="val" id="k-goal">—</div>
-                    <div class="note" id="k-goal-note"></div>
-                </div>
-                <div class="kpi">
-                    <div class="lbl">부족액</div>
-                    <div class="val" id="k-gap">—</div>
-                    <div class="note" id="k-gap-note"></div>
-                </div>
-                <div class="kpi">
-                    <div class="lbl">남은 기간</div>
-                    <div class="val" id="k-months">—</div>
-                    <div class="note" id="k-months-note"></div>
-                </div>
-                <div class="kpi">
-                    <div class="lbl">필요 월 저축액</div>
-                    <div class="val" id="k-need">—</div>
-                    <div class="note" id="k-need-note"></div>
-                </div>
-                <div class="kpi">
-                    <div class="lbl">계획 저축액 기준</div>
-                    <div class="val" id="k-plan">—</div>
-                    <div class="note" id="k-plan-note"></div>
-                </div>
-            </div>
 
-            <div class="card">
-                <div class="sec-actions">
-                    <div>
-                        <h2 style="margin:0">자산 변동 기록 (시계열)</h2>
-                        <div class="sub">오늘부터 매일 종가 반영 시점의 자산 기록입니다. (단위: 원) · 기본은 이번 달과 전달만 표시, 그 이전은 아래에서 달을 선택하세요
+                <!-- 자산구성 항목 토글 패널 -->
+                <div id="panelDashComp" class="dash-toggle-panel" style="display:none;">
+                    <div style="margin-bottom:12px;">
+                        <h3 style="margin:0; font-size:16px; font-weight:700;">자산 구성</h3>
+                        <div class="sub">포트폴리오 자산군별 비중 분포</div>
+                    </div>
+                    <div class="donutRow">
+                        <div class="donutSvgWrap"><svg id="chartComp"></svg></div>
+                        <div class="donutLegend" id="compLegend"></div>
+                    </div>
+                </div>
+
+                <!-- 자산변동 기록(시계열) 토글 패널 -->
+                <div id="panelDashAssetHist" class="dash-toggle-panel" style="display:none;">
+                    <div class="sec-actions">
+                        <div>
+                            <h3 style="margin:0; font-size:16px; font-weight:700;">자산 변동 기록 (시계열)</h3>
+                            <div class="sub">오늘부터 매일 종가 반영 시점의 자산 기록입니다. (단위: 원) · 기본은 이번 달과 전달만 표시, 그 이전은 아래에서 달을 선택하세요</div>
+                        </div>
+                        <div class="tools">
+                            <select id="hist-monthSel" onchange="renderHistory()"></select>
+                            <select id="historyPeriod" onchange="renderHistory()">
+                                <option value="day">일간</option>
+                                <option value="week">주간</option>
+                                <option value="month">월간</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="tools">
-                        <select id="hist-monthSel" onchange="renderHistory()"></select>
-                        <select id="historyPeriod" onchange="renderHistory()">
-                            <option value="day">일간</option>
-                            <option value="week">주간</option>
-                            <option value="month">월간</option>
-                        </select>
-                    </div>
-                </div>
 
-                <!-- 자산 변동 기록 일간 시계열 주식 차트 -->
-                <div class="asset-chart-section">
-                    <div class="stock-chart-header">
-                        <div class="stock-chart-stats">
-                            <div class="stock-stat-top-row">
-                                <span class="stock-stat-label">기간 변동</span>
-                                <span class="stock-stat-val" id="assetChartPeriodDiff">—</span>
+                    <!-- 자산 변동 기록 일간 시계열 주식 차트 -->
+                    <div class="asset-chart-section">
+                        <div class="stock-chart-header">
+                            <div class="stock-chart-stats">
+                                <div class="stock-stat-top-row">
+                                    <span class="stock-stat-label">기간 변동</span>
+                                    <span class="stock-stat-val" id="assetChartPeriodDiff">—</span>
+                                </div>
+                                <span class="stock-stat-badge" id="assetChartPeriodRange">최저 —, 최고 —</span>
                             </div>
-                            <span class="stock-stat-badge" id="assetChartPeriodRange">최저 —, 최고 —</span>
+                            <div class="stock-period-tabs" id="assetPeriodTabs">
+                                <button type="button" class="stock-period-btn active" data-period="1W" onclick="setAssetChartPeriod('1W')">1주일</button>
+                                <button type="button" class="stock-period-btn" data-period="1M" onclick="setAssetChartPeriod('1M')">1개월</button>
+                                <button type="button" class="stock-period-btn" data-period="3M" onclick="setAssetChartPeriod('3M')">분기</button>
+                                <button type="button" class="stock-period-btn" data-period="1Y" onclick="setAssetChartPeriod('1Y')">1년</button>
+                                <button type="button" class="stock-period-btn" data-period="ALL" onclick="setAssetChartPeriod('ALL')">전체</button>
+                            </div>
                         </div>
-                        <div class="stock-period-tabs" id="assetPeriodTabs">
-                            <button type="button" class="stock-period-btn active" data-period="1W" onclick="setAssetChartPeriod('1W')">1주일</button>
-                            <button type="button" class="stock-period-btn" data-period="1M" onclick="setAssetChartPeriod('1M')">1개월</button>
-                            <button type="button" class="stock-period-btn" data-period="3M" onclick="setAssetChartPeriod('3M')">분기</button>
-                            <button type="button" class="stock-period-btn" data-period="1Y" onclick="setAssetChartPeriod('1Y')">1년</button>
-                            <button type="button" class="stock-period-btn" data-period="ALL" onclick="setAssetChartPeriod('ALL')">전체</button>
+                        <div class="stock-chart-container" id="assetChartContainer">
+                            <svg id="chartAssetSeries" class="stock-svg" height="190"></svg>
+                            <div class="stock-tooltip" id="assetChartTooltip" style="display:none">
+                                <div class="stt-date" id="assetTooltipDate">—</div>
+                                <div class="stt-val" id="assetTooltipVal">—원</div>
+                                <div class="stt-sub" id="assetTooltipDiff">—</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="stock-chart-container" id="assetChartContainer">
-                        <svg id="chartAssetSeries" class="stock-svg" height="190"></svg>
-                        <div class="stock-tooltip" id="assetChartTooltip" style="display:none">
-                            <div class="stt-date" id="assetTooltipDate">—</div>
-                            <div class="stt-val" id="assetTooltipVal">—원</div>
-                            <div class="stt-sub" id="assetTooltipDiff">—</div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="tablewrap">
-                    <table style="min-width:640px">
-                        <thead>
-                            <tr>
-                                <th>날짜</th>
-                                <th class="num">총 자산</th>
-                                <th class="num">총 변동액</th>
-                                <th class="num">순수익 (평가손익)</th>
-                                <th class="num">수익률</th>
-                                <th class="num">추가 입금</th>
-                            </tr>
-                        </thead>
-                        <tbody id="historyBody"></tbody>
-                    </table>
-                </div>
-                <div class="hist-more-wrap" id="histMoreWrap" style="display:none;">
-                    <button type="button" id="btnHistMore" class="hist-more-btn" onclick="toggleHistoryRows()">
-                        <span id="histMoreArrow">▼</span> <span id="histMoreText">지난 기록 더보기</span>
-                    </button>
+                    <div class="tablewrap">
+                        <table style="min-width:640px">
+                            <thead>
+                                <tr>
+                                    <th>날짜</th>
+                                    <th class="num">총 자산</th>
+                                    <th class="num">총 변동액</th>
+                                    <th class="num">순수익 (평가손익)</th>
+                                    <th class="num">수익률</th>
+                                    <th class="num">추가 입금</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="hist-more-wrap" id="histMoreWrap" style="display:none;">
+                        <button type="button" id="btnHistMore" class="hist-more-btn" onclick="toggleHistoryRows()">
+                            <span id="histMoreArrow">▼</span> <span id="histMoreText">지난 기록 더보기</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <div class="card">
-                <h2>자산 구성</h2>
-                <div class="donutRow">
-                    <div class="donutSvgWrap"><svg id="chartComp"></svg></div>
-                    <div class="donutLegend" id="compLegend"></div>
+            <!-- 2. 원·달러 환율, SCHD, 타이거미국배당다우존스 차트 (주식항목 차트 신규 추가 - 같은 기간 막대그래프) -->
+            <div class="card stock-macro-card" id="stockMacroCard">
+                <div class="stock-macro-header">
+                    <div>
+                        <div class="stock-macro-badge">📈 핵심 지표 & 보유 종목</div>
+                        <h2 class="stock-macro-title">원·달러 환율 · SCHD · 타이거미국배당다우존스</h2>
+                        <div class="stock-macro-desc">같은 기간 기준 일별 주식형 막대차트 (일봉 등락 비교)</div>
+                    </div>
+                    <!-- 같은 기간 일괄 동기화 탭 -->
+                    <div class="stock-sync-tabs" id="stockSyncTabs">
+                        <button type="button" class="stock-sync-btn" data-period="1W" onclick="setStocksSyncPeriod('1W')">1주일</button>
+                        <button type="button" class="stock-sync-btn active" data-period="1M" onclick="setStocksSyncPeriod('1M')">1개월</button>
+                        <button type="button" class="stock-sync-btn" data-period="3M" onclick="setStocksSyncPeriod('3M')">분기(3M)</button>
+                    </div>
+                </div>
+
+                <div class="stock-barcharts-grid">
+                    <!-- 1) 원·달러 환율 막대차트 -->
+                    <div class="stock-bar-item-card" id="barchartCard_fx">
+                        <div class="sbi-top-row">
+                            <div class="sbi-name-wrap">
+                                <span class="sbi-flag">🇺🇸</span>
+                                <span class="sbi-name">원·달러 환율</span>
+                                <span class="sbi-code">USD/KRW</span>
+                            </div>
+                            <span class="sbi-diff-pill" id="sbiDiff_fx">—</span>
+                        </div>
+                        <div class="sbi-price-row">
+                            <div class="sbi-price-big" id="sbiPrice_fx">—</div>
+                            <div class="sbi-range-badge" id="sbiRange_fx">최저 —, 최고 —</div>
+                        </div>
+                        <div class="sbi-chart-container" id="sbiContainer_fx">
+                            <svg id="sbiSvg_fx" class="stock-bar-svg" height="145"></svg>
+                            <div class="sbi-tooltip" id="sbiTooltip_fx" style="display:none;">
+                                <div class="stt-date" id="sbiTooltipDate_fx">—</div>
+                                <div class="stt-val" id="sbiTooltipVal_fx">—</div>
+                                <div class="stt-sub" id="sbiTooltipDiff_fx">—</div>
+                            </div>
+                        </div>
+                        <div class="sbi-footer-meta">
+                            <span>외화자산 민감도: 10원 변동 시 약 ±65만 원 변동</span>
+                        </div>
+                    </div>
+
+                    <!-- 2) SCHD 막대차트 -->
+                    <div class="stock-bar-item-card" id="barchartCard_schd">
+                        <div class="sbi-top-row">
+                            <div class="sbi-name-wrap">
+                                <span class="sbi-flag">🏛️</span>
+                                <span class="sbi-name">미국배당다우존스</span>
+                                <span class="sbi-code">SCHD</span>
+                            </div>
+                            <span class="sbi-diff-pill" id="sbiDiff_schd">—</span>
+                        </div>
+                        <div class="sbi-price-row">
+                            <div class="sbi-price-big" id="sbiPrice_schd">—</div>
+                            <div class="sbi-range-badge" id="sbiRange_schd">최저 —, 최고 —</div>
+                        </div>
+                        <div class="sbi-chart-container" id="sbiContainer_schd">
+                            <svg id="sbiSvg_schd" class="stock-bar-svg" height="145"></svg>
+                            <div class="sbi-tooltip" id="sbiTooltip_schd" style="display:none;">
+                                <div class="stt-date" id="sbiTooltipDate_schd">—</div>
+                                <div class="stt-val" id="sbiTooltipVal_schd">—</div>
+                                <div class="stt-sub" id="sbiTooltipDiff_schd">—</div>
+                            </div>
+                        </div>
+                        <div class="sbi-footer-meta">
+                            <span>배당수익률 3.55% · 10년 연속 배당성장 우량 가치주</span>
+                        </div>
+                    </div>
+
+                    <!-- 3) TIGER 미국배당다우존스 막대차트 -->
+                    <div class="stock-bar-item-card" id="barchartCard_tiger">
+                        <div class="sbi-top-row">
+                            <div class="sbi-name-wrap">
+                                <span class="sbi-flag">🐯</span>
+                                <span class="sbi-name">TIGER 미국배당다우존스</span>
+                                <span class="sbi-code">458730</span>
+                            </div>
+                            <span class="sbi-diff-pill" id="sbiDiff_tiger">—</span>
+                        </div>
+                        <div class="sbi-price-row">
+                            <div class="sbi-price-big" id="sbiPrice_tiger">—</div>
+                            <div class="sbi-range-badge" id="sbiRange_tiger">최저 —, 최고 —</div>
+                        </div>
+                        <div class="sbi-chart-container" id="sbiContainer_tiger">
+                            <svg id="sbiSvg_tiger" class="stock-bar-svg" height="145"></svg>
+                            <div class="sbi-tooltip" id="sbiTooltip_tiger" style="display:none;">
+                                <div class="stt-date" id="sbiTooltipDate_tiger">—</div>
+                                <div class="stt-val" id="sbiTooltipVal_tiger">—</div>
+                                <div class="stt-sub" id="sbiTooltipDiff_tiger">—</div>
+                            </div>
+                        </div>
+                        <div class="sbi-footer-meta sbi-footer-highlight">
+                            <span>부부 합산 5,062주 보유 · 연 약 283만 원 배당 기여</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 실시간 환율 연동 호환용 숨김 엘리먼트 -->
+                <div style="display:none;">
+                    <span id="dashFxRate">1,335.10</span>
+                    <span id="dashFxDiffPill">실시간</span>
+                    <span id="dashFxDxyPill">DXY 99.16</span>
+                    <button id="btnLiveFxRefresh" onclick="syncLiveFx(true)"></button>
+                    <svg id="chartFxSeries"></svg>
+                    <span id="fxChartPeriodDiff"></span>
+                    <span id="fxChartPeriodRange"></span>
+                    <div id="fxChartTooltip">
+                        <div id="fxTooltipDate"></div>
+                        <div id="fxTooltipVal"></div>
+                        <div id="fxTooltipDiff"></div>
+                    </div>
                 </div>
             </div>
 
@@ -6278,7 +6684,7 @@
             }
             set("summaryTotal", won(c.total));
             drawProjection(c); drawDonut(compRows, c.total);
-            drawFxChart(); drawAssetHistoryChart();
+            drawFxChart(); if (typeof renderDashboardStockBarCharts === "function") renderDashboardStockBarCharts(); drawAssetHistoryChart();
         }
 
         window.selectedDividendMonth = null;
@@ -7727,7 +8133,7 @@
                                     data: fresh
                                 }));
                             } catch (e) { }
-                            drawFxChart();
+                            drawFxChart(); if (typeof renderDashboardStockBarCharts === "function") renderDashboardStockBarCharts();
                         }
                     } catch (netErr) {
                         console.warn("Frankfurter API fetch failed, keeping baseline:", netErr);
@@ -7742,7 +8148,7 @@
             document.querySelectorAll("#fxPeriodTabs .stock-period-btn").forEach(btn => {
                 btn.classList.toggle("active", btn.dataset.period === period);
             });
-            drawFxChart();
+            drawFxChart(); if (typeof renderDashboardStockBarCharts === "function") renderDashboardStockBarCharts();
         }
 
         // 자산 변동 차트 기간 변경 (1W, 1M, 3M, 1Y, ALL)
@@ -7960,6 +8366,361 @@
         }
 
         // 1) 원·달러 환율 시계열 주식 차트 그리기
+        
+        /* ===== [대시보드 1번 & 2번 인터랙션 로직] ===== */
+        // 1번: 자산구성 & 시계열 변동 접기/펴기 토글 핸들러
+        function toggleDashSection(secId) {
+            const isComp = secId === "comp";
+            const panel = document.getElementById(isComp ? "panelDashComp" : "panelDashAssetHist");
+            const btn = document.getElementById(isComp ? "btnToggleComp" : "btnToggleAssetHist");
+            if (!panel || !btn) return;
+
+            const isOpen = panel.style.display !== "none";
+            if (isOpen) {
+                panel.style.display = "none";
+                btn.classList.remove("active");
+                btn.setAttribute("aria-expanded", "false");
+            } else {
+                panel.style.display = "block";
+                btn.classList.add("active");
+                btn.setAttribute("aria-expanded", "true");
+                requestAnimationFrame(() => {
+                    if (isComp) {
+                        if (typeof renderCompChart === "function") renderCompChart();
+                    } else {
+                        if (typeof drawAssetHistoryChart === "function") drawAssetHistoryChart();
+                        if (typeof renderHistory === "function") renderHistory();
+                    }
+                });
+            }
+        }
+
+        // 2번: 환율·SCHD·TIGER '같은 기간' 주식 막대차트 동기화 로직
+        let currentStocksSyncPeriod = "1M";
+
+        function setStocksSyncPeriod(period) {
+            currentStocksSyncPeriod = period;
+            document.querySelectorAll("#stockSyncTabs .stock-sync-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.period === period);
+            });
+            renderDashboardStockBarCharts();
+        }
+
+        // 주식형 SVG 막대그래프 렌더러 (Bar Chart / Candlestick Style)
+        function renderStockBarSvgChart({
+            svgId,
+            containerId,
+            tooltipId,
+            priceId,
+            diffId,
+            rangeId,
+            pts,
+            fmtPrice,
+            fmtDiff,
+            fmtY,
+            unit = "원"
+        }) {
+            const svg = document.getElementById(svgId);
+            const container = document.getElementById(containerId);
+            const tooltip = document.getElementById(tooltipId);
+            const priceEl = document.getElementById(priceId);
+            const diffEl = document.getElementById(diffId);
+            const rangeEl = document.getElementById(rangeId);
+            if (!svg || !container) return;
+
+            const W = Math.max(260, (container.clientWidth || 280) - 2);
+            const H = 145;
+            const P = { top: 12, right: 38, bottom: 22, left: 6 };
+            const iw = W - P.left - P.right;
+            const ih = H - P.top - P.bottom;
+
+            if (!pts || pts.length < 2) {
+                svg.setAttribute("width", W);
+                svg.setAttribute("height", H);
+                svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+                svg.innerHTML = `<text x="${W / 2}" y="${H / 2}" text-anchor="middle" font-size="12" fill="var(--muted)">데이터를 불러오는 중입니다…</text>`;
+                return;
+            }
+
+            const n = pts.length;
+            const vals = pts.map(p => Number(p.val) || 0);
+            const minV = Math.min(...vals);
+            const maxV = Math.max(...vals);
+            const spread = (maxV - minV) || (maxV * 0.05 || 1);
+            const pad = spread * 0.12;
+            const yMin = Math.max(0, minV - pad);
+            const yMax = maxV + pad;
+
+            const Y = v => P.top + ih - ih * ((v - yMin) / (yMax - yMin));
+
+            const firstV = pts[0].val;
+            const lastV = pts[n - 1].val;
+            const totalDiff = lastV - firstV;
+            const totalDiffPct = firstV > 0 ? (totalDiff / firstV * 100) : 0;
+            const totalIsUp = totalDiff >= 0;
+
+            // 상단 기본 HUD 세팅
+            const defaultPriceText = fmtPrice(lastV);
+            const defaultDiffText = (totalDiff > 0 ? "+" : "") + fmtDiff(totalDiff) + " (" + (totalDiff > 0 ? "+" : "") + totalDiffPct.toFixed(2) + "%)";
+            if (priceEl) priceEl.textContent = defaultPriceText;
+            if (diffEl) {
+                diffEl.textContent = defaultDiffText;
+                diffEl.className = "sbi-diff-pill " + (totalIsUp ? "up" : "down");
+            }
+            if (rangeEl) {
+                rangeEl.textContent = `최저 ${fmtPrice(minV)} · 최고 ${fmtPrice(maxV)}`;
+            }
+
+            // Y축 점선 그리드 & 우측 가격 라벨 3개
+            let gridSvg = "";
+            [0.15, 0.55, 0.90].forEach(r => {
+                const val = yMin + (yMax - yMin) * r;
+                const y = Y(val);
+                gridSvg += `<line x1="${P.left}" y1="${y.toFixed(1)}" x2="${(W - P.right).toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--grid)" stroke-dasharray="3 3" stroke-width="0.85"/>`;
+                gridSvg += `<text x="${W - 2}" y="${(y + 3.5).toFixed(1)}" text-anchor="end" font-size="9" fill="var(--muted)" style="font-variant-numeric:tabular-nums">${fmtY(val)}</text>`;
+            });
+
+            // 막대 폭 및 간격 계산
+            const bw = Math.min(22, Math.max(3.5, (iw / n) * 0.68));
+            const step = iw / n;
+
+            // 막대 및 심지(High/Low) SVG
+            let barsSvg = "";
+            pts.forEach((pt, i) => {
+                const cx = P.left + step * (i + 0.5);
+                const prev = (i > 0) ? pts[i - 1].val : (pt.open || pt.val);
+                const ptDiff = pt.val - prev;
+                const isUp = ptDiff >= 0;
+                const color = isUp ? "#f04452" : "#3182f6";
+
+                const barY = Y(pt.val);
+                const barH = Math.max(3, (P.top + ih) - barY);
+                const bx = cx - bw / 2;
+
+                let wickSvg = "";
+                if (pt.high && pt.low && pt.high !== pt.low) {
+                    const highY = Y(pt.high);
+                    const lowY = Y(pt.low);
+                    wickSvg = `<line x1="${cx.toFixed(1)}" y1="${highY.toFixed(1)}" x2="${cx.toFixed(1)}" y2="${lowY.toFixed(1)}" stroke="${color}" stroke-width="1.2" opacity="0.6"/>`;
+                }
+
+                barsSvg += `
+                    <g class="sbi-bar-group" data-idx="${i}">
+                        ${wickSvg}
+                        <rect class="sbi-bar-rect" x="${bx.toFixed(1)}" y="${barY.toFixed(1)}" width="${bw.toFixed(1)}" height="${barH.toFixed(1)}" rx="2.5" ry="2.5" fill="${color}" opacity="0.9" style="transition: opacity 0.15s ease;"/>
+                    </g>
+                `;
+            });
+
+            // X축 날짜 라벨 (적절한 간격으로 3~4개만 표시)
+            let dateSvg = "";
+            const xStepIdx = Math.max(1, Math.floor((n - 1) / 3));
+            const xIndices = [0];
+            if (n > 2) {
+                for (let i = xStepIdx; i < n - 1; i += xStepIdx) xIndices.push(i);
+            }
+            if (!xIndices.includes(n - 1)) xIndices.push(n - 1);
+
+            xIndices.forEach(idx => {
+                const cx = P.left + step * (idx + 0.5);
+                const anchor = idx === 0 ? "start" : idx === n - 1 ? "end" : "middle";
+                const dx = idx === 0 ? -bw / 2 : idx === n - 1 ? bw / 2 : 0;
+                dateSvg += `<text x="${(cx + dx).toFixed(1)}" y="${(H - 5).toFixed(1)}" text-anchor="${anchor}" font-size="9.5" fill="var(--muted)">${pts[idx].date}</text>`;
+            });
+
+            // 크로스헤어 & 인터랙션 레이어
+            const scrubSvg = `
+                <line class="sbi-crosshair" x1="0" y1="${P.top}" x2="0" y2="${P.top + ih}" stroke="var(--ink)" stroke-dasharray="2 2" stroke-width="1" opacity="0.5" style="display:none; pointer-events:none;"/>
+                <rect class="sbi-overlay" x="0" y="0" width="${W}" height="${H}" fill="transparent" style="cursor:crosshair; touch-action:pan-y;"/>
+            `;
+
+            svg.setAttribute("width", W);
+            svg.setAttribute("height", H);
+            svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+            svg.innerHTML = gridSvg + barsSvg + dateSvg + scrubSvg;
+
+            // 호버/터치 인터랙션
+            const overlay = svg.querySelector(".sbi-overlay");
+            const crosshair = svg.querySelector(".sbi-crosshair");
+            const barGroups = svg.querySelectorAll(".sbi-bar-group");
+
+            const handleScrub = (e) => {
+                const rect = svg.getBoundingClientRect();
+                const clientX = (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX;
+                if (clientX == null) return;
+                const relX = clientX - rect.left;
+                let ratio = (relX - P.left) / iw;
+                ratio = Math.max(0, Math.min(1, ratio));
+                const idx = Math.min(n - 1, Math.max(0, Math.floor(ratio * n)));
+                const pt = pts[idx];
+                if (!pt) return;
+
+                const cx = P.left + step * (idx + 0.5);
+                if (crosshair) {
+                    crosshair.setAttribute("x1", cx.toFixed(1));
+                    crosshair.setAttribute("x2", cx.toFixed(1));
+                    crosshair.style.display = "block";
+                }
+
+                // 막대 투명도 포커스
+                barGroups.forEach((g, i) => {
+                    const rectEl = g.querySelector(".sbi-bar-rect");
+                    if (rectEl) rectEl.style.opacity = (i === idx) ? "1.0" : "0.35";
+                });
+
+                // 툴팁 노출
+                if (tooltip) {
+                    tooltip.style.display = "block";
+                    const prev = (idx > 0) ? pts[idx - 1].val : (pt.open || pt.val);
+                    const ptDiff = pt.val - prev;
+                    const ptDiffPct = prev > 0 ? (ptDiff / prev * 100) : 0;
+                    const ptIsUp = ptDiff >= 0;
+
+                    const dtEl = tooltip.querySelector(".stt-date");
+                    const valEl = tooltip.querySelector(".stt-val");
+                    const subEl = tooltip.querySelector(".stt-sub");
+                    if (dtEl) dtEl.textContent = pt.fullDate || pt.date;
+                    if (valEl) valEl.textContent = fmtPrice(pt.val);
+                    if (subEl) {
+                        subEl.textContent = (ptDiff > 0 ? "+" : "") + fmtDiff(ptDiff) + " (" + (ptDiff > 0 ? "+" : "") + ptDiffPct.toFixed(2) + "%)";
+                        subEl.style.color = ptIsUp ? "#f04452" : "#3182f6";
+                    }
+
+                    const ttW = 100;
+                    let ttX = cx;
+                    if (ttX - ttW / 2 < 6) ttX = 6 + ttW / 2;
+                    if (ttX + ttW / 2 > W - 6) ttX = W - 6 - ttW / 2;
+                    tooltip.style.left = ttX + "px";
+                    tooltip.style.top = Math.max(16, Y(pt.val)) + "px";
+                }
+
+                // 상단 HUD 동적 갱신
+                if (priceEl) priceEl.textContent = fmtPrice(pt.val);
+                if (diffEl) {
+                    const prev = (idx > 0) ? pts[idx - 1].val : (pt.open || pt.val);
+                    const ptDiff = pt.val - prev;
+                    const ptDiffPct = prev > 0 ? (ptDiff / prev * 100) : 0;
+                    const ptIsUp = ptDiff >= 0;
+                    diffEl.textContent = (ptDiff > 0 ? "+" : "") + fmtDiff(ptDiff) + " (" + (ptDiff > 0 ? "+" : "") + ptDiffPct.toFixed(2) + "%)";
+                    diffEl.className = "sbi-diff-pill " + (ptIsUp ? "up" : "down");
+                }
+            };
+
+            const resetScrub = () => {
+                if (crosshair) crosshair.style.display = "none";
+                if (tooltip) tooltip.style.display = "none";
+                barGroups.forEach(g => {
+                    const rectEl = g.querySelector(".sbi-bar-rect");
+                    if (rectEl) rectEl.style.opacity = "0.9";
+                });
+                if (priceEl) priceEl.textContent = defaultPriceText;
+                if (diffEl) {
+                    diffEl.textContent = defaultDiffText;
+                    diffEl.className = "sbi-diff-pill " + (totalIsUp ? "up" : "down");
+                }
+            };
+
+            if (overlay) {
+                overlay.addEventListener("pointerdown", handleScrub);
+                overlay.addEventListener("pointermove", handleScrub);
+                overlay.addEventListener("pointerup", resetScrub);
+                overlay.addEventListener("pointercancel", resetScrub);
+                overlay.addEventListener("pointerleave", resetScrub);
+            }
+        }
+
+        // 대시보드 3종목(환율, SCHD, TIGER) 막대그래프 일괄 렌더링
+        function renderDashboardStockBarCharts() {
+            const data = marketInsightsData || DEFAULT_MARKET_INSIGHTS;
+            if (!data || !data.macro) return;
+
+            const period = currentStocksSyncPeriod || "1M";
+            const sliceCount = period === "1W" ? 5 : (period === "1M" ? 22 : 65);
+
+            // 1) 원·달러 환율 데이터 준비
+            let fxHist = (data.macro.fx && data.macro.fx.history) ? [...data.macro.fx.history] : [];
+            const curFx = (S && S.fx && S.fx.usdKrw > 0) ? S.fx.usdKrw : ((data.macro.fx && data.macro.fx.current) || 1335.1);
+            if (curFx && fxHist.length > 0) {
+                const now = new Date();
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const dd = String(now.getDate()).padStart(2, '0');
+                const todayStr = `${mm}.${dd}`;
+                const lastIdx = fxHist.length - 1;
+                if (fxHist[lastIdx].date === todayStr) {
+                    fxHist[lastIdx].val = curFx;
+                }
+            }
+            const fxPts = fxHist.slice(-sliceCount);
+
+            renderStockBarSvgChart({
+                svgId: "sbiSvg_fx",
+                containerId: "sbiContainer_fx",
+                tooltipId: "sbiTooltip_fx",
+                priceId: "sbiPrice_fx",
+                diffId: "sbiDiff_fx",
+                rangeId: "sbiRange_fx",
+                pts: fxPts,
+                fmtPrice: v => `${v.toLocaleString('ko-KR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}원`,
+                fmtDiff: v => `${Math.abs(v).toFixed(1)}원`,
+                fmtY: v => Math.round(v).toLocaleString('ko-KR'),
+                unit: "원"
+            });
+
+            // 2) SCHD 데이터 준비
+            let schdHist = (data.macro.schd && data.macro.schd.history) ? [...data.macro.schd.history] : [];
+            const schdPts = schdHist.slice(-sliceCount);
+
+            renderStockBarSvgChart({
+                svgId: "sbiSvg_schd",
+                containerId: "sbiContainer_schd",
+                tooltipId: "sbiTooltip_schd",
+                priceId: "sbiPrice_schd",
+                diffId: "sbiDiff_schd",
+                rangeId: "sbiRange_schd",
+                pts: schdPts,
+                fmtPrice: v => `$${v.toFixed(2)}`,
+                fmtDiff: v => `$${Math.abs(v).toFixed(2)}`,
+                fmtY: v => `$${v.toFixed(1)}`,
+                unit: "$"
+            });
+
+            // 3) TIGER 미국배당다우존스 데이터 준비
+            let tigerHist = (data.macro.tiger && data.macro.tiger.history) ? [...data.macro.tiger.history] : [];
+            if (tigerHist.length === 0) {
+                tigerHist = [
+                    { date: "10.01", val: 14020, open: 14100, high: 14150, low: 14000 },
+                    { date: "10.02", val: 14055, open: 14020, high: 14100, low: 14010 },
+                    { date: "10.06", val: 13975, open: 14055, high: 14080, low: 13950 },
+                    { date: "10.08", val: 13840, open: 13975, high: 14000, low: 13800 },
+                    { date: "10.12", val: 13995, open: 13840, high: 14020, low: 13840 },
+                    { date: "10.13", val: 14250, open: 13995, high: 14280, low: 13980 },
+                    { date: "10.15", val: 14465, open: 14250, high: 14500, low: 14200 },
+                    { date: "10.19", val: 14515, open: 14465, high: 14550, low: 14400 },
+                    { date: "10.22", val: 14570, open: 14515, high: 14600, low: 14500 },
+                    { date: "10.23", val: 14810, open: 14570, high: 14850, low: 14550 },
+                    { date: "10.26", val: 14785, open: 14810, high: 14840, low: 14750 },
+                    { date: "10.28", val: 14850, open: 14785, high: 14890, low: 14780 },
+                    { date: "10.29", val: 14955, open: 14850, high: 14990, low: 14850 },
+                    { date: "10.30", val: 15175, open: 14955, high: 15200, low: 14940 }
+                ];
+            }
+            const tigerPts = tigerHist.slice(-sliceCount);
+
+            renderStockBarSvgChart({
+                svgId: "sbiSvg_tiger",
+                containerId: "sbiContainer_tiger",
+                tooltipId: "sbiTooltip_tiger",
+                priceId: "sbiPrice_tiger",
+                diffId: "sbiDiff_tiger",
+                rangeId: "sbiRange_tiger",
+                pts: tigerPts,
+                fmtPrice: v => `${Math.round(v).toLocaleString('ko-KR')}원`,
+                fmtDiff: v => `${Math.round(Math.abs(v)).toLocaleString('ko-KR')}원`,
+                fmtY: v => `${Math.round(v).toLocaleString('ko-KR')}`,
+                unit: "원"
+            });
+        }
+    
         function drawFxChart() {
             if (!fxHistoryData || fxHistoryData.length === 0) {
                 initFxHistory();
@@ -8341,6 +9102,14 @@
                     divGrowth5Y: 11.8,
                     peRatio: 15.4
                 },
+                tiger: {
+                    name: "TIGER 미국배당다우존스",
+                    code: "458730",
+                    price: 15175,
+                    diff: 1020,
+                    diffPct: 7.21,
+                    holdingQty: 5062
+                },
                 us10y: {
                     current: 4.929,
                     diff: -0.057,
@@ -8380,6 +9149,7 @@
                     if (data && data.macro) {
                         marketInsightsData = data;
                         renderInsights();
+                        renderDashboardStockBarCharts();
                         return;
                     }
                 }
