@@ -6657,7 +6657,7 @@
                         mergedStocks.forEach(mStock => {
                             let mQty = 0, mVal = 0, mCost = 0;
                             const accounts = [];
-                            let hasWoori = false;
+                            let hasExcluded = false;
 
                             mStock.items.forEach(h => {
                                 const rate = h.isUsd ? fxRate : 1;
