@@ -3555,63 +3555,6 @@
                 </div>
             </div>
 
-            <div class="card dividend-card">
-                <div class="sec-actions" style="margin-bottom: 6px;">
-                    <div>
-                        <h2 style="margin:0; font-size:16.5px; font-weight:700;">💰 월별 예상 배당금 (세전)</h2>
-                        <div class="sub">1년 12개월 매달 실제로 입금되는 예상 배당금과 주기별 수령 일정입니다.</div>
-                    </div>
-                </div>
-
-                <!-- 3단 요약 박스: 이번 달 / 분기 배당월 / 연간 총액 -->
-                <div class="div-summary-row">
-                    <div class="div-sum-box highlight">
-                        <div class="lbl" id="lblDivCurMonth">이번 달 예상</div>
-                        <div class="val" id="valDivCurMonth">—</div>
-                    </div>
-                    <div class="div-sum-box">
-                        <div class="lbl">분기 배당월 (2·5·8·11월)</div>
-                        <div class="val text-good" id="valDivQuarterMonth">—</div>
-                    </div>
-                    <div class="div-sum-box">
-                        <div class="lbl">연간 총 예상 배당금</div>
-                        <div class="val" id="valDivYearlyTotal">—</div>
-                    </div>
-                </div>
-
-                <!-- 12개월 월별 배당 바 비주얼라이저 -->
-                <div class="div-calendar-wrap">
-                    <div class="div-cal-header">
-                        <span class="div-cal-title">📅 1년 12개월 월별 배당 캘린더</span>
-                        <span class="div-cal-sub" id="divCalHint">월을 터치하면 해당 월 입금 종목만 필터링됩니다</span>
-                    </div>
-                    <div class="div-months-grid" id="divMonthsGrid"></div>
-                </div>
-
-                <!-- 종목별 상세 지급 테이블 -->
-                <div class="sec-actions" style="margin: 14px 0 6px;">
-                    <div style="font-size: 13.5px; font-weight: 700; color: var(--ink);" id="divTableTitle">
-                        📋 전체 종목별 배당 주기 및 입금일자
-                    </div>
-                    <button type="button" class="sm" id="btnDivResetFilter" style="display:none;" onclick="selectDividendMonth(null)">
-                        전체 종목 보기
-                    </button>
-                </div>
-                <div class="tablewrap">
-                    <table style="min-width:440px; margin-top:4px;">
-                        <thead>
-                            <tr>
-                                <th>종목명 / 보유 정보</th>
-                                <th class="num">1회 예상 지급액</th>
-                                <th>입금 주기 (해당 월)</th>
-                                <th>입금 예정일자</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dividendScheduleBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
             <div class="card">
                 <h2>자산 구성</h2>
                 <div class="donutRow">
@@ -6406,6 +6349,7 @@
         }
 
         function renderDividendSection() {
+            if (!document.getElementById("dividendScheduleBody") && !document.getElementById("valDivCurMonth")) return;
             const divList = window._currentDivList || [];
             const monthlyTotals = window._currentMonthlyTotals || {};
             const yearlyDiv = window._currentYearlyDiv || 0;
