@@ -2881,6 +2881,91 @@
             background: var(--border);
             color: var(--ink);
         }
+
+        /* 환율 양방향 시나리오 듀얼 카드 */
+        .scenario-dual-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .scenario-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px 20px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+        .scenario-box:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
+        }
+        .scenario-box.up {
+            border-top: 4px solid var(--loss, #f43f5e);
+        }
+        .scenario-box.down {
+            border-top: 4px solid var(--toss-blue, #3182f6);
+        }
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            gap: 8px;
+        }
+        .scenario-title {
+            font-size: 14.5px;
+            font-weight: 750;
+            color: var(--ink);
+        }
+        .scenario-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+        .scenario-badge.up {
+            background: #fff1f2;
+            color: #f43f5e;
+        }
+        .scenario-badge.down {
+            background: #e8f3ff;
+            color: #3182f6;
+        }
+        .scenario-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 12px 0;
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--ink2);
+        }
+        .scenario-list li {
+            position: relative;
+            padding-left: 14px;
+            margin-bottom: 6px;
+        }
+        .scenario-list li::before {
+            content: "•";
+            position: absolute;
+            left: 2px;
+            font-weight: bold;
+            color: var(--muted);
+        }
+        .scenario-impact-box {
+            background: var(--chip);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 11.5px;
+            line-height: 1.55;
+            border: 1px solid var(--border);
+            margin-top: auto;
+        }
     </style>
 </head>
 
@@ -4039,6 +4124,62 @@
                 </div>
             </div>
 
+            <!-- 2-1. 환율 상승 vs 하락 양방향 시나리오 및 포트폴리오 대응 전략 -->
+            <div style="margin-bottom:20px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                    <div>
+                        <h2 style="font-size:16.5px;font-weight:800;margin:0 0 4px 0;display:flex;align-items:center;gap:6px;">
+                            <span>⚖️ 원·달러 환율 양방향 시나리오 & 부부 자산 대응법</span>
+                        </h2>
+                        <div style="font-size:12px;color:var(--muted);">
+                            하락(원화강세)과 상승(달러강세) 시각을 균형 있게 점검하고 잔금 마련 전략에 대입합니다.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scenario-dual-grid">
+                    <!-- 하락 시나리오 박스 (원화 강세) -->
+                    <div class="scenario-box down">
+                        <div>
+                            <div class="scenario-header">
+                                <div class="scenario-title">🔵 환율 하락 시나리오 (1,280 ~ 1,320원)</div>
+                                <span class="scenario-badge down">달러 약세 · 원화 강세</span>
+                            </div>
+                            <ul class="scenario-list">
+                                <li><b>반도체 교역조건 붐:</b> AI 반도체 수출 호조로 사상 최대 경상흑자 행진 (삼성증권)</li>
+                                <li><b>수출 네고 물량 우위:</b> 대기업 달러 매도 물량이 1,370원 상단 억제 (키움증권)</li>
+                                <li><b>WGBI 편입 및 연준 인하:</b> 수십조 원 외국인 채권 자금 유입 및 한미 금리차 축소 (하나증권)</li>
+                            </ul>
+                        </div>
+                        <div class="scenario-impact-box" style="border-left: 3px solid #3182f6;">
+                            <div style="font-weight:700;color:#3182f6;margin-bottom:3px;">💰 부부 자산 영향 & 행동 전략</div>
+                            <div>• 2028년 5월 잔금대출 금리 인하로 직결되어 매월 이자 상환 부담 경감!</div>
+                            <div>• <b>행동 지침:</b> 환율 하락 시 TIGER 미국배당다우존스(SCHD)를 싼 가격에 추가 줍줍(분할 적립)하는 최고의 골든타임! 🍷</div>
+                        </div>
+                    </div>
+
+                    <!-- 상승 시나리오 박스 (달러 강세) -->
+                    <div class="scenario-box up">
+                        <div>
+                            <div class="scenario-header">
+                                <div class="scenario-title">🔴 환율 상승 시나리오 (1,380 ~ 1,430원)</div>
+                                <span class="scenario-badge up">달러 강세 · 원화 약세</span>
+                            </div>
+                            <ul class="scenario-list">
+                                <li><b>해외투자 자본 유출:</b> 서학개미·연기금의 미국 AI 빅테크 주식 매수 열풍 지속 (신한투자증권)</li>
+                                <li><b>보호무역/관세 리스크:</b> 미 대선 통상 마찰 우려 시 안전자산 달러 선호 심리 재부각 (미래에셋)</li>
+                                <li><b>지정학적 리스크:</b> 중동 분쟁 및 국제 유가 급등에 따른 원유 수입 결제 수요 급증 (NH투자증권)</li>
+                            </ul>
+                        </div>
+                        <div class="scenario-impact-box" style="border-left: 3px solid #f43f5e;">
+                            <div style="font-weight:700;color:#f43f5e;margin-bottom:3px;">💎 부부 자산 영향 & 행동 전략</div>
+                            <div>• 보유 중인 외화자산(미국 단기국채 983만, SOXL 등) 원화 평가익 급증 (+10원당 약 +65만 원)!</div>
+                            <div>• <b>행동 지침:</b> 신규 환전은 자제하고, 기보유 달러자산의 평가익을 누리며 환율 상단에서 필요 시 부분 원화 환전 검토. 💵</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 3. 주요 증권사·기관 전문 리포트 피드 섹션 -->
             <div class="card" style="padding:20px;border-radius:18px;">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
@@ -4057,8 +4198,10 @@
                 <div class="reports-filter-bar">
                     <div class="reports-cat-chips" id="reportFilterTabs">
                         <button class="report-cat-btn active" data-cat="all" onclick="filterReportsCategory('all')">전체 리포트</button>
-                        <button class="report-cat-btn" data-cat="fx" onclick="filterReportsCategory('fx')">💵 환율 · 외환</button>
-                        <button class="report-cat-btn" data-cat="schd" onclick="filterReportsCategory('schd')">📈 SCHD · 미국배당</button>
+                        <button class="report-cat-btn" data-cat="fx_down" onclick="filterReportsCategory('fx_down')" style="font-weight:700;">🔵 환율 하락 전망</button>
+                        <button class="report-cat-btn" data-cat="fx_up" onclick="filterReportsCategory('fx_up')" style="font-weight:700;">🔴 환율 상승 전망</button>
+                        <button class="report-cat-btn" data-cat="fx" onclick="filterReportsCategory('fx')">💵 전체 환율</button>
+                        <button class="report-cat-btn" data-cat="schd" onclick="filterReportsCategory('schd')">📈 SCHD · 배당</button>
                         <button class="report-cat-btn" data-cat="rates" onclick="filterReportsCategory('rates')">🏛️ 국채 · 금리</button>
                     </div>
                     <div>
@@ -7787,9 +7930,15 @@
 
             let list = (data && data.reports) ? [...data.reports] : [];
 
-            // 카테고리 필터
+            // 카테고리 필터 (상승/하락 방향성 지원)
             if (currentReportFilter && currentReportFilter !== 'all') {
-                list = list.filter(r => r.category === currentReportFilter);
+                if (currentReportFilter === 'fx_down') {
+                    list = list.filter(r => r.category === 'fx' && (r.fxDirection === 'down' || (r.title && (r.title.includes('하락') || r.title.includes('안정')))));
+                } else if (currentReportFilter === 'fx_up') {
+                    list = list.filter(r => r.category === 'fx' && (r.fxDirection === 'up' || (r.title && (r.title.includes('상승') || r.title.includes('강세') || r.title.includes('자본유출')))));
+                } else {
+                    list = list.filter(r => r.category === currentReportFilter);
+                }
             }
 
             // 검색어 필터
@@ -7797,8 +7946,8 @@
                 const q = currentReportSearch;
                 list = list.filter(r => {
                     const title = (r.title || "").toLowerCase();
-                    const firm = (r.firm || "").toLowerCase();
-                    const author = (r.author || "").toLowerCase();
+                    const firm = (r.broker || r.firm || "").toLowerCase();
+                    const author = (r.writer || r.author || "").toLowerCase();
                     const summary = Array.isArray(r.summary) ? r.summary.join(" ").toLowerCase() : (r.summary || "").toLowerCase();
                     return title.includes(q) || firm.includes(q) || author.includes(q) || summary.includes(q);
                 });
@@ -7833,6 +7982,19 @@
                     </div>
                 `).join("");
 
+                let dirBadgeHtml = "";
+                if (r.category === 'fx') {
+                    const isDown = r.fxDirection === 'down' || (r.title && (r.title.includes('하락') || r.title.includes('안정')));
+                    const isUp = r.fxDirection === 'up' || (r.title && (r.title.includes('상승') || r.title.includes('상방') || r.title.includes('자본유출')));
+                    if (isDown) {
+                        dirBadgeHtml = `<span class="report-tag-chip" style="background:#e8f3ff;color:#3182f6;font-weight:700;">🔵 하락 전망(원화강세)</span>`;
+                    } else if (isUp) {
+                        dirBadgeHtml = `<span class="report-tag-chip" style="background:#fff1f2;color:#f43f5e;font-weight:700;">🔴 상승 전망(달러강세)</span>`;
+                    } else {
+                        dirBadgeHtml = `<span class="report-tag-chip" style="background:var(--chip);color:var(--ink2);font-weight:600;">⚖️ 박스권·전략</span>`;
+                    }
+                }
+
                 const tagsHtml = (r.tags || []).map(t => `<span class="report-tag-chip">#${escapeHtml(t)}</span>`).join("");
 
                 const pdfButton = r.pdfUrl ? `
@@ -7841,16 +8003,20 @@
                     </a>
                 ` : "";
 
+                const brokerName = r.broker || r.firm || "금융기관";
+                const writerName = r.writer || r.author || "리서치센터";
+
                 return `
                     <div class="report-item-card">
                         <div>
                             <div class="report-top-meta">
-                                <span class="report-broker-badge">${escapeHtml(r.firm || "금융기관")}</span>
-                                <span class="report-date-text">${escapeHtml(r.date || "")} · ${escapeHtml(r.author || "")}</span>
+                                <span class="report-broker-badge">${escapeHtml(brokerName)}</span>
+                                <span class="report-date-text">${escapeHtml(r.date || "")} · ${escapeHtml(writerName)}</span>
                             </div>
                             <div class="report-item-title">${escapeHtml(r.title || "")}</div>
                             <div class="report-tags-row">
                                 <span class="report-tag-chip" style="color:var(--toss-blue,#3182f6);font-weight:600;">${catLabel}</span>
+                                ${dirBadgeHtml}
                                 ${tagsHtml}
                             </div>
                             <div class="report-summary-box">

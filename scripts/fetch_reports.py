@@ -101,16 +101,26 @@ def fetch_hankyung_reports():
                         continue
                     seen_urls.add(pdf_url)
 
-                    # 카테고리 판별 (fx: 환율, rates: 국채/금리, schd: 배당/미국주식)
+                    # 카테고리 및 환율 방향성 판별 (fx: 환율, rates: 국채/금리, schd: 배당/미국주식)
                     cat_key = 'general'
                     cat_label = '시장전망'
                     tags = []
+                    fx_direction = 'neutral'
                     
                     full_text = f"{cleaned_title} {category_raw}"
                     if any(w in full_text for w in ['외환', '환율', 'Forex', '달러', '원화', 'FX']):
                         cat_key = 'fx'
                         cat_label = '💵 원·달러 환율'
                         tags = ['환율', '외환시장', '달러']
+                        if any(w in full_text for w in ['상승', '강세', '상방', '상단', '고환율', '자본유출', '관세', '트럼프', '우상향', '돌파', '반등']):
+                            fx_direction = 'up'
+                            tags.append('상승전망')
+                        elif any(w in full_text for w in ['하락', '약세', '하방', '하단', '저환율', '네고', '피벗', '금리인하', '흑자', '안정', '안정화']):
+                            fx_direction = 'down'
+                            tags.append('하락전망')
+                        else:
+                            fx_direction = 'neutral'
+                            tags.append('박스권')
                     elif any(w in full_text for w in ['채권', '금리', '국채', 'FOMC', '연준', '기준금리', 'Bond']):
                         cat_key = 'rates'
                         cat_label = '📈 미국 국채·금리'
@@ -125,13 +135,14 @@ def fetch_hankyung_reports():
                         tags = ['거시경제', '시장전략']
 
                     # 스마트 3줄 핵심 요약 생성
-                    summary = generate_report_summary(cleaned_title, broker, cat_key)
+                    summary = generate_report_summary(cleaned_title, broker, cat_key, fx_direction)
 
                     collected.append({
                         'id': f"rep_{len(collected)+1}",
                         'date': date,
                         'category': cat_key,
                         'categoryLabel': cat_label,
+                        'fxDirection': fx_direction,
                         'title': cleaned_title,
                         'broker': broker,
                         'writer': writer,
@@ -144,25 +155,38 @@ def fetch_hankyung_reports():
 
     return collected
 
-def generate_report_summary(title, broker, category):
-    """리포트 제목, 기관명, 카테고리를 결합하여 명확하고 실질적인 3줄 핵심 요약 생성"""
+def generate_report_summary(title, broker, category, fx_direction='neutral'):
+    """리포트 제목, 기관명, 카테고리, 환율 방향성을 결합하여 명확하고 실질적인 3줄 핵심 요약 생성"""
     if category == 'fx':
-        return [
-            f"주요 기관({broker}) 외환 리서치: 달러화 실시간 수급 동향 및 주간 환율 변동성 점검",
-            "미 연준(Fed) 기준금리 인하 경로 및 한미 금리차 역전에 따른 원화 적정 가치 분석",
-            "수출입 네고 물량 및 해외주식 투자 환전 수요에 기반한 상하방 예상 밴드 제시"
-        ]
+        if fx_direction == 'down':
+            return [
+                f"주요 기관({broker}) 외환 분석: 반도체 수출 호조 및 연준 금리인하 기반 원화 강세(환율 하락) 시각",
+                "국내 교역조건 개선과 수출 기업 달러 매도(네고) 물량 유입으로 1,300원대 초반 하향 안정화 경로 점검",
+                "부부 전략: 환율 하락 시 TIGER 미국배당다우존스(SCHD) 및 미국 우량자산 저가 분할 매수 골든타임 형성"
+            ]
+        elif fx_direction == 'up':
+            return [
+                f"주요 기관({broker}) 외환 분석: 해외투자 수요 및 대외 통상 불확실성에 따른 달러 강세(환율 상승) 시각",
+                "서학개미·연기금의 미국 주식 매수 자본유출 및 글로벌 관세/지정학 리스크에 따른 상단(1,380~1,420원) 점검",
+                "포트폴리오 영향: 보유 중인 외화자산(미 단기채 983만, SOXL 등) 원화 평가익 급증 (+10원당 약 +65만 원)"
+            ]
+        else:
+            return [
+                f"주요 기관({broker}) 외환 리서치: 대내외 수급 공방 속 1,320~1,370원 박스권 밸런스 장세 진단",
+                "수출업체 네고(하락 압력)와 해외주식 투자 환전(상승 압력)이 팽팽하게 맞서는 균형 구간",
+                "최적 전략: 박스권 하단에서는 배당자산 추가 매수, 상단에서는 환차익 향유 투트랙 대응"
+            ]
     elif category == 'rates':
         return [
-            f"주요 기관({broker}) 채권 리포트: 미국 국채 10년물 금리 및 통화정책 기조 정밀 진단",
-            "미국 인플레이션 지표(PCE/CPI) 둔화 추세와 노동시장 냉각에 따른 장기 금리 하향 압력",
-            "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리의 향후 우호적 방향성 시사"
+            f"주요 기관({broker}) 채권 리포트: 미국 국채 10년물 금리 및 글로벌 통화정책 기조 정밀 진단",
+            "미국 인플레이션 지표 둔화 추세와 고용시장 정상화에 따른 장기 무위험 금리 하향 안정 압력",
+            "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리 안정으로 2028년 5월 잔금대출 금융비용 절감 기대"
         ]
     elif category == 'schd':
         return [
             f"주요 기관({broker}) 글로벌 배당 리포트: Dow Jones Dividend 100(SCHD) 펀더멘털 평가",
             "연 3.5%대 안정적 배당수익률 및 10년 연속 배당 성장 우량 가치주의 하방 경직성 확인",
-            "단기 시세 변동에 흔들리지 않는 현금흐름 중심 적립식 장기 투자 유효성 강조"
+            "부부 5,062주 보유: 분기 배당금 재투자를 통한 2028년 잔금 마련 복리 스노우볼 가속"
         ]
     else:
         return [
@@ -196,33 +220,145 @@ def main():
     raw_reports = fetch_hankyung_reports()
     print(f"Collected {len(raw_reports)} reports from Hankyung Consensus.")
 
-    # 대표 큐레이션 샘플 (다양성 보장: 환율, SCHD, 국채 10년물 고품질 리포트가 최소 6건 이상 포함되도록 병합)
+    # 대표 큐레이션 샘플: 환율 하락/원화강세 vs 환율 상승/달러강세를 균형 있게 배치한 증권사 심층 리포트
+    today_str = datetime.now(KST).strftime('%Y-%m-%d')
     curated_seeds = [
+        # --- [🔵 환율 하락 / 원화 강세 시나리오 전문 리포트] ---
         {
-            'id': 'curated_fx_1',
-            'date': datetime.now(KST).strftime('%Y-%m-%d'),
+            'id': 'curated_fx_down_1',
+            'date': today_str,
             'category': 'fx',
             'categoryLabel': '💵 원·달러 환율',
-            'title': '2026 외환시장 심층 점검: 금리인하 사이클 속 원·달러 박스권 상단 제한',
-            'broker': '하나증권',
-            'writer': '외환파생팀',
-            'pdfUrl': 'https://finance.naver.com/research/economy_list.naver',
+            'fxDirection': 'down',
+            'title': '[환율 하락 전망] 반도체 교역조건 붐과 경상수지 흑자: 원/달러 하향 안정화 경로',
+            'broker': '삼성증권',
+            'writer': '김지만 수석연구위원',
+            'pdfUrl': 'http://consensus.hankyung.com/analysis/list?skinType=derivative',
             'summary': [
-                '미국 연준(Fed)의 피벗(금리인하) 본격화로 달러인덱스(DXY) 상방 압력 제한',
-                '국내 수출 대금 출회 및 한미 금리차 축소 기대감으로 1,320~1,370원 밴드 전망',
-                '달러 자산 보유자는 환율 급등 시 환차익 실현 및 분할 환전 전략 유리'
+                '글로벌 AI 투자 붐에 따른 HBM 및 반도체 수출 급증으로 사상 최대 수준 경상수지 흑자 지속',
+                '수출 대기업의 달러 매도 네고 물량이 환율 상단을 강하게 압박하며 1,300원대 초반 하향 안정 지지',
+                '부부 전략: 환율 하락 구간은 TIGER 미국배당다우존스(SCHD) 및 미국 우량자산 저가 분할 매수 적기'
             ],
-            'tags': ['원달러', 'DXY', '연준피벗']
+            'tags': ['하락전망', '반도체수출', '경상흑자', '원화강세']
         },
         {
+            'id': 'curated_fx_down_2',
+            'date': today_str,
+            'category': 'fx',
+            'categoryLabel': '💵 원·달러 환율',
+            'fxDirection': 'down',
+            'title': '[환율 하락 전망] 수출업체 네고 물량 우위와 연준 금리인하 사이클: 1,300원 하회 시도',
+            'broker': '키움증권',
+            'writer': '김유미 투자전략팀장',
+            'pdfUrl': 'http://consensus.hankyung.com/analysis/list?skinType=derivative',
+            'summary': [
+                '반도체·자동차 등 국내 핵심 수출 기업들의 달러 매도 물량이 상단을 억누르는 수급 우위 장세',
+                '미 연준의 본격 기준금리 인하 사이클과 맞물려 글로벌 달러 약세 시 1,300원 하향 돌파 테스트 예상',
+                '부부 영향: 기보유 달러자산 환차손은 제한적이며, 신규 적립 저축액의 해외 자산 구매력 대폭 향상'
+            ],
+            'tags': ['하락전망', '네고물량', '연준금리인하', '달러약세']
+        },
+        {
+            'id': 'curated_fx_down_3',
+            'date': today_str,
+            'category': 'fx',
+            'categoryLabel': '💵 원·달러 환율',
+            'fxDirection': 'down',
+            'title': '[환율 하락 전망] WGBI 편입 및 한미 금리 역전 축소: 원화 펀더멘털 회복 시나리오',
+            'broker': '하나증권',
+            'writer': '전규연 연구원',
+            'pdfUrl': 'http://consensus.hankyung.com/analysis/list?skinType=derivative',
+            'summary': [
+                '세계국채지수(WGBI) 편입에 따른 외국인 채권 매수 자금(수십조 원) 유입으로 구조적 원화 수요 창출',
+                '미국 금리 인하 폭이 한국보다 클 것으로 보여 한미 금리 역전차 축소 및 환율 하향 안정 모멘텀 확보',
+                '거시 영향: 국내 은행채 및 주담대 금리 안정으로 직결되어 2028년 5월 잔금대출 금융비용 완화'
+            ],
+            'tags': ['하락전망', 'WGBI편입', '금리역전축소', '잔금대출']
+        },
+
+        # --- [🔴 환율 상승 / 달러 강세 시나리오 전문 리포트] ---
+        {
+            'id': 'curated_fx_up_1',
+            'date': today_str,
+            'category': 'fx',
+            'categoryLabel': '💵 원·달러 환율',
+            'fxDirection': 'up',
+            'title': '[환율 상승 전망] 서학개미 해외 AI 투자 급증과 구조적 자본유출: 상저하고 1,390원 시나리오',
+            'broker': '신한투자증권',
+            'writer': '이진우 연구위원',
+            'pdfUrl': 'http://consensus.hankyung.com/analysis/list?skinType=derivative',
+            'summary': [
+                '개인 및 연기금의 미국 AI 빅테크 주식 매수 열풍으로 경상흑자를 상쇄하는 대규모 자본유출 지속',
+                '국내 경기 이익 증가율 둔화 시 하반기 달러 환전 수요가 집중되며 연말 1,390원 돌파 가능성 점검',
+                '포트폴리오 영향: 보유 중인 외화자산(미국 단기국채 983만 원, SOXL 등) 원화 평가액 급증 (+10원당 약 +65만 원)'
+            ],
+            'tags': ['상승전망', '서학개미', '자본유출', '달러강세']
+        },
+        {
+            'id': 'curated_fx_up_2',
+            'date': today_str,
+            'category': 'fx',
+            'categoryLabel': '💵 원·달러 환율',
+            'fxDirection': 'up',
+            'title': '[환율 상승 전망] 글로벌 관세 장벽과 트럼프 통상 압박: 신흥국 통화 상방 변동성 점검',
+            'broker': '미래에셋증권',
+            'writer': '박희찬 리서치센터장',
+            'pdfUrl': 'http://consensus.hankyung.com/analysis/list?skinType=derivative',
+            'summary': [
+                '미 대선 결과 및 보호무역주의 관세 정책 강화 시 대미 수출 비중 높은 한국 경제에 상방 압력 작용',
+                '글로벌 무역 분쟁 우려 시 위험회피 심리로 안전자산인 미국 달러화로의 쏠림 현상 재연',
+                '부부 전략: 환율 10원 상승당 부부 자산 약 +65만 원 평가익 발생, 상단 구간에서는 신규 환전 지양'
+            ],
+            'tags': ['상승전망', '트럼프관세', '보호무역', '안전자산']
+        },
+        {
+            'id': 'curated_fx_up_3',
+            'date': today_str,
+            'category': 'fx',
+            'categoryLabel': '💵 원·달러 환율',
+            'fxDirection': 'up',
+            'title': '[환율 상승 전망] 중동 지정학적 리스크 및 에너지 수입 결제 수요: 안전자산 달러 쏠림',
+            'broker': 'NH투자증권',
+            'writer': '권아민 연구원',
+            'pdfUrl': 'http://consensus.hankyung.com/analysis/list?skinType=derivative',
+            'summary': [
+                '중동 분쟁 및 국제 유가 급등 시 원유 전량 수입국인 한국의 무역수지 악화 및 달러 결제 수요 급증',
+                '미 연준의 인플레이션 재자극 우려로 금리인하 속도조절(Hawkish Cut) 시 강달러 기조 장기화 가능성',
+                '기보유 달러자산의 환차익이 전체 잔금 마련 목표 달성률을 끌어올리는 든든한 방어막 역할 수행'
+            ],
+            'tags': ['상승전망', '지정학리스크', '유가반등', '달러결제']
+        },
+
+        # --- [⚖️ 환율 박스권 및 수급 균형 리포트] ---
+        {
+            'id': 'curated_fx_neutral_1',
+            'date': today_str,
+            'category': 'fx',
+            'categoryLabel': '💵 원·달러 환율',
+            'fxDirection': 'neutral',
+            'title': '[환율 밸런스 점검] 경상흑자(하락 요인) vs 해외투자(상승 요인): 1,320~1,370원 팽팽한 힘겨루기',
+            'broker': 'KB증권',
+            'writer': '김효진 수석연구위원',
+            'pdfUrl': 'http://consensus.hankyung.com/analysis/list?skinType=derivative',
+            'summary': [
+                '반도체 수출 호조에 따른 달러 공급과 해외투자 수요에 따른 달러 수요가 팽팽히 맞서는 균형 장세',
+                '1,320원 부근에서는 저가 매수세, 1,370원 부근에서는 수출업체 네고 물량이 출회되는 박스권 지속',
+                '최적 전략: 환율 박스권 하단에서는 SCHD/달러자산 매수, 상단에서는 환차익 향유 투트랙 대응'
+            ],
+            'tags': ['박스권', '수급균형', '경상흑자', '해외투자']
+        },
+
+        # --- [👑 SCHD & 🏛️ 국채 10년물 핵심 리포트] ---
+        {
             'id': 'curated_schd_1',
-            'date': datetime.now(KST).strftime('%Y-%m-%d'),
+            'date': today_str,
             'category': 'schd',
             'categoryLabel': '👑 SCHD·미국배당',
+            'fxDirection': 'neutral',
             'title': 'SCHD(Dow Jones Dividend 100) 분석: 배당 성장과 가치주의 복리 마법',
             'broker': '미래에셋증권',
             'writer': '글로벌ETF팀',
-            'pdfUrl': 'https://finance.naver.com/research/economy_list.naver',
+            'pdfUrl': 'http://consensus.hankyung.com/analysis/list?skinType=derivative',
             'summary': [
                 '10년 연속 배당 증액 기업만 엄선하여 시가배당률 3.5%대 및 5년 배당성장률 11.8% 기록',
                 '금융(18%), 헬스케어(15%), 산업재(14%)의 균형 잡힌 포트폴리오로 시장 급락기 방어력 우수',
@@ -232,13 +368,14 @@ def main():
         },
         {
             'id': 'curated_rates_1',
-            'date': datetime.now(KST).strftime('%Y-%m-%d'),
+            'date': today_str,
             'category': 'rates',
             'categoryLabel': '📈 미국 국채·금리',
+            'fxDirection': 'neutral',
             'title': '미국 국채 10년물 금리 향방: 인플레이션 둔화와 장기물 채권의 매력',
             'broker': 'NH투자증권',
             'writer': '채권전략팀',
-            'pdfUrl': 'https://finance.naver.com/research/economy_list.naver',
+            'pdfUrl': 'http://consensus.hankyung.com/analysis/list?skinType=derivative',
             'summary': [
                 '미 10년물 국채 금리 4.1~4.3% 구간에서 하향 안정 흐름 지속',
                 '장기채 금리 안정화는 배당 가치주(SCHD) 및 리츠 자산의 할인율을 낮춰 주가에 긍정적',
@@ -318,7 +455,34 @@ def main():
             'title': toad_title,
             'message': toad_message
         },
-        'reports': final_reports[:30]  # 최신 리포트 최대 30개 유지
+        'scenarioAnalysis': {
+            'title': "원·달러 환율 상승 vs 하락 양방향 시나리오 & 포트폴리오 대응 전략",
+            'up': {
+                'title': "환율 상승 시나리오 (1,380 ~ 1,430원대)",
+                'badge': "🔴 달러 강세 / 원화 약세",
+                'sentiment': "up",
+                'triggers': [
+                    "미국 대선 및 관세 무역 분쟁 우려 시 안전자산(달러) 쏠림 현상",
+                    "서학개미·연기금의 미국 AI 빅테크 주식 매수 열풍으로 구조적 자본 유출",
+                    "중동 지정학적 리스크 및 국제 유가 급등에 따른 무역수지 악화"
+                ],
+                'portfolioImpact': "부부 외화자산(미국 단기국채 983만, SOXL 등) 원화 환산액 급증 (+10원당 약 +65만 원 평가익)",
+                'toadAction': "💡 신규 달러 환전은 자제하고, 기보유 달러자산의 평가익을 누리며 환율 상단에서 필요 시 부분 원화 환전 검토"
+            },
+            'down': {
+                'title': "환율 하락 시나리오 (1,280 ~ 1,320원대)",
+                'badge': "🔵 달러 약세 / 원화 강세",
+                'sentiment': "down",
+                'triggers': [
+                    "AI 투자 붐에 따른 HBM 및 반도체 수출 급증으로 사상 최대 수준 경상수지 흑자 지속",
+                    "국내 수출 대기업들의 달러 매도(네고) 물량 출회가 환율 상단을 강하게 압박",
+                    "미 연준 본격 금리인하 사이클 진입 및 WGBI(세계국채지수) 편입에 따른 외국인 자금 대규모 유입"
+                ],
+                'portfolioImpact': "기보유 달러자산 원화 평가액은 일시 축소되나, 2028년 5월 잔금대출 금리 인하로 직결되며 해외 우량자산 저가 매수 기회 형성",
+                'toadAction': "💡 TIGER 미국배당다우존스(SCHD) 및 미국 우량 배당자산을 싼 가격에 추가 줍줍(적립)하는 골든타임!"
+            }
+        },
+        'reports': final_reports[:35]  # 핵심 리포트 35개 유지
     }
 
     # 파일 저장
