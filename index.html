@@ -3755,16 +3755,22 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 18px;
-            background: linear-gradient(135deg, rgba(49, 130, 246, 0.12) 0%, rgba(49, 130, 246, 0.05) 100%);
-            border: 1.5px solid rgba(49, 130, 246, 0.32);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid rgba(49, 130, 246, 0.38);
             border-radius: 14px;
             margin-bottom: 12px;
-            box-shadow: 0 4px 14px rgba(49, 130, 246, 0.08);
+            box-shadow: 0 6px 22px rgba(49, 130, 246, 0.14);
             animation: slideDownAdminBanner 0.25s ease;
+            position: sticky;
+            top: 10px;
+            z-index: 105;
         }
         :root[data-theme="dark"] .admin-timer-banner {
-            background: linear-gradient(135deg, rgba(49, 130, 246, 0.22) 0%, rgba(49, 130, 246, 0.08) 100%);
-            border-color: rgba(49, 130, 246, 0.45);
+            background: rgba(27, 32, 40, 0.92);
+            border-color: rgba(49, 130, 246, 0.52);
+            box-shadow: 0 6px 26px rgba(0, 0, 0, 0.45);
         }
         @keyframes slideDownAdminBanner {
             from { opacity: 0; transform: translateY(-8px); }
@@ -3959,6 +3965,83 @@
         }
         .admin-btn-confirm:active, .admin-btn-cancel:active {
             transform: scale(0.97);
+        }
+
+        /* 3대 자산 실시간 기간 성과 요약 바 (UI-UX Pro Max) */
+        .stock-perf-summary-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 9px 14px;
+            background: var(--plane);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 14px;
+        }
+        .sps-label-tag {
+            font-size: 11.5px;
+            font-weight: 750;
+            color: var(--muted);
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .sps-chips-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .sps-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            font-size: 12px;
+            font-weight: 750;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.01em;
+            transition: all 0.15s ease;
+        }
+        .sps-chip .sps-name {
+            color: var(--ink2);
+            font-size: 11.5px;
+            font-weight: 650;
+        }
+        .sps-chip.up .sps-val {
+            color: #F04452;
+            font-weight: 850;
+        }
+        .sps-chip.down .sps-val {
+            color: #3182F6;
+            font-weight: 850;
+        }
+        :root[data-theme="dark"] .sps-chip.up {
+            background: rgba(240, 68, 82, 0.12);
+            border-color: rgba(240, 68, 82, 0.28);
+        }
+        :root[data-theme="dark"] .sps-chip.down {
+            background: rgba(49, 130, 246, 0.12);
+            border-color: rgba(49, 130, 246, 0.28);
+        }
+
+        /* 핀테크 표준 햅틱 마이크로 인터랙션 (토스 스타일) */
+        button:active,
+        .tab:active,
+        .btn:active,
+        .primary:active,
+        .accordion-toggle-btn:active,
+        .stock-filter-btn:active,
+        .stock-sync-btn:active,
+        .atb-lock-btn:active {
+            transform: scale(0.96) !important;
+            transition: transform 0.08s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
     
     </style>
@@ -4255,6 +4338,28 @@
                             <button type="button" class="stock-sync-btn" data-period="1W" onclick="setStocksSyncPeriod('1W')">1주일</button>
                             <button type="button" class="stock-sync-btn active" data-period="1M" onclick="setStocksSyncPeriod('1M')">1개월</button>
                             <button type="button" class="stock-sync-btn" data-period="3M" onclick="setStocksSyncPeriod('3M')">분기(3M)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3대 종목 기간 성과 요약 바 -->
+                <div class="stock-perf-summary-bar" id="stockPerfSummaryBar">
+                    <div class="sps-label-tag">⚡ 선택 기간 수익률</div>
+                    <div class="sps-chips-wrap">
+                        <div class="sps-chip up" id="spsChip_tiger">
+                            <span class="sps-icon">🐯</span>
+                            <span class="sps-name">TIGER 배당</span>
+                            <span class="sps-val" id="spsVal_tiger">+7.21%</span>
+                        </div>
+                        <div class="sps-chip up" id="spsChip_schd">
+                            <span class="sps-icon">🏛️</span>
+                            <span class="sps-name">SCHD</span>
+                            <span class="sps-val" id="spsVal_schd">+9.55%</span>
+                        </div>
+                        <div class="sps-chip down" id="spsChip_fx">
+                            <span class="sps-icon">🇺🇸</span>
+                            <span class="sps-name">원·달러 환율</span>
+                            <span class="sps-val" id="spsVal_fx">-1.92%</span>
                         </div>
                     </div>
                 </div>
@@ -7631,6 +7736,7 @@
             }
             set("bucketTotal", won(totalAssets()));
             updateBucketCardUI();
+            applyNumericInputAffordances();
         }
 
         function renderGoal() {
@@ -7692,6 +7798,7 @@
                 "계획한 <b>" + kfmt(c.plan) + "</b>으로는 " + (c.diff >= 0
                     ? "목표보다 <b style='color:var(--goodtext)'>" + kfmt(c.diff) + " 여유</b>가 생깁니다."
                     : "목표에 <b style='color:var(--crit)'>" + kfmt(-c.diff) + " 부족</b>합니다.");
+            applyNumericInputAffordances();
         }
 
         function setLoanAmountPreset(mode) {
@@ -9137,6 +9244,22 @@
                 fmtY: v => `${Math.round(v).toLocaleString('ko-KR')}`,
                 unit: "원"
             });
+
+            // 상단 3대 자산 실시간 기간 성과 요약 바 동적 갱신
+            const updatePerfSummaryChip = (chipId, valId, pts) => {
+                const chip = document.getElementById(chipId);
+                const valEl = document.getElementById(valId);
+                if (!chip || !valEl || !pts || pts.length < 2) return;
+                const first = pts[0].val;
+                const last = pts[pts.length - 1].val;
+                const diffPct = first > 0 ? ((last - first) / first * 100) : 0;
+                const isUp = diffPct >= 0;
+                valEl.textContent = (isUp ? "+" : "") + diffPct.toFixed(2) + "%";
+                chip.className = "sps-chip " + (isUp ? "up" : "down");
+            };
+            updatePerfSummaryChip("spsChip_tiger", "spsVal_tiger", tigerPts);
+            updatePerfSummaryChip("spsChip_schd", "spsVal_schd", schdPts);
+            updatePerfSummaryChip("spsChip_fx", "spsVal_fx", fxPts);
         }
     
         function drawFxChart() {
@@ -11076,6 +11199,14 @@
             }
         }
 
+        function handleAdminPasswordInput(e) {
+            const input = e.target;
+            input.value = input.value.replace(/[^0-9]/g, "");
+            if (input.value.length === 4) {
+                submitAdminAuth();
+            }
+        }
+
         function handleAdminPasswordKeydown(e) {
             if (e.key === "Enter") {
                 submitAdminAuth();
@@ -11169,6 +11300,45 @@
             }
         }
 
+        // 모바일 숫자 전용 키패드 및 핀테크 입력 보조 (UI-UX Pro Max)
+        function applyNumericInputAffordances() {
+            const targets = document.querySelectorAll("input.num, [data-goal], [data-loan], [data-fx], #sv-amt, #sv-qty, #sv-execPrice, #in-amt, #dv-amt, #tf-amt");
+            targets.forEach(inp => {
+                if (inp.type === "checkbox" || inp.type === "month" || inp.type === "date" || inp.tagName === "SELECT") return;
+                const isDecimal = inp.id === "g-acqTaxRate" || (inp.dataset && (inp.dataset.goal === "acqTaxRate" || inp.dataset.loan === "rate" || inp.dataset.fx === "usdKrw"));
+                if (!inp.getAttribute("inputmode")) {
+                    inp.setAttribute("inputmode", isDecimal ? "decimal" : "numeric");
+                }
+                inp.setAttribute("autocomplete", "off");
+                inp.setAttribute("spellcheck", "false");
+            });
+        }
+
+        // 주요 금액 입력 시 실시간 3자리 콤마 자동 서식화 (오타 및 자릿수 착오 방지)
+        function attachLiveCommaFormatting() {
+            const liveIds = ["sv-amt", "in-amt", "dv-amt", "tf-amt"];
+            liveIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el || el._hasLiveFormat) return;
+                el._hasLiveFormat = true;
+                el.addEventListener("input", () => {
+                    const rawVal = el.value.replace(/[^0-9]/g, "");
+                    if (!rawVal) {
+                        el.value = "";
+                        return;
+                    }
+                    const pos = el.selectionStart;
+                    const prevLen = el.value.length;
+                    const numVal = Number(rawVal);
+                    if (!isFinite(numVal)) return;
+                    const formatted = numVal.toLocaleString("ko-KR");
+                    el.value = formatted;
+                    const newPos = Math.max(0, pos + (formatted.length - prevLen));
+                    el.setSelectionRange(newPos, newPos);
+                });
+            });
+        }
+
         // 보안 가드 초기화: 자산, 목표설정, 저축/자금이동, 기록 탭 수정 시도 시 관리자 인증 요구
         function initAdminSecurityGuards() {
             const protectedTabIds = ["tab-assets", "tab-goal", "tab-flow", "tab-log"];
@@ -11248,6 +11418,8 @@
         // 앱 시작 시 안전 타임아웃(최대 6초)과 함께 초기 동기화 진행
         (async () => {
             initAdminSecurityGuards();
+            applyNumericInputAffordances();
+            attachLiveCommaFormatting();
             loadMarketInsights();
             await Promise.race([
                 runInitialDataAndMarketSync(),
@@ -11304,7 +11476,7 @@
             <h3 class="admin-auth-title">관리자 인증</h3>
             <div class="admin-auth-hint">💡 힌트: <b>힐스 비밀번호</b></div>
             <div class="admin-auth-input-wrap">
-                <input type="password" id="adminPasswordInput" class="admin-password-input" maxlength="4" placeholder="••••" autocomplete="off" inputmode="numeric" pattern="[0-9]*" onkeydown="handleAdminPasswordKeydown(event)">
+                <input type="password" id="adminPasswordInput" class="admin-password-input" maxlength="4" placeholder="••••" autocomplete="off" inputmode="numeric" pattern="[0-9]*" oninput="handleAdminPasswordInput(event)" onkeydown="handleAdminPasswordKeydown(event)">
             </div>
             <div id="adminAuthErrMsg" class="admin-auth-err" style="display:none;">비밀번호가 올바르지 않습니다.</div>
             <div class="admin-auth-btn-row">
