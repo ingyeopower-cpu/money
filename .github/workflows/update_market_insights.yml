@@ -2,8 +2,10 @@ name: Update Market Insights & Financial Reports
 
 on:
   schedule:
-    # 매일 평일 아침 07:30 KST (UTC 22:30, 일~목)
+    # 1. 평일 아침 07:30 KST (UTC 22:30, 일~목): 미국 증시 마감 & 아침 모닝 리포트 수집
     - cron: '30 22 * * 0-4'
+    # 2. 평일 오후 16:00 KST (UTC 07:00, 월~금): 국내 장 마감 환율 & 오후 신규 리포트 수집
+    - cron: '0 7 * * 1-5'
   workflow_dispatch: # 관리자가 깃허브 웹에서 수동으로 즉시 실행 가능
 
 permissions:
