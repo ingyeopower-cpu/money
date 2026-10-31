@@ -6503,7 +6503,12 @@
             const sub = document.getElementById("bucketCardSub");
             if (wrap) wrap.style.display = isBucketCardOpen ? "block" : "none";
             if (icon) icon.textContent = isBucketCardOpen ? "▾ 접기" : "▸ 펼치기";
-            if (sub) sub.textContent = "총자산: " + won(totalAssets()) + "원 (터치하여 " + (isBucketCardOpen ? "접기" : "펼치기") + ")";
+            const lk = lockedAssets();
+            if (sub) {
+                sub.textContent = lk > 0 
+                    ? "잔금 가용: " + won(usableAssets()) + "원 (우리사주 " + kfmt(lk) + " 제외) · 터치하여 " + (isBucketCardOpen ? "접기" : "펼치기")
+                    : "총자산: " + won(totalAssets()) + "원 (터치하여 " + (isBucketCardOpen ? "접기" : "펼치기") + ")";
+            }
         }
 
         function renderAssets() {
@@ -6541,16 +6546,28 @@
 
             // 1. 카드 뷰 상단 서머리 헤로
             if (cl) {
+                const lockedStockVal = lockedAssets();
+                const usableStockVal = Math.max(0, totalStockVal - lockedStockVal);
+                const usableCost = S.holdings.filter(h => !(h.account === "우리사주" || h.excludeFromGoal)).reduce((s, h) => s + (h.qty || 0) * (h.avgPrice || 0) * (h.isUsd ? fxRate : 1), 0);
+                const usablePl = usableStockVal - usableCost;
+                const usablePlPct = usableCost > 0 ? (usablePl / usableCost * 100) : 0;
+                const usablePlCls = usablePl > 0 ? "gain" : usablePl < 0 ? "loss" : "";
+                const usablePlTxt = usableCost > 0 ? (usablePl >= 0 ? "+" : "") + won(usablePl) + "원 (" + (usablePl >= 0 ? "+" : "") + usablePlPct.toFixed(1) + "%)" : "—";
+
                 const hero = document.createElement("div");
                 hero.className = "hold-summary-hero";
                 hero.innerHTML =
                     '<div>' +
                         '<div class="hold-summary-title">보유 주식 총 평가액 (' + allUniqueKeys.size + '개 종목 · ' + S.holdings.length + '건)</div>' +
-                        '<div class="hold-summary-val">' + won(totalStockVal) + '원</div>' +
+                        '<div class="hold-summary-val">' + 
+                            (lockedStockVal > 0 
+                                ? won(usableStockVal) + '원 <span style="font-size:12px;color:var(--muted);font-weight:normal;">(우리사주 ' + won(lockedStockVal) + '원 제외)</span>' 
+                                : won(totalStockVal) + '원') + 
+                        '</div>' +
                     '</div>' +
                     '<div class="hold-summary-pl-wrap">' +
-                        '<div class="hold-summary-title">총 평가손익</div>' +
-                        '<div class="hold-summary-pl-badge ' + totalPlCls + '">' + totalPlTxt + '</div>' +
+                        '<div class="hold-summary-title">' + (lockedStockVal > 0 ? '가용 평가손익' : '총 평가손익') + '</div>' +
+                        '<div class="hold-summary-pl-badge ' + (lockedStockVal > 0 ? usablePlCls : totalPlCls) + '">' + (lockedStockVal > 0 ? usablePlTxt : totalPlTxt) + '</div>' +
                     '</div>';
                 cl.appendChild(hero);
 
@@ -6571,6 +6588,7 @@
                 g.items.sort((a, b) => (a.order || 0) - (b.order || 0));
 
                 let gValue = 0, gCost = 0;
+                let gLockedVal = 0, gLockedCost = 0;
 
                 // A. 테이블 뷰 (표로 보기)
                 if (hb) {
@@ -6587,10 +6605,15 @@
                         gValue += value;
                         gCost += cost;
 
+                        const isWoori = h.account === "우리사주" || h.excludeFromGoal;
+                        if (isWoori) {
+                            gLockedVal += value;
+                            gLockedCost += cost;
+                        }
+
                         const plCls = pl > 0 ? "gain" : pl < 0 ? "loss" : "";
                         const plTxt = cost > 0 ? (pl >= 0 ? "+" : "") + won(pl) + " (" + (pl >= 0 ? "+" : "") + plPct.toFixed(1) + "%)" : "—";
                         const isFirst = idx === 0, isLast = idx === g.items.length - 1;
-                        const isWoori = h.account === "우리사주" || h.excludeFromGoal;
 
                         const tr = document.createElement("tr");
                         tr.innerHTML =
@@ -6627,19 +6650,43 @@
                     const gPlTxt = gCost > 0 ? (gPl >= 0 ? "+" : "") + won(gPl) + " (" + (gPl >= 0 ? "+" : "") + gPlPct.toFixed(1) + "%)" : "—";
                     const gPlPctTxt = gCost > 0 ? (gPlPct >= 0 ? "+" : "") + gPlPct.toFixed(1) + "%" : "—";
 
+                    const gUsableVal = Math.max(0, gValue - gLockedVal);
+                    const gUsableCost = Math.max(0, gCost - gLockedCost);
+                    const gUsablePl = gUsableVal - gUsableCost;
+                    const gUsablePlPct = gUsableCost > 0 ? (gUsablePl / gUsableCost * 100) : 0;
+                    const gUsablePlCls = gUsablePl > 0 ? "gain" : gUsablePl < 0 ? "loss" : "";
+                    const gUsablePlTxt = gUsableCost > 0 ? (gUsablePl >= 0 ? "+" : "") + won(gUsablePl) + " (" + (gUsablePl >= 0 ? "+" : "") + gUsablePlPct.toFixed(1) + "%)" : "—";
+
                     const subtotal = document.createElement("tr");
-                    subtotal.innerHTML =
-                        '<td colspan="9" style="text-align:right;font-weight:600;color:var(--ink2);padding:6px 12px;border-bottom:2px solid var(--grid)">' + g.title + ' 합계 (' + g.items.length + '건) · 총 평가손익률 <span class="' + gPlCls + '">' + gPlPctTxt + '</span></td>' +
-                        '<td class="num" style="font-weight:600;border-bottom:2px solid var(--grid)">' + won(gValue) + '</td>' +
-                        '<td class="num ' + gPlCls + '" style="font-weight:600;border-bottom:2px solid var(--grid)">' + gPlTxt + '</td>' +
-                        '<td style="border-bottom:2px solid var(--grid)"></td>' +
-                        '<td style="border-bottom:2px solid var(--grid)"></td>';
+                    if (gLockedVal > 0) {
+                        subtotal.innerHTML =
+                            '<td colspan="9" style="text-align:right;font-weight:600;color:var(--ink2);padding:6px 12px;border-bottom:2px solid var(--grid)">' +
+                                g.title + ' 합계 (' + g.items.length + '건) · <span style="color:var(--muted);font-weight:normal;">우리사주 ' + won(gLockedVal) + '원 제외 가용손익률</span> <span class="' + gUsablePlCls + '">' + (gUsableCost > 0 ? (gUsablePlPct >= 0 ? "+" : "") + gUsablePlPct.toFixed(1) + "%" : "—") + '</span></td>' +
+                            '<td class="num" style="font-weight:600;border-bottom:2px solid var(--grid)">' + won(gUsableVal) + '</td>' +
+                            '<td class="num ' + gUsablePlCls + '" style="font-weight:600;border-bottom:2px solid var(--grid)">' + gUsablePlTxt + '</td>' +
+                            '<td style="border-bottom:2px solid var(--grid)"></td>' +
+                            '<td style="border-bottom:2px solid var(--grid)"></td>';
+                    } else {
+                        subtotal.innerHTML =
+                            '<td colspan="9" style="text-align:right;font-weight:600;color:var(--ink2);padding:6px 12px;border-bottom:2px solid var(--grid)">' + g.title + ' 합계 (' + g.items.length + '건) · 총 평가손익률 <span class="' + gPlCls + '">' + gPlPctTxt + '</span></td>' +
+                            '<td class="num" style="font-weight:600;border-bottom:2px solid var(--grid)">' + won(gValue) + '</td>' +
+                            '<td class="num ' + gPlCls + '" style="font-weight:600;border-bottom:2px solid var(--grid)">' + gPlTxt + '</td>' +
+                            '<td style="border-bottom:2px solid var(--grid)"></td>' +
+                            '<td style="border-bottom:2px solid var(--grid)"></td>';
+                    }
                     hb.appendChild(subtotal);
                 } else {
                     g.items.forEach(h => {
+                        const isWoori = h.account === "우리사주" || h.excludeFromGoal;
                         const rate = h.isUsd ? fxRate : 1;
-                        gValue += (h.qty || 0) * (h.price || 0) * rate;
-                        gCost += (h.qty || 0) * (h.avgPrice || 0) * rate;
+                        const val = (h.qty || 0) * (h.price || 0) * rate;
+                        const cst = (h.qty || 0) * (h.avgPrice || 0) * rate;
+                        gValue += val;
+                        gCost += cst;
+                        if (isWoori) {
+                            gLockedVal += val;
+                            gLockedCost += cst;
+                        }
                     });
                 }
 
@@ -6674,8 +6721,27 @@
                     const gPlCls = gPl > 0 ? "gain" : gPl < 0 ? "loss" : "";
                     const gPlTxt = gCost > 0 ? (gPl >= 0 ? "+" : "") + won(gPl) + " (" + (gPl >= 0 ? "+" : "") + gPlPct.toFixed(1) + "%)" : "—";
 
+                    const gUsableVal = Math.max(0, gValue - gLockedVal);
+                    const gUsableCost = Math.max(0, gCost - gLockedCost);
+                    const gUsablePl = gUsableVal - gUsableCost;
+                    const gUsablePlPct = gUsableCost > 0 ? (gUsablePl / gUsableCost * 100) : 0;
+                    const gUsablePlCls = gUsablePl > 0 ? "gain" : gUsablePl < 0 ? "loss" : "";
+                    const gUsablePlTxt = gUsableCost > 0 ? (gUsablePl >= 0 ? "+" : "") + won(gUsablePl) + " (" + (gUsablePl >= 0 ? "+" : "") + gUsablePlPct.toFixed(1) + "%)" : "—";
+
                     const groupSec = document.createElement("div");
                     groupSec.className = "hold-group-section";
+
+                    let headerSubHtml = "";
+                    if (gLockedVal > 0) {
+                        headerSubHtml =
+                            '<div class="hold-group-sub">' +
+                                '<span>' + won(gUsableVal) + '원</span>' +
+                                '<span style="font-size:11px;color:var(--muted);font-weight:normal;"> (우리사주 제외)</span> · ' +
+                                '<span class="' + gUsablePlCls + '">' + gUsablePlTxt + '</span>' +
+                            '</div>';
+                    } else {
+                        headerSubHtml = '<div class="hold-group-sub">' + won(gValue) + '원 · <span class="' + gPlCls + '">' + gPlTxt + '</span></div>';
+                    }
 
                     // 그룹 아코디언 헤더
                     const groupHdr = document.createElement("div");
@@ -6686,7 +6752,7 @@
                             '<span>' + g.title + ' (' + mergedStocks.length + '개 종목 · ' + g.items.length + '건)</span>' +
                             '<span class="hold-group-toggle-icon">' + (isGroupCollapsed ? '▸ 펼치기' : '▾ 접기') + '</span>' +
                         '</div>' +
-                        '<div class="hold-group-sub">' + won(gValue) + '원 · <span class="' + gPlCls + '">' + gPlTxt + '</span></div>';
+                        headerSubHtml;
                     groupSec.appendChild(groupHdr);
 
                     // 그룹이 접혀있지 않은 경우에만 종목 리스트 컨테이너 노출
