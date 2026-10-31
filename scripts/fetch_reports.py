@@ -418,8 +418,47 @@ def main():
         }
     ]
 
-    # 크롤링 리포트와 큐레이션 리포트 결합 (중복 방지)
-    final_reports = curated_seeds + [r for r in raw_reports if r['title'] not in [c['title'] for c in curated_seeds]]
+    # 기존 파일(data/market_insights.json)에 보관된 과거 날짜 리포트 읽기 (영구 날짜별 아카이브)
+    output_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'market_insights.json')
+    existing_reports = []
+    if os.path.exists(output_path):
+        try:
+            with open(output_path, 'r', encoding='utf-8') as f:
+                old_data = json.load(f)
+                if old_data and isinstance(old_data.get('reports'), list):
+                    existing_reports = old_data['reports']
+        except Exception as e:
+            print("Notice: Existing reports load exception:", e)
+
+    # 리포트 고유 식별 함수 (중복 제거)
+    def get_rep_key(r):
+        if r.get('pdfUrl'):
+            return r['pdfUrl']
+        t = re.sub(r'\s+', '', r.get('title', ''))
+        return f"{r.get('date', '')}_{t}_{r.get('broker', '')}"
+
+    seen_keys = set()
+    merged_reports = []
+
+    # 1) 오늘 신규 수집 & 큐레이션 리포트 우선 등록
+    for r in (curated_seeds + raw_reports):
+        k = get_rep_key(r)
+        if k and k not in seen_keys:
+            seen_keys.add(k)
+            merged_reports.append(r)
+
+    # 2) 과거 날짜에 수집되어 저장되었던 보관함 리포트 병합 (날짜별 누적 보관)
+    for r in existing_reports:
+        k = get_rep_key(r)
+        if k and k not in seen_keys:
+            seen_keys.add(k)
+            merged_reports.append(r)
+
+    # 3) 날짜(date) 최신순 역순 정렬 보존
+    merged_reports.sort(key=lambda x: str(x.get('date', '')), reverse=True)
+
+    # 날짜별 누적 보관함 유지 (최대 150건 보관)
+    final_reports = merged_reports[:150]
 
     # 3. 종합 데이터 객체 구성
     # 부부 실제 보유 TIGER 미국배당다우존스 5,062주 연동 계산
@@ -565,7 +604,7 @@ def main():
                 'toadAction': "💡 TIGER 미국배당다우존스(SCHD) 및 미국 우량 배당자산을 싼 가격에 추가 줍줍(적립)하는 골든타임!"
             }
         },
-        'reports': final_reports[:35]  # 핵심 리포트 35개 유지
+        'reports': final_reports  # 날짜별 누적 보관 리포트 리스트
     }
 
     # 파일 저장

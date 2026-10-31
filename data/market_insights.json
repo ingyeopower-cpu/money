@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-31 23:25 KST",
+  "updatedAt": "2026-10-31 23:32 KST",
   "macro": {
     "fx": {
       "current": 1335.1,
@@ -10470,180 +10470,6 @@
       ]
     },
     {
-      "id": "curated_fx_down_2",
-      "date": "2026-10-31",
-      "category": "fx",
-      "categoryLabel": "💵 원·달러 환율",
-      "fxDirection": "down",
-      "title": "[환율 하락 전망] 수출업체 네고 물량 우위와 연준 금리인하 사이클: 1,300원 하회 시도",
-      "broker": "키움증권",
-      "writer": "김유미 투자전략팀장",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/list?skinType=derivative",
-      "summary": [
-        "반도체·자동차 등 국내 핵심 수출 기업들의 달러 매도 물량이 상단을 억누르는 수급 우위 장세",
-        "미 연준의 본격 기준금리 인하 사이클과 맞물려 글로벌 달러 약세 시 1,300원 하향 돌파 테스트 예상",
-        "부부 영향: 기보유 달러자산 환차손은 제한적이며, 신규 적립 저축액의 해외 자산 구매력 대폭 향상"
-      ],
-      "tags": [
-        "하락전망",
-        "네고물량",
-        "연준금리인하",
-        "달러약세"
-      ]
-    },
-    {
-      "id": "curated_fx_down_3",
-      "date": "2026-10-31",
-      "category": "fx",
-      "categoryLabel": "💵 원·달러 환율",
-      "fxDirection": "down",
-      "title": "[환율 하락 전망] WGBI 편입 및 한미 금리 역전 축소: 원화 펀더멘털 회복 시나리오",
-      "broker": "하나증권",
-      "writer": "전규연 연구원",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/list?skinType=derivative",
-      "summary": [
-        "세계국채지수(WGBI) 편입에 따른 외국인 채권 매수 자금(수십조 원) 유입으로 구조적 원화 수요 창출",
-        "미국 금리 인하 폭이 한국보다 클 것으로 보여 한미 금리 역전차 축소 및 환율 하향 안정 모멘텀 확보",
-        "거시 영향: 국내 은행채 및 주담대 금리 안정으로 직결되어 2028년 5월 잔금대출 금융비용 완화"
-      ],
-      "tags": [
-        "하락전망",
-        "WGBI편입",
-        "금리역전축소",
-        "잔금대출"
-      ]
-    },
-    {
-      "id": "curated_fx_up_1",
-      "date": "2026-10-31",
-      "category": "fx",
-      "categoryLabel": "💵 원·달러 환율",
-      "fxDirection": "up",
-      "title": "[환율 상승 전망] 서학개미 해외 AI 투자 급증과 구조적 자본유출: 상저하고 1,390원 시나리오",
-      "broker": "신한투자증권",
-      "writer": "이진우 연구위원",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/list?skinType=derivative",
-      "summary": [
-        "개인 및 연기금의 미국 AI 빅테크 주식 매수 열풍으로 경상흑자를 상쇄하는 대규모 자본유출 지속",
-        "국내 경기 이익 증가율 둔화 시 하반기 달러 환전 수요가 집중되며 연말 1,390원 돌파 가능성 점검",
-        "포트폴리오 영향: 보유 중인 외화자산(미국 단기국채 983만 원, SOXL 등) 원화 평가액 급증 (+10원당 약 +65만 원)"
-      ],
-      "tags": [
-        "상승전망",
-        "서학개미",
-        "자본유출",
-        "달러강세"
-      ]
-    },
-    {
-      "id": "curated_fx_up_2",
-      "date": "2026-10-31",
-      "category": "fx",
-      "categoryLabel": "💵 원·달러 환율",
-      "fxDirection": "up",
-      "title": "[환율 상승 전망] 글로벌 관세 장벽과 트럼프 통상 압박: 신흥국 통화 상방 변동성 점검",
-      "broker": "미래에셋증권",
-      "writer": "박희찬 리서치센터장",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/list?skinType=derivative",
-      "summary": [
-        "미 대선 결과 및 보호무역주의 관세 정책 강화 시 대미 수출 비중 높은 한국 경제에 상방 압력 작용",
-        "글로벌 무역 분쟁 우려 시 위험회피 심리로 안전자산인 미국 달러화로의 쏠림 현상 재연",
-        "부부 전략: 환율 10원 상승당 부부 자산 약 +65만 원 평가익 발생, 상단 구간에서는 신규 환전 지양"
-      ],
-      "tags": [
-        "상승전망",
-        "트럼프관세",
-        "보호무역",
-        "안전자산"
-      ]
-    },
-    {
-      "id": "curated_fx_up_3",
-      "date": "2026-10-31",
-      "category": "fx",
-      "categoryLabel": "💵 원·달러 환율",
-      "fxDirection": "up",
-      "title": "[환율 상승 전망] 중동 지정학적 리스크 및 에너지 수입 결제 수요: 안전자산 달러 쏠림",
-      "broker": "NH투자증권",
-      "writer": "권아민 연구원",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/list?skinType=derivative",
-      "summary": [
-        "중동 분쟁 및 국제 유가 급등 시 원유 전량 수입국인 한국의 무역수지 악화 및 달러 결제 수요 급증",
-        "미 연준의 인플레이션 재자극 우려로 금리인하 속도조절(Hawkish Cut) 시 강달러 기조 장기화 가능성",
-        "기보유 달러자산의 환차익이 전체 잔금 마련 목표 달성률을 끌어올리는 든든한 방어막 역할 수행"
-      ],
-      "tags": [
-        "상승전망",
-        "지정학리스크",
-        "유가반등",
-        "달러결제"
-      ]
-    },
-    {
-      "id": "curated_fx_neutral_1",
-      "date": "2026-10-31",
-      "category": "fx",
-      "categoryLabel": "💵 원·달러 환율",
-      "fxDirection": "neutral",
-      "title": "[환율 밸런스 점검] 경상흑자(하락 요인) vs 해외투자(상승 요인): 1,320~1,370원 팽팽한 힘겨루기",
-      "broker": "KB증권",
-      "writer": "김효진 수석연구위원",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/list?skinType=derivative",
-      "summary": [
-        "반도체 수출 호조에 따른 달러 공급과 해외투자 수요에 따른 달러 수요가 팽팽히 맞서는 균형 장세",
-        "1,320원 부근에서는 저가 매수세, 1,370원 부근에서는 수출업체 네고 물량이 출회되는 박스권 지속",
-        "최적 전략: 환율 박스권 하단에서는 SCHD/달러자산 매수, 상단에서는 환차익 향유 투트랙 대응"
-      ],
-      "tags": [
-        "박스권",
-        "수급균형",
-        "경상흑자",
-        "해외투자"
-      ]
-    },
-    {
-      "id": "curated_schd_1",
-      "date": "2026-10-31",
-      "category": "schd",
-      "categoryLabel": "👑 SCHD·미국배당",
-      "fxDirection": "neutral",
-      "title": "SCHD(Dow Jones Dividend 100) 분석: 배당 성장과 가치주의 복리 마법",
-      "broker": "미래에셋증권",
-      "writer": "글로벌ETF팀",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/list?skinType=derivative",
-      "summary": [
-        "10년 연속 배당 증액 기업만 엄선하여 시가배당률 3.5%대 및 5년 배당성장률 11.8% 기록",
-        "금융(18%), 헬스케어(15%), 산업재(14%)의 균형 잡힌 포트폴리오로 시장 급락기 방어력 우수",
-        "TIGER 미국배당다우존스 적립식 투자 시 분기 배당금 재투자를 통한 잔금 마련 복리 가속"
-      ],
-      "tags": [
-        "SCHD",
-        "배당성장",
-        "다우배당"
-      ]
-    },
-    {
-      "id": "curated_rates_1",
-      "date": "2026-10-31",
-      "category": "rates",
-      "categoryLabel": "📈 미국 국채·금리",
-      "fxDirection": "neutral",
-      "title": "미국 국채 10년물 금리 향방: 인플레이션 둔화와 장기물 채권의 매력",
-      "broker": "NH투자증권",
-      "writer": "채권전략팀",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/list?skinType=derivative",
-      "summary": [
-        "미 10년물 국채 금리 4.1~4.3% 구간에서 하향 안정 흐름 지속",
-        "장기채 금리 안정화는 배당 가치주(SCHD) 및 리츠 자산의 할인율을 낮춰 주가에 긍정적",
-        "국내 은행채 및 주담대 금리에도 우호적으로 작용하여 2028년 5월 잔금대출 부담 경감 기대"
-      ],
-      "tags": [
-        "미10년물",
-        "채권금리",
-        "잔금대출"
-      ]
-    },
-    {
       "id": "rep_1",
       "date": "2026-10-30",
       "category": "fx",
@@ -10663,6 +10489,287 @@
         "외환시장",
         "달러",
         "박스권"
+      ]
+    },
+    {
+      "id": "rep_19",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "엄우용",
+      "broker": "국내 증권사",
+      "writer": "상상인증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653545",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_20",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "투자전략팀",
+      "broker": "국내 증권사",
+      "writer": "상상인증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653542",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_21",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "리서치센터 투자전략실",
+      "broker": "국내 증권사",
+      "writer": "LS증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653533",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_22",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "리서치센터 투자전략실",
+      "broker": "국내 증권사",
+      "writer": "LS증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653532",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_23",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "투자분석부",
+      "broker": "국내 증권사",
+      "writer": "IBK투자증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653522",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_24",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "기간산업분석부・혁신기업분석부",
+      "broker": "국내 증권사",
+      "writer": "IBK투자증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653520",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_25",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "리서치센터",
+      "broker": "국내 증권사",
+      "writer": "유안타증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653509",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_26",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "sk증권 리서치센터",
+      "broker": "국내 증권사",
+      "writer": "SK증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653508",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_27",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "나민식",
+      "broker": "국내 증권사",
+      "writer": "SK증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653507",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_28",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "나민식",
+      "broker": "국내 증권사",
+      "writer": "SK증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653506",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_29",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "투자전략팀",
+      "broker": "국내 증권사",
+      "writer": "한화투자증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653505",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_30",
+      "date": "2026-10-30",
+      "category": "schd",
+      "categoryLabel": "👑 SCHD·미국배당",
+      "fxDirection": "neutral",
+      "title": "최규호",
+      "broker": "국내 증권사",
+      "writer": "한화투자증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653501",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 배당 리포트: Dow Jones Dividend 100(SCHD) 펀더멘털 평가",
+        "연 3.5%대 안정적 배당수익률 및 10년 연속 배당 성장 우량 가치주의 하방 경직성 확인",
+        "부부 5,062주 보유: 분기 배당금 재투자를 통한 2028년 잔금 마련 복리 스노우볼 가속"
+      ],
+      "tags": [
+        "배당성장",
+        "미국주식",
+        "ETF"
+      ]
+    },
+    {
+      "id": "rep_31",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "최규호",
+      "broker": "국내 증권사",
+      "writer": "한화투자증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653500",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_32",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "리서치센터",
+      "broker": "국내 증권사",
+      "writer": "대신증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653482",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
       ]
     },
     {
@@ -10835,6 +10942,147 @@
       ]
     },
     {
+      "id": "rep_18",
+      "date": "2026-10-29",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "fxDirection": "neutral",
+      "title": "10월 FOMC: 현실진단 후 12월에 마지막 인상",
+      "broker": "메리츠증권",
+      "writer": "이승훈,박민서",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653424",
+      "summary": [
+        "주요 기관(메리츠증권) 채권 리포트: 미국 국채 10년물 금리 및 글로벌 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표 둔화 추세와 고용시장 정상화에 따른 장기 무위험 금리 하향 안정 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리 안정으로 2028년 5월 잔금대출 금융비용 절감 기대"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_33",
+      "date": "2026-10-29",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "투자전략팀",
+      "broker": "국내 증권사",
+      "writer": "IBK투자증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653452",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_34",
+      "date": "2026-10-29",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "리서치센터",
+      "broker": "국내 증권사",
+      "writer": "IBK투자증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653451",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_35",
+      "date": "2026-10-29",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "리서치센터",
+      "broker": "국내 증권사",
+      "writer": "SK증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653439",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_36",
+      "date": "2026-10-29",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "리서치센터",
+      "broker": "국내 증권사",
+      "writer": "대신증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653429",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_37",
+      "date": "2026-10-29",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "리서치센터",
+      "broker": "국내 증권사",
+      "writer": "유안타증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653420",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_38",
+      "date": "2026-10-29",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "권명준,서석준",
+      "broker": "국내 증권사",
+      "writer": "유안타증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653415",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
       "id": "rep_10",
       "date": "2026-10-28",
       "category": "rates",
@@ -11002,187 +11250,6 @@
         "외환시장",
         "달러",
         "박스권"
-      ]
-    },
-    {
-      "id": "rep_18",
-      "date": "2026-10-29",
-      "category": "rates",
-      "categoryLabel": "📈 미국 국채·금리",
-      "fxDirection": "neutral",
-      "title": "10월 FOMC: 현실진단 후 12월에 마지막 인상",
-      "broker": "메리츠증권",
-      "writer": "이승훈,박민서",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653424",
-      "summary": [
-        "주요 기관(메리츠증권) 채권 리포트: 미국 국채 10년물 금리 및 글로벌 통화정책 기조 정밀 진단",
-        "미국 인플레이션 지표 둔화 추세와 고용시장 정상화에 따른 장기 무위험 금리 하향 안정 압력",
-        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리 안정으로 2028년 5월 잔금대출 금융비용 절감 기대"
-      ],
-      "tags": [
-        "국채금리",
-        "FOMC",
-        "연준"
-      ]
-    },
-    {
-      "id": "rep_19",
-      "date": "2026-10-30",
-      "category": "market",
-      "categoryLabel": "🌐 글로벌 시황",
-      "fxDirection": "neutral",
-      "title": "엄우용",
-      "broker": "국내 증권사",
-      "writer": "상상인증권",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653545",
-      "summary": [
-        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
-        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
-        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
-      ],
-      "tags": [
-        "거시경제",
-        "시장전략"
-      ]
-    },
-    {
-      "id": "rep_20",
-      "date": "2026-10-30",
-      "category": "market",
-      "categoryLabel": "🌐 글로벌 시황",
-      "fxDirection": "neutral",
-      "title": "투자전략팀",
-      "broker": "국내 증권사",
-      "writer": "상상인증권",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653542",
-      "summary": [
-        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
-        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
-        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
-      ],
-      "tags": [
-        "거시경제",
-        "시장전략"
-      ]
-    },
-    {
-      "id": "rep_21",
-      "date": "2026-10-30",
-      "category": "market",
-      "categoryLabel": "🌐 글로벌 시황",
-      "fxDirection": "neutral",
-      "title": "리서치센터 투자전략실",
-      "broker": "국내 증권사",
-      "writer": "LS증권",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653533",
-      "summary": [
-        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
-        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
-        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
-      ],
-      "tags": [
-        "거시경제",
-        "시장전략"
-      ]
-    },
-    {
-      "id": "rep_22",
-      "date": "2026-10-30",
-      "category": "market",
-      "categoryLabel": "🌐 글로벌 시황",
-      "fxDirection": "neutral",
-      "title": "리서치센터 투자전략실",
-      "broker": "국내 증권사",
-      "writer": "LS증권",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653532",
-      "summary": [
-        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
-        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
-        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
-      ],
-      "tags": [
-        "거시경제",
-        "시장전략"
-      ]
-    },
-    {
-      "id": "rep_23",
-      "date": "2026-10-30",
-      "category": "market",
-      "categoryLabel": "🌐 글로벌 시황",
-      "fxDirection": "neutral",
-      "title": "투자분석부",
-      "broker": "국내 증권사",
-      "writer": "IBK투자증권",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653522",
-      "summary": [
-        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
-        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
-        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
-      ],
-      "tags": [
-        "거시경제",
-        "시장전략"
-      ]
-    },
-    {
-      "id": "rep_24",
-      "date": "2026-10-30",
-      "category": "market",
-      "categoryLabel": "🌐 글로벌 시황",
-      "fxDirection": "neutral",
-      "title": "기간산업분석부・혁신기업분석부",
-      "broker": "국내 증권사",
-      "writer": "IBK투자증권",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653520",
-      "summary": [
-        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
-        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
-        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
-      ],
-      "tags": [
-        "거시경제",
-        "시장전략"
-      ]
-    },
-    {
-      "id": "rep_25",
-      "date": "2026-10-30",
-      "category": "market",
-      "categoryLabel": "🌐 글로벌 시황",
-      "fxDirection": "neutral",
-      "title": "리서치센터",
-      "broker": "국내 증권사",
-      "writer": "유안타증권",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653509",
-      "summary": [
-        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
-        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
-        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
-      ],
-      "tags": [
-        "거시경제",
-        "시장전략"
-      ]
-    },
-    {
-      "id": "rep_26",
-      "date": "2026-10-30",
-      "category": "market",
-      "categoryLabel": "🌐 글로벌 시황",
-      "fxDirection": "neutral",
-      "title": "sk증권 리서치센터",
-      "broker": "국내 증권사",
-      "writer": "SK증권",
-      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653508",
-      "summary": [
-        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
-        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
-        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
-      ],
-      "tags": [
-        "거시경제",
-        "시장전략"
       ]
     }
   ]

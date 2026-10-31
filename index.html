@@ -3085,6 +3085,131 @@
             min-width: 170px;
         }
 
+        /* 날짜별 보관함 필터 바 */
+        .report-date-filter-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .report-date-filter-label {
+            font-size: 12px;
+            font-weight: 750;
+            color: var(--ink2);
+            white-space: nowrap;
+        }
+        .report-date-filter-chips {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            padding-bottom: 3px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .report-date-chip-btn {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--chip);
+            color: var(--ink2);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .report-date-chip-btn:hover {
+            background: var(--surface);
+            color: var(--ink);
+        }
+        .report-date-chip-btn.active {
+            background: var(--surface);
+            color: var(--toss-blue, #3182f6);
+            border-color: var(--toss-blue, #3182f6);
+            font-weight: 750;
+            box-shadow: 0 1px 4px rgba(49, 130, 246, 0.15);
+        }
+        :root[data-theme="dark"] .report-date-chip-btn.active {
+            color: #60a5fa;
+            border-color: #60a5fa;
+            background: rgba(96, 165, 250, 0.15);
+        }
+        .report-date-chip-count {
+            font-size: 10px;
+            opacity: 0.75;
+        }
+
+        /* 날짜별 그룹 섹션 */
+        .report-date-group {
+            margin-bottom: 24px;
+        }
+        .report-date-group-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 14px;
+            background: var(--chip);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        .report-date-group-header:hover {
+            background: var(--surface);
+            border-color: rgba(49, 130, 246, 0.3);
+        }
+        .report-date-group-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .report-date-group-title .rd-icon {
+            font-size: 13px;
+        }
+        .report-date-group-title .rd-text {
+            font-size: 13.5px;
+            font-weight: 750;
+            color: var(--ink);
+            letter-spacing: -0.01em;
+        }
+        .report-date-group-title .rd-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 1.5px 7px;
+            border-radius: 6px;
+            background: var(--surface);
+            color: var(--toss-blue, #3182f6);
+            border: 1px solid rgba(49, 130, 246, 0.2);
+        }
+        .report-date-group-toggle {
+            font-size: 12px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .report-date-group-toggle .rd-arrow {
+            display: inline-block;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 11px;
+        }
+        .report-date-group.collapsed .rd-arrow {
+            transform: rotate(-90deg);
+        }
+        .report-date-group.collapsed .report-date-cards-grid {
+            display: none;
+        }
+        .report-date-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 14px;
+        }
+
         /* 리포트 카드 그리드 */
         .reports-grid {
             display: grid;
@@ -5531,9 +5656,17 @@
                     </div>
                 </div>
 
-                <!-- 리포트 카드 그리드 컨테이너 -->
-                <div class="reports-grid" id="reportsGridContainer">
-                    <!-- JS로 동적 렌더링 -->
+                <!-- 📅 날짜별 보관함 필터 바 -->
+                <div class="report-date-filter-wrap">
+                    <span class="report-date-filter-label">📅 날짜별 보관함:</span>
+                    <div class="report-date-filter-chips" id="reportDateFilterTabs">
+                        <button type="button" class="report-date-chip-btn active" data-date="all" onclick="filterReportsDate('all')">전체 날짜</button>
+                    </div>
+                </div>
+
+                <!-- 리포트 카드 그리드 컨테이너 (날짜별 그룹 렌더링) -->
+                <div class="reports-container" id="reportsGridContainer">
+                    <!-- JS로 날짜별 그룹 및 카드 동적 렌더링 -->
                 </div>
             </div>
         </section>
@@ -9633,7 +9766,9 @@
            ========================================================================== */
         let marketInsightsData = null;
         let currentReportFilter = 'all';
+        let currentReportDateFilter = 'all';
         let currentReportSearch = '';
+        const collapsedReportDateGroups = new Set();
 
         function escapeHtml(str) {
             if (str == null) return "";
@@ -9747,6 +9882,29 @@
                 btn.classList.toggle("active", btn.dataset.cat === cat);
             });
             renderReportsGrid();
+        }
+
+        function filterReportsDate(date) {
+            currentReportDateFilter = date;
+            document.querySelectorAll("#reportDateFilterTabs .report-date-chip-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.date === date);
+            });
+            renderReportsGrid();
+        }
+
+        function toggleReportDateGroup(dateStr) {
+            if (collapsedReportDateGroups.has(dateStr)) {
+                collapsedReportDateGroups.delete(dateStr);
+            } else {
+                collapsedReportDateGroups.add(dateStr);
+            }
+            const groupEl = document.querySelector(`.report-date-group[data-group-date="${dateStr}"]`);
+            if (groupEl) {
+                const isCollapsed = collapsedReportDateGroups.has(dateStr);
+                groupEl.classList.toggle("collapsed", isCollapsed);
+                const toggleTxt = groupEl.querySelector(".report-date-group-toggle span");
+                if (toggleTxt) toggleTxt.textContent = isCollapsed ? "펼치기" : "접기";
+            }
         }
 
         function handleReportSearch(val) {
@@ -10118,15 +10276,150 @@
             }
         }
 
+        function renderReportDateFilterChips(allReports) {
+            const container = document.getElementById("reportDateFilterTabs");
+            if (!container) return;
+
+            const dateCounts = {};
+            (allReports || []).forEach(r => {
+                const d = r.date || "기타";
+                dateCounts[d] = (dateCounts[d] || 0) + 1;
+            });
+
+            const sortedDates = Object.keys(dateCounts).sort().reverse();
+            const totalCount = (allReports || []).length;
+
+            let html = `
+                <button type="button" class="report-date-chip-btn ${currentReportDateFilter === 'all' ? 'active' : ''}" data-date="all" onclick="filterReportsDate('all')">
+                    전체 날짜 <span class="report-date-chip-count">(${totalCount})</span>
+                </button>
+            `;
+
+            const now = new Date();
+            const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+            sortedDates.forEach(d => {
+                let label = d;
+                if (d === todayStr) label = `${d.slice(5)} (오늘)`;
+                else label = d.slice(5);
+
+                const isActive = currentReportDateFilter === d;
+                html += `
+                    <button type="button" class="report-date-chip-btn ${isActive ? 'active' : ''}" data-date="${d}" onclick="filterReportsDate('${d}')">
+                        📅 ${label} <span class="report-date-chip-count">(${dateCounts[d]})</span>
+                    </button>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function formatReportDateHeading(dateStr) {
+            if (!dateStr || dateStr === "기타") return "기타 보관 리포트";
+            try {
+                const parts = dateStr.split("-");
+                if (parts.length === 3) {
+                    const year = parts[0];
+                    const month = parts[1];
+                    const day = parts[2];
+                    const d = new Date(Number(year), Number(month) - 1, Number(day));
+                    const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+                    const dayName = dayNames[d.getDay()] || '';
+
+                    const now = new Date();
+                    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+                    const yesterday = new Date(now);
+                    yesterday.setDate(now.getDate() - 1);
+                    const yesterdayStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
+
+                    let rel = "";
+                    if (dateStr === todayStr) rel = " · 오늘";
+                    else if (dateStr === yesterdayStr) rel = " · 어제";
+                    else if (dayName) rel = ` (${dayName})`;
+
+                    return `${year}.${month}.${day}${rel}`;
+                }
+            } catch (e) {}
+            return dateStr;
+        }
+
+        function renderReportCardItem(r) {
+            const catLabels = {
+                fx: "💵 환율 · 외환",
+                schd: "📈 SCHD · 배당",
+                rates: "🏛️ 국채 · 금리"
+            };
+            const catLabel = catLabels[r.category] || "📊 거시경제";
+            const summaryItems = Array.isArray(r.summary) ? r.summary : [r.summary || "기관 핵심 분석 리포트"];
+            const summaryHtml = summaryItems.map(s => `
+                <div class="report-summary-item">
+                    <span class="report-summary-dot">•</span>
+                    <span>${escapeHtml(s)}</span>
+                </div>
+            `).join("");
+
+            let dirBadgeHtml = "";
+            if (r.category === 'fx') {
+                const isDown = r.fxDirection === 'down' || (r.title && (r.title.includes('하락') || r.title.includes('안정')));
+                const isUp = r.fxDirection === 'up' || (r.title && (r.title.includes('상승') || r.title.includes('상방') || r.title.includes('자본유출')));
+                if (isDown) {
+                    dirBadgeHtml = `<span class="report-tag-chip" style="background:#e8f3ff;color:#3182f6;font-weight:700;">🔵 하락 전망(원화강세)</span>`;
+                } else if (isUp) {
+                    dirBadgeHtml = `<span class="report-tag-chip" style="background:#fff1f2;color:#f43f5e;font-weight:700;">🔴 상승 전망(달러강세)</span>`;
+                } else {
+                    dirBadgeHtml = `<span class="report-tag-chip" style="background:var(--chip);color:var(--ink2);font-weight:600;">⚖️ 박스권·전략</span>`;
+                }
+            }
+
+            const tagsHtml = (r.tags || []).map(t => `<span class="report-tag-chip">#${escapeHtml(t)}</span>`).join("");
+
+            const pdfButton = r.pdfUrl ? `
+                <a href="${r.pdfUrl}" target="_blank" rel="noopener noreferrer" class="report-btn-link pdf" title="한국경제 및 증권사 원문 PDF 열기">
+                    <span>📥 원문 PDF</span>
+                </a>
+            ` : "";
+
+            const brokerName = r.broker || r.firm || "금융기관";
+            const writerName = r.writer || r.author || "리서치센터";
+
+            return `
+                <div class="report-item-card">
+                    <div>
+                        <div class="report-top-meta">
+                            <span class="report-broker-badge">${escapeHtml(brokerName)}</span>
+                            <span class="report-date-text">${escapeHtml(r.date || "")} · ${escapeHtml(writerName)}</span>
+                        </div>
+                        <div class="report-item-title">${escapeHtml(r.title || "")}</div>
+                        <div class="report-tags-row">
+                            <span class="report-tag-chip" style="color:var(--toss-blue,#3182f6);font-weight:600;">${catLabel}</span>
+                            ${dirBadgeHtml}
+                            ${tagsHtml}
+                        </div>
+                        <div class="report-summary-box">
+                            ${summaryHtml}
+                        </div>
+                    </div>
+                    <div class="report-actions-row">
+                        <span style="font-size:11px;color:var(--muted);margin-right:auto;">
+                            ${r.source ? escapeHtml(r.source) : "한경 컨센서스"}
+                        </span>
+                        ${pdfButton}
+                    </div>
+                </div>
+            `;
+        }
+
         function renderReportsGrid() {
             const data = marketInsightsData || DEFAULT_MARKET_INSIGHTS;
             const container = document.getElementById("reportsGridContainer");
             const countBadge = document.getElementById("reportsCountBadge");
             if (!container) return;
 
-            let list = (data && data.reports) ? [...data.reports] : [];
+            const allReports = (data && data.reports) ? [...data.reports] : [];
+            renderReportDateFilterChips(allReports);
 
-            // 카테고리 필터 (상승/하락 방향성 지원)
+            let list = [...allReports];
+
+            // 1. 카테고리 필터 (상승/하락 방향성 지원)
             if (currentReportFilter && currentReportFilter !== 'all') {
                 if (currentReportFilter === 'fx_down') {
                     list = list.filter(r => r.category === 'fx' && (r.fxDirection === 'down' || (r.title && (r.title.includes('하락') || r.title.includes('안정')))));
@@ -10137,7 +10430,12 @@
                 }
             }
 
-            // 검색어 필터
+            // 2. 날짜별 보관함 필터
+            if (currentReportDateFilter && currentReportDateFilter !== 'all') {
+                list = list.filter(r => (r.date || "기타") === currentReportDateFilter);
+            }
+
+            // 3. 검색어 필터
             if (currentReportSearch) {
                 const q = currentReportSearch;
                 list = list.filter(r => {
@@ -10155,75 +10453,43 @@
 
             if (list.length === 0) {
                 container.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13.5px;">
-                        조건에 맞는 리포트가 없습니다. 검색어나 카테고리 필터를 변경해 보세요.
+                    <div style="text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13.5px; background: var(--surface); border: 1px dashed var(--border); border-radius: 16px;">
+                        조건에 맞는 리포트가 없습니다. 검색어나 카테고리/날짜 필터를 변경해 보세요.
                     </div>
                 `;
                 return;
             }
 
-            const catLabels = {
-                fx: "💵 환율 · 외환",
-                schd: "📈 SCHD · 배당",
-                rates: "🏛️ 국채 · 금리"
-            };
+            // 4. 날짜별 그룹화 (Date Grouping)
+            const dateGroups = {};
+            list.forEach(r => {
+                const d = r.date || "기타";
+                if (!dateGroups[d]) dateGroups[d] = [];
+                dateGroups[d].push(r);
+            });
 
-            container.innerHTML = list.map(r => {
-                const catLabel = catLabels[r.category] || "📊 거시경제";
-                const summaryItems = Array.isArray(r.summary) ? r.summary : [r.summary || "기관 핵심 분석 리포트"];
-                const summaryHtml = summaryItems.map(s => `
-                    <div class="report-summary-item">
-                        <span class="report-summary-dot">•</span>
-                        <span>${escapeHtml(s)}</span>
-                    </div>
-                `).join("");
+            const sortedDates = Object.keys(dateGroups).sort().reverse();
 
-                let dirBadgeHtml = "";
-                if (r.category === 'fx') {
-                    const isDown = r.fxDirection === 'down' || (r.title && (r.title.includes('하락') || r.title.includes('안정')));
-                    const isUp = r.fxDirection === 'up' || (r.title && (r.title.includes('상승') || r.title.includes('상방') || r.title.includes('자본유출')));
-                    if (isDown) {
-                        dirBadgeHtml = `<span class="report-tag-chip" style="background:#e8f3ff;color:#3182f6;font-weight:700;">🔵 하락 전망(원화강세)</span>`;
-                    } else if (isUp) {
-                        dirBadgeHtml = `<span class="report-tag-chip" style="background:#fff1f2;color:#f43f5e;font-weight:700;">🔴 상승 전망(달러강세)</span>`;
-                    } else {
-                        dirBadgeHtml = `<span class="report-tag-chip" style="background:var(--chip);color:var(--ink2);font-weight:600;">⚖️ 박스권·전략</span>`;
-                    }
-                }
-
-                const tagsHtml = (r.tags || []).map(t => `<span class="report-tag-chip">#${escapeHtml(t)}</span>`).join("");
-
-                const pdfButton = r.pdfUrl ? `
-                    <a href="${r.pdfUrl}" target="_blank" rel="noopener noreferrer" class="report-btn-link pdf" title="한국경제 및 증권사 원문 PDF 열기">
-                        <span>📥 원문 PDF</span>
-                    </a>
-                ` : "";
-
-                const brokerName = r.broker || r.firm || "금융기관";
-                const writerName = r.writer || r.author || "리서치센터";
+            container.innerHTML = sortedDates.map(dateKey => {
+                const items = dateGroups[dateKey];
+                const isCollapsed = collapsedReportDateGroups.has(dateKey);
+                const headingText = formatReportDateHeading(dateKey);
 
                 return `
-                    <div class="report-item-card">
-                        <div>
-                            <div class="report-top-meta">
-                                <span class="report-broker-badge">${escapeHtml(brokerName)}</span>
-                                <span class="report-date-text">${escapeHtml(r.date || "")} · ${escapeHtml(writerName)}</span>
+                    <div class="report-date-group ${isCollapsed ? 'collapsed' : ''}" data-group-date="${escapeHtml(dateKey)}">
+                        <div class="report-date-group-header" onclick="toggleReportDateGroup('${escapeHtml(dateKey)}')">
+                            <div class="report-date-group-title">
+                                <span class="rd-icon">📅</span>
+                                <span class="rd-text">${escapeHtml(headingText)}</span>
+                                <span class="rd-badge">${items.length}건 보관</span>
                             </div>
-                            <div class="report-item-title">${escapeHtml(r.title || "")}</div>
-                            <div class="report-tags-row">
-                                <span class="report-tag-chip" style="color:var(--toss-blue,#3182f6);font-weight:600;">${catLabel}</span>
-                                ${dirBadgeHtml}
-                                ${tagsHtml}
-                            </div>
-                            <div class="report-summary-box">
-                                ${summaryHtml}
+                            <div class="report-date-group-toggle">
+                                <span>${isCollapsed ? '펼치기' : '접기'}</span>
+                                <span class="rd-arrow">▼</span>
                             </div>
                         </div>
-                        <div class="report-actions-row">
-                            <span style="font-size:11px;color:var(--muted);margin-right:auto;">
-                                ${r.source ? escapeHtml(r.source) : "한경 컨센서스"}
-                            </span>
-                            ${pdfButton}
+                        <div class="report-date-cards-grid">
+                            ${items.map(r => renderReportCardItem(r)).join("")}
                         </div>
                     </div>
                 `;
