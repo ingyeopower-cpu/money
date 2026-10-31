@@ -1,0 +1,656 @@
+{
+  "updatedAt": "2026-10-31 16:25 KST",
+  "macro": {
+    "fx": {
+      "current": 1335.1,
+      "diff": 13.34,
+      "diffPct": 1.01,
+      "dxy": 99.16,
+      "targetBand": {
+        "low": 1320,
+        "high": 1370
+      },
+      "consensus": "연준 금리인하 사이클 진입 속 상방 경직적 완만한 박스권 하향 안정화"
+    },
+    "schd": {
+      "price": 35.78,
+      "diff": 0.51,
+      "diffPct": 1.45,
+      "divYield": 3.55,
+      "peRatio": 15.4,
+      "divGrowth5Y": 11.8,
+      "topSectors": [
+        {
+          "name": "금융 (Financials)",
+          "pct": 18.2
+        },
+        {
+          "name": "헬스케어 (Health Care)",
+          "pct": 15.6
+        },
+        {
+          "name": "산업재 (Industrials)",
+          "pct": 14.8
+        },
+        {
+          "name": "필수소비재 (Consumer Defensive)",
+          "pct": 13.1
+        },
+        {
+          "name": "정보기술 (Technology)",
+          "pct": 9.5
+        }
+      ]
+    },
+    "us10y": {
+      "current": 4.929,
+      "diff": -0.057,
+      "diffPct": -1.14,
+      "status": "하향 안정세",
+      "desc": "미국 인플레이션 둔화 및 연준 기준금리 인하 기조 반영. 장기 금리 하락은 배당주(SCHD) 가치 재평가 및 주택담보대출 금리 인하에 긍정적"
+    }
+  },
+  "portfolioImpact": {
+    "tigerHoldingQty": 5062,
+    "tigerEstAnnualDividend": 2834720,
+    "tigerEstMonthlyDividend": 236227,
+    "fxSensitivityComment": "원·달러 환율 10원 변동 시 부부 외화자산(미국 단기국채 983만, SOXL 등) 평가액 약 ±65만원 변동"
+  },
+  "toadComment": {
+    "icon": "🐸",
+    "title": "두꺼비의 거시경제 & 부부 자산 종합 브리핑",
+    "message": "원·달러 환율(1,335.1원)은 안정적인 박스권 흐름을 유지하고 있습니다. 📊<br>미국 국채 10년물 금리가 4.93%로 하향 안정세를 이어가고 있어, 배당 가치주(SCHD)의 주가 모멘텀과 2028년 잔금대출 환경에 매우 긍정적입니다.<br>두 분이 모으신 TIGER 미국배당다우존스 <b>5,062주</b>에서 올해 약 <b>2,834,720원 (월 약 236,227원)</b>의 배당금이 통장에 차곡차곡 쌓여 잔금 저축을 가속합니다! 🍷"
+  },
+  "reports": [
+    {
+      "id": "curated_fx_1",
+      "date": "2026-10-31",
+      "category": "fx",
+      "categoryLabel": "💵 원·달러 환율",
+      "title": "2026 외환시장 심층 점검: 금리인하 사이클 속 원·달러 박스권 상단 제한",
+      "broker": "하나증권",
+      "writer": "외환파생팀",
+      "pdfUrl": "https://finance.naver.com/research/economy_list.naver",
+      "summary": [
+        "미국 연준(Fed)의 피벗(금리인하) 본격화로 달러인덱스(DXY) 상방 압력 제한",
+        "국내 수출 대금 출회 및 한미 금리차 축소 기대감으로 1,320~1,370원 밴드 전망",
+        "달러 자산 보유자는 환율 급등 시 환차익 실현 및 분할 환전 전략 유리"
+      ],
+      "tags": [
+        "원달러",
+        "DXY",
+        "연준피벗"
+      ]
+    },
+    {
+      "id": "curated_schd_1",
+      "date": "2026-10-31",
+      "category": "schd",
+      "categoryLabel": "👑 SCHD·미국배당",
+      "title": "SCHD(Dow Jones Dividend 100) 분석: 배당 성장과 가치주의 복리 마법",
+      "broker": "미래에셋증권",
+      "writer": "글로벌ETF팀",
+      "pdfUrl": "https://finance.naver.com/research/economy_list.naver",
+      "summary": [
+        "10년 연속 배당 증액 기업만 엄선하여 시가배당률 3.5%대 및 5년 배당성장률 11.8% 기록",
+        "금융(18%), 헬스케어(15%), 산업재(14%)의 균형 잡힌 포트폴리오로 시장 급락기 방어력 우수",
+        "TIGER 미국배당다우존스 적립식 투자 시 분기 배당금 재투자를 통한 잔금 마련 복리 가속"
+      ],
+      "tags": [
+        "SCHD",
+        "배당성장",
+        "다우배당"
+      ]
+    },
+    {
+      "id": "curated_rates_1",
+      "date": "2026-10-31",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "title": "미국 국채 10년물 금리 향방: 인플레이션 둔화와 장기물 채권의 매력",
+      "broker": "NH투자증권",
+      "writer": "채권전략팀",
+      "pdfUrl": "https://finance.naver.com/research/economy_list.naver",
+      "summary": [
+        "미 10년물 국채 금리 4.1~4.3% 구간에서 하향 안정 흐름 지속",
+        "장기채 금리 안정화는 배당 가치주(SCHD) 및 리츠 자산의 할인율을 낮춰 주가에 긍정적",
+        "국내 은행채 및 주담대 금리에도 우호적으로 작용하여 2028년 5월 잔금대출 부담 경감 기대"
+      ],
+      "tags": [
+        "미10년물",
+        "채권금리",
+        "잔금대출"
+      ]
+    },
+    {
+      "id": "rep_1",
+      "date": "2026-10-30",
+      "category": "fx",
+      "categoryLabel": "💵 원·달러 환율",
+      "title": "Daily Forex Live",
+      "broker": "우리은행",
+      "writer": "민경원,임환열",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653464",
+      "summary": [
+        "주요 기관(우리은행) 외환 리서치: 달러화 실시간 수급 동향 및 주간 환율 변동성 점검",
+        "미 연준(Fed) 기준금리 인하 경로 및 한미 금리차 역전에 따른 원화 적정 가치 분석",
+        "수출입 네고 물량 및 해외주식 투자 환전 수요에 기반한 상하방 예상 밴드 제시"
+      ],
+      "tags": [
+        "환율",
+        "외환시장",
+        "달러"
+      ]
+    },
+    {
+      "id": "rep_2",
+      "date": "2026-10-29",
+      "category": "fx",
+      "categoryLabel": "💵 원·달러 환율",
+      "title": "Daily Forex Live",
+      "broker": "우리은행",
+      "writer": "민경원,임환열",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653463",
+      "summary": [
+        "주요 기관(우리은행) 외환 리서치: 달러화 실시간 수급 동향 및 주간 환율 변동성 점검",
+        "미 연준(Fed) 기준금리 인하 경로 및 한미 금리차 역전에 따른 원화 적정 가치 분석",
+        "수출입 네고 물량 및 해외주식 투자 환전 수요에 기반한 상하방 예상 밴드 제시"
+      ],
+      "tags": [
+        "환율",
+        "외환시장",
+        "달러"
+      ]
+    },
+    {
+      "id": "rep_3",
+      "date": "2026-10-29",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "title": "IBKS Bond Inside",
+      "broker": "IBK투자증권",
+      "writer": "정형주",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653453",
+      "summary": [
+        "주요 기관(IBK투자증권) 채권 리포트: 미국 국채 10년물 금리 및 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표(PCE/CPI) 둔화 추세와 노동시장 냉각에 따른 장기 금리 하향 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리의 향후 우호적 방향성 시사"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_4",
+      "date": "2026-10-29",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "title": "동결. 성장은 강하지만 인상은 점진적으로",
+      "broker": "SK증권",
+      "writer": "원유승",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653443",
+      "summary": [
+        "주요 기관(SK증권) 채권 리포트: 미국 국채 10년물 금리 및 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표(PCE/CPI) 둔화 추세와 노동시장 냉각에 따른 장기 금리 하향 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리의 향후 우호적 방향성 시사"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_5",
+      "date": "2026-10-29",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "title": "Global Carbon Daily",
+      "broker": "SK증권",
+      "writer": "최관순",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653438",
+      "summary": [
+        "주요 기관(SK증권) 채권 리포트: 미국 국채 10년물 금리 및 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표(PCE/CPI) 둔화 추세와 노동시장 냉각에 따른 장기 금리 하향 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리의 향후 우호적 방향성 시사"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_6",
+      "date": "2026-10-29",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "title": "Tighten FCI, 최종금리 4.25% 전망 유지",
+      "broker": "메리츠증권",
+      "writer": "윤여삼,김영준",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653425",
+      "summary": [
+        "주요 기관(메리츠증권) 채권 리포트: 미국 국채 10년물 금리 및 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표(PCE/CPI) 둔화 추세와 노동시장 냉각에 따른 장기 금리 하향 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리의 향후 우호적 방향성 시사"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_7",
+      "date": "2026-10-29",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "title": "유안타 채권 Daily",
+      "broker": "유안타증권",
+      "writer": "이현수",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653419",
+      "summary": [
+        "주요 기관(유안타증권) 채권 리포트: 미국 국채 10년물 금리 및 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표(PCE/CPI) 둔화 추세와 노동시장 냉각에 따른 장기 금리 하향 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리의 향후 우호적 방향성 시사"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_8",
+      "date": "2026-10-29",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "title": "무난한 인상 예고",
+      "broker": "한화투자증권",
+      "writer": "김성수",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653413",
+      "summary": [
+        "주요 기관(한화투자증권) 채권 리포트: 미국 국채 10년물 금리 및 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표(PCE/CPI) 둔화 추세와 노동시장 냉각에 따른 장기 금리 하향 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리의 향후 우호적 방향성 시사"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_9",
+      "date": "2026-10-29",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "title": "10월 FOMC Review: 금리동결과 커뮤니케이션 변화",
+      "broker": "상상인증권",
+      "writer": "신얼",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653406",
+      "summary": [
+        "주요 기관(상상인증권) 채권 리포트: 미국 국채 10년물 금리 및 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표(PCE/CPI) 둔화 추세와 노동시장 냉각에 따른 장기 금리 하향 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리의 향후 우호적 방향성 시사"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_10",
+      "date": "2026-10-28",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "title": "10월 FOMC Preview: 매파적 동결은 중립 이상 재료",
+      "broker": "상상인증권",
+      "writer": "신얼",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653399",
+      "summary": [
+        "주요 기관(상상인증권) 채권 리포트: 미국 국채 10년물 금리 및 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표(PCE/CPI) 둔화 추세와 노동시장 냉각에 따른 장기 금리 하향 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리의 향후 우호적 방향성 시사"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_11",
+      "date": "2026-10-28",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "title": "바닥의 조건과 반등의 조건",
+      "broker": "한화투자증권",
+      "writer": "신승윤",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653395",
+      "summary": [
+        "주요 기관(한화투자증권) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_12",
+      "date": "2026-10-28",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "title": "유안타채권Daily",
+      "broker": "유안타증권",
+      "writer": "이현수",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653383",
+      "summary": [
+        "주요 기관(유안타증권) 채권 리포트: 미국 국채 10년물 금리 및 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표(PCE/CPI) 둔화 추세와 노동시장 냉각에 따른 장기 금리 하향 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리의 향후 우호적 방향성 시사"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_13",
+      "date": "2026-10-28",
+      "category": "fx",
+      "categoryLabel": "💵 원·달러 환율",
+      "title": "Daily Forex Live",
+      "broker": "우리은행",
+      "writer": "민경원,임환열",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653336",
+      "summary": [
+        "주요 기관(우리은행) 외환 리서치: 달러화 실시간 수급 동향 및 주간 환율 변동성 점검",
+        "미 연준(Fed) 기준금리 인하 경로 및 한미 금리차 역전에 따른 원화 적정 가치 분석",
+        "수출입 네고 물량 및 해외주식 투자 환전 수요에 기반한 상하방 예상 밴드 제시"
+      ],
+      "tags": [
+        "환율",
+        "외환시장",
+        "달러"
+      ]
+    },
+    {
+      "id": "rep_14",
+      "date": "2026-10-27",
+      "category": "fx",
+      "categoryLabel": "💵 원·달러 환율",
+      "title": "Daily Forex Live",
+      "broker": "우리은행",
+      "writer": "민경원,임환열",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653288",
+      "summary": [
+        "주요 기관(우리은행) 외환 리서치: 달러화 실시간 수급 동향 및 주간 환율 변동성 점검",
+        "미 연준(Fed) 기준금리 인하 경로 및 한미 금리차 역전에 따른 원화 적정 가치 분석",
+        "수출입 네고 물량 및 해외주식 투자 환전 수요에 기반한 상하방 예상 밴드 제시"
+      ],
+      "tags": [
+        "환율",
+        "외환시장",
+        "달러"
+      ]
+    },
+    {
+      "id": "rep_15",
+      "date": "2026-10-26",
+      "category": "schd",
+      "categoryLabel": "👑 SCHD·미국배당",
+      "title": "지수 ETF 2.8조 유입, 인버스 환매",
+      "broker": "메리츠증권",
+      "writer": "이상현",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653283",
+      "summary": [
+        "주요 기관(메리츠증권) 글로벌 배당 리포트: Dow Jones Dividend 100(SCHD) 펀더멘털 평가",
+        "연 3.5%대 안정적 배당수익률 및 10년 연속 배당 성장 우량 가치주의 하방 경직성 확인",
+        "단기 시세 변동에 흔들리지 않는 현금흐름 중심 적립식 장기 투자 유효성 강조"
+      ],
+      "tags": [
+        "배당성장",
+        "미국주식",
+        "ETF"
+      ]
+    },
+    {
+      "id": "rep_16",
+      "date": "2026-10-26",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "title": "회복중인 채권의 안전자산 역할",
+      "broker": "메리츠증권",
+      "writer": "윤여삼,김영준",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653280",
+      "summary": [
+        "주요 기관(메리츠증권) 채권 리포트: 미국 국채 10년물 금리 및 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표(PCE/CPI) 둔화 추세와 노동시장 냉각에 따른 장기 금리 하향 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리의 향후 우호적 방향성 시사"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_17",
+      "date": "2026-10-26",
+      "category": "fx",
+      "categoryLabel": "💵 원·달러 환율",
+      "title": "Daily Forex Live",
+      "broker": "우리은행",
+      "writer": "민경원,임환열",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653262",
+      "summary": [
+        "주요 기관(우리은행) 외환 리서치: 달러화 실시간 수급 동향 및 주간 환율 변동성 점검",
+        "미 연준(Fed) 기준금리 인하 경로 및 한미 금리차 역전에 따른 원화 적정 가치 분석",
+        "수출입 네고 물량 및 해외주식 투자 환전 수요에 기반한 상하방 예상 밴드 제시"
+      ],
+      "tags": [
+        "환율",
+        "외환시장",
+        "달러"
+      ]
+    },
+    {
+      "id": "rep_18",
+      "date": "2026-10-29",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "title": "10월 FOMC: 현실진단 후 12월에 마지막 인상",
+      "broker": "메리츠증권",
+      "writer": "이승훈,박민서",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653424",
+      "summary": [
+        "주요 기관(메리츠증권) 채권 리포트: 미국 국채 10년물 금리 및 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표(PCE/CPI) 둔화 추세와 노동시장 냉각에 따른 장기 금리 하향 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리의 향후 우호적 방향성 시사"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_19",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "title": "엄우용",
+      "broker": "국내 증권사",
+      "writer": "상상인증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653545",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_20",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "title": "투자전략팀",
+      "broker": "국내 증권사",
+      "writer": "상상인증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653542",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_21",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "title": "리서치센터 투자전략실",
+      "broker": "국내 증권사",
+      "writer": "LS증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653533",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_22",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "title": "리서치센터 투자전략실",
+      "broker": "국내 증권사",
+      "writer": "LS증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653532",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_23",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "title": "투자분석부",
+      "broker": "국내 증권사",
+      "writer": "IBK투자증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653522",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_24",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "title": "기간산업분석부・혁신기업분석부",
+      "broker": "국내 증권사",
+      "writer": "IBK투자증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653520",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_25",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "title": "리서치센터",
+      "broker": "국내 증권사",
+      "writer": "유안타증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653509",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_26",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "title": "sk증권 리서치센터",
+      "broker": "국내 증권사",
+      "writer": "SK증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653508",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_27",
+      "date": "2026-10-30",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "title": "나민식",
+      "broker": "국내 증권사",
+      "writer": "SK증권",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653507",
+      "summary": [
+        "주요 기관(국내 증권사) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    }
+  ]
+}

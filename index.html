@@ -2564,6 +2564,323 @@
             color: #c9d1d9;
             border-color: #58a6ff;
         }
+
+        /* ============ 시장분석 & 거시 인텔리전스 탭 (Toss Fintech Style) ============ */
+        .insights-hero-card {
+            background: linear-gradient(135deg, var(--surface) 0%, rgba(49, 130, 246, 0.08) 100%);
+            border: 1px solid rgba(49, 130, 246, 0.25);
+            border-radius: 20px;
+            padding: 20px 22px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+        .insights-hero-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .insights-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 750;
+            color: var(--toss-blue, #3182f6);
+            background: rgba(49, 130, 246, 0.12);
+            padding: 4px 12px;
+            border-radius: 99px;
+        }
+        .insights-hero-time {
+            font-size: 11.5px;
+            color: var(--muted);
+            font-weight: 550;
+            margin-top: 2px;
+        }
+        .insights-hero-msg {
+            font-size: 14.5px;
+            line-height: 1.7;
+            color: var(--ink);
+            word-break: keep-all;
+        }
+        .insights-hero-msg b {
+            color: var(--toss-blue, #3182f6);
+        }
+        :root[data-theme="dark"] .insights-hero-msg b {
+            color: #60a5fa;
+        }
+
+        /* 3대 거시지표 라이브 카드 그리드 */
+        .macro-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .macro-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px 20px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .macro-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: rgba(49, 130, 246, 0.3);
+        }
+        .macro-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .macro-card-title-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .macro-card-icon {
+            font-size: 20px;
+        }
+        .macro-card-title {
+            font-size: 14.5px;
+            font-weight: 750;
+            color: var(--ink);
+        }
+        .macro-card-sub {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 1px;
+        }
+        .macro-price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .macro-price-big {
+            font-size: 26px;
+            font-weight: 850;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+        }
+        .macro-diff-pill {
+            font-size: 12.5px;
+            font-weight: 750;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+        .macro-diff-pill.up {
+            color: var(--gain);
+            background: var(--gain-bg);
+        }
+        .macro-diff-pill.down {
+            color: var(--loss);
+            background: var(--loss-bg);
+        }
+        .macro-details-box {
+            background: var(--chip);
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--ink2);
+            border: 1px solid var(--border);
+        }
+        .macro-band-bar-wrap {
+            margin-top: 8px;
+        }
+        .macro-band-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+        .macro-band-track {
+            height: 7px;
+            background: var(--border);
+            border-radius: 99px;
+            position: relative;
+            overflow: hidden;
+        }
+        .macro-band-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3182f6, #f04452);
+            border-radius: 99px;
+        }
+        
+        /* 리포트 섹션 & 검색/필터 툴바 */
+        .reports-filter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .reports-cat-chips {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .report-cat-btn {
+            font-size: 12px;
+            font-weight: 650;
+            padding: 6px 14px;
+            border-radius: 99px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--ink2);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .report-cat-btn.active {
+            background: var(--toss-blue, #3182f6);
+            color: #ffffff;
+            border-color: var(--toss-blue, #3182f6);
+        }
+        .report-search-input {
+            padding: 7px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--ink);
+            font-size: 12px;
+            min-width: 170px;
+        }
+
+        /* 리포트 카드 그리드 */
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 14px;
+        }
+        .report-item-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px 18px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+        .report-item-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(49, 130, 246, 0.4);
+            box-shadow: var(--card-shadow-hover);
+        }
+        .report-top-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 11.5px;
+        }
+        .report-broker-badge {
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: rgba(49, 130, 246, 0.12);
+            color: var(--toss-blue, #3182f6);
+        }
+        .report-date-text {
+            color: var(--muted);
+            font-weight: 550;
+        }
+        .report-item-title {
+            font-size: 14px;
+            font-weight: 750;
+            color: var(--ink);
+            line-height: 1.45;
+            margin-bottom: 8px;
+            word-break: keep-all;
+        }
+        .report-tags-row {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .report-tag-chip {
+            font-size: 10.5px;
+            color: var(--muted);
+            background: var(--chip);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .report-summary-box {
+            background: var(--chip);
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            font-size: 11.5px;
+            line-height: 1.6;
+            color: var(--ink2);
+            border-left: 3px solid var(--toss-blue, #3182f6);
+        }
+        .report-summary-item {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+        .report-summary-item:last-child {
+            margin-bottom: 0;
+        }
+        .report-summary-dot {
+            color: var(--toss-blue, #3182f6);
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+        .report-actions-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            border-top: 1px dashed var(--border);
+            padding-top: 10px;
+        }
+        .report-btn-link {
+            font-size: 11.5px;
+            font-weight: 650;
+            padding: 5px 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.15s;
+        }
+        .report-btn-link.pdf {
+            background: var(--toss-blue, #3182f6);
+            color: #ffffff;
+        }
+        .report-btn-link.pdf:hover {
+            background: #1b64da;
+        }
+        .report-btn-link.view {
+            background: var(--chip);
+            color: var(--ink2);
+            border: 1px solid var(--border);
+        }
+        .report-btn-link.view:hover {
+            background: var(--border);
+            color: var(--ink);
+        }
     </style>
 </head>
 
@@ -2607,6 +2924,7 @@
             <button class="tab" role="tab" data-tab="goal" aria-selected="false">목표 설정</button>
             <button class="tab" role="tab" data-tab="flow" aria-selected="false">저축 · 자금이동</button>
             <button class="tab" role="tab" data-tab="loan" aria-selected="false">대출 계산기</button>
+            <button class="tab" role="tab" data-tab="insights" aria-selected="false">📊 시장분석</button>
             <button class="tab" role="tab" data-tab="log" aria-selected="false">기록</button>
         </div>
 
@@ -2647,6 +2965,7 @@
                 <div class="hero-quick-actions">
                     <button class="quick-btn primary" onclick="switchTab('flow')">💰 저축 기록하기</button>
                     <button class="quick-btn" id="btnDashSyncPrices" onclick="syncPrices()">⚡ 실시간 시세 갱신</button>
+                    <button class="quick-btn" onclick="switchTab('insights')">📊 시장·리포트 분석</button>
                     <button class="quick-btn" onclick="switchTab('loan')">📐 대출 시뮬레이션</button>
                     <button class="quick-btn" onclick="switchTab('assets')">💎 보유 종목 보기</button>
                 </div>
@@ -3560,6 +3879,200 @@
             </div>
         </section>
 
+        <!-- ============ 📊 시장분석 & 기관 리포트 ============ -->
+        <section id="tab-insights" hidden>
+            <!-- 1. Hero 브리핑 카드 -->
+            <div class="insights-hero-card">
+                <div class="insights-hero-top">
+                    <div class="insights-hero-badge">
+                        <span class="badge-dot"></span>
+                        <span>실시간 거시경제 & 기관 리포트 인텔리전스</span>
+                    </div>
+                    <div class="insights-hero-actions">
+                        <span class="insights-hero-time" id="insightsUpdatedTime">2026.10.31 갱신</span>
+                        <button class="insights-refresh-btn" onclick="refreshInsights(true)" title="최신 리포트 및 시세 갱신">
+                            🔄 새로고침
+                        </button>
+                    </div>
+                </div>
+
+                <div class="toad-insights-quote">
+                    <div class="toad-avatar">🐸</div>
+                    <div class="quote-content">
+                        <div class="quote-title" id="toadMacroTitle">두꺼비의 거시경제 & 부부 자산 종합 브리핑</div>
+                        <div class="quote-desc" id="toadMacroMsg">
+                            원·달러 환율, 미국 배당 다우존스(SCHD), 미국 국채 10년물 금리를 종합 분석 중입니다...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 부부 자산 직결 하이라이트 배너 -->
+                <div class="portfolio-impact-banner" id="portfolioImpactBanner">
+                    <div class="impact-item">
+                        <span class="impact-icon">📈</span>
+                        <div class="impact-text">
+                            <span class="impact-label">TIGER 미국배당다우존스 5,062주</span>
+                            <span class="impact-val" id="impactAnnualDiv">연간 배당금 약 283만 원 (월 23.6만 원)</span>
+                        </div>
+                    </div>
+                    <div class="impact-item">
+                        <span class="impact-icon">💵</span>
+                        <div class="impact-text">
+                            <span class="impact-label">환율 10원 변동 민감도</span>
+                            <span class="impact-val" id="impactFxSens">달러 자산 평가액 약 ±65만 원 변동</span>
+                        </div>
+                    </div>
+                    <div class="impact-item">
+                        <span class="impact-icon">🏛️</span>
+                        <div class="impact-text">
+                            <span class="impact-label">미 국채 10년물 금리 영향</span>
+                            <span class="impact-val" id="impactYieldSens">금리 하향 안정 시 2028년 잔금대출 부담 경감</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 3대 핵심 거시경제 지표 카드 그리드 -->
+            <div class="macro-cards-grid">
+                <!-- 카드 1: 원·달러 환율 (USD/KRW) & DXY -->
+                <div class="macro-card">
+                    <div class="macro-card-header">
+                        <div class="macro-card-title-group">
+                            <span class="macro-card-icon">💵</span>
+                            <div>
+                                <div class="macro-card-title">원 · 달러 환율 (USD/KRW)</div>
+                                <div class="macro-card-sub">DXY 달러 인덱스 연동</div>
+                            </div>
+                        </div>
+                        <span class="macro-diff-pill up" id="macroFxDiffPill">+13.34 (+1.01%)</span>
+                    </div>
+
+                    <div class="macro-price-row">
+                        <span class="macro-price-big" id="macroFxPrice">1,335.1</span>
+                        <span style="font-size:15px;color:var(--muted);font-weight:600;">원</span>
+                    </div>
+
+                    <div class="macro-details-box">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                            <span>달러 인덱스 (DXY)</span>
+                            <b id="macroDxyVal" style="color:var(--ink);">99.16 pt</b>
+                        </div>
+                        <div class="macro-band-bar-wrap">
+                            <div class="macro-band-labels">
+                                <span>예상 하단 1,320원</span>
+                                <span>상단 1,370원</span>
+                            </div>
+                            <div class="macro-band-track">
+                                <div class="macro-band-fill" id="macroFxBandFill" style="width: 30%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-top:8px;font-size:11.5px;color:var(--ink2);" id="macroFxDesc">
+                            💡 연준 금리인하 사이클 진입 속 상방 경직적 박스권. 10원 변동 시 부부 외화자산 약 ±65만 원 평가 변동.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카드 2: 미국배당다우존스 (SCHD) -->
+                <div class="macro-card">
+                    <div class="macro-card-header">
+                        <div class="macro-card-title-group">
+                            <span class="macro-card-icon">📈</span>
+                            <div>
+                                <div class="macro-card-title">미국배당다우존스 (SCHD)</div>
+                                <div class="macro-card-sub">Dow Jones US Dividend 100</div>
+                            </div>
+                        </div>
+                        <span class="macro-diff-pill up" id="macroSchdDiffPill">+0.51 (+1.45%)</span>
+                    </div>
+
+                    <div class="macro-price-row">
+                        <span class="macro-price-big" id="macroSchdPrice">$35.78</span>
+                        <span style="font-size:15px;color:var(--muted);font-weight:600;">USD</span>
+                    </div>
+
+                    <div class="macro-details-box">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                            <span>배당수익률 / 5년 성장률</span>
+                            <b style="color:var(--toss-blue,#3182f6);" id="macroSchdYieldVal">연 3.55% (성장 +11.8%)</b>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                            <span>PER 밸류에이션</span>
+                            <b id="macroSchdPeVal" style="color:var(--ink);">15.4배 (S&P 22배 대비 저평가)</b>
+                        </div>
+                        <div style="margin-top:8px;font-size:11.5px;color:var(--ink2);" id="macroSchdDesc">
+                            💡 부부 합산 5,062주(TIGER) 보유 중! 연간 약 283만 원 배당금이 잔금 준비금으로 자동 기여합니다.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카드 3: 미국 국채 10년물 금리 (^TNX) -->
+                <div class="macro-card">
+                    <div class="macro-card-header">
+                        <div class="macro-card-title-group">
+                            <span class="macro-card-icon">🏛️</span>
+                            <div>
+                                <div class="macro-card-title">미국 국채 10년물 금리</div>
+                                <div class="macro-card-sub">글로벌 기준금리 · 국내 주담대 선행</div>
+                            </div>
+                        </div>
+                        <span class="macro-diff-pill down" id="macroYieldDiffPill">-0.06%p (-1.14%)</span>
+                    </div>
+
+                    <div class="macro-price-row">
+                        <span class="macro-price-big" id="macroYieldPrice">4.93%</span>
+                        <span style="font-size:13px;color:var(--gain);font-weight:700;margin-left:4px;" id="macroYieldStatus">하향 안정세</span>
+                    </div>
+
+                    <div class="macro-details-box">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                            <span>주담대 연계 영향</span>
+                            <b style="color:var(--gain);" id="macroYieldImpactVal">잔금대출 금리 부담 완화</b>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                            <span>SCHD 배당주 효과</span>
+                            <b style="color:var(--toss-blue,#3182f6);">채권 대비 배당 매력도 상승</b>
+                        </div>
+                        <div style="margin-top:8px;font-size:11.5px;color:var(--ink2);" id="macroYieldDesc">
+                            💡 10년물 금리 하향 안정 시 2028년 5월 신규 주담대 금리 인하로 직결되어 매월 이자 상환 부담이 경감됩니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 주요 증권사·기관 전문 리포트 피드 섹션 -->
+            <div class="card" style="padding:20px;border-radius:18px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+                    <div>
+                        <h2 style="font-size:17px;margin:0 0 4px 0;display:flex;align-items:center;gap:6px;">
+                            <span>📑 주요 기관 & 증권사 전문 리포트</span>
+                            <span style="font-size:12px;background:var(--toss-blue-light,#e8f3ff);color:var(--toss-blue,#3182f6);padding:2px 8px;border-radius:99px;font-weight:700;" id="reportsCountBadge">0개</span>
+                        </h2>
+                        <div style="font-size:12px;color:var(--muted);">
+                            한국경제 컨센서스 및 주요 증권사(삼성, 미래에셋, 키움, 신한 등) 실시간 연동 리포트
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 필터 및 검색 바 -->
+                <div class="reports-filter-bar">
+                    <div class="reports-cat-chips" id="reportFilterTabs">
+                        <button class="report-cat-btn active" data-cat="all" onclick="filterReportsCategory('all')">전체 리포트</button>
+                        <button class="report-cat-btn" data-cat="fx" onclick="filterReportsCategory('fx')">💵 환율 · 외환</button>
+                        <button class="report-cat-btn" data-cat="schd" onclick="filterReportsCategory('schd')">📈 SCHD · 미국배당</button>
+                        <button class="report-cat-btn" data-cat="rates" onclick="filterReportsCategory('rates')">🏛️ 국채 · 금리</button>
+                    </div>
+                    <div>
+                        <input type="text" class="report-search-input" id="reportSearchInput" placeholder="리포트 제목, 증권사 검색..." oninput="handleReportSearch(this.value)">
+                    </div>
+                </div>
+
+                <!-- 리포트 카드 그리드 컨테이너 -->
+                <div class="reports-grid" id="reportsGridContainer">
+                    <!-- JS로 동적 렌더링 -->
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <!-- 모바일 하단 내비게이션 바 (Toss Modern Dock) -->
@@ -3583,6 +4096,10 @@
         <button class="dock-item" data-tab="loan" onclick="switchTab('loan')" aria-label="대출">
             <span class="dock-icon">📐</span>
             <span class="dock-label">대출</span>
+        </button>
+        <button class="dock-item" data-tab="insights" onclick="switchTab('insights')" aria-label="시장분석">
+            <span class="dock-icon">📊</span>
+            <span class="dock-label">시장분석</span>
         </button>
         <button class="dock-item" data-tab="log" onclick="switchTab('log')" aria-label="기록">
             <span class="dock-icon">📋</span>
@@ -4708,13 +5225,14 @@
             if (activeTabEl && activeTabEl.scrollIntoView) {
                 try { activeTabEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); } catch(e){}
             }
-            ["dash", "assets", "goal", "flow", "loan", "log"].forEach(k => {
+            ["dash", "assets", "goal", "flow", "loan", "log", "insights"].forEach(k => {
                 const el = document.getElementById("tab-" + k);
                 if (el) el.hidden = (k !== tabId);
             });
             if (tabId === "dash") renderDash();
             if (tabId === "assets") updateHoldViewUI();
             if (tabId === "loan") renderLoan();
+            if (tabId === "insights") renderInsights();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -7049,6 +7567,307 @@
             clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
         }
 
+        /* ==========================================================================
+           20. 거시경제 시장분석 (환율, SCHD, 미 국채 10년물) & 주요 기관 리포트 로직
+           ========================================================================== */
+        let marketInsightsData = null;
+        let currentReportFilter = 'all';
+        let currentReportSearch = '';
+
+        function escapeHtml(str) {
+            if (str == null) return "";
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // 기본 내장 데이터 (오프라인이거나 파일 로드 지연 시 즉각 렌더링)
+        const DEFAULT_MARKET_INSIGHTS = {
+            updatedAt: "2026.10.31 KST",
+            macro: {
+                fx: {
+                    current: 1335.1,
+                    diff: 13.34,
+                    diffPct: 1.01,
+                    dxy: 99.16,
+                    targetBand: { low: 1320, high: 1370 },
+                    consensus: "연준 금리인하 사이클 진입 속 상방 경직적 박스권 흐름 유지 전망"
+                },
+                schd: {
+                    price: 35.78,
+                    diff: 0.51,
+                    diffPct: 1.45,
+                    divYield: 3.55,
+                    divGrowth5Y: 11.8,
+                    peRatio: 15.4
+                },
+                us10y: {
+                    current: 4.929,
+                    diff: -0.057,
+                    diffPct: -1.14,
+                    status: "하향 안정세",
+                    desc: "미국 인플레이션 둔화 및 연준 기준금리 인하 기조 반영. 장기 금리 하락은 배당주(SCHD) 가치 재평가 및 주택담보대출 금리 인하에 긍정적"
+                }
+            },
+            portfolioImpact: {
+                tigerHoldingQty: 5062,
+                tigerEstAnnualDividend: 2834720,
+                tigerEstMonthlyDividend: 236227,
+                fxSensitivityComment: "달러 환율 10원 변동 시 부부 외화자산(미국 단기국채 983만, SOXL 등) 평가액 약 ±65만 원 변동"
+            },
+            toadComment: {
+                icon: "🐸",
+                title: "두꺼비의 거시경제 & 부부 자산 종합 브리핑",
+                message: "원·달러 환율(1,335.1원)은 박스권 흐름을 유지하고 있습니다. 📊<br>미국 국채 10년물 금리가 <b>4.93%</b>로 하향 안정세를 이어가며, 배당 가치주(SCHD) 주가 모멘텀과 2028년 잔금대출 환경에 긍정적인 신호를 보냅니다.<br>두 분이 모으신 TIGER 미국배당다우존스 <b>5,062주</b>에서 연간 약 <b>283만 원(월 23.6만 원)</b>의 배당금이 쌓여 잔금 프로젝트를 든든하게 뒷받침합니다! 🍷"
+            },
+            reports: []
+        };
+
+        async function loadMarketInsights(forceFetch = false) {
+            try {
+                const url = "./data/market_insights.json" + (forceFetch ? "?t=" + Date.now() : "?v=20261031");
+                const res = await fetch(url, { cache: forceFetch ? "no-cache" : "default" });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.macro) {
+                        marketInsightsData = data;
+                        renderInsights();
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.warn("[Insights] Failed to fetch external market insights, fallback to local:", e);
+            }
+            if (!marketInsightsData) {
+                marketInsightsData = DEFAULT_MARKET_INSIGHTS;
+            }
+            renderInsights();
+        }
+
+        async function refreshInsights(showToast = true) {
+            const btn = document.querySelector(".insights-refresh-btn");
+            if (btn) {
+                btn.textContent = "⏳ 동기화 중…";
+                btn.disabled = true;
+            }
+            await loadMarketInsights(true);
+            if (btn) {
+                btn.textContent = "🔄 새로고침";
+                btn.disabled = false;
+            }
+            if (showToast) {
+                toast("최신 시장 지표 및 기관 리포트를 갱신했습니다");
+            }
+        }
+
+        function filterReportsCategory(cat) {
+            currentReportFilter = cat;
+            document.querySelectorAll("#reportFilterTabs .report-cat-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.cat === cat);
+            });
+            renderReportsGrid();
+        }
+
+        function handleReportSearch(val) {
+            currentReportSearch = (val || "").trim().toLowerCase();
+            renderReportsGrid();
+        }
+
+        function renderInsights() {
+            const data = marketInsightsData || DEFAULT_MARKET_INSIGHTS;
+            if (!data) return;
+
+            // 1. Hero 브리핑 업데이트
+            const timeEl = document.getElementById("insightsUpdatedTime");
+            if (timeEl && data.updatedAt) timeEl.textContent = data.updatedAt + " 갱신";
+
+            const titleEl = document.getElementById("toadMacroTitle");
+            if (titleEl && data.toadComment && data.toadComment.title) {
+                titleEl.textContent = data.toadComment.title;
+            }
+            const msgEl = document.getElementById("toadMacroMsg");
+            if (msgEl && data.toadComment && data.toadComment.message) {
+                msgEl.innerHTML = data.toadComment.message;
+            }
+
+            // 부부 자산 직결 하이라이트 배너
+            const divEl = document.getElementById("impactAnnualDiv");
+            if (divEl && data.portfolioImpact) {
+                const ann = data.portfolioImpact.tigerEstAnnualDividend || 2834720;
+                const mth = data.portfolioImpact.tigerEstMonthlyDividend || 236227;
+                divEl.textContent = `연간 배당 약 ${(ann / 10000).toFixed(0)}만 원 (월 ${(mth / 10000).toFixed(1)}만 원)`;
+            }
+            const fxSensEl = document.getElementById("impactFxSens");
+            if (fxSensEl && data.portfolioImpact && data.portfolioImpact.fxSensitivityComment) {
+                fxSensEl.textContent = data.portfolioImpact.fxSensitivityComment;
+            }
+
+            // 2. 3대 핵심 거시지표 렌더링
+            const macro = data.macro || {};
+
+            // (1) 원·달러 환율
+            if (macro.fx) {
+                const fx = macro.fx;
+                const priceEl = document.getElementById("macroFxPrice");
+                if (priceEl) priceEl.textContent = fx.current ? fx.current.toLocaleString() : "1,335.1";
+                const diffEl = document.getElementById("macroFxDiffPill");
+                if (diffEl) {
+                    const isUp = (fx.diff || 0) >= 0;
+                    diffEl.className = "macro-diff-pill " + (isUp ? "up" : "down");
+                    diffEl.textContent = `${isUp ? "+" : ""}${fx.diff != null ? fx.diff.toFixed(2) : "0.00"} (${isUp ? "+" : ""}${fx.diffPct != null ? fx.diffPct.toFixed(2) : "0.00"}%)`;
+                }
+                const dxyEl = document.getElementById("macroDxyVal");
+                if (dxyEl) dxyEl.textContent = (fx.dxy ? fx.dxy.toFixed(2) : "99.16") + " pt";
+
+                if (fx.targetBand) {
+                    const low = fx.targetBand.low || 1320;
+                    const high = fx.targetBand.high || 1370;
+                    const pct = Math.max(0, Math.min(100, ((fx.current - low) / (high - low)) * 100));
+                    const fillEl = document.getElementById("macroFxBandFill");
+                    if (fillEl) fillEl.style.width = pct.toFixed(1) + "%";
+                }
+                const descEl = document.getElementById("macroFxDesc");
+                if (descEl && fx.consensus) {
+                    descEl.innerHTML = `💡 ${fx.consensus}`;
+                }
+            }
+
+            // (2) 미국배당다우존스 (SCHD)
+            if (macro.schd) {
+                const s = macro.schd;
+                const priceEl = document.getElementById("macroSchdPrice");
+                if (priceEl) priceEl.textContent = "$" + (s.price ? s.price.toFixed(2) : "35.78");
+                const diffEl = document.getElementById("macroSchdDiffPill");
+                if (diffEl) {
+                    const isUp = (s.diff || 0) >= 0;
+                    diffEl.className = "macro-diff-pill " + (isUp ? "up" : "down");
+                    diffEl.textContent = `${isUp ? "+" : ""}${s.diff != null ? s.diff.toFixed(2) : "0.00"} (${isUp ? "+" : ""}${s.diffPct != null ? s.diffPct.toFixed(2) : "0.00"}%)`;
+                }
+                const yieldEl = document.getElementById("macroSchdYieldVal");
+                if (yieldEl) {
+                    yieldEl.textContent = `연 ${s.divYield ? s.divYield.toFixed(2) : "3.55"}% (성장 +${s.divGrowth5Y ? s.divGrowth5Y.toFixed(1) : "11.8"}%)`;
+                }
+                const peEl = document.getElementById("macroSchdPeVal");
+                if (peEl) {
+                    peEl.textContent = `${s.peRatio ? s.peRatio.toFixed(1) : "15.4"}배 (S&P 22배 대비 저평가)`;
+                }
+            }
+
+            // (3) 미국 국채 10년물 (^TNX)
+            if (macro.us10y) {
+                const y = macro.us10y;
+                const priceEl = document.getElementById("macroYieldPrice");
+                if (priceEl) priceEl.textContent = (y.current ? y.current.toFixed(2) : "4.93") + "%";
+                const diffEl = document.getElementById("macroYieldDiffPill");
+                if (diffEl) {
+                    const isDown = (y.diff || 0) <= 0;
+                    diffEl.className = "macro-diff-pill " + (isDown ? "down" : "up");
+                    diffEl.textContent = `${y.diff > 0 ? "+" : ""}${y.diff != null ? y.diff.toFixed(2) : "0.00"}%p (${y.diffPct > 0 ? "+" : ""}${y.diffPct != null ? y.diffPct.toFixed(2) : "0.00"}%)`;
+                }
+                const statusEl = document.getElementById("macroYieldStatus");
+                if (statusEl && y.status) statusEl.textContent = y.status;
+                const descEl = document.getElementById("macroYieldDesc");
+                if (descEl && y.desc) {
+                    descEl.innerHTML = `💡 ${y.desc}`;
+                }
+            }
+
+            // 3. 기관 리포트 피드 렌더링
+            renderReportsGrid();
+        }
+
+        function renderReportsGrid() {
+            const data = marketInsightsData || DEFAULT_MARKET_INSIGHTS;
+            const container = document.getElementById("reportsGridContainer");
+            const countBadge = document.getElementById("reportsCountBadge");
+            if (!container) return;
+
+            let list = (data && data.reports) ? [...data.reports] : [];
+
+            // 카테고리 필터
+            if (currentReportFilter && currentReportFilter !== 'all') {
+                list = list.filter(r => r.category === currentReportFilter);
+            }
+
+            // 검색어 필터
+            if (currentReportSearch) {
+                const q = currentReportSearch;
+                list = list.filter(r => {
+                    const title = (r.title || "").toLowerCase();
+                    const firm = (r.firm || "").toLowerCase();
+                    const author = (r.author || "").toLowerCase();
+                    const summary = Array.isArray(r.summary) ? r.summary.join(" ").toLowerCase() : (r.summary || "").toLowerCase();
+                    return title.includes(q) || firm.includes(q) || author.includes(q) || summary.includes(q);
+                });
+            }
+
+            if (countBadge) {
+                countBadge.textContent = list.length + "개";
+            }
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13.5px;">
+                        조건에 맞는 리포트가 없습니다. 검색어나 카테고리 필터를 변경해 보세요.
+                    </div>
+                `;
+                return;
+            }
+
+            const catLabels = {
+                fx: "💵 환율 · 외환",
+                schd: "📈 SCHD · 배당",
+                rates: "🏛️ 국채 · 금리"
+            };
+
+            container.innerHTML = list.map(r => {
+                const catLabel = catLabels[r.category] || "📊 거시경제";
+                const summaryItems = Array.isArray(r.summary) ? r.summary : [r.summary || "기관 핵심 분석 리포트"];
+                const summaryHtml = summaryItems.map(s => `
+                    <div class="report-summary-item">
+                        <span class="report-summary-dot">•</span>
+                        <span>${escapeHtml(s)}</span>
+                    </div>
+                `).join("");
+
+                const tagsHtml = (r.tags || []).map(t => `<span class="report-tag-chip">#${escapeHtml(t)}</span>`).join("");
+
+                const pdfButton = r.pdfUrl ? `
+                    <a href="${r.pdfUrl}" target="_blank" rel="noopener noreferrer" class="report-btn-link pdf" title="한국경제 및 증권사 원문 PDF 열기">
+                        <span>📥 원문 PDF</span>
+                    </a>
+                ` : "";
+
+                return `
+                    <div class="report-item-card">
+                        <div>
+                            <div class="report-top-meta">
+                                <span class="report-broker-badge">${escapeHtml(r.firm || "금융기관")}</span>
+                                <span class="report-date-text">${escapeHtml(r.date || "")} · ${escapeHtml(r.author || "")}</span>
+                            </div>
+                            <div class="report-item-title">${escapeHtml(r.title || "")}</div>
+                            <div class="report-tags-row">
+                                <span class="report-tag-chip" style="color:var(--toss-blue,#3182f6);font-weight:600;">${catLabel}</span>
+                                ${tagsHtml}
+                            </div>
+                            <div class="report-summary-box">
+                                ${summaryHtml}
+                            </div>
+                        </div>
+                        <div class="report-actions-row">
+                            <span style="font-size:11px;color:var(--muted);margin-right:auto;">
+                                ${r.source ? escapeHtml(r.source) : "한경 컨센서스"}
+                            </span>
+                            ${pdfButton}
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
         /* ---------- 이벤트 ---------- */
         document.querySelectorAll(".tab").forEach(t => {
             t.addEventListener("click", () => switchTab(t.dataset.tab));
@@ -8039,6 +8858,7 @@
 
         // 앱 시작 시 안전 타임아웃(최대 6초)과 함께 초기 동기화 진행
         (async () => {
+            loadMarketInsights();
             await Promise.race([
                 runInitialDataAndMarketSync(),
                 new Promise(resolve => setTimeout(resolve, 6000))

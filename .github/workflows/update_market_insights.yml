@@ -1,0 +1,38 @@
+name: Update Market Insights & Financial Reports
+
+on:
+  schedule:
+    # 매일 평일 아침 07:30 KST (UTC 22:30, 일~목)
+    - cron: '30 22 * * 0-4'
+  workflow_dispatch: # 관리자가 깃허브 웹에서 수동으로 즉시 실행 가능
+
+permissions:
+  contents: write
+
+jobs:
+  update-insights:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      - name: Fetch reports and macro insights
+        run: |
+          python scripts/fetch_reports.py
+
+      - name: Commit and push if updated
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions [Market Insights Bot]"
+          git add data/market_insights.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(insights): 금융기관 리포트 및 거시지표(환율/SCHD/국채10년물) 자동 갱신 [skip ci]" && git push)
