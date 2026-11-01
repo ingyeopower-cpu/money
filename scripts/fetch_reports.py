@@ -98,27 +98,50 @@ def fetch_hankyung_reports():
             r = requests.get(url, headers=headers, timeout=8)
             r.encoding = 'utf-8'
             soup = BeautifulSoup(r.text, 'html.parser')
+            table = soup.find('table')
+            if not table:
+                continue
+
+            # 한경 컨센서스 스킨별 테이블 헤더 컬럼 위치 동적 판별
+            th_row = table.find('tr')
+            headers_list = [th.get_text(strip=True) for th in th_row.find_all(['th', 'td'])] if th_row else []
+            has_cat = '분류' in headers_list
+            idx_date = headers_list.index('작성일') if '작성일' in headers_list else 0
+            idx_cat = headers_list.index('분류') if has_cat else None
+            idx_title = headers_list.index('제목') if '제목' in headers_list else (2 if has_cat else 1)
+            idx_writer = headers_list.index('작성자') if '작성자' in headers_list else (3 if has_cat else 2)
+            idx_broker = headers_list.index('제공출처') if '제공출처' in headers_list else (4 if has_cat else 3)
             
-            for tr in soup.find_all('tr'):
+            for tr in table.find_all('tr')[1:]:
                 tds = tr.find_all('td')
-                if len(tds) >= 5:
-                    date = tds[0].get_text(strip=True)
-                    category_raw = tds[1].get_text(strip=True)
+                max_needed_idx = max(filter(lambda x: x is not None, [idx_date, idx_cat, idx_title, idx_writer, idx_broker]))
+                if len(tds) > max_needed_idx:
+                    date = tds[idx_date].get_text(strip=True)
+                    category_raw = tds[idx_cat].get_text(strip=True) if idx_cat is not None else default_cat
                     
                     # 제목 태그에서 중복 텍스트 정제
-                    title_elem = tds[2].find('a')
-                    raw_title = title_elem.get_text(strip=True) if title_elem else tds[2].get_text(strip=True)
+                    title_elem = tds[idx_title].find('a')
+                    raw_title = title_elem.get_text(strip=True) if title_elem else tds[idx_title].get_text(strip=True)
                     
-                    # 한경 컨센서스 제목 중복 출력 버그 정제 (3회 반복되는 현상 제거)
-                    cleaned_title = raw_title
-                    for split_len in range(len(raw_title) // 3, 5, -1):
-                        part = raw_title[:split_len]
-                        if raw_title == part * 3 or raw_title.startswith(part * 2):
+                    # 한경 컨센서스 제목 중복 출력 버그 정제 (3회 또는 2회 반복되는 현상 제거)
+                    cleaned_title = raw_title.strip()
+                    L = len(cleaned_title)
+                    found_clean = False
+                    for split_len in range(L // 3, 3, -1):
+                        part = cleaned_title[:split_len].strip()
+                        if cleaned_title == part * 3 or cleaned_title.startswith(part * 2):
                             cleaned_title = part
+                            found_clean = True
                             break
+                    if not found_clean:
+                        for split_len in range(L // 2, 3, -1):
+                            part = cleaned_title[:split_len].strip()
+                            if cleaned_title == part * 2:
+                                cleaned_title = part
+                                break
                     
-                    writer = tds[3].get_text(strip=True) or '리서치센터'
-                    broker = tds[4].get_text(strip=True) or '국내 증권사'
+                    writer = tds[idx_writer].get_text(strip=True) or '리서치센터'
+                    broker = tds[idx_broker].get_text(strip=True) or '국내 증권사'
                     
                     link_tag = tr.find('a', href=lambda h: h and ('downpdf' in h or '.pdf' in h))
                     if not link_tag:
@@ -437,16 +460,28 @@ def main():
 
     # 리포트 고유 식별 함수 (중복 제거)
     def get_rep_key(r):
-        if r.get('pdfUrl'):
-            return r['pdfUrl']
+        rep_id = str(r.get('id', ''))
+        if rep_id.startswith('curated_'):
+            return rep_id
+        pdf = str(r.get('pdfUrl', ''))
+        if pdf and 'downpdf' in pdf:
+            return pdf
         t = re.sub(r'\s+', '', r.get('title', ''))
         return f"{r.get('date', '')}_{t}_{r.get('broker', '')}"
+
+    def is_valid_report(r):
+        title = str(r.get('title', '')).strip()
+        if title in ['엄우용', '투자전략팀', '리서치센터 투자전략실', '투자분석부', '기간산업분석부・혁신기업분석부', '리서치센터', 'sk증권 리서치센터', '나민식', '최규호']:
+            return False
+        return len(title) >= 2
 
     seen_keys = set()
     merged_reports = []
 
     # 1) 오늘 신규 수집 & 큐레이션 리포트 우선 등록
     for r in (curated_seeds + raw_reports):
+        if not is_valid_report(r):
+            continue
         k = get_rep_key(r)
         if k and k not in seen_keys:
             seen_keys.add(k)
@@ -454,6 +489,8 @@ def main():
 
     # 2) 과거 날짜에 수집되어 저장되었던 보관함 리포트 병합 (날짜별 누적 보관)
     for r in existing_reports:
+        if not is_valid_report(r):
+            continue
         k = get_rep_key(r)
         if k and k not in seen_keys:
             seen_keys.add(k)

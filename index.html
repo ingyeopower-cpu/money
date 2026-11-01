@@ -10092,13 +10092,31 @@
         };
 
         async function loadMarketInsights(forceFetch = false) {
+            // 1. 오프라인 복원력: 로컬 캐시에서 먼저 즉시 복원하여 초기 로딩 지연/네트워크 단절 방지
+            if (!marketInsightsData) {
+                try {
+                    const cached = localStorage.getItem("money_market_insights_cache_v1");
+                    if (cached) {
+                        const parsed = JSON.parse(cached);
+                        if (parsed && parsed.macro) {
+                            marketInsightsData = parsed;
+                            renderInsights();
+                            renderDashboardStockBarCharts();
+                        }
+                    }
+                } catch (errCache) {}
+            }
+
             try {
-                const url = "./data/market_insights.json" + (forceFetch ? "?t=" + Date.now() : "?v=20261031");
+                const url = "./data/market_insights.json" + (forceFetch ? "?t=" + Date.now() : "?v=" + new Date().toISOString().slice(0, 10));
                 const res = await fetch(url, { cache: forceFetch ? "no-cache" : "default" });
                 if (res.ok) {
                     const data = await res.json();
                     if (data && data.macro) {
                         marketInsightsData = data;
+                        try {
+                            localStorage.setItem("money_market_insights_cache_v1", JSON.stringify(data));
+                        } catch (errLs) {}
                         renderInsights();
                         renderDashboardStockBarCharts();
                         return;

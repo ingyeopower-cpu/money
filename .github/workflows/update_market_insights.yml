@@ -37,4 +37,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Actions [Market Insights Bot]"
           git add data/market_insights.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(insights): 금융기관 리포트 및 거시지표(환율/SCHD/국채10년물) 자동 갱신 [skip ci]" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(insights): 금융기관 리포트 및 거시지표 자동 갱신" && git push)
