@@ -1,0 +1,27 @@
+{
+  "name": "고석현의 돈통 · 자산관리",
+  "short_name": "돈통",
+  "description": "부부 실시간 자산 관리 및 2028년 입주 잔금 달성 프로젝트",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "lang": "ko",
+  "categories": ["finance", "productivity"],
+  "icons": [
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

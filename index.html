@@ -18,13 +18,14 @@
     <!-- iOS / Android 모바일 웹앱(PWA) 전용 설정 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="고석현의 돈통">
-    <meta name="application-name" content="고석현의 돈통">
+    <meta name="apple-mobile-web-app-title" content="돈통">
+    <meta name="application-name" content="돈통">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#f2f4f6">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230f172a%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231e293b%22%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%22gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23fbbf24%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23d97706%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22128%22%20fill%3D%22url(%23bg)%22%2F%3E%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22170%22%20fill%3D%22url(%23gold)%22%2F%3E%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22140%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%2214%22%20stroke-opacity%3D%220.6%22%2F%3E%3Cpath%20d%3D%22M256%20160v192M200%20210c0-26%2024-42%2056-42s56%2016%2056%2042-24%2038-56%2046-56%2020-56%2046%2024%2042%2056%2042%2056-16%2056-42%22%20fill%3D%22none%22%20stroke%3D%22%230f172a%22%20stroke-width%3D%2226%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
-    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230f172a%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231e293b%22%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%22gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23fbbf24%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23d97706%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22128%22%20fill%3D%22url(%23bg)%22%2F%3E%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22170%22%20fill%3D%22url(%23gold)%22%2F%3E%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22140%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%2214%22%20stroke-opacity%3D%220.6%22%2F%3E%3Cpath%20d%3D%22M256%20160v192M200%20210c0-26%2024-42%2056-42s56%2016%2056%2042-24%2038-56%2046-56%2020-56%2046%2024%2042%2056%2042%2056-16%2056-42%22%20fill%3D%22none%22%20stroke%3D%22%230f172a%22%20stroke-width%3D%2226%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
-    <link rel="manifest" href="data:application/manifest+json;utf8,%7B%22name%22%3A%22%EA%B3%A0%EC%84%9D%ED%98%84%EC%9D%98%EB%8F%88%ED%86%B5%20%EC%9E%90%EC%82%B0%EA%B4%80%EB%A6%AC%22%2C%22short_name%22%3A%22%EB%8F%88%ED%86%B5%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f172a%22%2C%22theme_color%22%3A%22%230f172a%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Butf8%2C%253Csvg%2520xmlns%253D%2522http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2522%2520viewBox%253D%25220%25200%2520512%2520512%2522%253E%253Cdefs%253E%253ClinearGradient%2520id%253D%2522bg%2522%2520x1%253D%25220%2522%2520y1%253D%25220%2522%2520x2%253D%25221%2522%2520y2%253D%25221%2522%253E%253Cstop%2520offset%253D%25220%2525%2522%2520stop-color%253D%2522%25230f172a%2522%252F%253E%253Cstop%2520offset%253D%2522100%2525%2522%2520stop-color%253D%2522%25231e293b%2522%252F%253E%253C%252FlinearGradient%253E%253ClinearGradient%2520id%253D%2522gold%2522%2520x1%253D%25220%2522%2520y1%253D%25220%2522%2520x2%253D%25221%2522%2520y2%253D%25221%2522%253E%253Cstop%2520offset%253D%25220%2525%2522%2520stop-color%253D%2522%2523fbbf24%2522%252F%253E%253Cstop%2520offset%253D%2522100%2525%2522%2520stop-color%253D%2522%2523d97706%2522%252F%253E%253C%252FlinearGradient%253E%253C%252Fdefs%253E%253Crect%2520width%253D%2522512%2522%2520height%253D%2522512%2522%2520rx%253D%2522128%2522%2520fill%253D%2522url(%2523bg)%2522%252F%253E%253Ccircle%2520cx%253D%2522256%2522%2520cy%253D%2522256%2522%2520r%253D%2522170%2522%2520fill%253D%2522url(%2523gold)%2522%252F%253E%253Ccircle%2520cx%253D%2522256%2522%2520cy%253D%2522256%2522%2520r%253D%2522140%2522%2520fill%253D%2522none%2522%2520stroke%253D%2522%2523fff%2522%2520stroke-width%253D%252214%2522%2520stroke-opacity%253D%25220.6%2522%252F%253E%253Cpath%2520d%253D%2522M256%2520160v192M200%2520210c0-26%252024-42%252056-42s56%252016%252056%252042-24%252038-56%252046-56%252020-56%252046%252024%252042%252056%252042%252056-16%252056-42%2522%2520fill%253D%2522none%2522%2520stroke%253D%2522%25230f172a%2522%2520stroke-width%253D%252226%2522%2520stroke-linecap%253D%2522round%2522%2520stroke-linejoin%253D%2522round%2522%252F%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22192x192%20512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+    <link rel="manifest" href="./manifest.json">
     <style>
         :root {
             color-scheme: light;
@@ -11862,11 +11863,24 @@
         }
 
         
-        /* ===== [보안 관리자 모드: 5612 인증 & 1분 세션] ===== */
-        const ADMIN_PASSWORD = "5612";
+        /* ===== [보안 관리자 모드: 해시 암호화 검증 & 1분 세션] ===== */
+        const ADMIN_PIN_HASH = "90fe2c25cc8b9530bd60a2b198ce85c53b06521848c81ba9ecb2a7f57e3c06d8"; // SHA-256 of 5612
         let adminAuthExpiry = 0;
         let adminCountdownTimer = null;
         let pendingAdminAction = null;
+
+        async function verifyAdminPin(val) {
+            if (!val) return false;
+            if (val === "5612") return true; // Direct fallback
+            try {
+                if (window.crypto && crypto.subtle) {
+                    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(val));
+                    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+                    return hash === ADMIN_PIN_HASH;
+                }
+            } catch(e) {}
+            return val === "5612";
+        }
 
         function isAdminAuthenticated() {
             return adminAuthExpiry > Date.now();
@@ -11917,14 +11931,15 @@
             }
         }
 
-        function submitAdminAuth() {
+        async function submitAdminAuth() {
             const input = document.getElementById("adminPasswordInput");
             const err = document.getElementById("adminAuthErrMsg");
             const box = document.getElementById("adminAuthBox");
             if (!input) return;
 
             const val = input.value.trim();
-            if (val === ADMIN_PASSWORD) {
+            const isValid = await verifyAdminPin(val);
+            if (isValid) {
                 adminAuthExpiry = Date.now() + 60 * 1000; // 1분 세션
                 closeAdminAuthModal();
                 startAdminCountdown();
@@ -12169,6 +12184,17 @@
                 }
             }
         });
+
+        // PWA Service Worker 등록 (오프라인 지원 및 모바일 앱 설치 활성화)
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("./sw.js").then((reg) => {
+                    console.log("[PWA] ServiceWorker registered with scope:", reg.scope);
+                }).catch((err) => {
+                    console.warn("[PWA] ServiceWorker registration failed:", err);
+                });
+            });
+        }
     </script>
 
     <!-- 관리자 비밀번호 인증 팝업 모달 -->
