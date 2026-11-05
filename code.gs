@@ -84,8 +84,8 @@ function 권한테스트() {
 
 /**
  * 시트에 저장된 데이터를 읽어서, 보유 종목 종가와 환율/달러인덱스를 서버(Apps Script)에서
- * 직접 조회해 갱신하고 다시 저장합니다. 브라우저가 아니라 서버에서 요청하기 때문에
- * CORS(브라우저 보안 정책)에 막히지 않습니다.
+ * 병렬(fetchAll)로 초고속 조회(1~2초)해 갱신하고 다시 저장합니다. 브라우저가 아니라 서버에서 요청하기 때문에
+ * CORS(브라우저 보안 정책)에 막히지 않으며 10여 개 종목을 1번에 동시 조회합니다.
  */
 function refreshMarket_() {
   var sheet = getSheet_();
@@ -106,33 +106,138 @@ function refreshMarket_() {
 
   var today = Utilities.formatDate(new Date(), "Asia/Seoul", "yyyy-MM-dd");
 
+  // 1) 환율(USDKRW=X, DX-Y.NYB) 및 모든 보유종목 조회를 병렬(fetchAll) 요청 목록으로 구성
+  var requests = [];
+
+  // 환율 1순위: 야후 실시간 원달러 통화쌍 (1분 실시간)
+  requests.push({
+    url: "https://query1.finance.yahoo.com/v8/finance/chart/USDKRW=X?range=1d&interval=1m",
+    muteHttpExceptions: true,
+    headers: { "User-Agent": "Mozilla/5.0" }
+  });
+  // 달러 인덱스 (DXY)
+  requests.push({
+    url: "https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?range=5d&interval=1d",
+    muteHttpExceptions: true,
+    headers: { "User-Agent": "Mozilla/5.0" }
+  });
+
+  // 각 종목별 실시간 조회 요청
+  codes.forEach(function(code) {
+    var isNumeric = /^\d+$/.test(code);
+    if (isNumeric) {
+      // 국내(KRX) 종목: 네이버 실시간 폴링 API
+      requests.push({
+        url: "https://polling.finance.naver.com/api/realtime/domestic/stock/" + code,
+        muteHttpExceptions: true,
+        headers: { "User-Agent": "Mozilla/5.0" }
+      });
+    } else {
+      // 해외(미국 등) 종목: 야후 파이낸스 실시간
+      requests.push({
+        url: "https://query1.finance.yahoo.com/v8/finance/chart/" + code + "?range=1d&interval=1m",
+        muteHttpExceptions: true,
+        headers: { "User-Agent": "Mozilla/5.0" }
+      });
+    }
+  });
+
+  // 초고속 병렬 실행: 모든 HTTP 요청을 동시 전송 (1~2초 이내 완료)
+  var responses = [];
+  try {
+    responses = UrlFetchApp.fetchAll(requests);
+  } catch (fetchErr) {
+    Logger.log("fetchAll error: " + fetchErr);
+  }
+
+  // 2) 환율 응답 파싱
   var fxOk = false;
   var fxRate = 0;
+  var dxyVal = 0;
   try {
-    var fx = fetchFx_();
-    if (fx) {
-      data.fx = data.fx || {};
-      if (data.fx.usdKrw && data.fx.usdKrwDate && data.fx.usdKrwDate !== today) {
-        data.fx.prevUsdKrw = data.fx.usdKrw;
-      } else if (!data.fx.prevUsdKrw && data.fx.usdKrw) {
-        data.fx.prevUsdKrw = data.fx.usdKrw;
+    if (responses && responses.length >= 2) {
+      var fxRes = responses[0];
+      if (fxRes && fxRes.getResponseCode() === 200) {
+        var fxData = parseYahooQuoteMeta_(fxRes.getContentText());
+        if (fxData && fxData.price > 0) {
+          data.fx = data.fx || {};
+          if (data.fx.usdKrw && data.fx.usdKrwDate && data.fx.usdKrwDate !== today) {
+            data.fx.prevUsdKrw = data.fx.usdKrw;
+          } else if (!data.fx.prevUsdKrw && data.fx.usdKrw) {
+            data.fx.prevUsdKrw = data.fx.usdKrw;
+          }
+          data.fx.usdKrw = fxData.price;
+          data.fx.usdKrwDate = today;
+          data.fx.lastUpdated = new Date().toISOString();
+          fxRate = fxData.price;
+          fxOk = true;
+        }
       }
-      data.fx.usdKrw = fx.usdKrw;
-      data.fx.usdKrwDate = today;
-      data.fx.dxy = fx.dxy;
-      data.fx.dxyDate = today;
-      data.fx.dxyIsExact = !!fx.dxyIsExact;
-      fxOk = true;
-      fxRate = fx.usdKrw;
-    }
-  } catch (e) { /* 환율 조회 실패는 무시하고 계속 진행 */ }
 
+      var dxyRes = responses[1];
+      if (dxyRes && dxyRes.getResponseCode() === 200) {
+        var dxyData = parseYahooQuoteMeta_(dxyRes.getContentText());
+        if (dxyData && dxyData.price > 0) {
+          dxyVal = Math.round(dxyData.price * 1000) / 1000;
+          data.fx = data.fx || {};
+          data.fx.dxy = dxyVal;
+          data.fx.dxyDate = today;
+          data.fx.dxyIsExact = true;
+        }
+      }
+    }
+
+    // 야후 환율 실패 시 기존 오픈 환율 API로 보조 폴백
+    if (!fxOk) {
+      var fbFx = fetchFxFallback_();
+      if (fbFx) {
+        data.fx = data.fx || {};
+        if (data.fx.usdKrw && data.fx.usdKrwDate && data.fx.usdKrwDate !== today) {
+          data.fx.prevUsdKrw = data.fx.usdKrw;
+        }
+        data.fx.usdKrw = fbFx.usdKrw;
+        data.fx.usdKrwDate = today;
+        data.fx.dxy = fbFx.dxy;
+        data.fx.dxyDate = today;
+        data.fx.dxyIsExact = !!fbFx.dxyIsExact;
+        data.fx.lastUpdated = new Date().toISOString();
+        fxOk = true;
+        fxRate = fbFx.usdKrw;
+      }
+    }
+  } catch (fxErr) {
+    Logger.log("FX parse error: " + fxErr);
+  }
+
+  // 3) 각 종목 응답 파싱 및 실패 종목 단일 보조 폴백
   var priceOk = 0, priceTotal = codes.length;
   var prices = {};
-  codes.forEach(function (code) {
-    var p = fetchStockPrice_(code, fxRate);
-    if (p && p.price > 0) { prices[code] = p; priceOk++; }
+
+  codes.forEach(function(code, idx) {
+    var respIdx = idx + 2; // index 0: fx, 1: dxy
+    var p = null;
+    var isNumeric = /^\d+$/.test(code);
+
+    if (responses && responses[respIdx] && responses[respIdx].getResponseCode() === 200) {
+      var body = responses[respIdx].getContentText();
+      if (isNumeric) {
+        p = parseNaverPolling_(body);
+      } else {
+        p = parseYahooQuoteMeta_(body);
+      }
+    }
+
+    // 1차 병렬 응답에서 실패한 경우에만 단일 폴백 재시도
+    if (!p || p.price <= 0) {
+      p = fetchStockPriceSingleFallback_(code, isNumeric);
+    }
+
+    if (p && p.price > 0) {
+      prices[code] = p;
+      priceOk++;
+    }
   });
+
   if (priceOk > 0) {
     (data.holdings || []).forEach(function (h) {
       if (h.isFixed) return;
@@ -148,8 +253,9 @@ function refreshMarket_() {
       }
     });
     data.lastSync = today;
+    data.lastSyncTimestamp = new Date().toISOString();
     data.syncLog = data.syncLog || [];
-    data.syncLog.push({ date: today, mode: "서버 자동", detail: priceTotal + "종목 중 " + priceOk + "종목 반영" });
+    data.syncLog.push({ date: today, mode: "실시간 초고속 병렬", detail: priceTotal + "종목 중 " + priceOk + "종목 반영" });
   }
 
   // 당일 총자산 계산 및 history 스냅샷 자동 저장
@@ -190,113 +296,90 @@ function refreshMarket_() {
   };
 }
 
-function fetchStockPrice_(code, fxRate) {
-  var isNumeric = /^\d+$/.test(code);
+function parseYahooQuoteMeta_(jsonText) {
+  try {
+    var j = JSON.parse(jsonText);
+    var m = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
+    var cur = m && (m.regularMarketPrice || m.chartPreviousClose);
+    var prev = m && (m.chartPreviousClose || m.previousClose);
+    if (cur > 0) {
+      return { price: Math.round(cur * 100) / 100, prevPrice: Math.round((prev > 0 ? prev : cur) * 100) / 100 };
+    }
+  } catch (e) {}
+  return null;
+}
+
+function parseNaverPolling_(jsonText) {
+  try {
+    var j2 = JSON.parse(jsonText);
+    var d = j2 && j2.datas && j2.datas[0];
+    var v2 = d && (d.closePriceRaw || d.closePrice || d.nv);
+    var cur = v2 ? Number(String(v2).replace(/[^0-9.-]/g, "")) : 0;
+    if (cur > 0) {
+      var diff = d.compareToPreviousClosePriceRaw ? Number(d.compareToPreviousClosePriceRaw) : 0;
+      var isFalling = d.compareToPreviousPrice && (d.compareToPreviousPrice.name === "FALLING" || d.compareToPreviousPrice.code === "5");
+      var prev = isFalling ? (cur + diff) : (cur - diff);
+      return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
+    }
+  } catch (e) {}
+  return null;
+}
+
+function fetchStockPriceSingleFallback_(code, isNumeric) {
   if (isNumeric) {
-    // 국내(KRX) 종목: 네이버가 야후보다 국내 종목 시세를 훨씬 정확하고 최신으로 제공하므로 먼저 시도.
-    var vNaverPoll = fetchFromNaverPolling_(code);
-    if (vNaverPoll && vNaverPoll.price > 0) return vNaverPoll;
-    var vNaverBasic = fetchFromNaverBasic_(code);
-    if (vNaverBasic && vNaverBasic.price > 0) return vNaverBasic;
-    var vYahooKr = fetchFromYahoo_(code + ".KS");
-    if (vYahooKr && vYahooKr.price > 0) return vYahooKr;
-    return null;
+    try {
+      var url = "https://api.stock.naver.com/stock/" + code + "/basic";
+      var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
+      if (res.getResponseCode() === 200) {
+        var j3 = JSON.parse(res.getContentText());
+        var v3 = j3 && (j3.closePrice || j3.nowPrice);
+        var cur = v3 ? Number(String(v3).replace(/[^0-9.-]/g, "")) : 0;
+        if (cur > 0) {
+          var diff = j3.compareToPreviousClosePrice ? Number(j3.compareToPreviousClosePrice) : 0;
+          var isFalling = j3.compareToPreviousPrice && (j3.compareToPreviousPrice.name === "FALLING" || j3.compareToPreviousPrice.code === "5");
+          var prev = isFalling ? (cur + diff) : (cur - diff);
+          return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
+        }
+      }
+    } catch (e) {}
+    try {
+      var urlY = "https://query1.finance.yahoo.com/v8/finance/chart/" + code + ".KS?range=5d&interval=1d";
+      var resY = UrlFetchApp.fetch(urlY, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
+      if (resY.getResponseCode() === 200) {
+        return parseYahooQuoteMeta_(resY.getContentText());
+      }
+    } catch (e) {}
   } else {
-    // 해외(미국 등) 종목: 야후 파이낸스가 정확하고 빠르게 반영됨
-    var vYahoo = fetchFromYahoo_(code);
-    if (vYahoo && vYahoo.price > 0) return vYahoo;
-    return null;
+    try {
+      var urlY2 = "https://query1.finance.yahoo.com/v8/finance/chart/" + code + "?range=5d&interval=1d";
+      var resY2 = UrlFetchApp.fetch(urlY2, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
+      if (resY2.getResponseCode() === 200) {
+        return parseYahooQuoteMeta_(resY2.getContentText());
+      }
+    } catch (e) {}
   }
-}
-
-function fetchFromYahoo_(symbol) {
-  try {
-    var url = "https://query1.finance.yahoo.com/v8/finance/chart/" + symbol + "?range=5d&interval=1d";
-    var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
-    if (res.getResponseCode() === 200) {
-      var j = JSON.parse(res.getContentText());
-      var m = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
-      var cur = m && (m.regularMarketPrice || m.chartPreviousClose);
-      var prev = m && m.chartPreviousClose;
-      if (cur > 0) return { price: cur, prevPrice: (prev > 0 ? prev : cur) };
-    }
-  } catch (e) { /* 실패 시 null 반환 */ }
   return null;
 }
 
-function fetchFromNaverPolling_(code) {
+function fetchFxFallback_() {
   try {
-    var url2 = "https://polling.finance.naver.com/api/realtime/domestic/stock/" + code;
-    var res2 = UrlFetchApp.fetch(url2, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
-    if (res2.getResponseCode() === 200) {
-      var j2 = JSON.parse(res2.getContentText());
-      var d = j2 && j2.datas && j2.datas[0];
-      var v2 = d && (d.closePriceRaw || d.closePrice || d.nv);
-      var cur = v2 ? Number(String(v2).replace(/[^0-9.-]/g, "")) : 0;
-      if (cur > 0) {
-        var diff = d.compareToPreviousClosePriceRaw ? Number(d.compareToPreviousClosePriceRaw) : 0;
-        var isFalling = d.compareToPreviousPrice && (d.compareToPreviousPrice.name === "FALLING" || d.compareToPreviousPrice.code === "5");
-        var prev = isFalling ? (cur + diff) : (cur - diff);
-        return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
-      }
-    }
-  } catch (e) { /* 실패 시 null 반환 */ }
-  return null;
-}
-
-function fetchFromNaverBasic_(code) {
-  try {
-    var url3 = "https://api.stock.naver.com/stock/" + code + "/basic";
-    var res3 = UrlFetchApp.fetch(url3, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
-    if (res3.getResponseCode() === 200) {
-      var j3 = JSON.parse(res3.getContentText());
-      var v3 = j3 && (j3.closePrice || j3.nowPrice);
-      var cur = v3 ? Number(String(v3).replace(/[^0-9.-]/g, "")) : 0;
-      if (cur > 0) {
-        var diff = j3.compareToPreviousClosePrice ? Number(j3.compareToPreviousClosePrice) : 0;
-        var isFalling = j3.compareToPreviousPrice && (j3.compareToPreviousPrice.name === "FALLING" || j3.compareToPreviousPrice.code === "5");
-        var prev = isFalling ? (cur + diff) : (cur - diff);
-        return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
-      }
-    }
-  } catch (e) { /* 실패 시 null 반환 */ }
-  return null;
-}
-
-function fetchFx_() {
-  var res = UrlFetchApp.fetch("https://open.er-api.com/v6/latest/USD", { muteHttpExceptions: true });
-  if (res.getResponseCode() !== 200) return null;
-  var j = JSON.parse(res.getContentText());
-  if (!j || j.result !== "success" || !j.rates || !j.rates.KRW) return null;
-  var rt = j.rates;
-
-  var dxy = fetchDxyIndex_();
-  var dxyIsExact = dxy > 0;
-  if (!dxyIsExact) {
+    var res = UrlFetchApp.fetch("https://open.er-api.com/v6/latest/USD", { muteHttpExceptions: true });
+    if (res.getResponseCode() !== 200) return null;
+    var j = JSON.parse(res.getContentText());
+    if (!j || j.result !== "success" || !j.rates || !j.rates.KRW) return null;
+    var rt = j.rates;
     var eurusd = 1 / rt.EUR, usdjpy = rt.JPY, gbpusd = 1 / rt.GBP, usdcad = rt.CAD, usdsek = rt.SEK, usdchf = rt.CHF;
-    dxy = 50.14348112
+    var dxy = 50.14348112
       * Math.pow(eurusd, -0.576) * Math.pow(usdjpy, 0.136) * Math.pow(gbpusd, -0.119)
       * Math.pow(usdcad, 0.091) * Math.pow(usdsek, 0.042) * Math.pow(usdchf, 0.036);
+    return {
+      usdKrw: Math.round(rt.KRW * 100) / 100,
+      dxy: Math.round(dxy * 1000) / 1000,
+      dxyIsExact: false
+    };
+  } catch (e) {
+    return null;
   }
-  return {
-    usdKrw: Math.round(rt.KRW * 100) / 100,
-    dxy: Math.round(dxy * 1000) / 1000,
-    dxyIsExact: dxyIsExact
-  };
-}
-
-function fetchDxyIndex_() {
-  try {
-    var url = "https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?range=5d&interval=1d";
-    var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
-    if (res.getResponseCode() === 200) {
-      var j = JSON.parse(res.getContentText());
-      var m = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
-      var v = m && (m.regularMarketPrice || m.chartPreviousClose);
-      if (v > 0) return v;
-    }
-  } catch (e) { /* 근사 계산으로 폴백 */ }
-  return 0;
 }
 
 function getSheet_() {

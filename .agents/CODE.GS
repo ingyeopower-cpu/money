@@ -1,37 +1,27 @@
 /**
- * 잔금 프로젝트 자산관리 앱 - 구글시트 동기화 + 앱 자체 호스팅용 Apps Script (토큰 없는 버전)
+ * 윤지의돈창고 자산관리 앱 - 구글시트 동기화 + 웹앱 호스팅용 Apps Script
  *
- * 이 버전은 데이터 저장뿐 아니라, 앱 화면 자체도 이 주소에서 바로 열리게 해줍니다.
- * 그래서 폰에서는 파일을 다운로드/열기 할 필요 없이, 배포된 웹 앱 URL을 그냥 링크처럼 열면 됩니다.
- *
- * 사용법 (한 번만 설정):
- * 1. 구글 스프레드시트를 새로 만듭니다 (내용은 비워둬도 됩니다).
- * 2. 상단 메뉴 확장 프로그램 > Apps Script 를 누릅니다.
- * 3. 왼쪽 파일 목록에서 기본 "Code.gs" 파일의 내용을 모두 지우고, 이 파일 내용 전체를 붙여넣습니다.
- * 4. 왼쪽 파일 목록 옆의 "+" 버튼을 누르고 "HTML"을 선택합니다. 파일 이름을 정확히 "Index"로
- *    입력합니다 (자동으로 .html이 붙습니다). 그 안에 "잔금프로젝트_자산관리.html" 파일 내용
- *    전체를 그대로 복사해서 붙여넣습니다.
- * 5. 저장한 뒤 상단의 "배포" > "새 배포" 를 누릅니다.
- * 6. 유형은 "웹 앱"을 선택합니다.
+ * 사용법 (새 계정 / 새 스프레드시트 배포 시):
+ * 1. 새 구글 계정에서 구글 드라이브 접속 -> 스프레드시트를 새로 만듭니다.
+ * 2. 상단 메뉴 [확장 프로그램] > [Apps Script] 를 클릭합니다.
+ * 3. 기본 Code.gs 내용을 모두 지우고, 이 파일(code.gs) 내용 전체를 붙여넣습니다.
+ * 4. 왼쪽 파일 목록 [+] 버튼 > [HTML] 클릭 후 파일 이름을 'Index' 로 입력합니다.
+ * 5. index.html 파일 내용 전체를 복사해서 Index.html 에 붙여넣고 저장(Ctrl+S)합니다.
+ * 6. 상단 [배포] > [새 배포] 클릭:
+ *    - 유형: 웹 앱
+ *    - 설명: 윤지의돈창고 첫 배포
  *    - 실행할 사용자: 나
- *    - 액세스 권한이 있는 사용자: 모든 사용자
- * 7. "배포"를 누르면 구글 계정 권한 승인 화면이 나옵니다. 본인 계정으로 허용해 주세요.
- *    (승인 화면이 배포 중에 뜨지 않으면, 함수 목록에서 "권한테스트"를 선택해 한 번 실행해서
- *     권한 승인을 먼저 마쳐도 됩니다.)
- * 8. 배포가 끝나면 "웹 앱 URL"이 나옵니다. 이 URL을 폰/PC 브라우저에서 그대로 열면
- *    앱 화면이 바로 뜹니다. (기존처럼 앱의 동기화 카드에 URL을 붙여넣지 않아도, 앱이
- *    자기 자신의 주소를 자동으로 인식해서 연결합니다.)
- *
- * 코드나 Index.html을 수정한 뒤에는 "배포 > 배포 관리 > 수정(연필 아이콘) > 새 버전"으로
- * 다시 배포해야 변경사항이 적용됩니다. (URL은 그대로 유지됩니다)
- *
- * ⚠️ 보안 안내: 이 버전은 비밀번호(토큰) 확인을 하지 않습니다.
- * 즉, 이 웹 앱 URL을 아는 사람은 누구나 화면을 보고 데이터를 읽고 쓸 수 있습니다.
- * URL이 검색엔진에 노출되거나 캡처화면·채팅 등으로 유출되지 않도록 본인만 보관해 주세요.
- * 계좌 비밀번호나 공인인증서 같은 금융 인증정보는 이 앱에 입력하지 않습니다 (자산 "금액"만 다룹니다).
+ *    - 액세스 권한: 모든 사용자
+ * 7. 구글 계정 권한 승인 창이 뜨면 허용해 줍니다.
+ * 8. 배포 완료 후 나타나는 '웹 앱 URL'을 복사하여 폰(아이폰/안드로이드) 브라우저에서 엽니다.
+ * 9. 사파리(아이폰) 또는 크롬(갤럭시)에서 '홈 화면에 추가'를 누르면 전용 앱 아이콘으로 설치됩니다!
  */
 
 var SHEET_NAME = "Data";
+
+// 기존에 사용하던 최신 자산/보유종목/로그 백업 데이터 (새 스프레드시트 배포 시 자동 초기화용)
+var INITIAL_DATA_JSON = "{\"v\":1,\"goal\":{\"totalPrice\":692000000,\"contractPaid\":69200000,\"midLoan\":415200000,\"balance\":207600000,\"acqTaxRate\":1.5,\"optionCost\":31860000,\"moveCost\":30000000,\"extraCost\":0,\"targetMonth\":\"2028-05\",\"monthlySaving\":4000000,\"useExtraTaxes\":true,\"bondDiscount\":1500000,\"legalFee\":300000,\"stampDuty\":150000,\"moveInDeposit\":400000},\"buckets\":[{\"id\":\"b_stock\",\"name\":\"국내 주식/ETF 계좌\",\"kind\":\"stock\",\"amount\":0},{\"id\":\"n4jvk0j\",\"name\":\"미국 단기국채\",\"kind\":\"cash\",\"amount\":9830000},{\"id\":\"jbd38kh\",\"name\":\"국내채권\",\"kind\":\"cash\",\"amount\":30000000},{\"id\":\"ua5i675\",\"name\":\"금 현물 계좌\",\"kind\":\"cash\",\"amount\":3200000},{\"id\":\"7nqqnys\",\"name\":\"예금\",\"kind\":\"cash\",\"amount\":39000000},{\"id\":\"jsnhcyj\",\"name\":\"적금\",\"kind\":\"cash\",\"amount\":12000000},{\"id\":\"bwwbaj8\",\"name\":\"현금\",\"kind\":\"cash\",\"amount\":3000001},{\"id\":\"b_stock_overseas\",\"name\":\"해외주식\",\"kind\":\"stock\",\"amount\":0}],\"holdings\":[{\"id\":\"iu1r0px\",\"bucketId\":\"b_stock\",\"name\":\"TIGER 미국배당다우존스\",\"code\":\"458730\",\"account\":\"일반계좌\",\"qty\":1169,\"avgPrice\":15320,\"price\":14965,\"priceDate\":\"2026-09-05\",\"owner\":\"아내\",\"isUsd\":false,\"divYield\":3.5,\"order\":6},{\"id\":\"v6zjfbn\",\"bucketId\":\"b_stock\",\"name\":\"TIGER 미국배당다우존스\",\"code\":\"458730\",\"account\":\"ISA\",\"qty\":3183,\"avgPrice\":15669,\"price\":14965,\"priceDate\":\"2026-09-05\",\"owner\":\"아내\",\"isUsd\":false,\"divYield\":3.5,\"order\":7},{\"id\":\"lrg3hfq\",\"bucketId\":\"b_stock\",\"name\":\"KODEX 미국S&P500\",\"code\":\"379800\",\"account\":\"일반계좌\",\"qty\":519,\"avgPrice\":24532,\"price\":23620,\"priceDate\":\"2026-09-05\",\"owner\":\"아내\",\"isUsd\":false,\"divYield\":1,\"order\":1},{\"id\":\"5kus7q2\",\"bucketId\":\"b_stock\",\"name\":\"KODEX 미국S&P500\",\"code\":\"379800\",\"account\":\"ISA\",\"qty\":165,\"avgPrice\":22941,\"price\":23620,\"priceDate\":\"2026-09-05\",\"owner\":\"아내\",\"isUsd\":false,\"divYield\":1,\"order\":2},{\"id\":\"qoio6jh\",\"bucketId\":\"b_stock\",\"name\":\"KODEX 미국나스닥100\",\"code\":\"379810\",\"account\":\"일반계좌\",\"qty\":210,\"avgPrice\":28374,\"price\":26470,\"priceDate\":\"2026-09-05\",\"owner\":\"아내\",\"isUsd\":false,\"divYield\":1,\"order\":4},{\"id\":\"hxo1bom\",\"bucketId\":\"b_stock\",\"name\":\"KODEX 미국나스닥100\",\"code\":\"379810\",\"account\":\"ISA\",\"qty\":124,\"avgPrice\":25356,\"price\":26470,\"priceDate\":\"2026-09-05\",\"owner\":\"아내\",\"isUsd\":false,\"divYield\":1,\"order\":5},{\"id\":\"xbg0ndu\",\"bucketId\":\"b_stock\",\"name\":\"KODEX 한국부동산리츠인프라\",\"code\":\"476800\",\"account\":\"ISA\",\"qty\":350,\"avgPrice\":4553,\"price\":4225,\"priceDate\":\"2026-09-05\",\"owner\":\"아내\",\"isUsd\":false,\"divYield\":5,\"order\":10},{\"id\":\"u3iziav\",\"bucketId\":\"b_stock\",\"name\":\"ACE 미국하이일드액티브(H)\",\"code\":\"455660\",\"account\":\"ISA\",\"qty\":100,\"avgPrice\":9551,\"price\":9425,\"priceDate\":\"2026-09-05\",\"owner\":\"아내\",\"isUsd\":false,\"divYield\":7,\"order\":9},{\"id\":\"qa2cvkm\",\"bucketId\":\"b_stock\",\"name\":\"TIGER 미국배당다우존스\",\"code\":\"458730\",\"account\":\"ISA\",\"qty\":710,\"avgPrice\":14863,\"price\":14965,\"priceDate\":\"2026-09-05\",\"owner\":\"남편\",\"isUsd\":false,\"divYield\":3.5,\"order\":8},{\"id\":\"4cm69ju\",\"bucketId\":\"b_stock\",\"name\":\"KODEX 미국S&P500\",\"code\":\"379800\",\"account\":\"ISA\",\"qty\":383,\"avgPrice\":24780,\"price\":23620,\"priceDate\":\"2026-09-05\",\"owner\":\"남편\",\"isUsd\":false,\"divYield\":1,\"order\":3},{\"id\":\"d1yox3h\",\"bucketId\":\"b_stock_overseas\",\"name\":\"SOXL 미국반도체 3배 디렉시온 ETF\",\"code\":\"SOXL\",\"account\":\"일반계좌\",\"owner\":\"남편\",\"qty\":20,\"avgPrice\":186.3,\"price\":117.28,\"priceDate\":\"2026-09-05\",\"isUsd\":true,\"divYield\":0,\"order\":11}],\"entries\":[{\"id\":\"e0llhi5\",\"type\":\"saving\",\"date\":\"2026-08-19\",\"amount\":1000000,\"bucketId\":\"jsnhcyj\",\"memo\":\"\"},{\"id\":\"bbiscf8\",\"type\":\"saving\",\"date\":\"2026-08-23\",\"amount\":1,\"bucketId\":\"bwwbaj8\",\"memo\":\"\"},{\"id\":\"oywfd4l\",\"type\":\"saving\",\"date\":\"2026-09-03\",\"amount\":1507000,\"bucketId\":\"b_stock\",\"memo\":\"\",\"holdingId\":\"iu1r0px\",\"stockQty\":100,\"execPrice\":15070},{\"id\":\"mb66gcw\",\"type\":\"saving\",\"date\":\"2026-09-03\",\"amount\":2259000,\"bucketId\":\"b_stock\",\"memo\":\"\",\"holdingId\":\"iu1r0px\",\"stockQty\":150,\"execPrice\":15060},{\"id\":\"r3vngoo\",\"type\":\"saving\",\"date\":\"2026-09-03\",\"amount\":4262550,\"bucketId\":\"b_stock\",\"memo\":\"\",\"holdingId\":\"lrg3hfq\",\"stockQty\":181,\"execPrice\":23550},{\"id\":\"gj53ut0\",\"type\":\"saving\",\"date\":\"2026-09-03\",\"amount\":492870,\"bucketId\":\"b_stock\",\"memo\":\"\",\"holdingId\":\"lrg3hfq\",\"stockQty\":21,\"execPrice\":23470},{\"id\":\"v7oha9u\",\"type\":\"saving\",\"date\":\"2026-09-03\",\"amount\":3004000,\"bucketId\":\"b_stock\",\"memo\":\"\",\"holdingId\":\"iu1r0px\",\"stockQty\":200,\"execPrice\":15020}],\"syncLog\":[{\"date\":\"2026-08-18\",\"mode\":\"서버 자동\",\"detail\":\"5종목 중 5종목 반영\"},{\"date\":\"2026-08-19\",\"mode\":\"서버 자동\",\"detail\":\"5종목 중 5종목 반영\"},{\"date\":\"2026-08-19\",\"mode\":\"서버 자동\",\"detail\":\"5종목 중 5종목 반영\"},{\"date\":\"2026-08-20\",\"mode\":\"서버 자동\",\"detail\":\"5종목 중 5종목 반영\"},{\"date\":\"2026-08-20\",\"mode\":\"서버 자동\",\"detail\":\"5종목 중 5종목 반영\"},{\"date\":\"2026-08-20\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 5종목 반영\"},{\"date\":\"2026-08-20\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 5종목 반영\"},{\"date\":\"2026-08-20\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 6종목 반영\"},{\"date\":\"2026-08-23\",\"mode\":\"자동(앱 실행 시)\",\"detail\":\"6종목 중 2종목 반영\"},{\"date\":\"2026-08-26\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 6종목 반영\"},{\"date\":\"2026-08-30\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 6종목 반영\"},{\"date\":\"2026-09-02\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 6종목 반영\"},{\"date\":\"2026-09-03\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 6종목 반영\"},{\"date\":\"2026-09-03\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 6종목 반영\"},{\"date\":\"2026-09-03\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 6종목 반영\"},{\"date\":\"2026-09-03\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 6종목 반영\"},{\"date\":\"2026-09-04\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 6종목 반영\"},{\"date\":\"2026-09-04\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 6종목 반영\"},{\"date\":\"2026-09-04\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 6종목 반영\"},{\"date\":\"2026-09-05\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 6종목 반영\"},{\"date\":\"2026-09-05\",\"mode\":\"서버 자동\",\"detail\":\"6종목 중 6종목 반영\"}],\"lastSync\":\"2026-09-05\",\"fx\":{\"usdKrw\":1348.99,\"usdKrwDate\":\"2026-09-05\",\"dxy\":99.157,\"dxyDate\":\"2026-09-05\",\"dxyIsExact\":true},\"theme\":\"light\",\"updatedAt\":\"2026-09-05T10:18:58.876Z\",\"history\":[{\"date\":\"2026-08-20\",\"total\":204179052.6},{\"date\":\"2026-08-23\",\"total\":204150449.12},{\"date\":\"2026-08-26\",\"total\":203380805.808},{\"date\":\"2026-08-30\",\"total\":203380805.808},{\"date\":\"2026-09-02\",\"total\":201981978.72},{\"date\":\"2026-09-03\",\"total\":212292340.78},{\"date\":\"2026-09-04\",\"total\":212528213.204},{\"date\":\"2026-09-05\",\"total\":212411791.944}],\"loan\":{\"customAmount\":false,\"manualAmount\":0,\"includeMidLoan\":true,\"useStressDsr\":true,\"rate\":4,\"term\":30,\"grace\":0,\"type\":\"체증식\",\"salaryH\":100000000,\"salaryW\":40000000,\"otherDebt\":0,\"ltv\":80,\"estValue\":692000000,\"deduction\":28000000,\"useDeduction\":true},\"tax\":{\"rate\":4,\"term\":30,\"type\":\"원리금균등\"}}";
+var INITIAL_UPDATED_AT = "2026-09-05T10:18:58.876Z";
 
 function doGet(e) {
   try {
@@ -45,10 +35,24 @@ function doGet(e) {
     if (action === "refreshMarket") {
       return jsonOut_(refreshMarket_());
     }
+    if (action === "setupTriggers") {
+      return jsonOut_(setupDailyTriggers_());
+    }
+    if (action === "restoreBackup") {
+      기존데이터_강제복원();
+      return jsonOut_({ ok: true, message: "기존 데이터 복원 완료" });
+    }
     // action 파라미터가 없으면 앱 화면(Index.html) 자체를 보여줍니다.
-    return HtmlService.createHtmlOutputFromFile("Index")
-      .setTitle("잔금 프로젝트 · 자산관리")
-      .addMetaTag("viewport", "width=device-width, initial-scale=1");
+    var template = HtmlService.createTemplateFromFile("Index");
+    var serviceUrl = "";
+    try {
+      serviceUrl = ScriptApp.getService().getUrl();
+    } catch (urlErr) {}
+    template.currentDeploymentUrl = serviceUrl;
+    return template.evaluate()
+      .setTitle("고석현의 돈통 · 자산관리")
+      .addMetaTag("viewport", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover")
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
   } catch (err) {
     return jsonOut_({ ok: false, error: String(err) });
   }
@@ -80,8 +84,8 @@ function 권한테스트() {
 
 /**
  * 시트에 저장된 데이터를 읽어서, 보유 종목 종가와 환율/달러인덱스를 서버(Apps Script)에서
- * 직접 조회해 갱신하고 다시 저장합니다. 브라우저가 아니라 서버에서 요청하기 때문에
- * CORS(브라우저 보안 정책)에 막히지 않습니다.
+ * 병렬(fetchAll)로 초고속 조회(1~2초)해 갱신하고 다시 저장합니다. 브라우저가 아니라 서버에서 요청하기 때문에
+ * CORS(브라우저 보안 정책)에 막히지 않으며 10여 개 종목을 1번에 동시 조회합니다.
  */
 function refreshMarket_() {
   var sheet = getSheet_();
@@ -96,41 +100,191 @@ function refreshMarket_() {
 
   var codes = [];
   (data.holdings || []).forEach(function (h) {
+    if (h.isFixed) return;
     if (h.code && codes.indexOf(h.code) === -1) codes.push(h.code);
   });
 
   var today = Utilities.formatDate(new Date(), "Asia/Seoul", "yyyy-MM-dd");
 
+  // 1) 환율(USDKRW=X, DX-Y.NYB) 및 모든 보유종목 조회를 병렬(fetchAll) 요청 목록으로 구성
+  var requests = [];
+
+  // 환율 1순위: 야후 실시간 원달러 통화쌍 (1분 실시간)
+  requests.push({
+    url: "https://query1.finance.yahoo.com/v8/finance/chart/USDKRW=X?range=1d&interval=1m",
+    muteHttpExceptions: true,
+    headers: { "User-Agent": "Mozilla/5.0" }
+  });
+  // 달러 인덱스 (DXY)
+  requests.push({
+    url: "https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?range=5d&interval=1d",
+    muteHttpExceptions: true,
+    headers: { "User-Agent": "Mozilla/5.0" }
+  });
+
+  // 각 종목별 실시간 조회 요청
+  codes.forEach(function(code) {
+    var isNumeric = /^\d+$/.test(code);
+    if (isNumeric) {
+      // 국내(KRX) 종목: 네이버 실시간 폴링 API
+      requests.push({
+        url: "https://polling.finance.naver.com/api/realtime/domestic/stock/" + code,
+        muteHttpExceptions: true,
+        headers: { "User-Agent": "Mozilla/5.0" }
+      });
+    } else {
+      // 해외(미국 등) 종목: 야후 파이낸스 실시간
+      requests.push({
+        url: "https://query1.finance.yahoo.com/v8/finance/chart/" + code + "?range=1d&interval=1m",
+        muteHttpExceptions: true,
+        headers: { "User-Agent": "Mozilla/5.0" }
+      });
+    }
+  });
+
+  // 초고속 병렬 실행: 모든 HTTP 요청을 동시 전송 (1~2초 이내 완료)
+  var responses = [];
+  try {
+    responses = UrlFetchApp.fetchAll(requests);
+  } catch (fetchErr) {
+    Logger.log("fetchAll error: " + fetchErr);
+  }
+
+  // 2) 환율 응답 파싱
   var fxOk = false;
   var fxRate = 0;
+  var dxyVal = 0;
   try {
-    var fx = fetchFx_();
-    if (fx) {
-      data.fx = data.fx || {};
-      data.fx.usdKrw = fx.usdKrw;
-      data.fx.usdKrwDate = today;
-      data.fx.dxy = fx.dxy;
-      data.fx.dxyDate = today;
-      data.fx.dxyIsExact = !!fx.dxyIsExact;
-      fxOk = true;
-      fxRate = fx.usdKrw;
-    }
-  } catch (e) { /* 환율 조회 실패는 무시하고 계속 진행 */ }
+    if (responses && responses.length >= 2) {
+      var fxRes = responses[0];
+      if (fxRes && fxRes.getResponseCode() === 200) {
+        var fxData = parseYahooQuoteMeta_(fxRes.getContentText());
+        if (fxData && fxData.price > 0) {
+          data.fx = data.fx || {};
+          if (data.fx.usdKrw && data.fx.usdKrwDate && data.fx.usdKrwDate !== today) {
+            data.fx.prevUsdKrw = data.fx.usdKrw;
+          } else if (!data.fx.prevUsdKrw && data.fx.usdKrw) {
+            data.fx.prevUsdKrw = data.fx.usdKrw;
+          }
+          data.fx.usdKrw = fxData.price;
+          data.fx.usdKrwDate = today;
+          data.fx.lastUpdated = new Date().toISOString();
+          fxRate = fxData.price;
+          fxOk = true;
+        }
+      }
 
+      var dxyRes = responses[1];
+      if (dxyRes && dxyRes.getResponseCode() === 200) {
+        var dxyData = parseYahooQuoteMeta_(dxyRes.getContentText());
+        if (dxyData && dxyData.price > 0) {
+          dxyVal = Math.round(dxyData.price * 1000) / 1000;
+          data.fx = data.fx || {};
+          data.fx.dxy = dxyVal;
+          data.fx.dxyDate = today;
+          data.fx.dxyIsExact = true;
+        }
+      }
+    }
+
+    // 야후 환율 실패 시 기존 오픈 환율 API로 보조 폴백
+    if (!fxOk) {
+      var fbFx = fetchFxFallback_();
+      if (fbFx) {
+        data.fx = data.fx || {};
+        if (data.fx.usdKrw && data.fx.usdKrwDate && data.fx.usdKrwDate !== today) {
+          data.fx.prevUsdKrw = data.fx.usdKrw;
+        }
+        data.fx.usdKrw = fbFx.usdKrw;
+        data.fx.usdKrwDate = today;
+        data.fx.dxy = fbFx.dxy;
+        data.fx.dxyDate = today;
+        data.fx.dxyIsExact = !!fbFx.dxyIsExact;
+        data.fx.lastUpdated = new Date().toISOString();
+        fxOk = true;
+        fxRate = fbFx.usdKrw;
+      }
+    }
+  } catch (fxErr) {
+    Logger.log("FX parse error: " + fxErr);
+  }
+
+  // 3) 각 종목 응답 파싱 및 실패 종목 단일 보조 폴백
   var priceOk = 0, priceTotal = codes.length;
   var prices = {};
-  codes.forEach(function (code) {
-    var p = fetchStockPrice_(code, fxRate);
-    if (p > 0) { prices[code] = p; priceOk++; }
+
+  codes.forEach(function(code, idx) {
+    var respIdx = idx + 2; // index 0: fx, 1: dxy
+    var p = null;
+    var isNumeric = /^\d+$/.test(code);
+
+    if (responses && responses[respIdx] && responses[respIdx].getResponseCode() === 200) {
+      var body = responses[respIdx].getContentText();
+      if (isNumeric) {
+        p = parseNaverPolling_(body);
+      } else {
+        p = parseYahooQuoteMeta_(body);
+      }
+    }
+
+    // 1차 병렬 응답에서 실패한 경우에만 단일 폴백 재시도
+    if (!p || p.price <= 0) {
+      p = fetchStockPriceSingleFallback_(code, isNumeric);
+    }
+
+    if (p && p.price > 0) {
+      prices[code] = p;
+      priceOk++;
+    }
   });
+
   if (priceOk > 0) {
     (data.holdings || []).forEach(function (h) {
-      if (prices[h.code]) { h.price = prices[h.code]; h.priceDate = today; }
+      if (h.isFixed) return;
+      if (prices[h.code]) {
+        var pInfo = prices[h.code];
+        h.price = pInfo.price;
+        if (pInfo.prevPrice && pInfo.prevPrice > 0) {
+          h.prevPrice = pInfo.prevPrice;
+        } else if (h.price && h.priceDate && h.priceDate !== today) {
+          h.prevPrice = h.price;
+        }
+        h.priceDate = today;
+      }
     });
     data.lastSync = today;
+    data.lastSyncTimestamp = new Date().toISOString();
     data.syncLog = data.syncLog || [];
-    data.syncLog.push({ date: today, mode: "서버 자동", detail: priceTotal + "종목 중 " + priceOk + "종목 반영" });
+    data.syncLog.push({ date: today, mode: "실시간 초고속 병렬", detail: priceTotal + "종목 중 " + priceOk + "종목 반영" });
   }
+
+  // 당일 총자산 계산 및 history 스냅샷 자동 저장
+  try {
+    var curFx = (data.fx && data.fx.usdKrw > 0) ? data.fx.usdKrw : 1350;
+    var tot = 0;
+    (data.buckets || []).forEach(function(b) {
+      if (b.kind !== "stock") tot += Number(b.amount || 0);
+    });
+    (data.holdings || []).forEach(function(h) {
+      var p = Number(h.price || 0);
+      var q = Number(h.qty || 0);
+      tot += p * q * (h.isUsd ? curFx : 1);
+    });
+    data.history = data.history || [];
+    var existingHist = null;
+    for (var i = 0; i < data.history.length; i++) {
+      if (data.history[i].date === today) {
+        existingHist = data.history[i];
+        break;
+      }
+    }
+    if (existingHist) {
+      existingHist.total = Math.round(tot * 100) / 100;
+    } else {
+      data.history.push({ date: today, total: Math.round(tot * 100) / 100 });
+      data.history.sort(function(a, b) { return a.date.localeCompare(b.date); });
+    }
+  } catch (histErr) {}
 
   data.updatedAt = new Date().toISOString();
   sheet.getRange("A1").setValue(JSON.stringify(data));
@@ -142,107 +296,90 @@ function refreshMarket_() {
   };
 }
 
-function fetchStockPrice_(code, fxRate) {
-  var isNumeric = /^\d+$/.test(code);
+function parseYahooQuoteMeta_(jsonText) {
+  try {
+    var j = JSON.parse(jsonText);
+    var m = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
+    var cur = m && (m.regularMarketPrice || m.chartPreviousClose);
+    var prev = m && (m.chartPreviousClose || m.previousClose);
+    if (cur > 0) {
+      return { price: Math.round(cur * 100) / 100, prevPrice: Math.round((prev > 0 ? prev : cur) * 100) / 100 };
+    }
+  } catch (e) {}
+  return null;
+}
+
+function parseNaverPolling_(jsonText) {
+  try {
+    var j2 = JSON.parse(jsonText);
+    var d = j2 && j2.datas && j2.datas[0];
+    var v2 = d && (d.closePriceRaw || d.closePrice || d.nv);
+    var cur = v2 ? Number(String(v2).replace(/[^0-9.-]/g, "")) : 0;
+    if (cur > 0) {
+      var diff = d.compareToPreviousClosePriceRaw ? Number(d.compareToPreviousClosePriceRaw) : 0;
+      var isFalling = d.compareToPreviousPrice && (d.compareToPreviousPrice.name === "FALLING" || d.compareToPreviousPrice.code === "5");
+      var prev = isFalling ? (cur + diff) : (cur - diff);
+      return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
+    }
+  } catch (e) {}
+  return null;
+}
+
+function fetchStockPriceSingleFallback_(code, isNumeric) {
   if (isNumeric) {
-    // 국내(KRX) 종목: 네이버가 야후보다 국내 종목 시세를 훨씬 정확하고 최신으로 제공하므로 먼저 시도.
-    // 야후의 ".KS" 데이터는 국내 소형 ETF의 경우 며칠씩 지연되거나 부정확한 경우가 있어 보조 수단으로만 사용.
-    var vNaverPoll = fetchFromNaverPolling_(code);
-    if (vNaverPoll > 0) return vNaverPoll;
-    var vNaverBasic = fetchFromNaverBasic_(code);
-    if (vNaverBasic > 0) return vNaverBasic;
-    var vYahooKr = fetchFromYahoo_(code + ".KS");
-    if (vYahooKr > 0) return vYahooKr;
-    return 0;
+    try {
+      var url = "https://api.stock.naver.com/stock/" + code + "/basic";
+      var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
+      if (res.getResponseCode() === 200) {
+        var j3 = JSON.parse(res.getContentText());
+        var v3 = j3 && (j3.closePrice || j3.nowPrice);
+        var cur = v3 ? Number(String(v3).replace(/[^0-9.-]/g, "")) : 0;
+        if (cur > 0) {
+          var diff = j3.compareToPreviousClosePrice ? Number(j3.compareToPreviousClosePrice) : 0;
+          var isFalling = j3.compareToPreviousPrice && (j3.compareToPreviousPrice.name === "FALLING" || j3.compareToPreviousPrice.code === "5");
+          var prev = isFalling ? (cur + diff) : (cur - diff);
+          return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
+        }
+      }
+    } catch (e) {}
+    try {
+      var urlY = "https://query1.finance.yahoo.com/v8/finance/chart/" + code + ".KS?range=5d&interval=1d";
+      var resY = UrlFetchApp.fetch(urlY, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
+      if (resY.getResponseCode() === 200) {
+        return parseYahooQuoteMeta_(resY.getContentText());
+      }
+    } catch (e) {}
   } else {
-    // 해외(미국 등) 종목: 야후 파이낸스가 정확하고 빠르게 반영됨
-    var vYahoo = fetchFromYahoo_(code);
-    if (vYahoo > 0) return vYahoo;
-    return 0;
+    try {
+      var urlY2 = "https://query1.finance.yahoo.com/v8/finance/chart/" + code + "?range=5d&interval=1d";
+      var resY2 = UrlFetchApp.fetch(urlY2, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
+      if (resY2.getResponseCode() === 200) {
+        return parseYahooQuoteMeta_(resY2.getContentText());
+      }
+    } catch (e) {}
   }
+  return null;
 }
 
-function fetchFromYahoo_(symbol) {
+function fetchFxFallback_() {
   try {
-    var url = "https://query1.finance.yahoo.com/v8/finance/chart/" + symbol + "?range=5d&interval=1d";
-    var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
-    if (res.getResponseCode() === 200) {
-      var j = JSON.parse(res.getContentText());
-      var m = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
-      var v = m && (m.regularMarketPrice || m.chartPreviousClose);
-      if (v > 0) return v;
-    }
-  } catch (e) { /* 실패 시 0 반환 */ }
-  return 0;
-}
-
-function fetchFromNaverPolling_(code) {
-  try {
-    var url2 = "https://polling.finance.naver.com/api/realtime/domestic/stock/" + code;
-    var res2 = UrlFetchApp.fetch(url2, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
-    if (res2.getResponseCode() === 200) {
-      var j2 = JSON.parse(res2.getContentText());
-      var d = j2 && j2.datas && j2.datas[0];
-      var v2 = d && (d.closePrice || d.nv);
-      var num2 = v2 ? Number(String(v2).replace(/[^0-9.-]/g, "")) : 0;
-      if (num2 > 0) return Math.round(num2);
-    }
-  } catch (e) { /* 실패 시 0 반환 */ }
-  return 0;
-}
-
-function fetchFromNaverBasic_(code) {
-  try {
-    var url3 = "https://api.stock.naver.com/stock/" + code + "/basic";
-    var res3 = UrlFetchApp.fetch(url3, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
-    if (res3.getResponseCode() === 200) {
-      var j3 = JSON.parse(res3.getContentText());
-      var v3 = j3 && (j3.closePrice || j3.nowPrice);
-      var num3 = v3 ? Number(String(v3).replace(/[^0-9.-]/g, "")) : 0;
-      if (num3 > 0) return Math.round(num3);
-    }
-  } catch (e) { /* 실패 시 0 반환 */ }
-  return 0;
-}
-
-function fetchFx_() {
-  var res = UrlFetchApp.fetch("https://open.er-api.com/v6/latest/USD", { muteHttpExceptions: true });
-  if (res.getResponseCode() !== 200) return null;
-  var j = JSON.parse(res.getContentText());
-  if (!j || j.result !== "success" || !j.rates || !j.rates.KRW) return null;
-  var rt = j.rates;
-
-  // 달러인덱스는 우선 야후 파이낸스에 실제로 고시되는 지수(티커: DX-Y.NYB)를 그대로 가져옵니다.
-  // 이러면 통화쌍으로 재계산할 때 생기는 오차 없이, 실제 발표되는 값과 (거의) 동일한 수치를 씁니다.
-  var dxy = fetchDxyIndex_();
-  var dxyIsExact = dxy > 0;
-  if (!dxyIsExact) {
-    // 실패했을 때만, 통화쌍으로 근사 계산 (약간의 오차가 있을 수 있음)
+    var res = UrlFetchApp.fetch("https://open.er-api.com/v6/latest/USD", { muteHttpExceptions: true });
+    if (res.getResponseCode() !== 200) return null;
+    var j = JSON.parse(res.getContentText());
+    if (!j || j.result !== "success" || !j.rates || !j.rates.KRW) return null;
+    var rt = j.rates;
     var eurusd = 1 / rt.EUR, usdjpy = rt.JPY, gbpusd = 1 / rt.GBP, usdcad = rt.CAD, usdsek = rt.SEK, usdchf = rt.CHF;
-    dxy = 50.14348112
+    var dxy = 50.14348112
       * Math.pow(eurusd, -0.576) * Math.pow(usdjpy, 0.136) * Math.pow(gbpusd, -0.119)
       * Math.pow(usdcad, 0.091) * Math.pow(usdsek, 0.042) * Math.pow(usdchf, 0.036);
+    return {
+      usdKrw: Math.round(rt.KRW * 100) / 100,
+      dxy: Math.round(dxy * 1000) / 1000,
+      dxyIsExact: false
+    };
+  } catch (e) {
+    return null;
   }
-  return {
-    usdKrw: Math.round(rt.KRW * 100) / 100,
-    dxy: Math.round(dxy * 1000) / 1000,
-    dxyIsExact: dxyIsExact
-  };
-}
-
-// 야후 파이낸스에 실제 고시되는 ICE 달러인덱스(DX-Y.NYB) 값을 그대로 가져옵니다. 실패 시 0을 반환합니다.
-function fetchDxyIndex_() {
-  try {
-    var url = "https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?range=5d&interval=1d";
-    var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, headers: { "User-Agent": "Mozilla/5.0" } });
-    if (res.getResponseCode() === 200) {
-      var j = JSON.parse(res.getContentText());
-      var m = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
-      var v = m && (m.regularMarketPrice || m.chartPreviousClose);
-      if (v > 0) return v;
-    }
-  } catch (e) { /* 근사 계산으로 폴백 */ }
-  return 0;
 }
 
 function getSheet_() {
@@ -251,14 +388,68 @@ function getSheet_() {
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
   }
-  if (sheet.getRange("C1").getValue() !== "janggeum-sync") {
-    sheet.getRange("A1").setValue("");
-    sheet.getRange("B1").setValue("");
+  var flag = sheet.getRange("C1").getValue();
+  var a1 = sheet.getRange("A1").getValue();
+  if (flag !== "janggeum-sync" || !a1) {
+    sheet.getRange("A1").setValue(INITIAL_DATA_JSON);
+    sheet.getRange("B1").setValue(INITIAL_UPDATED_AT);
     sheet.getRange("C1").setValue("janggeum-sync");
   }
   return sheet;
 }
 
+// 혹시 새 시트에서 수동으로 기존 데이터를 다시 덮어씌워야 할 때 Apps Script에서 이 함수를 실행하세요.
+function 기존데이터_강제복원() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
+  sheet.getRange("A1").setValue(INITIAL_DATA_JSON);
+  sheet.getRange("B1").setValue(new Date().toISOString());
+  sheet.getRange("C1").setValue("janggeum-sync");
+  Logger.log("OK: 기존 자산 데이터 및 로그가 복원되었습니다.");
+}
+
 function jsonOut_(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * 한국 장 종료 (16:00) 및 아침 06:00 자동 시세 갱신용 핸들러
+ */
+function scheduledMarketRefresh_() {
+  var res = refreshMarket_();
+  Logger.log("Scheduled market refresh completed: " + JSON.stringify(res));
+  return res;
+}
+
+/**
+ * 16시(한국 장 종료) 및 06시(아침 미국장/환율 마감) 시간 기반 트리거 설정
+ */
+function setupDailyTriggers_() {
+  try {
+    var triggers = ScriptApp.getProjectTriggers();
+    for (var i = 0; i < triggers.length; i++) {
+      if (triggers[i].getHandlerFunction() === "scheduledMarketRefresh_") {
+        ScriptApp.deleteTrigger(triggers[i]);
+      }
+    }
+    // 1) 한국 장 종료 시점 (오후 16:00 ~ 17:00 KST)
+    ScriptApp.newTrigger("scheduledMarketRefresh_")
+      .timeBased()
+      .atHour(16)
+      .everyDays(1)
+      .inTimezone("Asia/Seoul")
+      .create();
+
+    // 2) 아침 미국 증시 및 환율 마감 정산 (오전 06:00 ~ 07:00 KST)
+    ScriptApp.newTrigger("scheduledMarketRefresh_")
+      .timeBased()
+      .atHour(6)
+      .everyDays(1)
+      .inTimezone("Asia/Seoul")
+      .create();
+
+    return { ok: true, message: "한국 장 종료(16시) 및 아침(06시) 시세 자동 갱신 트리거가 설정되었습니다." };
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
 }

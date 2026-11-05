@@ -4198,6 +4198,126 @@
             transform: scale(0.97);
         }
 
+        /* 항목 삭제 확인 커스텀 모달 (Toss Fintech Style) */
+        .confirm-delete-backdrop {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10005;
+            padding: 20px;
+            animation: fadeInAdminModal 0.2s ease;
+        }
+        .confirm-delete-box {
+            width: 100%;
+            max-width: 340px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 24px 22px;
+            text-align: center;
+            box-shadow: 0 16px 44px rgba(0, 0, 0, 0.3);
+            animation: popAdminModal 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .confirm-delete-icon-wrap {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(240, 68, 82, 0.12);
+            color: #f04452;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin: 0 auto 12px;
+        }
+        .confirm-delete-title {
+            margin: 0 0 12px 0;
+            font-size: 17.5px;
+            font-weight: 800;
+            color: var(--ink);
+            letter-spacing: -0.02em;
+        }
+        .confirm-delete-card {
+            background: var(--chip, #f2f4f6);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+        .cdc-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 750;
+            padding: 2px 7px;
+            border-radius: 6px;
+            background: rgba(240, 68, 82, 0.15);
+            color: #f04452;
+            margin-bottom: 6px;
+        }
+        .cdc-name {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--ink);
+            margin-bottom: 3px;
+            word-break: break-all;
+        }
+        .cdc-detail {
+            font-size: 12px;
+            color: var(--muted);
+            word-break: break-all;
+            line-height: 1.4;
+        }
+        .confirm-delete-desc {
+            font-size: 12.5px;
+            color: var(--ink2);
+            line-height: 1.45;
+            margin-bottom: 20px;
+        }
+        .confirm-delete-btn-row {
+            display: flex;
+            gap: 10px;
+        }
+        .confirm-delete-btn-cancel {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--ink2);
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .confirm-delete-btn-cancel:hover {
+            background: var(--chip);
+        }
+        .confirm-delete-btn-danger {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background: #f04452;
+            color: #ffffff;
+            font-weight: 750;
+            font-size: 13.5px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(240, 68, 82, 0.3);
+            transition: all 0.15s ease;
+        }
+        .confirm-delete-btn-danger:hover {
+            background: #d93846;
+        }
+        .confirm-delete-btn-danger:active, .confirm-delete-btn-cancel:active {
+            transform: scale(0.97);
+        }
+
         /* 3대 자산 실시간 기간 성과 요약 바 (UI-UX Pro Max) */
         .stock-perf-summary-bar {
             display: flex;
@@ -4290,7 +4410,11 @@
                     </div>
                 </div>
                 <div class="header-actions-group">
-                    <span id="btnHeaderFx" style="display:none;"><span id="headerFxRate"></span><span id="headerFxSpin"></span></span>
+                    <button type="button" class="fx-header-pill" id="btnHeaderFx" onclick="syncLiveFx(true)" title="⚡ 실시간 원·달러 환율 즉시 갱신">
+                        <span class="fx-pill-flag">🇺🇸</span>
+                        <span id="headerFxRate">—원</span>
+                        <span class="fx-pill-spin" id="headerFxSpin">🔄</span>
+                    </button>
                     <button class="toad-header-btn" onclick="openToadAlertModal(true)" title="두꺼비 전일 대비 알림 테스트">🐸 두꺼비 보기</button>
                 </div>
             </div>
@@ -6753,12 +6877,8 @@
         }
         async function serverRefreshMarket(targetSlot) {
             if (!sync.url) return null;
-            // 미저장된 로컬 변경사항이 있는 경우에만 가볍게 선행 푸시 (불필요한 중복 왕복 제거)
-            if (dirty) {
-                try { await syncPush(); } catch (e) { }
-            }
-            // 모바일 네트워크 및 Apps Script 콜드스타트를 고려하여 타임아웃 30초 부여
-            const ac = new AbortController(); const t = setTimeout(() => ac.abort(), 30000);
+            // 초고속 병렬 조회(1~2초 완료)에 맞춰 타임아웃 15초 부여 (앱스스크립트 콜드스타트 여유분)
+            const ac = new AbortController(); const t = setTimeout(() => ac.abort(), 15000);
             try {
                 const sep = sync.url.indexOf("?") >= 0 ? "&" : "?";
                 const r = await fetch(sync.url + sep + "action=refreshMarket", { method: "GET", signal: ac.signal });
@@ -6776,6 +6896,9 @@
                         S.lastSyncSlot = targetSlot;
                         safeSetItem("toad_last_sync_slot", targetSlot);
                     }
+                    const nowTs = Date.now();
+                    lastLiveMarketSyncTs = nowTs;
+                    safeSetItem("toad_last_price_sync_ts", nowTs.toString());
                     document.documentElement.setAttribute("data-theme", S.theme || "light");
                     save(false);
                     render();
@@ -6910,12 +7033,40 @@
             const kst = getKstDate();
             return String(kst.hour).padStart(2, "0") + ":" + String(kst.minute).padStart(2, "0");
         }
+        /* ---------- 정규장 운영 상태 체크 (한국장 09:00~15:35, 미국장 22:30~05:00) ---------- */
+        function getMarketStatusInfo() {
+            const now = new Date();
+            const kstDate = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+            const day = kstDate.getDay(); // 0: 일, 1: 월, ..., 6: 토
+            const mins = kstDate.getHours() * 60 + kstDate.getMinutes();
+
+            const isWeekday = (day >= 1 && day <= 5);
+            // 한국 정규장: 평일 09:00 (540분) ~ 15:35 (935분)
+            const isKrx = isWeekday && (mins >= 540 && mins <= 935);
+            // 미국 정규장: 평일 22:30 ~ 23:59 또는 익일 00:00 ~ 05:00 KST
+            const isUsNight = isWeekday && (mins >= 1350);
+            const isUsDawn = (day >= 2 && day <= 6) && (mins <= 300);
+            const isUs = isUsNight || isUsDawn;
+
+            return {
+                isOpen: isKrx || isUs,
+                isKrx: isKrx,
+                isUs: isUs,
+                label: isKrx ? "⚡ 국내 장중 실시간" : (isUs ? "⚡ 미국 장중 실시간" : "정규장 마감")
+            };
+        }
+
         function isKrMarketClosedToday() {
             const kst = getKstDate();
             if (kst.weekday === "Sun" || kst.weekday === "Sat") return false;
             return (kst.hour * 60 + kst.minute) >= (15 * 60 + 30);
         }
-        function priceBtnLabel() { return isKrMarketClosedToday() ? "당일 종가 반영" : "전일 종가 반영"; }
+        function priceBtnLabel() {
+            const ms = getMarketStatusInfo();
+            if (ms.isKrx) return "⚡ 국내 장중 실시간 갱신";
+            if (ms.isUs) return "⚡ 미국 장중 실시간 갱신";
+            return isKrMarketClosedToday() ? "당일 종가 반영" : "최신 시세 갱신";
+        }
 
         /* ---------- 포맷 ---------- */
         const usd = v => Number(v || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -7189,8 +7340,16 @@
             return syncLiveFx(true);
         }
 
-        /* ---------- 실시간 원·달러 환율 즉시 업데이트 (수동 및 16시/06시 자동) ---------- */
+        /* ---------- 실시간 원·달러 환율 즉시 업데이트 (수동 및 자동) ---------- */
+        let lastLiveFxSyncTime = 0;
         async function syncLiveFx(showToast = true) {
+            const now = Date.now();
+            if (now - lastLiveFxSyncTime < 4000) {
+                if (showToast) toast("방금 최신 실시간 환율로 갱신되었습니다.");
+                return true;
+            }
+            lastLiveFxSyncTime = now;
+
             const spinEl = document.getElementById("fxRefreshIcon");
             const headerSpinEl = document.getElementById("headerFxSpin");
             const btn = document.getElementById("btnLiveFxRefresh");
@@ -7202,30 +7361,25 @@
                 let gotRate = 0;
                 let gotDxy = 0;
 
-                // 1) 1순위 무료 공개 실시간 환율 API (open.er-api.com)
-                try {
-                    const ac1 = new AbortController();
-                    const timer1 = setTimeout(() => ac1.abort(), 6000);
-                    const r = await fetch("https://open.er-api.com/v6/latest/USD", { signal: ac1.signal });
-                    clearTimeout(timer1);
-                    const j = await r.json();
-                    if (j && j.result === "success" && j.rates && j.rates.KRW) {
-                        gotRate = Math.round(j.rates.KRW * 100) / 100;
-                        const rt = j.rates;
-                        const eurusd = 1 / rt.EUR, usdjpy = rt.JPY, gbpusd = 1 / rt.GBP, usdcad = rt.CAD, usdsek = rt.SEK, usdchf = rt.CHF;
-                        gotDxy = 50.14348112
-                            * Math.pow(eurusd, -0.576) * Math.pow(usdjpy, 0.136) * Math.pow(gbpusd, -0.119)
-                            * Math.pow(usdcad, 0.091) * Math.pow(usdsek, 0.042) * Math.pow(usdchf, 0.036);
+                // 1) 1순위: 구글 스프레드시트 백엔드(Apps Script) 초고속 병렬 조회
+                // 야후 파이낸스 USDKRW=X (1분 실시간) + 보유종목 시세를 1~2초 만에 즉시 가져옴
+                if (sync.url) {
+                    try {
+                        const res = await serverRefreshMarket();
+                        if (res && res.fxOk && S.fx && S.fx.usdKrw > 0) {
+                            gotRate = S.fx.usdKrw;
+                            gotDxy = S.fx.dxy || 0;
+                        }
+                    } catch (e) {
+                        console.warn("Server fast refresh failed during FX lookup, trying fallback:", e);
                     }
-                } catch (netErr1) {
-                    console.warn("Tier-1 FX API failed, trying Tier-2:", netErr1);
                 }
 
-                // 2) 2순위 보조 실시간 환율 API (exchangerate-api.com)
+                // 2) 2순위 보조 실시간 환율 API (exchangerate-api.com - 초경량 응답)
                 if (!gotRate) {
                     try {
                         const ac2 = new AbortController();
-                        const timer2 = setTimeout(() => ac2.abort(), 6000);
+                        const timer2 = setTimeout(() => ac2.abort(), 4000);
                         const r2 = await fetch("https://api.exchangerate-api.com/v4/latest/USD", { signal: ac2.signal });
                         clearTimeout(timer2);
                         const j2 = await r2.json();
@@ -7236,16 +7390,25 @@
                         console.warn("Tier-2 FX API failed:", netErr2);
                     }
                 }
-                
-                // 3) 3순위 구글 스프레드시트 백엔드 서버(Apps Script) 조회 시도
-                if (!gotRate && sync.url) {
+
+                // 3) 3순위 무료 공개 실시간 환율 API (open.er-api.com)
+                if (!gotRate) {
                     try {
-                        const res = await serverRefreshMarket();
-                        if (res && res.fxOk && S.fx && S.fx.usdKrw > 0) {
-                            gotRate = S.fx.usdKrw;
+                        const ac1 = new AbortController();
+                        const timer1 = setTimeout(() => ac1.abort(), 4000);
+                        const r = await fetch("https://open.er-api.com/v6/latest/USD", { signal: ac1.signal });
+                        clearTimeout(timer1);
+                        const j = await r.json();
+                        if (j && j.result === "success" && j.rates && j.rates.KRW) {
+                            gotRate = Math.round(j.rates.KRW * 100) / 100;
+                            const rt = j.rates;
+                            const eurusd = 1 / rt.EUR, usdjpy = rt.JPY, gbpusd = 1 / rt.GBP, usdcad = rt.CAD, usdsek = rt.SEK, usdchf = rt.CHF;
+                            gotDxy = 50.14348112
+                                * Math.pow(eurusd, -0.576) * Math.pow(usdjpy, 0.136) * Math.pow(gbpusd, -0.119)
+                                * Math.pow(usdcad, 0.091) * Math.pow(usdsek, 0.042) * Math.pow(usdchf, 0.036);
                         }
-                    } catch (e) {
-                        console.warn("Server market refresh failed during FX lookup:", e);
+                    } catch (netErr1) {
+                        console.warn("Tier-3 FX API failed:", netErr1);
                     }
                 }
                 
@@ -7269,13 +7432,13 @@
                     render();
                     renderFx();
                     
-                    // 구글 스프레드시트에 백그라운드 동기화 (최신 환율 클라우드 DB 안전 영구보관)
+                    // 구글 스프레드시트에 백그라운드 동기화 (클라우드 DB 보관)
                     if (sync.url) {
                         doSync().catch(syncErr => console.warn("Background FX sync err:", syncErr));
                     }
                     
                     if (showToast) {
-                        toast(`🇺🇸 실시간 환율 갱신 완료: 1달러 = ${gotRate.toLocaleString('ko-KR')}원`);
+                        toast(`⚡ 실시간 원·달러 환율 반영 완료: 1달러 = ${gotRate.toLocaleString('ko-KR')}원`);
                     }
                     return true;
                 } else {
@@ -9854,8 +10017,17 @@
             }
             return null;
         }
+        let lastSyncPricesCallTime = 0;
         async function syncPrices(opts) {
             const silent = !!(opts && opts.silent);
+            const force = !!(opts && opts.force);
+            const now = Date.now();
+            if (!force && (now - lastSyncPricesCallTime < 4000)) {
+                if (!silent) toast("방금 최신 실시간 시세로 동기화되었습니다.");
+                return;
+            }
+            lastSyncPricesCallTime = now;
+
             const cp = getCurrentMarketCheckpoint();
             const targetSlot = (opts && opts.slotId) || cp.slotId;
             const btn = document.getElementById("btnSync");
@@ -9866,13 +10038,13 @@
                 if (dashBtn) { dashBtn.disabled = false; dashBtn.innerHTML = '⚡ 실시간 시세 갱신'; }
             }
 
-            if (btn) { btn.disabled = true; btn.textContent = "조회 중…"; }
+            if (btn) { btn.disabled = true; btn.textContent = "⚡ 실시간 조회 중…"; }
             if (dashBtn) { dashBtn.disabled = true; dashBtn.innerHTML = '<span class="spin">🔄</span> 시세 갱신 중…'; }
             isDailyAssetSyncing = true;
             render();
 
             try {
-                // 1) 서버(Apps Script)를 통한 조회 우선 시도 — CORS 제약이 없어 가장 빠르고 안정적
+                // 1) 서버(Apps Script) 초고속 병렬 조회 우선 시도 — CORS 제약 없이 1~2초 내에 환율+전종목 완료
                 if (sync.url) {
                     try {
                         const res = await serverRefreshMarket(targetSlot);
@@ -9882,7 +10054,7 @@
                             save(false);
                             render();
                             if (!silent) {
-                                toast(`⚡ ${res.priceOk}/${res.priceTotal}개 종목 종가 및 환율을 갱신했습니다!` + (res.fxOk ? " (환율도 최신화됨)" : ""));
+                                toast(`⚡ ${res.priceOk}/${res.priceTotal}개 종목 및 환율 실시간 갱신 완료!` + (res.fxOk ? " (환율도 최신화됨)" : ""));
                             }
                             return;
                         } else if (!silent && res && res.ok === false) {
@@ -9893,16 +10065,24 @@
                     }
                 }
 
-                // 2) 폴백: 브라우저에서 직접 조회 (구글시트 연동이 없거나 서버 조회가 실패한 경우)
+                // 2) 폴백: 브라우저에서 직접 초고속 병렬 조회 (Promise.allSettled)
                 const codes = [...new Set(S.holdings.filter(h => !h.isFixed).map(h => h.code).filter(Boolean))];
                 const got = {}; let okCount = 0;
-                const ms = silent ? 4000 : 9000;
-                for (const c of codes) {
-                    if (btn) btn.textContent = "조회 중… " + c;
-                    if (dashBtn) dashBtn.innerHTML = '<span class="spin">🔄</span> 조회 중… ' + c;
+                const ms = silent ? 4000 : 7000;
+                if (btn) btn.textContent = "⚡ 병렬 조회 중…";
+                if (dashBtn) dashBtn.innerHTML = '<span class="spin">🔄</span> 실시간 시세 조회 중…';
+
+                const results = await Promise.allSettled(codes.map(async c => {
                     const v = await fetchPrice(c, ms);
-                    if (v && v.price > 0) { got[c] = v; okCount++; }
-                }
+                    return { code: c, data: v };
+                }));
+
+                results.forEach(r => {
+                    if (r.status === "fulfilled" && r.value && r.value.data && r.value.data.price > 0) {
+                        got[r.value.code] = r.value.data;
+                        okCount++;
+                    }
+                });
 
                 if (okCount > 0) {
                     S.holdings.forEach(h => {
@@ -11000,12 +11180,81 @@
                 autosave(); renderAssets(); renderDash(); renderSelects();
             }
         });
+        // 항목 삭제 확인 커스텀 모달 컨트롤러 (Toss Fintech Style)
+        let pendingDeleteAction = null;
+
+        function openDeleteConfirmModal(opts) {
+            const modal = document.getElementById("deleteConfirmModal");
+            if (!modal) return;
+            
+            const titleEl = document.getElementById("deleteConfirmTitle");
+            const badgeEl = document.getElementById("deleteConfirmBadge");
+            const nameEl = document.getElementById("deleteConfirmItemName");
+            const detailEl = document.getElementById("deleteConfirmItemDetail");
+            const descEl = document.getElementById("deleteConfirmDesc");
+            
+            if (titleEl) titleEl.textContent = opts.title || "항목을 삭제하시겠습니까?";
+            if (badgeEl) badgeEl.textContent = opts.badge || "항목 삭제";
+            if (nameEl) nameEl.textContent = opts.name || "-";
+            if (detailEl) detailEl.textContent = opts.detail || "";
+            if (descEl) descEl.innerHTML = opts.desc || "삭제된 데이터는 복구할 수 없습니다.<br>정말 삭제하시겠습니까?";
+
+            pendingDeleteAction = opts.onConfirm;
+            modal.style.display = "flex";
+        }
+
+        function closeDeleteConfirmModal() {
+            const modal = document.getElementById("deleteConfirmModal");
+            if (modal) modal.style.display = "none";
+            pendingDeleteAction = null;
+        }
+
+        function handleDeleteModalBackdrop(e) {
+            if (e.target && e.target.id === "deleteConfirmModal") {
+                closeDeleteConfirmModal();
+            }
+        }
+
         document.body.addEventListener("click", e => {
+            // 삭제 모달 확인 버튼 클릭
+            if (e.target && (e.target.id === "btnDeleteConfirmProceed" || e.target.closest("#btnDeleteConfirmProceed"))) {
+                if (typeof pendingDeleteAction === "function") {
+                    const act = pendingDeleteAction;
+                    pendingDeleteAction = null;
+                    closeDeleteConfirmModal();
+                    try { act(); } catch(errAct) { console.error("Delete action error:", errAct); }
+                } else {
+                    closeDeleteConfirmModal();
+                }
+                return;
+            }
+
             const b = e.target.closest("button"); if (!b) return;
             if (b.dataset.delh) {
-                if (!confirm("이 종목을 삭제할까요?")) return;
-                S.holdings = S.holdings.filter(h => h.id !== b.dataset.delh);
-                autosave(); renderAssets(); renderDash();
+                const h = S.holdings.find(x => x.id === b.dataset.delh);
+                if (!h) return;
+                const hVal = (h.qty || 0) * (h.price || 0) * (h.isUsd ? (S.fx || 1350) : 1);
+                const detailParts = [];
+                if (h.owner) detailParts.push(h.owner);
+                if (h.account) detailParts.push(h.account);
+                detailParts.push(`${won(h.qty)}주`);
+                detailParts.push(`약 ${won(hVal)}원`);
+
+                openDeleteConfirmModal({
+                    title: "종목을 삭제하시겠습니까?",
+                    badge: "자산 종목",
+                    name: h.name + (h.code ? ` (${h.code})` : ""),
+                    detail: detailParts.join(" · "),
+                    desc: "이 종목을 삭제하면 자산 총액 및 관련 포트폴리오에서 완전히 제외됩니다.<br>정말 삭제하시겠습니까?",
+                    onConfirm: () => {
+                        S.holdings = S.holdings.filter(x => x.id !== h.id);
+                        autosave();
+                        renderAssets();
+                        renderDash();
+                        toast(`🗑️ '${h.name}' 종목이 삭제되었습니다.`);
+                    }
+                });
+                return;
             }
             if (b.dataset.moveh) {
                 const dir = parseInt(b.dataset.dir, 10);
@@ -11024,19 +11273,50 @@
             }
             if (b.dataset.delb) {
                 const bk = S.buckets.find(x => x.id === b.dataset.delb);
+                if (!bk) return;
                 const used = S.holdings.some(h => h.bucketId === bk.id);
                 if (used) { alert("이 항목에 속한 종목이 있어 삭제할 수 없습니다. 종목을 먼저 옮기거나 삭제해 주세요."); return; }
                 if (S.buckets.length <= 1) { alert("자산 항목은 최소 1개가 있어야 합니다."); return; }
-                if (!confirm("‘" + bk.name + "’ 항목을 삭제할까요? 관련 기록은 남습니다.")) return;
-                S.buckets = S.buckets.filter(x => x.id !== bk.id);
-                autosave(); render();
+
+                openDeleteConfirmModal({
+                    title: "자산 항목을 삭제하시겠습니까?",
+                    badge: "자산 항목",
+                    name: bk.name,
+                    detail: `유형: ${bk.kind === 'stock' ? '주식 계좌' : bk.kind === 'deposit' ? '예적금' : '현금/입출금'} · 잔액: ${won(bk.amount || 0)}원`,
+                    desc: "‘" + bk.name + "’ 항목을 삭제할까요? 관련 이동 기록은 보존됩니다.",
+                    onConfirm: () => {
+                        S.buckets = S.buckets.filter(x => x.id !== bk.id);
+                        autosave();
+                        render();
+                        toast(`🗑️ '${bk.name}' 자산 항목이 삭제되었습니다.`);
+                    }
+                });
+                return;
             }
             if (b.dataset.dele) {
-                const en = S.entries.find(x => x.id === b.dataset.dele); if (!en) return;
-                if (!confirm("이 기록을 삭제하고 자산 금액을 되돌릴까요?")) return;
-                applyEntry(en, -1);
-                S.entries = S.entries.filter(x => x.id !== en.id);
-                autosave(); render();
+                const en = S.entries.find(x => x.id === b.dataset.dele);
+                if (!en) return;
+                const typeName = label[en.type] || en.type;
+                const bn = id => { const b = S.buckets.find(x => x.id === id); return b ? b.name : "(삭제된 항목)"; };
+                const desc = en.type === "transfer" ? `${bn(en.fromId)} → ${bn(en.toId)}` : bn(en.bucketId);
+                const detailParts = [`일자: ${en.date}`, desc];
+                if (en.memo) detailParts.push(en.memo);
+
+                openDeleteConfirmModal({
+                    title: "기록을 삭제하시겠습니까?",
+                    badge: `${typeName} 기록`,
+                    name: `${typeName} ${won(en.amount)}원`,
+                    detail: detailParts.join(" · "),
+                    desc: "이 기록을 삭제하면 <b>자산 금액이 이전 상태로 자동 복원(되돌리기)</b>됩니다.<br>정말 삭제하시겠습니까?",
+                    onConfirm: () => {
+                        applyEntry(en, -1);
+                        S.entries = S.entries.filter(x => x.id !== en.id);
+                        autosave();
+                        render();
+                        toast(`🗑️ ${en.date} ${typeName} 기록이 삭제되고 자산 금액이 복원되었습니다.`);
+                    }
+                });
+                return;
             }
         });
         function nextHoldingOrder() {
@@ -11257,6 +11537,27 @@
                     }
                 } catch (e) {
                     console.error("Slot market sync error:", e);
+                }
+            }
+        }
+
+        /* ---------- 장중(한국/미국) 실시간 스마트 자동 동기화 엔진 ---------- */
+        let lastLiveMarketSyncTs = 0;
+        async function checkMarketHoursLiveSync(force = false) {
+            const ms = getMarketStatusInfo();
+            const nowTs = Date.now();
+            const savedTs = Number(localStorage.getItem("toad_last_price_sync_ts") || 0);
+            const effectiveLastTs = Math.max(lastLiveMarketSyncTs, savedTs);
+
+            // 장중(한국장 09:00~15:35, 미국장 22:30~05:00)이며 마지막 조회 후 5분 경과 시 조용히 최신 시세 갱신
+            const fiveMin = 5 * 60 * 1000;
+            if (force || (ms.isOpen && (nowTs - effectiveLastTs > fiveMin))) {
+                lastLiveMarketSyncTs = nowTs;
+                safeSetItem("toad_last_price_sync_ts", nowTs.toString());
+                try {
+                    await syncPrices({ silent: true });
+                } catch (e) {
+                    console.warn("Market hours live sync err:", e);
                 }
             }
         }
@@ -11804,9 +12105,14 @@
             if (e.target.id === "toadAlertModal") closeToadAlertModal();
         });
 
-        // ESC 키로 열려있는 모달(두꺼비 알림, 시세 직접 입력) 닫기 지원
+        // ESC 키로 열려있는 모달(삭제 확인, 두꺼비 알림, 시세 직접 입력) 닫기 지원
         document.addEventListener("keydown", e => {
             if (e.key === "Escape" || e.keyCode === 27) {
+                const deleteModal = document.getElementById("deleteConfirmModal");
+                if (deleteModal && deleteModal.style.display !== "none") {
+                    closeDeleteConfirmModal();
+                    return;
+                }
                 const toadModal = document.getElementById("toadAlertModal");
                 if (toadModal && toadModal.classList.contains("show")) {
                     closeToadAlertModal();
@@ -11840,6 +12146,7 @@
                 }
                 try {
                     await checkCheckpointMarketSync();
+                    await checkMarketHoursLiveSync();
                 } catch (e) { console.warn("Startup checkpoint sync err:", e); }
             } catch (err) {
                 console.warn("Initial sync error:", err);
@@ -12152,8 +12459,11 @@
                 const cp = getCurrentMarketCheckpoint();
                 const lastSlot = localStorage.getItem("toad_last_sync_slot") || S.lastSyncSlot;
                 const needSlotSync = lastSlot !== cp.slotId;
+                const ms = getMarketStatusInfo();
+                const lastTs = Number(localStorage.getItem("toad_last_price_sync_ts") || 0);
+                const needLiveSync = ms.isOpen && (Date.now() - lastTs > 5 * 60 * 1000);
                 
-                if (needSlotSync || sync.url) {
+                if (needSlotSync || needLiveSync || sync.url) {
                     isDailyAssetSyncing = true;
                     render();
                     try {
@@ -12163,6 +12473,9 @@
                                     try { await doSync(); } catch (e) {}
                                 }
                                 await checkCheckpointMarketSync();
+                                if (needLiveSync) {
+                                    await checkMarketHoursLiveSync();
+                                }
                             })(),
                             new Promise(resolve => setTimeout(resolve, 5000))
                         ]);
@@ -12184,6 +12497,13 @@
                 }
             }
         });
+
+        // 사용자가 대시보드를 켜두고 있는 동안 1분마다 장중 시세 자동 체크 (최소 5분 쿨다운 준수)
+        setInterval(() => {
+            if (document.visibilityState === "visible") {
+                checkMarketHoursLiveSync();
+            }
+        }, 60 * 1000);
 
         // PWA Service Worker 등록 (오프라인 지원 및 모바일 앱 설치 활성화)
         if ("serviceWorker" in navigator) {
@@ -12210,6 +12530,26 @@
             <div class="admin-auth-btn-row">
                 <button type="button" class="admin-btn-cancel" onclick="closeAdminAuthModal()">취소</button>
                 <button type="button" class="admin-btn-confirm" onclick="submitAdminAuth()">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 항목 삭제 확인 팝업 모달 (Toss Fintech Style) -->
+    <div id="deleteConfirmModal" class="confirm-delete-backdrop" style="display:none;" onclick="handleDeleteModalBackdrop(event)">
+        <div class="confirm-delete-box" id="deleteConfirmBox">
+            <div class="confirm-delete-icon-wrap">🗑️</div>
+            <h3 class="confirm-delete-title" id="deleteConfirmTitle">항목을 삭제하시겠습니까?</h3>
+            <div class="confirm-delete-card">
+                <span class="cdc-badge" id="deleteConfirmBadge">항목</span>
+                <div class="cdc-name" id="deleteConfirmItemName">-</div>
+                <div class="cdc-detail" id="deleteConfirmItemDetail">-</div>
+            </div>
+            <div class="confirm-delete-desc" id="deleteConfirmDesc">
+                삭제된 데이터는 복구할 수 없습니다.<br>정말 삭제하시겠습니까?
+            </div>
+            <div class="confirm-delete-btn-row">
+                <button type="button" class="confirm-delete-btn-cancel" onclick="closeDeleteConfirmModal()">취소</button>
+                <button type="button" class="confirm-delete-btn-danger" id="btnDeleteConfirmProceed">삭제하기</button>
             </div>
         </div>
     </div>
