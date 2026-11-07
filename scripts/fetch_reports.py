@@ -256,6 +256,7 @@ def main():
     nasdaq_quote = fetch_yahoo_quote('^NDX')
     tnx_quote = fetch_yahoo_quote('^TNX')
     wti_quote = fetch_yahoo_quote('CL=F')
+    vix_quote = fetch_yahoo_quote('^VIX')
 
     # 기본값 보정 (Fallback)
     current_fx = fx_quote['price'] if fx_quote and fx_quote.get('price') else 1348.99
@@ -281,6 +282,10 @@ def main():
     current_wti = wti_quote['price'] if wti_quote and wti_quote.get('price') else 70.38
     wti_diff = wti_quote['diff'] if wti_quote and wti_quote.get('diff') is not None else -0.68
     wti_diff_pct = wti_quote['diffPct'] if wti_quote and wti_quote.get('diffPct') is not None else -0.96
+
+    current_vix = vix_quote['price'] if vix_quote and vix_quote.get('price') else 16.5
+    vix_diff = vix_quote['diff'] if vix_quote and vix_quote.get('diff') is not None else -0.35
+    vix_diff_pct = vix_quote['diffPct'] if vix_quote and vix_quote.get('diffPct') is not None else -2.08
 
     # 2. 주요 기관 리포트 수집
     raw_reports = fetch_hankyung_reports()
@@ -530,6 +535,7 @@ def main():
     nasdaq_history = nasdaq_quote.get('history', []) if nasdaq_quote else []
     tnx_history = tnx_quote.get('history', []) if tnx_quote else []
     wti_history = wti_quote.get('history', []) if wti_quote else []
+    vix_history = vix_quote.get('history', []) if vix_quote else []
 
     # 한국 국채 10년물 금리 히스토리 생성 (날짜 및 일봉 시계열은 tnx_history 또는 fx_history 기반 동조)
     base_pts = tnx_history if tnx_history else fx_history
@@ -641,13 +647,24 @@ def main():
                 'diffPct': wti_diff_pct,
                 'desc': "💡 글로벌 원유 대표 가격 지표(WTI). 유가 하락은 글로벌 인플레이션 진정과 금리 인하에 우호적인 거시 환경을 조성합니다.",
                 'history': wti_history
+            },
+            'vix': {
+                'name': 'CBOE 변동성 지수 (VIX)',
+                'symbol': '^VIX',
+                'price': current_vix,
+                'diff': vix_diff,
+                'diffPct': vix_diff_pct,
+                'status': "시장 평온" if current_vix < 20 else ("변동성 경계" if current_vix < 30 else "극단적 공포(매수찬스)"),
+                'desc': "💡 월가의 '공포 지수(VIX)'. 20 미만은 안정권, 30 이상은 시장 패닉 구간입니다. 공포 지수가 급등할 때는 우량 배당주를 가장 싼 가격에 모아갈 수 있는 역사적 분할 매수 기회입니다.",
+                'history': vix_history
             }
         },
         'portfolioImpact': {
             'tigerHoldingQty': tiger_qty,
             'tigerEstAnnualDividend': total_tiger_div,
             'tigerEstMonthlyDividend': round(total_tiger_div / 12),
-            'fxSensitivityComment': "원·달러 환율 10원 변동 시 부부 외화자산(미국 단기국채 983만, SOXL 등) 평가액 약 ±65만원 변동"
+            'fxSensitivityComment': "원·달러 환율 10원 변동 시 부부 외화자산(미국 단기국채 983만, SOXL 등) 평가액 약 ±65만원 변동",
+            'vixComment': f"VIX 변동성 {current_vix:.1f}pt — {'🟢 시장 평온 (계획대로 분할 적립)' if current_vix < 20 else ('🟡 변동성 확대 (분할 매수 템포 조절)' if current_vix < 30 else '🔥 극단적 공포 (우량자산 바겐세일 매수찬스)')}"
         },
         'toadComment': {
             'icon': toad_icon,
