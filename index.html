@@ -2706,7 +2706,356 @@
             }
         }
 
-        /* 6대 거시지표 라이브 카드 그리드 */
+        /* ===== 다중 지표 겹쳐보기 오버레이 아코디언 차트 스타일 ===== */
+        .macro-overlay-accordion {
+            margin-bottom: 20px;
+            background: var(--surface);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all .25s ease;
+            box-shadow: var(--card-shadow);
+        }
+        .macro-overlay-accordion:hover {
+            border-color: rgba(49, 130, 246, 0.45);
+        }
+        .moa-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            cursor: pointer;
+            user-select: none;
+            background: linear-gradient(135deg, rgba(49, 130, 246, 0.06) 0%, rgba(168, 85, 247, 0.05) 100%);
+            border-bottom: 1px solid transparent;
+            transition: background .2s ease;
+        }
+        .moa-header:hover {
+            background: linear-gradient(135deg, rgba(49, 130, 246, 0.1) 0%, rgba(168, 85, 247, 0.08) 100%);
+        }
+        .moa-header.open {
+            border-bottom: 1px solid var(--border);
+        }
+        .moa-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .moa-badge {
+            font-size: 11px;
+            font-weight: 750;
+            color: #3182f6;
+            background: rgba(49, 130, 246, 0.15);
+            padding: 4px 9px;
+            border-radius: 8px;
+        }
+        .moa-title {
+            font-size: 16px;
+            font-weight: 750;
+            margin: 0;
+            color: var(--ink);
+        }
+        .moa-tag {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            background: var(--surface2);
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+        .moa-chevron {
+            font-size: 13px;
+            color: var(--muted);
+            display: inline-block;
+            transition: transform .25s ease;
+        }
+        .moa-chevron.open {
+            transform: rotate(180deg);
+        }
+        .moa-body {
+            padding: 18px 20px;
+        }
+        .moa-desc {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        .moa-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--ink2);
+            margin-bottom: 8px;
+        }
+        .moa-sublabel {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--muted);
+            margin-bottom: 6px;
+            display: block;
+        }
+        .moa-chips-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+        .moa-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--ink2);
+            cursor: pointer;
+            transition: all .15s ease;
+            user-select: none;
+        }
+        .moa-chip:hover {
+            border-color: rgba(49, 130, 246, 0.4);
+            color: var(--ink);
+        }
+        .moa-chip.active {
+            border-color: var(--chip-color, #3182f6);
+            background: rgba(49, 130, 246, 0.12);
+            color: var(--ink);
+            font-weight: 700;
+        }
+        .moa-chip-color-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .moa-controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .moa-period-section {
+            flex: 0 0 auto;
+        }
+        .moa-custom-date-section {
+            flex: 0 1 auto;
+        }
+        .moa-date-inputs {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .moa-date-inputs input[type="date"] {
+            padding: 5px 8px;
+            font-size: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--ink);
+        }
+        .moa-axis-controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .moa-mode-switch {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .moa-mode-btns {
+            display: flex;
+            gap: 4px;
+            background: var(--surface2);
+            padding: 3px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        .moa-mode-btn {
+            border: none;
+            background: transparent;
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 5px 11px;
+            border-radius: 7px;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all .15s ease;
+        }
+        .moa-mode-btn.active {
+            background: var(--surface);
+            color: var(--ink);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .moa-custom-axis-toggle {
+            display: flex;
+            gap: 6px;
+        }
+        .moa-custom-axis-panel {
+            background: var(--surface2);
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border);
+        }
+        .moa-axis-panel-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--ink2);
+            margin-bottom: 10px;
+        }
+        .moa-axis-panel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 10px;
+        }
+        .moa-axis-item {
+            background: var(--surface);
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .moa-axis-item-title {
+            font-size: 11.5px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+            color: var(--ink);
+        }
+        .moa-axis-inputs {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .moa-axis-inputs input {
+            width: 70px;
+            padding: 4px 6px;
+            font-size: 11.5px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--surface2);
+            color: var(--ink);
+            text-align: right;
+        }
+        .moa-chart-wrapper {
+            position: relative;
+            width: 100%;
+            height: 290px;
+            background: rgba(0, 0, 0, 0.14);
+            border-radius: 16px;
+            padding: 16px 14px 28px 14px;
+            box-sizing: border-box;
+            cursor: crosshair;
+            touch-action: none;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .moa-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+            display: block;
+        }
+        .moa-xaxis-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 8px;
+            padding: 0 4px;
+        }
+        .moa-tooltip {
+            position: absolute;
+            z-index: 50;
+            background: rgba(22, 26, 34, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 10px 14px;
+            pointer-events: none;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+            font-size: 12px;
+            min-width: 180px;
+            max-width: 320px;
+        }
+        .moa-tt-date {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--muted);
+            margin-bottom: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 4px;
+        }
+        .moa-tt-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 2.5px 0;
+            font-variant-numeric: tabular-nums;
+        }
+        .moa-tt-name {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--ink2);
+            font-size: 11.5px;
+        }
+        .moa-tt-val {
+            font-weight: 700;
+            color: var(--ink);
+        }
+        .moa-legend-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+        }
+        .moa-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            background: var(--surface2);
+            padding: 5px 11px;
+            border-radius: 9px;
+            border: 1px solid var(--border);
+        }
+        .moa-legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .moa-legend-name {
+            color: var(--ink2);
+            font-weight: 600;
+        }
+        .moa-legend-val {
+            font-weight: 750;
+            color: var(--ink);
+        }
+        .moa-legend-diff {
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* 7대 거시지표 라이브 카드 그리드 */
         .macro-cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
@@ -5394,10 +5743,20 @@
                     <div class="field" style="max-width:150px"><label>날짜</label><input type="date" id="tf-date"></div>
                     <div class="field"><label>보낼 항목</label><select id="tf-from"></select></div>
                     <div class="field"><label>받을 항목</label><select id="tf-to"></select></div>
-                    <div class="field" style="max-width:170px"><label>금액 (원)</label><input class="num" id="tf-amt">
+                    <div class="field" id="tf-amtField" style="max-width:170px"><label id="tf-amtLabel">금액 (원)</label><input class="num" id="tf-amt">
                     </div>
                     <div class="field"><label>메모</label><input id="tf-memo" placeholder="적금 만기 등"></div>
                     <button class="primary" id="btnAddTransfer">이동</button>
+                </div>
+                <div class="rowflex" id="tf-stockWrap" style="display:none;margin-top:8px">
+                    <div class="field"><label id="tf-stockSelLabel">종목</label><select id="tf-stockSel"></select></div>
+                    <div class="field" id="tf-newNameWrap" style="display:none"><label>종목명</label><input id="tf-newName" placeholder="새 종목명"></div>
+                    <div class="field" id="tf-newCodeWrap" style="display:none;max-width:110px"><label>코드(선택)</label><input id="tf-newCode" placeholder="458730"></div>
+                    <div class="field" style="max-width:110px"><label id="tf-qtyLabel">주수</label><input class="num" id="tf-qty" placeholder="10"></div>
+                    <div class="field" style="max-width:130px"><label id="tf-execPriceLabel">체결단가(원)</label><input class="num" id="tf-execPrice" placeholder="15,000"></div>
+                </div>
+                <div class="hint" id="tf-stockHint" style="display:none;margin-top:6px;color:var(--brand);">
+                    💡 주식 계좌로 자금 이동 시: 주수 × 체결단가로 금액이 자동 계산되며, 기존 보유 종목이면 평단가가 수량 대비 가중평균으로 자동 갱신됩니다.
                 </div>
                 <div class="hint">적금이 만기되면 여기서 <b>적금 → 예금(또는 원하는 항목)</b>으로 직접 옮겨 주세요. 총자산은 변하지 않고 구성만 바뀝니다.<br>
                     이자가 붙어 원금보다 늘었다면, 늘어난 이자만 위의 <b>목돈 유입</b>으로 따로 기록하시면 됩니다.</div>
@@ -5511,13 +5870,112 @@
                 </div>
             </div>
 
+            <!-- 지표 겹쳐보기 (오버레이 비교 차트 - 접이식 Accordion) -->
+            <div class="macro-overlay-accordion" id="macroOverlayAccordion">
+                <div class="moa-header" id="moaHeader" onclick="toggleMacroOverlayAccordion()">
+                    <div class="moa-title-row">
+                        <span class="moa-badge">📈 차트 겹쳐보기</span>
+                        <h2 class="moa-title">다중 지표 오버레이 비교 차트</h2>
+                        <span class="moa-tag">접기 / 펼치기</span>
+                    </div>
+                    <div class="moa-header-right">
+                        <span class="moa-chevron" id="moaChevron">▼</span>
+                    </div>
+                </div>
+
+                <div class="moa-body" id="moaBody" style="display:none;">
+                    <div class="moa-desc">비교하고 싶은 여러 지표를 선택해 동일한 가로 시간축에서 겹쳐 보며, <b>수익률(%) 상대비교</b> 또는 <b>정규화 사이클</b>을 분석할 수 있습니다.</div>
+
+                    <!-- 1) 겹칠 항목 선택 칩 (복수 선택) -->
+                    <div class="moa-label">비교할 지표 선택 (복수 선택 가능)</div>
+                    <div class="moa-chips-grid" id="moaChipsContainer"></div>
+
+                    <!-- 2) 가로축 동일 시간 & 기간 선택 -->
+                    <div class="moa-controls-row">
+                        <div class="moa-period-section">
+                            <span class="moa-sublabel">기간 선택 (가로축 동일 시간 기준)</span>
+                            <div class="macro-sync-tabs" id="moaPeriodTabs">
+                                <button type="button" class="macro-sync-tab-btn" data-period="1w" onclick="setMoaPeriod('1w')">1주</button>
+                                <button type="button" class="macro-sync-tab-btn active" data-period="1m" onclick="setMoaPeriod('1m')">1개월</button>
+                                <button type="button" class="macro-sync-tab-btn" data-period="3m" onclick="setMoaPeriod('3m')">3개월</button>
+                                <button type="button" class="macro-sync-tab-btn" data-period="6m" onclick="setMoaPeriod('6m')">6개월</button>
+                                <button type="button" class="macro-sync-tab-btn" data-period="1y" onclick="setMoaPeriod('1y')">1년</button>
+                            </div>
+                        </div>
+
+                        <div class="moa-custom-date-section">
+                            <span class="moa-sublabel">직접 기간 설정 (달력)</span>
+                            <div class="moa-date-inputs">
+                                <input type="date" id="moaStartDate" onchange="applyMoaCustomDate()">
+                                <span>~</span>
+                                <input type="date" id="moaEndDate" onchange="applyMoaCustomDate()">
+                                <button type="button" class="sm primary" onclick="applyMoaCustomDate()">적용</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3) 세로축 모드 & 수동 Min/Max 설정 -->
+                    <div class="moa-axis-controls-row">
+                        <div class="moa-mode-switch">
+                            <span class="moa-sublabel">세로축 정렬 기준</span>
+                            <div class="moa-mode-btns">
+                                <button type="button" class="moa-mode-btn active" id="moaModeReturn" onclick="setMoaYMode('return')">
+                                    📈 수익률/변동률 (%) 정규화
+                                </button>
+                                <button type="button" class="moa-mode-btn" id="moaModeMinMax" onclick="setMoaYMode('minmax')">
+                                    📊 상대 진폭 (0 ~ 100%) 정규화
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="moa-custom-axis-toggle">
+                            <button type="button" class="sm outline" onclick="toggleMoaAxisSettings()">
+                                ⚙️ 각 항목 세로축(Min/Max) 세부 설정
+                            </button>
+                            <button type="button" class="sm" onclick="resetMoaCustomAxes()">
+                                🔄 자동 맞춤 (Auto)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 세로축 항목별 사용자 설정 패널 (접이식) -->
+                    <div class="moa-custom-axis-panel" id="moaCustomAxisPanel" style="display:none;">
+                        <div class="moa-axis-panel-title">각 항목 세로축 상/하한값 직접 지정 (비워두면 기간 내 실제 최저/최고값 자동 정렬)</div>
+                        <div class="moa-axis-panel-grid" id="moaAxisPanelGrid"></div>
+                    </div>
+
+                    <!-- 4) 와이드 SVG 겹쳐보기 차트 캔버스 & 툴팁 -->
+                    <div class="moa-chart-wrapper" id="moaChartWrapper" onmousemove="handleMoaChartScrub(event)" onmouseleave="resetMoaChartScrub()" ontouchmove="handleMoaChartTouch(event)" ontouchend="resetMoaChartScrub()">
+                        <div class="moa-tooltip" id="moaTooltip" style="display:none;"></div>
+                        <svg class="moa-svg" id="moaChartSvg" viewBox="0 0 800 280" preserveAspectRatio="none">
+                            <defs id="moaDefs"></defs>
+                            <!-- 가로 가이드 라인 (Grid Lines) -->
+                            <g id="moaGridLines"></g>
+                            <!-- 각 항목별 꺾은선 패스 (Lines) -->
+                            <g id="moaLinesGroup"></g>
+                            <!-- 마우스 스크러버 크로스헤어 & 포인트 닷 -->
+                            <line id="moaCrosshair" x1="0" y1="0" x2="0" y2="280" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-dasharray="3,3" opacity="0"/>
+                            <g id="moaDotsGroup"></g>
+                        </svg>
+                        <div class="moa-xaxis-row">
+                            <span id="moaStartDateLabel">—</span>
+                            <span id="moaMidDateLabel">—</span>
+                            <span id="moaEndDateLabel">—</span>
+                        </div>
+                    </div>
+
+                    <!-- 5) 실시간 지표별 범례 (Legend) 및 현재값/변동률 요약 바 -->
+                    <div class="moa-legend-bar" id="moaLegendBar"></div>
+                </div>
+            </div>
+
             <!-- 지표 공통 기간 동기화 바 (1주, 1개월, 3개월, 6개월, 1년 원클릭 일괄 전환) -->
             <div class="macro-sync-period-bar">
                 <div class="msp-left">
                     <span class="msp-icon">⚡</span>
                     <div>
-                        <div class="msp-title">6대 핵심 지표 공통 기간</div>
-                        <div class="msp-desc">하나만 누르면 6개 전 종목 차트가 같은 기간으로 바뀝니다</div>
+                        <div class="msp-title">7대 핵심 지표 공통 기간</div>
+                        <div class="msp-desc">하나만 누르면 7개 전 종목 차트가 같은 기간으로 바뀝니다</div>
                     </div>
                 </div>
                 <div class="macro-sync-tabs" id="macroCommonSyncTabs">
@@ -5934,6 +6392,73 @@
                         </div>
                         <div style="margin-top:8px;font-size:11.5px;color:var(--ink2);" id="macroKr10yDesc">
                             💡 한국은행 기준금리 인하(3.25%)와 세계국채지수(WGBI) 편입 효과로 국고채 금리가 3.0%대에 안착했습니다. 2028년 5월 주택담보대출(혼합형 5년 고정) 금리 산정의 직접 기준이 되어 부부의 미래 잔금대출 이자 부담을 실질적으로 줄여줍니다.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카드 7: WTI 국제 유가 (Crude Oil) -->
+                <div class="macro-card">
+                    <div class="macro-card-header">
+                        <div class="macro-card-title-group">
+                            <span class="macro-card-icon">🛢️</span>
+                            <div>
+                                <div class="macro-card-title">WTI 국제 유가 (Crude Oil)</div>
+                                <div class="macro-card-sub">NYMEX CL · 글로벌 원유 선물</div>
+                            </div>
+                        </div>
+                        <span class="macro-diff-pill down" id="macroWtiDiffPill">-0.68 (-0.96%)</span>
+                    </div>
+
+                    <div class="macro-price-row">
+                        <span class="macro-price-big" id="macroWtiPrice">90.34</span>
+                        <span style="font-size:15px;color:var(--muted);font-weight:600;">$</span>
+                    </div>
+
+                    <!-- 주식 꺾은선 차트 영역 -->
+                    <div class="macro-chart-section" id="chartSection_wti">
+                        <div class="macro-chart-top-bar">
+                            <span class="macro-chart-legend" id="chartLegend_wti">📈 1개월 추이</span>
+                            <div class="macro-chart-range-group">
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('wti', '1w', this)">1주</button>
+                                <button type="button" class="macro-chart-range-btn active" onclick="changeChartRange('wti', '1m', this)">1개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('wti', '3m', this)">3개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('wti', '6m', this)">6개월</button>
+                                <button type="button" class="macro-chart-range-btn" onclick="changeChartRange('wti', '1y', this)">1년</button>
+                            </div>
+                        </div>
+                        <div class="macro-chart-svg-wrap" id="chartWrap_wti" onmousemove="handleChartScrub(event, 'wti')" onmouseleave="resetChartScrub('wti')" ontouchmove="handleChartTouchScrub(event, 'wti')" ontouchend="resetChartScrub('wti')">
+                            <div class="macro-chart-tooltip" id="chartTip_wti"></div>
+                            <svg class="macro-chart-svg" id="chartSvg_wti" viewBox="0 0 300 70" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="chartGrad_wti" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#eab308" stop-opacity="0.25" id="gradStop0_wti"/>
+                                        <stop offset="100%" stop-color="#eab308" stop-opacity="0.0" id="gradStop1_wti"/>
+                                    </linearGradient>
+                                </defs>
+                                <path class="macro-chart-area" id="chartArea_wti" fill="url(#chartGrad_wti)" d=""/>
+                                <path class="macro-chart-line" id="chartLine_wti" stroke="#eab308" d=""/>
+                                <line class="macro-chart-crosshair" id="chartCross_wti" x1="0" y1="0" x2="0" y2="70" stroke="var(--ink)" stroke-width="1.2" opacity="0"/>
+                                <circle class="macro-chart-dot" id="chartDot_wti" cx="0" cy="0" r="4.5" fill="#eab308" stroke="#fff" stroke-width="2" opacity="0"/>
+                            </svg>
+                        </div>
+                        <div class="macro-chart-axis">
+                            <span id="chartMinDate_wti">09.30</span>
+                            <span id="chartMinMax_wti" style="font-size:9.5px;opacity:0.75;">-</span>
+                            <span id="chartMaxDate_wti">10.31</span>
+                        </div>
+                    </div>
+
+                    <div class="macro-details-box">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                            <span>인플레이션 영향</span>
+                            <b style="color:var(--gain);">원유 가격 안정화</b>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                            <span>연계 지표</span>
+                            <b style="color:var(--toss-blue,#3182f6);">미국 CPI · 물가 압력 완화</b>
+                        </div>
+                        <div style="margin-top:8px;font-size:11.5px;color:var(--ink2);" id="macroWtiDesc">
+                            💡 WTI 국제 유가는 글로벌 제조·물류 및 물가 지표(CPI)의 핵심 선행 변수입니다. 유가 안정세는 글로벌 인플레이션을 진정시키고 각국 중앙은행의 기준금리 인하 기조를 뒷받침하는 우호적 거시 환경을 조성합니다.
                         </div>
                     </div>
                 </div>
@@ -8882,6 +9407,7 @@
             const dep = S.buckets.find(b => b.name.indexOf("예금") >= 0);
             if (dep && !document.getElementById("tf-to").dataset.touched) document.getElementById("tf-to").value = dep.id;
             updateSvStockUI();
+            updateTfStockUI();
         }
 
         const SV_NEW = "__new__";
@@ -8925,6 +9451,111 @@
             const qty = parseNum(document.getElementById("sv-qty").value);
             const execPrice = parseNum(document.getElementById("sv-execPrice").value);
             document.getElementById("sv-amt").value = (qty > 0 && execPrice > 0) ? won(qty * execPrice) : "";
+        }
+
+        function updateTfStockUI() {
+            const fromId = document.getElementById("tf-from").value;
+            const toId = document.getElementById("tf-to").value;
+            const f = S.buckets.find(x => x.id === fromId);
+            const t = S.buckets.find(x => x.id === toId);
+            const wrap = document.getElementById("tf-stockWrap");
+            const amtInput = document.getElementById("tf-amt");
+            const amtLabel = document.getElementById("tf-amtLabel");
+            const hint = document.getElementById("tf-stockHint");
+            if (!wrap || !amtInput || !amtLabel || !hint) return;
+
+            let stockBucketId = null;
+            let mode = null; // 'buy' or 'sell'
+
+            if (t && t.kind === "stock") {
+                stockBucketId = t.id;
+                mode = "buy";
+            } else if (f && f.kind === "stock") {
+                stockBucketId = f.id;
+                mode = "sell";
+            }
+
+            if (!stockBucketId) {
+                wrap.style.display = "none";
+                hint.style.display = "none";
+                amtInput.readOnly = false;
+                amtLabel.textContent = "금액 (원)";
+                return;
+            }
+
+            wrap.style.display = "flex";
+            amtInput.readOnly = true;
+            amtLabel.textContent = "금액 (원, 자동계산)";
+            hint.style.display = "block";
+
+            if (mode === "buy") {
+                hint.innerHTML = '💡 <b>주식 매수 (자금 투입)</b>: 주수 × 체결단가로 이동 금액이 계산되며, 기존 보유 종목이면 <b>평단가가 수량 대비 가중평균으로 자동 수정</b>되고 수량이 합쳐집니다.';
+                document.getElementById("tf-stockSelLabel").textContent = "매수 종목";
+                document.getElementById("tf-qtyLabel").textContent = "매수 주수";
+                document.getElementById("tf-execPriceLabel").textContent = "체결단가(원)";
+            } else {
+                hint.innerHTML = '💡 <b>주식 매도 (현금화)</b>: 주수 × 체결단가로 매도 대금이 계산되어 받을 항목으로 이동하며, 주식 보유 수량이 차감됩니다.';
+                document.getElementById("tf-stockSelLabel").textContent = "매도 종목";
+                document.getElementById("tf-qtyLabel").textContent = "매도 주수";
+                document.getElementById("tf-execPriceLabel").textContent = "매도단가(원)";
+            }
+
+            const sel = document.getElementById("tf-stockSel");
+            const prev = sel.value;
+            const holds = S.holdings.filter(h => h.bucketId === stockBucketId);
+
+            let optsHtml = holds.map(h => {
+                const tag = [h.owner || "미지정", h.account || "미지정"].join(" · ");
+                const info = " (" + won(h.qty) + "주 보유 · 평단 " + won(h.avgPrice) + "원)";
+                return '<option value="' + h.id + '">' + esc(h.name) + (h.code ? " (" + esc(h.code) + ")" : "") + info + " · " + esc(tag) + '</option>';
+            }).join("");
+
+            if (mode === "buy") {
+                optsHtml += '<option value="' + SV_NEW + '">+ 새 종목 추가</option>';
+            }
+
+            sel.innerHTML = optsHtml;
+            if (prev && (holds.some(h => h.id === prev) || (mode === "buy" && prev === SV_NEW))) {
+                sel.value = prev;
+            } else if (holds.length === 0 && mode === "buy") {
+                sel.value = SV_NEW;
+            }
+            updateTfNewUI();
+            updateTfAmtFromStock();
+        }
+
+        function updateTfNewUI() {
+            const selEl = document.getElementById("tf-stockSel");
+            const isNew = selEl && selEl.value === SV_NEW;
+            const newNameWrap = document.getElementById("tf-newNameWrap");
+            const newCodeWrap = document.getElementById("tf-newCodeWrap");
+            if (newNameWrap) newNameWrap.style.display = isNew ? "" : "none";
+            if (newCodeWrap) newCodeWrap.style.display = isNew ? "" : "none";
+
+            // 종목 선택 시 기본 단가 자동 제안 (입력 편의 향상)
+            if (selEl && !isNew) {
+                const h = S.holdings.find(x => x.id === selEl.value);
+                const epInput = document.getElementById("tf-execPrice");
+                if (h && epInput && !epInput.value) {
+                    const defaultP = h.price || h.avgPrice || 0;
+                    if (defaultP > 0) {
+                        epInput.value = won(defaultP);
+                        updateTfAmtFromStock();
+                    }
+                }
+            }
+        }
+
+        function updateTfAmtFromStock() {
+            const fromId = document.getElementById("tf-from").value;
+            const toId = document.getElementById("tf-to").value;
+            const f = S.buckets.find(x => x.id === fromId);
+            const t = S.buckets.find(x => x.id === toId);
+            if (!((t && t.kind === "stock") || (f && f.kind === "stock"))) return;
+
+            const qty = parseNum(document.getElementById("tf-qty").value);
+            const execPrice = parseNum(document.getElementById("tf-execPrice").value);
+            document.getElementById("tf-amt").value = (qty > 0 && execPrice > 0) ? won(qty * execPrice) : "";
         }
 
         function renderLog() {
@@ -10256,6 +10887,14 @@
                     status: "하향 안정세",
                     bokRate: 3.25,
                     desc: "한국은행 기준금리(3.25%) 인하 및 WGBI 편입 효과. 국내 주택담보대출(혼합형 5년 고정금리)의 직접적인 산정 기준으로서 잔금대출 금융비용 절감에 결정적 호재"
+                },
+                wti: {
+                    name: "WTI 국제 유가",
+                    symbol: "CL=F",
+                    price: 90.34,
+                    diff: -0.68,
+                    diffPct: -0.96,
+                    desc: "💡 글로벌 원유 대표 가격 지표(WTI). 유가 하락은 글로벌 인플레이션 진정과 금리 인하에 우호적인 거시 환경을 조성합니다."
                 }
             },
             portfolioImpact: {
@@ -10528,24 +11167,48 @@
                 }
             }
 
-            // 2-2. 6개 핵심 지표 주식형 인터랙티브 꺾은선 차트 일괄 렌더링
+            // (7) WTI 국제 유가 (Crude Oil)
+            if (macro.wti) {
+                const w = macro.wti;
+                const priceEl = document.getElementById("macroWtiPrice");
+                if (priceEl) priceEl.textContent = w.price ? Number(w.price).toFixed(2) : "90.34";
+                const diffEl = document.getElementById("macroWtiDiffPill");
+                if (diffEl) {
+                    const isDiffUp = (w.diff || 0) >= 0;
+                    diffEl.className = "macro-diff-pill " + (isDiffUp ? "up" : "down");
+                    diffEl.textContent = `${isDiffUp ? "+" : ""}${w.diff != null ? Number(w.diff).toFixed(2) : "0.00"} (${isDiffUp ? "+" : ""}${w.diffPct != null ? Number(w.diffPct).toFixed(2) : "0.00"}%)`;
+                }
+                const descEl = document.getElementById("macroWtiDesc");
+                if (descEl && w.desc) {
+                    descEl.innerHTML = `💡 ${w.desc}`;
+                }
+            }
+
+            // 2-2. 7개 핵심 지표 주식형 인터랙티브 꺾은선 차트 일괄 렌더링
             ALL_MACRO_KEYS.forEach(key => renderSingleChart(key));
+
+            // 2-3. 다중 지표 겹쳐보기 (오버레이 비교 차트) 초기화/렌더링
+            renderMoaChips();
+            if (moaState.isOpen) {
+                renderMoaOverlayChart();
+            }
 
             // 3. 기관 리포트 피드 렌더링
             renderReportsGrid();
         }
 
         // ==========================================
-        // 거시지표 주식형 인터랙티브 꺾은선 차트 엔진
+        // 거시지표 주식형 인터랙티브 꺾은선 차트 엔진 (7대 지표)
         // ==========================================
-        const ALL_MACRO_KEYS = ['fx', 'schd', 'tiger', 'nasdaq', 'us10y', 'kr10y'];
+        const ALL_MACRO_KEYS = ['fx', 'schd', 'tiger', 'nasdaq', 'us10y', 'kr10y', 'wti'];
         const chartRangeState = {
             fx: '1m',
             schd: '1m',
             tiger: '1m',
             nasdaq: '1m',
             us10y: '1m',
-            kr10y: '1m'
+            kr10y: '1m',
+            wti: '1m'
         };
         let currentMacroCommonRange = '1m';
         const chartCoordsCache = {};
@@ -10613,7 +11276,7 @@
             let hist = (item && Array.isArray(item.history) && item.history.length > 0) ? [...item.history] : [];
             if (hist.length === 0) {
                 const cur = (item && (item.current || item.price)) ? (item.current || item.price) : 
-                    (key === 'fx' ? 1335.1 : key === 'schd' ? 35.78 : key === 'tiger' ? 15175 : key === 'nasdaq' ? 28384.8 : key === 'us10y' ? 4.93 : 3.08);
+                    (key === 'fx' ? 1335.1 : key === 'schd' ? 35.78 : key === 'tiger' ? 15175 : key === 'nasdaq' ? 28384.8 : key === 'us10y' ? 4.93 : key === 'wti' ? 90.34 : 3.08);
                 hist = [
                     { date: '10.21', val: cur * 0.994 },
                     { date: '10.23', val: cur * 0.998 },
@@ -10705,16 +11368,13 @@
                 tiger: 'macroTigerDiffPill',
                 nasdaq: 'macroNasdaqDiffPill',
                 us10y: 'macroYieldDiffPill',
-                kr10y: 'macroKr10yDiffPill'
+                kr10y: 'macroKr10yDiffPill',
+                wti: 'macroWtiDiffPill'
             };
             const pillId = pillIdMap[key];
             const diffEl = document.getElementById(pillId);
             if (diffEl) {
-                if (key === 'fx') {
-                    const isDiffUp = periodDiff >= 0;
-                    diffEl.className = "macro-diff-pill " + (isDiffUp ? "up" : "down");
-                    diffEl.textContent = `${isDiffUp ? "+" : ""}${periodDiff.toFixed(2)} (${isDiffUp ? "+" : ""}${periodDiffPct.toFixed(2)}%)`;
-                } else if (key === 'schd') {
+                if (key === 'fx' || key === 'schd') {
                     const isDiffUp = periodDiff >= 0;
                     diffEl.className = "macro-diff-pill " + (isDiffUp ? "up" : "down");
                     diffEl.textContent = `${isDiffUp ? "+" : ""}${periodDiff.toFixed(2)} (${isDiffUp ? "+" : ""}${periodDiffPct.toFixed(2)}%)`;
@@ -10726,6 +11386,10 @@
                     const isDiffUp = periodDiff >= 0;
                     diffEl.className = "macro-diff-pill " + (isDiffUp ? "up" : "down");
                     diffEl.textContent = `${isDiffUp ? "+" : ""}${periodDiff.toFixed(1)} (${isDiffUp ? "+" : ""}${periodDiffPct.toFixed(2)}%)`;
+                } else if (key === 'wti') {
+                    const isDiffUp = periodDiff >= 0;
+                    diffEl.className = "macro-diff-pill " + (isDiffUp ? "up" : "down");
+                    diffEl.textContent = `${isDiffUp ? "+" : ""}${periodDiff.toFixed(2)} (${isDiffUp ? "+" : ""}${periodDiffPct.toFixed(2)}%)`;
                 } else {
                     const isDiffDown = periodDiff <= 0;
                     diffEl.className = "macro-diff-pill " + (isDiffDown ? "down" : "up");
@@ -10737,10 +11401,11 @@
         function formatMacroVal(key, val) {
             if (val == null || isNaN(val)) return "-";
             if (key === 'fx') return val.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "원";
-            if (key === 'schd') return "$" + val.toFixed(2);
-            if (key === 'tiger') return Math.round(val).toLocaleString() + "원";
-            if (key === 'nasdaq') return val.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " pt";
-            if (key === 'us10y' || key === 'kr10y') return val.toFixed(2) + "%";
+            if (key === 'schd') return "$" + Number(val).toFixed(2);
+            if (key === 'tiger') return Math.round(Number(val)).toLocaleString() + "원";
+            if (key === 'nasdaq') return Number(val).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " pt";
+            if (key === 'us10y' || key === 'kr10y') return Number(val).toFixed(2) + "%";
+            if (key === 'wti') return "$" + Number(val).toFixed(2);
             return String(val);
         }
 
@@ -10751,6 +11416,7 @@
             if (key === 'nasdaq') return document.getElementById("macroNasdaqPrice");
             if (key === 'us10y') return document.getElementById("macroYieldPrice");
             if (key === 'kr10y') return document.getElementById("macroKr10yPrice");
+            if (key === 'wti') return document.getElementById("macroWtiPrice");
             return null;
         }
 
@@ -10765,6 +11431,7 @@
             else if (key === 'nasdaq') priceEl.textContent = item.price ? item.price.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : "28,384.8";
             else if (key === 'us10y') priceEl.textContent = (item.current ? item.current.toFixed(2) : "4.93") + "%";
             else if (key === 'kr10y') priceEl.textContent = (item.current ? item.current.toFixed(2) : "3.08") + "%";
+            else if (key === 'wti') priceEl.textContent = "$" + (item.price ? item.price.toFixed(2) : "90.34");
         }
 
         function handleChartScrub(e, key) {
@@ -10817,6 +11484,7 @@
                 else if (key === 'tiger') priceEl.textContent = Math.round(closest.val).toLocaleString();
                 else if (key === 'nasdaq') priceEl.textContent = closest.val.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
                 else if (key === 'us10y' || key === 'kr10y') priceEl.textContent = closest.val.toFixed(2) + "%";
+                else if (key === 'wti') priceEl.textContent = "$" + Number(closest.val).toFixed(2);
                 priceEl.classList.add('scrubbing');
             }
         }
@@ -10841,6 +11509,539 @@
                 priceEl.classList.remove('scrubbing');
                 restoreCurrentPrice(key);
             }
+        }
+
+        /* =========================================================
+           📈 다중 지표 겹쳐보기 (오버레이 비교 차트 엔진)
+           ========================================================= */
+        const ALL_OVERLAY_INDICATORS = [
+            { key: 'fx', name: '원·달러 환율', icon: '💵', unit: '원', color: '#3182f6', defaultActive: true },
+            { key: 'schd', name: 'SCHD', icon: '📈', unit: '$', color: '#f04452', defaultActive: true },
+            { key: 'tiger', name: 'TIGER 미국배당', icon: '🐯', unit: '원', color: '#ff9f43', defaultActive: true },
+            { key: 'nasdaq', name: '나스닥 100', icon: '⚡', unit: 'pt', color: '#a855f7', defaultActive: false },
+            { key: 'us10y', name: '미 10년물 국채', icon: '🏛️', unit: '%', color: '#10b981', defaultActive: false },
+            { key: 'kr10y', name: '한국 10년물 국채', icon: '🇰🇷', unit: '%', color: '#06b6d4', defaultActive: false },
+            { key: 'wti', name: 'WTI 국제 유가', icon: '🛢️', unit: '$', color: '#eab308', defaultActive: false }
+        ];
+
+        const moaState = {
+            isOpen: false,
+            activeKeys: new Set(['fx', 'schd', 'tiger']),
+            period: '1m', // '1w', '1m', '3m', '6m', '1y', 'custom'
+            customStartDate: '',
+            customEndDate: '',
+            yMode: 'return', // 'return' (수익률% 변동 비교) or 'minmax' (0~100% 상대진폭)
+            customAxesOpen: false,
+            customMinMax: {}, // { key: { min: num, max: num } }
+            timelineCoords: null, // Scrub 캐시
+            masterTimeline: []
+        };
+
+        function toggleMacroOverlayAccordion() {
+            moaState.isOpen = !moaState.isOpen;
+            const body = document.getElementById("moaBody");
+            const header = document.getElementById("moaHeader");
+            const chev = document.getElementById("moaChevron");
+            if (body) body.style.display = moaState.isOpen ? "block" : "none";
+            if (header) header.classList.toggle("open", moaState.isOpen);
+            if (chev) chev.classList.toggle("open", moaState.isOpen);
+            if (moaState.isOpen) {
+                renderMoaChips();
+                renderMoaCustomAxisPanel();
+                renderMoaOverlayChart();
+            }
+        }
+
+        function renderMoaChips() {
+            const container = document.getElementById("moaChipsContainer");
+            if (!container) return;
+            container.innerHTML = ALL_OVERLAY_INDICATORS.map(item => {
+                const isActive = moaState.activeKeys.has(item.key);
+                return `
+                    <div class="moa-chip ${isActive ? 'active' : ''}" style="--chip-color:${item.color};" onclick="toggleMoaKey('${item.key}')">
+                        <span class="moa-chip-color-dot" style="background:${item.color};"></span>
+                        <span>${item.icon} ${item.name}</span>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function toggleMoaKey(key) {
+            if (moaState.activeKeys.has(key)) {
+                if (moaState.activeKeys.size <= 1) {
+                    toast("최소 1개 이상의 지표를 선택해야 합니다.");
+                    return;
+                }
+                moaState.activeKeys.delete(key);
+            } else {
+                moaState.activeKeys.add(key);
+            }
+            renderMoaChips();
+            renderMoaCustomAxisPanel();
+            renderMoaOverlayChart();
+        }
+
+        function setMoaPeriod(p) {
+            moaState.period = p;
+            document.querySelectorAll("#moaPeriodTabs .macro-sync-tab-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.period === p);
+            });
+            const sInp = document.getElementById("moaStartDate");
+            const eInp = document.getElementById("moaEndDate");
+            if (sInp) sInp.value = "";
+            if (eInp) eInp.value = "";
+            moaState.customStartDate = "";
+            moaState.customEndDate = "";
+            renderMoaOverlayChart();
+        }
+
+        function applyMoaCustomDate() {
+            const sInp = document.getElementById("moaStartDate");
+            const eInp = document.getElementById("moaEndDate");
+            if (!sInp || !eInp || !sInp.value || !eInp.value) {
+                toast("시작일과 종료일을 모두 선택해 주세요.");
+                return;
+            }
+            if (sInp.value > eInp.value) {
+                toast("시작일이 종료일보다 늦을 수 없습니다.");
+                return;
+            }
+            moaState.period = 'custom';
+            moaState.customStartDate = sInp.value;
+            moaState.customEndDate = eInp.value;
+            document.querySelectorAll("#moaPeriodTabs .macro-sync-tab-btn").forEach(btn => btn.classList.remove("active"));
+            renderMoaOverlayChart();
+        }
+
+        function setMoaYMode(mode) {
+            moaState.yMode = mode;
+            const rBtn = document.getElementById("moaModeReturn");
+            const mBtn = document.getElementById("moaModeMinMax");
+            if (rBtn) rBtn.classList.toggle("active", mode === 'return');
+            if (mBtn) mBtn.classList.toggle("active", mode === 'minmax');
+            renderMoaOverlayChart();
+        }
+
+        function toggleMoaAxisSettings() {
+            moaState.customAxesOpen = !moaState.customAxesOpen;
+            const panel = document.getElementById("moaCustomAxisPanel");
+            if (panel) panel.style.display = moaState.customAxesOpen ? "block" : "none";
+            if (moaState.customAxesOpen) {
+                renderMoaCustomAxisPanel();
+            }
+        }
+
+        function resetMoaCustomAxes() {
+            moaState.customMinMax = {};
+            renderMoaCustomAxisPanel();
+            renderMoaOverlayChart();
+            toast("세로축 설정을 자동 맞춤(Auto)으로 초기화했습니다.");
+        }
+
+        function renderMoaCustomAxisPanel() {
+            const grid = document.getElementById("moaAxisPanelGrid");
+            if (!grid) return;
+            const activeItems = ALL_OVERLAY_INDICATORS.filter(it => moaState.activeKeys.has(it.key));
+            grid.innerHTML = activeItems.map(it => {
+                const curCustom = moaState.customMinMax[it.key] || {};
+                return `
+                    <div class="moa-axis-item">
+                        <div class="moa-axis-item-title">
+                            <span style="color:${it.color};">●</span> ${it.name} (${it.unit})
+                        </div>
+                        <div class="moa-axis-inputs">
+                            <label style="font-size:10px;color:var(--muted);">Min</label>
+                            <input type="number" step="any" placeholder="Auto" value="${curCustom.min != null ? curCustom.min : ''}" onchange="updateMoaCustomAxis('${it.key}', 'min', this.value)">
+                            <label style="font-size:10px;color:var(--muted);">Max</label>
+                            <input type="number" step="any" placeholder="Auto" value="${curCustom.max != null ? curCustom.max : ''}" onchange="updateMoaCustomAxis('${it.key}', 'max', this.value)">
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function updateMoaCustomAxis(key, type, val) {
+            if (!moaState.customMinMax[key]) moaState.customMinMax[key] = {};
+            const num = parseFloat(val);
+            if (!isNaN(num)) {
+                moaState.customMinMax[key][type] = num;
+            } else {
+                delete moaState.customMinMax[key][type];
+                if (Object.keys(moaState.customMinMax[key]).length === 0) {
+                    delete moaState.customMinMax[key];
+                }
+            }
+            renderMoaOverlayChart();
+        }
+
+        // 전체 1년 히스토리 원본 데이터 추출
+        function getRawIndicatorHistory(key) {
+            const data = marketInsightsData || DEFAULT_MARKET_INSIGHTS;
+            const item = (data && data.macro && data.macro[key]) ? data.macro[key] : null;
+            let hist = (item && Array.isArray(item.history) && item.history.length > 0) ? item.history : [];
+            if (hist.length === 0) {
+                const cur = (item && (item.current || item.price)) ? (item.current || item.price) : 100;
+                hist = [
+                    { date: '10.21', fullDate: '2026.10.21', val: cur * 0.98 },
+                    { date: '10.25', fullDate: '2026.10.25', val: cur * 0.99 },
+                    { date: '10.28', fullDate: '2026.10.28', val: cur * 1.01 },
+                    { date: '10.31', fullDate: '2026.10.31', val: cur }
+                ];
+            }
+            return hist;
+        }
+
+        function renderMoaOverlayChart() {
+            const activeItems = ALL_OVERLAY_INDICATORS.filter(it => moaState.activeKeys.has(it.key));
+            if (activeItems.length === 0) return;
+
+            // 1. 선택 기간에 따른 원본 데이터 슬라이스 & 마스터 타임라인 구축
+            const period = moaState.period;
+            const sliceCount = period === '1w' ? 5 : (period === '1m' ? 22 : (period === '3m' ? 65 : (period === '6m' ? 130 : 260)));
+
+            const isCustom = period === 'custom' && moaState.customStartDate && moaState.customEndDate;
+            const sDate = moaState.customStartDate ? moaState.customStartDate.replace(/-/g, '.') : '';
+            const eDate = moaState.customEndDate ? moaState.customEndDate.replace(/-/g, '.') : '';
+
+            // 지표별 필터링된 데이터 맵
+            const itemHistMap = {};
+            const allDatesSet = new Set();
+
+            activeItems.forEach(it => {
+                let raw = getRawIndicatorHistory(it.key);
+                let filtered = [];
+                if (isCustom) {
+                    filtered = raw.filter(p => {
+                        const d = p.fullDate || p.date;
+                        return d >= sDate && d <= eDate;
+                    });
+                } else {
+                    filtered = raw.slice(-sliceCount);
+                }
+                if (filtered.length === 0) filtered = raw.slice(-5);
+                itemHistMap[it.key] = filtered;
+                filtered.forEach(p => allDatesSet.add(p.fullDate || p.date));
+            });
+
+            // 마스터 타임라인 정렬 (공통 시간축)
+            const masterTimeline = Array.from(allDatesSet).sort((a, b) => a.localeCompare(b));
+            if (masterTimeline.length < 2) return;
+            moaState.masterTimeline = masterTimeline;
+
+            // 지표별 마스터 타임라인 값 매핑 및 Forward-Fill 보간
+            const seriesMap = {};
+            activeItems.forEach(it => {
+                const hist = itemHistMap[it.key];
+                const dateValLookup = {};
+                hist.forEach(p => { dateValLookup[p.fullDate || p.date] = Number(p.val) || 0; });
+
+                let lastVal = hist.length > 0 ? (Number(hist[0].val) || 0) : 0;
+                const points = masterTimeline.map(dt => {
+                    if (dateValLookup[dt] !== undefined) {
+                        lastVal = dateValLookup[dt];
+                    }
+                    return { date: dt, val: lastVal };
+                });
+                seriesMap[it.key] = points;
+            });
+
+            // 2. Y축 좌표 계산
+            const yMode = moaState.yMode;
+            const W = 800, H = 280;
+            const padL = 40, padR = 24, padT = 24, padB = 30;
+            const usableW = W - padL - padR;
+            const usableH = H - padT - padB;
+            const N = masterTimeline.length;
+
+            const gridLinesGroup = document.getElementById("moaGridLines");
+            const linesGroup = document.getElementById("moaLinesGroup");
+            const dotsGroup = document.getElementById("moaDotsGroup");
+            const defs = document.getElementById("moaDefs");
+            if (!gridLinesGroup || !linesGroup) return;
+
+            gridLinesGroup.innerHTML = "";
+            linesGroup.innerHTML = "";
+            if (dotsGroup) dotsGroup.innerHTML = "";
+            if (defs) defs.innerHTML = "";
+
+            const coordsCache = []; // 스크러버용 { x, date, items: { [key]: { val, pct, y, color } } }
+
+            if (yMode === 'return') {
+                // 수익률(%) 모드
+                // 각 지표의 baseVal (시작점) 기준 % 산출
+                let globalMinPct = 999999, globalMaxPct = -999999;
+                const returnSeriesMap = {};
+
+                activeItems.forEach(it => {
+                    const pts = seriesMap[it.key];
+                    const baseVal = pts[0].val || 1;
+                    const cMinMax = moaState.customMinMax[it.key] || {};
+
+                    const rPts = pts.map(p => {
+                        const pct = ((p.val - baseVal) / baseVal) * 100;
+                        return { date: p.date, val: p.val, pct };
+                    });
+                    returnSeriesMap[it.key] = rPts;
+
+                    const pcts = rPts.map(p => p.pct);
+                    const itMin = cMinMax.min != null ? cMinMax.min : Math.min(...pcts);
+                    const itMax = cMinMax.max != null ? cMinMax.max : Math.max(...pcts);
+
+                    if (itMin < globalMinPct) globalMinPct = itMin;
+                    if (itMax > globalMaxPct) globalMaxPct = itMax;
+                });
+
+                if (globalMinPct >= globalMaxPct) {
+                    globalMinPct -= 1;
+                    globalMaxPct += 1;
+                }
+
+                // 0% 기준선이 보이도록 마진 확보
+                globalMinPct = Math.min(globalMinPct, -0.5);
+                globalMaxPct = Math.max(globalMaxPct, 0.5);
+                const spread = (globalMaxPct - globalMinPct) * 1.1;
+                const mid = (globalMaxPct + globalMinPct) / 2;
+                const yMin = mid - spread / 2;
+                const yMax = mid + spread / 2;
+                const ySpread = yMax - yMin;
+
+                // 0% 기준선 Y좌표
+                const zeroNorm = (0 - yMin) / ySpread;
+                const zeroY = padT + (1 - zeroNorm) * usableH;
+
+                // 그리드 라인 (0% 수평선 강조 + 가이드선)
+                gridLinesGroup.innerHTML = `
+                    <line x1="${padL}" y1="${zeroY}" x2="${W - padR}" y2="${zeroY}" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" stroke-dasharray="4,4"/>
+                    <text x="${padL - 6}" y="${zeroY + 4}" fill="rgba(255,255,255,0.7)" font-size="11" font-weight="700" text-anchor="end">0%</text>
+                    <line x1="${padL}" y1="${padT}" x2="${W - padR}" y2="${padT}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                    <text x="${padL - 6}" y="${padT + 8}" fill="rgba(255,255,255,0.45)" font-size="10" text-anchor="end">${yMax > 0 ? '+' : ''}${yMax.toFixed(1)}%</text>
+                    <line x1="${padL}" y1="${padT + usableH}" x2="${W - padR}" y2="${padT + usableH}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                    <text x="${padL - 6}" y="${padT + usableH - 4}" fill="rgba(255,255,255,0.45)" font-size="10" text-anchor="end">${yMin.toFixed(1)}%</text>
+                `;
+
+                // 각 지표 좌표 및 SVG 패스 생성
+                activeItems.forEach(it => {
+                    const rPts = returnSeriesMap[it.key];
+                    const ptsCoords = rPts.map((p, idx) => {
+                        const x = padL + (idx / (N - 1)) * usableW;
+                        const norm = (p.pct - yMin) / ySpread;
+                        const y = padT + (1 - norm) * usableH;
+                        return { x, y, date: p.date, val: p.val, pct: p.pct };
+                    });
+
+                    // 부드러운 Bezier 곡선
+                    let pathD = `M ${ptsCoords[0].x.toFixed(1)} ${ptsCoords[0].y.toFixed(1)}`;
+                    for (let i = 0; i < ptsCoords.length - 1; i++) {
+                        const p0 = ptsCoords[i];
+                        const p1 = ptsCoords[i + 1];
+                        const dx = (p1.x - p0.x) / 2;
+                        pathD += ` C ${(p0.x + dx).toFixed(1)} ${p0.y.toFixed(1)}, ${(p1.x - dx).toFixed(1)} ${p1.y.toFixed(1)}, ${p1.x.toFixed(1)} ${p1.y.toFixed(1)}`;
+                    }
+
+                    const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    pathEl.setAttribute("d", pathD);
+                    pathEl.setAttribute("fill", "none");
+                    pathEl.setAttribute("stroke", it.color);
+                    pathEl.setAttribute("stroke-width", "2.4");
+                    pathEl.setAttribute("stroke-linecap", "round");
+                    pathEl.setAttribute("stroke-linejoin", "round");
+                    linesGroup.appendChild(pathEl);
+                });
+
+                // 마스터 스크러버 캐시 생성
+                for (let i = 0; i < N; i++) {
+                    const x = padL + (i / (N - 1)) * usableW;
+                    const date = masterTimeline[i];
+                    const itemData = {};
+                    activeItems.forEach(it => {
+                        const p = returnSeriesMap[it.key][i];
+                        const norm = (p.pct - yMin) / ySpread;
+                        const y = padT + (1 - norm) * usableH;
+                        itemData[it.key] = { val: p.val, pct: p.pct, y, color: it.color, name: it.name, unit: it.unit };
+                    });
+                    coordsCache.push({ x, date, items: itemData });
+                }
+
+            } else {
+                // 상대 진폭 (Min-Max 0~100%) 모드
+                gridLinesGroup.innerHTML = `
+                    <line x1="${padL}" y1="${padT}" x2="${W - padR}" y2="${padT}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                    <text x="${padL - 6}" y="${padT + 9}" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="end">100%</text>
+                    <line x1="${padL}" y1="${padT + usableH / 2}" x2="${W - padR}" y2="${padT + usableH / 2}" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3,3"/>
+                    <text x="${padL - 6}" y="${padT + usableH / 2 + 3}" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="end">50%</text>
+                    <line x1="${padL}" y1="${padT + usableH}" x2="${W - padR}" y2="${padT + usableH}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                    <text x="${padL - 6}" y="${padT + usableH - 4}" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="end">0%</text>
+                `;
+
+                const normSeriesMap = {};
+                activeItems.forEach(it => {
+                    const pts = seriesMap[it.key];
+                    const values = pts.map(p => p.val);
+                    const cMinMax = moaState.customMinMax[it.key] || {};
+
+                    let itMin = cMinMax.min != null ? cMinMax.min : Math.min(...values);
+                    let itMax = cMinMax.max != null ? cMinMax.max : Math.max(...values);
+                    if (itMin >= itMax) { itMin *= 0.99; itMax *= 1.01; }
+                    const itSpread = itMax - itMin;
+
+                    const nPts = pts.map(p => {
+                        const norm = Math.max(0, Math.min(1, (p.val - itMin) / itSpread));
+                        return { date: p.date, val: p.val, norm, itMin, itMax };
+                    });
+                    normSeriesMap[it.key] = nPts;
+
+                    const ptsCoords = nPts.map((p, idx) => {
+                        const x = padL + (idx / (N - 1)) * usableW;
+                        const y = padT + (1 - p.norm) * usableH;
+                        return { x, y, date: p.date, val: p.val, norm: p.norm };
+                    });
+
+                    let pathD = `M ${ptsCoords[0].x.toFixed(1)} ${ptsCoords[0].y.toFixed(1)}`;
+                    for (let i = 0; i < ptsCoords.length - 1; i++) {
+                        const p0 = ptsCoords[i];
+                        const p1 = ptsCoords[i + 1];
+                        const dx = (p1.x - p0.x) / 2;
+                        pathD += ` C ${(p0.x + dx).toFixed(1)} ${p0.y.toFixed(1)}, ${(p1.x - dx).toFixed(1)} ${p1.y.toFixed(1)}, ${p1.x.toFixed(1)} ${p1.y.toFixed(1)}`;
+                    }
+
+                    const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    pathEl.setAttribute("d", pathD);
+                    pathEl.setAttribute("fill", "none");
+                    pathEl.setAttribute("stroke", it.color);
+                    pathEl.setAttribute("stroke-width", "2.4");
+                    pathEl.setAttribute("stroke-linecap", "round");
+                    pathEl.setAttribute("stroke-linejoin", "round");
+                    linesGroup.appendChild(pathEl);
+                });
+
+                for (let i = 0; i < N; i++) {
+                    const x = padL + (i / (N - 1)) * usableW;
+                    const date = masterTimeline[i];
+                    const itemData = {};
+                    activeItems.forEach(it => {
+                        const p = normSeriesMap[it.key][i];
+                        const y = padT + (1 - p.norm) * usableH;
+                        itemData[it.key] = { val: p.val, norm: p.norm, y, color: it.color, name: it.name, unit: it.unit };
+                    });
+                    coordsCache.push({ x, date, items: itemData });
+                }
+            }
+
+            moaState.timelineCoords = coordsCache;
+
+            // X축 시작일/중간일/종료일 라벨 업데이트
+            const sLabel = document.getElementById("moaStartDateLabel");
+            const mLabel = document.getElementById("moaMidDateLabel");
+            const eLabel = document.getElementById("moaEndDateLabel");
+            if (sLabel) sLabel.textContent = masterTimeline[0];
+            if (mLabel) mLabel.textContent = masterTimeline[Math.floor(N / 2)];
+            if (eLabel) eLabel.textContent = masterTimeline[N - 1];
+
+            // 하단 실시간 범례 및 기간 변동률 렌더링
+            renderMoaLegendBar(activeItems, seriesMap);
+        }
+
+        function renderMoaLegendBar(activeItems, seriesMap) {
+            const bar = document.getElementById("moaLegendBar");
+            if (!bar) return;
+
+            bar.innerHTML = activeItems.map(it => {
+                const pts = seriesMap[it.key];
+                if (!pts || pts.length === 0) return '';
+                const firstVal = pts[0].val;
+                const lastVal = pts[pts.length - 1].val;
+                const diffPct = firstVal > 0 ? ((lastVal - firstVal) / firstVal) * 100 : 0;
+                const isUp = diffPct >= 0;
+                const sign = isUp ? '+' : '';
+                const diffColor = isUp ? 'var(--gain,#f04452)' : 'var(--loss,#3182f6)';
+
+                return `
+                    <div class="moa-legend-item">
+                        <span class="moa-legend-dot" style="background:${it.color};"></span>
+                        <span class="moa-legend-name">${it.name}:</span>
+                        <span class="moa-legend-val">${formatMacroVal(it.key, lastVal)}</span>
+                        <span class="moa-legend-diff" style="color:${diffColor};">${sign}${diffPct.toFixed(2)}%</span>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        // 오버레이 차트 멀티 스크러버 (Crosshair & Tooltip)
+        function handleMoaChartScrub(e) {
+            const wrap = document.getElementById("moaChartWrapper");
+            const tt = document.getElementById("moaTooltip");
+            const cross = document.getElementById("moaCrosshair");
+            const dotsGroup = document.getElementById("moaDotsGroup");
+            if (!wrap || !tt || !cross || !moaState.timelineCoords || moaState.timelineCoords.length === 0) return;
+
+            const rect = wrap.getBoundingClientRect();
+            if (rect.width <= 0) return;
+
+            const relX = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            const svgX = relX * 800;
+
+            // 가장 가까운 타임라인 포인트 검색
+            let closest = moaState.timelineCoords[0];
+            let minDiff = 999999;
+            for (const pt of moaState.timelineCoords) {
+                const d = Math.abs(pt.x - svgX);
+                if (d < minDiff) {
+                    minDiff = d;
+                    closest = pt;
+                }
+            }
+
+            // 크로스헤어 라인 이동
+            cross.setAttribute("x1", closest.x);
+            cross.setAttribute("x2", closest.x);
+            cross.setAttribute("opacity", "1");
+
+            // 포인트 닷들 렌더링
+            if (dotsGroup) {
+                dotsGroup.innerHTML = Object.entries(closest.items).map(([k, item]) => `
+                    <circle cx="${closest.x}" cy="${item.y}" r="4.5" fill="${item.color}" stroke="#fff" stroke-width="2"/>
+                `).join("");
+            }
+
+            // 툴팁 내용 및 위치 업데이트
+            let ttHtml = `<div class="moa-tt-date">📅 ${closest.date}</div>`;
+            Object.entries(closest.items).forEach(([k, item]) => {
+                const pctStr = item.pct != null ? `${item.pct >= 0 ? '+' : ''}${item.pct.toFixed(2)}%` : '';
+                const pctColor = item.pct != null ? (item.pct >= 0 ? 'var(--gain,#f04452)' : 'var(--loss,#3182f6)') : '';
+                ttHtml += `
+                    <div class="moa-tt-item">
+                        <span class="moa-tt-name"><span style="color:${item.color};">●</span> ${item.name}</span>
+                        <span class="moa-tt-val">${formatMacroVal(k, item.val)} <span style="font-size:10.5px;color:${pctColor};">${pctStr}</span></span>
+                    </div>
+                `;
+            });
+            tt.innerHTML = ttHtml;
+            tt.style.display = "block";
+
+            // 툴팁 좌우 배치 (차트 경계 내 자동 위치 조정)
+            const tipW = 220;
+            const mouseX = e.clientX - rect.left;
+            let leftPos = mouseX + 15;
+            if (leftPos + tipW > rect.width) {
+                leftPos = mouseX - tipW - 15;
+            }
+            tt.style.left = Math.max(10, leftPos) + "px";
+            tt.style.top = "15px";
+        }
+
+        function handleMoaChartTouch(e) {
+            if (e.touches && e.touches.length > 0) {
+                handleMoaChartScrub(e.touches[0]);
+            }
+        }
+
+        function resetMoaChartScrub() {
+            const tt = document.getElementById("moaTooltip");
+            const cross = document.getElementById("moaCrosshair");
+            const dotsGroup = document.getElementById("moaDotsGroup");
+            if (tt) tt.style.display = "none";
+            if (cross) cross.setAttribute("opacity", "0");
+            if (dotsGroup) dotsGroup.innerHTML = "";
         }
 
         function renderReportDateFilterChips(allReports) {
@@ -11382,6 +12583,28 @@
                 const f = get(e.fromId), t = get(e.toId);
                 if (f && f.kind !== "stock") f.amount = (f.amount || 0) - sign * e.amount;
                 if (t && t.kind !== "stock") t.amount = (t.amount || 0) + sign * e.amount;
+
+                if (e.holdingId) {
+                    const h = S.holdings.find(x => x.id === e.holdingId);
+                    if (h) {
+                        const isBuy = (t && t.kind === "stock");
+                        if (isBuy) {
+                            // 매수(자금투입): 수량 합산 및 평단가 가중평균 자동 수정
+                            const totalCost = (h.qty || 0) * (h.avgPrice || 0);
+                            const tradeCost = (e.stockQty || 0) * (e.execPrice || 0);
+                            const newTotalCost = totalCost + sign * tradeCost;
+                            const newQty = (h.qty || 0) + sign * (e.stockQty || 0);
+                            h.qty = Math.max(0, newQty);
+                            h.avgPrice = newQty > 0 ? Math.round(newTotalCost / newQty) : 0;
+                            if (e.execPrice && sign > 0) h.price = e.execPrice;
+                        } else {
+                            // 매도(현금화): 수량 차감 (평단가는 유지)
+                            const newQty = (h.qty || 0) - sign * (e.stockQty || 0);
+                            h.qty = Math.max(0, newQty);
+                            if (h.qty <= 0) h.avgPrice = 0;
+                        }
+                    }
+                }
             }
         }
         function addEntry(e) {
@@ -11450,21 +12673,94 @@
             document.getElementById("dv-amt").value = ""; document.getElementById("dv-memo").value = "";
             toast("배당금을 기록했습니다");
         });
-        document.getElementById("tf-to").addEventListener("change", e => e.target.dataset.touched = "1");
+
+        document.getElementById("tf-from").addEventListener("change", updateTfStockUI);
+        document.getElementById("tf-to").addEventListener("change", e => {
+            e.target.dataset.touched = "1";
+            updateTfStockUI();
+        });
+        document.getElementById("tf-stockSel").addEventListener("change", updateTfNewUI);
+        document.getElementById("tf-qty").addEventListener("input", updateTfAmtFromStock);
+        document.getElementById("tf-execPrice").addEventListener("input", updateTfAmtFromStock);
+
         document.getElementById("btnAddTransfer").addEventListener("click", () => {
-            const amt = parseNum(document.getElementById("tf-amt").value);
             const from = document.getElementById("tf-from").value, to = document.getElementById("tf-to").value;
-            if (amt <= 0) { alert("금액을 입력해 주세요."); return; }
             if (from === to) { alert("보낼 항목과 받을 항목이 같습니다."); return; }
             const f = S.buckets.find(x => x.id === from), t = S.buckets.find(x => x.id === to);
-            if ((f && f.kind === "stock") || (t && t.kind === "stock")) { alert("주식 계좌는 자금 이동 대상이 아닙니다. 종목 수량을 직접 수정해 주세요."); return; }
-            if (f && (f.amount || 0) < amt && !confirm("‘" + f.name + "’ 잔액보다 큰 금액입니다. 그래도 이동할까요?")) return;
-            addEntry({
-                id: uid(), type: "transfer", date: document.getElementById("tf-date").value || todayISO(),
-                amount: amt, fromId: from, toId: to, memo: document.getElementById("tf-memo").value
-            });
-            document.getElementById("tf-amt").value = ""; document.getElementById("tf-memo").value = "";
-            toast("자금을 이동했습니다");
+            const date = document.getElementById("tf-date").value || todayISO();
+            const memo = document.getElementById("tf-memo").value;
+
+            const isToStock = (t && t.kind === "stock");
+            const isFromStock = (f && f.kind === "stock");
+
+            if (isToStock) {
+                // 현금 → 주식 매수(자금 투입)
+                const qty = parseNum(document.getElementById("tf-qty").value);
+                if (qty <= 0) { alert("매수할 주수를 입력해 주세요."); return; }
+                const execPrice = parseNum(document.getElementById("tf-execPrice").value);
+                if (execPrice <= 0) { alert("체결단가를 입력해 주세요."); return; }
+                const amt = qty * execPrice;
+
+                const sel = document.getElementById("tf-stockSel").value;
+                let holdingId = sel;
+                if (sel === SV_NEW) {
+                    const name = document.getElementById("tf-newName").value.trim();
+                    if (!name) { alert("종목명을 입력해 주세요."); return; }
+                    const code = document.getElementById("tf-newCode").value.trim();
+                    const nh = { id: uid(), bucketId: t.id, name, code, account: "", owner: "", qty: 0, avgPrice: 0, price: execPrice, priceDate: date, order: nextHoldingOrder() };
+                    S.holdings.push(nh);
+                    holdingId = nh.id;
+                }
+
+                if (f && (f.amount || 0) < amt && !confirm("‘" + f.name + "’ 잔액(" + won(f.amount || 0) + "원)보다 큰 금액(" + won(amt) + "원)입니다. 그래도 이동할까요?")) return;
+
+                addEntry({
+                    id: uid(), type: "transfer", date, amount: amt, fromId: from, toId: to, memo,
+                    holdingId, stockQty: qty, execPrice, stockMode: "buy"
+                });
+
+                document.getElementById("tf-qty").value = "";
+                document.getElementById("tf-newName").value = "";
+                document.getElementById("tf-newCode").value = "";
+                document.getElementById("tf-execPrice").value = "";
+                document.getElementById("tf-amt").value = "";
+                document.getElementById("tf-memo").value = "";
+                toast("주식 매수 자금 이동을 기록하고 보유 종목 평단가·수량을 자동 갱신했습니다");
+            } else if (isFromStock) {
+                // 주식 → 현금 매도(현금화)
+                const qty = parseNum(document.getElementById("tf-qty").value);
+                if (qty <= 0) { alert("매도할 주수를 입력해 주세요."); return; }
+                const execPrice = parseNum(document.getElementById("tf-execPrice").value);
+                if (execPrice <= 0) { alert("매도단가를 입력해 주세요."); return; }
+                const amt = qty * execPrice;
+
+                const sel = document.getElementById("tf-stockSel").value;
+                const h = S.holdings.find(x => x.id === sel);
+                if (!h) { alert("매도할 종목을 선택해 주세요."); return; }
+                if ((h.qty || 0) < qty && !confirm("보유 수량(" + won(h.qty || 0) + "주)보다 많이 매도합니다. 그래도 이동할까요?")) return;
+
+                addEntry({
+                    id: uid(), type: "transfer", date, amount: amt, fromId: from, toId: to, memo,
+                    holdingId: h.id, stockQty: qty, execPrice, stockMode: "sell"
+                });
+
+                document.getElementById("tf-qty").value = "";
+                document.getElementById("tf-execPrice").value = "";
+                document.getElementById("tf-amt").value = "";
+                document.getElementById("tf-memo").value = "";
+                toast("주식 매도 자금 이동을 기록하고 주식 수량을 차감했습니다");
+            } else {
+                // 일반 현금/예적금 간 이동
+                const amt = parseNum(document.getElementById("tf-amt").value);
+                if (amt <= 0) { alert("금액을 입력해 주세요."); return; }
+                if (f && (f.amount || 0) < amt && !confirm("‘" + f.name + "’ 잔액보다 큰 금액입니다. 그래도 이동할까요?")) return;
+                addEntry({
+                    id: uid(), type: "transfer", date, amount: amt, fromId: from, toId: to, memo
+                });
+                document.getElementById("tf-amt").value = "";
+                document.getElementById("tf-memo").value = "";
+                toast("자금을 이동했습니다");
+            }
         });
 
         window.addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
@@ -12170,7 +13466,7 @@
         }
 
         
-        /* ===== [보안 관리자 모드: 해시 암호화 검증 & 1분 세션] ===== */
+        /* ===== [보안 관리자 모드: 해시 암호화 검증 & 10분 세션] ===== */
         const ADMIN_PIN_HASH = "90fe2c25cc8b9530bd60a2b198ce85c53b06521848c81ba9ecb2a7f57e3c06d8"; // SHA-256 of 5612
         let adminAuthExpiry = 0;
         let adminCountdownTimer = null;
@@ -12247,10 +13543,10 @@
             const val = input.value.trim();
             const isValid = await verifyAdminPin(val);
             if (isValid) {
-                adminAuthExpiry = Date.now() + 60 * 1000; // 1분 세션
+                adminAuthExpiry = Date.now() + 10 * 60 * 1000; // 10분 세션
                 closeAdminAuthModal();
                 startAdminCountdown();
-                toast("🔓 관리자 인증 성공! 1분 동안 수정할 수 있습니다.");
+                toast("🔓 관리자 인증 성공! 10분 동안 수정할 수 있습니다.");
 
                 if (typeof pendingAdminAction === "function") {
                     const act = pendingAdminAction;
@@ -12320,13 +13616,13 @@
             if (isManual) {
                 toast("🔒 관리자 모드를 잠갔습니다.");
             } else {
-                toast("🔒 1분이 경과하여 관리자 수정 모드가 잠겼습니다.");
+                toast("🔒 10분이 경과하여 관리자 수정 모드가 잠겼습니다.");
             }
         }
 
         // 모바일 숫자 전용 키패드 및 핀테크 입력 보조 (UI-UX Pro Max)
         function applyNumericInputAffordances() {
-            const targets = document.querySelectorAll("input.num, [data-goal], [data-loan], [data-fx], #sv-amt, #sv-qty, #sv-execPrice, #in-amt, #dv-amt, #tf-amt");
+            const targets = document.querySelectorAll("input.num, [data-goal], [data-loan], [data-fx], #sv-amt, #sv-qty, #sv-execPrice, #in-amt, #dv-amt, #tf-amt, #tf-qty, #tf-execPrice");
             targets.forEach(inp => {
                 if (inp.type === "checkbox" || inp.type === "month" || inp.type === "date" || inp.tagName === "SELECT") return;
                 const isDecimal = inp.id === "g-acqTaxRate" || (inp.dataset && (inp.dataset.goal === "acqTaxRate" || inp.dataset.loan === "rate" || inp.dataset.fx === "usdKrw"));
@@ -12340,7 +13636,7 @@
 
         // 주요 금액 입력 시 실시간 3자리 콤마 자동 서식화 (오타 및 자릿수 착오 방지)
         function attachLiveCommaFormatting() {
-            const liveIds = ["sv-amt", "in-amt", "dv-amt", "tf-amt"];
+            const liveIds = ["sv-amt", "in-amt", "dv-amt", "tf-amt", "tf-execPrice"];
             liveIds.forEach(id => {
                 const el = document.getElementById(id);
                 if (!el || el._hasLiveFormat) return;

@@ -255,6 +255,7 @@ def main():
     tiger_quote = fetch_yahoo_quote('458730.KS')
     nasdaq_quote = fetch_yahoo_quote('^NDX')
     tnx_quote = fetch_yahoo_quote('^TNX')
+    wti_quote = fetch_yahoo_quote('CL=F')
 
     # 기본값 보정 (Fallback)
     current_fx = fx_quote['price'] if fx_quote and fx_quote.get('price') else 1348.99
@@ -276,6 +277,10 @@ def main():
     current_tnx = tnx_quote['price'] if tnx_quote and tnx_quote.get('price') else 4.185
     tnx_diff = tnx_quote['diff'] if tnx_quote and tnx_quote.get('diff') is not None else -0.04
     tnx_diff_pct = tnx_quote['diffPct'] if tnx_quote and tnx_quote.get('diffPct') is not None else -0.95
+
+    current_wti = wti_quote['price'] if wti_quote and wti_quote.get('price') else 70.38
+    wti_diff = wti_quote['diff'] if wti_quote and wti_quote.get('diff') is not None else -0.68
+    wti_diff_pct = wti_quote['diffPct'] if wti_quote and wti_quote.get('diffPct') is not None else -0.96
 
     # 2. 주요 기관 리포트 수집
     raw_reports = fetch_hankyung_reports()
@@ -524,6 +529,7 @@ def main():
     tiger_history = tiger_quote.get('history', []) if tiger_quote else []
     nasdaq_history = nasdaq_quote.get('history', []) if nasdaq_quote else []
     tnx_history = tnx_quote.get('history', []) if tnx_quote else []
+    wti_history = wti_quote.get('history', []) if wti_quote else []
 
     # 한국 국채 10년물 금리 히스토리 생성 (날짜 및 일봉 시계열은 tnx_history 또는 fx_history 기반 동조)
     base_pts = tnx_history if tnx_history else fx_history
@@ -626,6 +632,15 @@ def main():
                 'bokRate': 3.25,
                 'desc': "한국은행 기준금리(3.25%) 인하 및 WGBI 편입 효과. 국내 주택담보대출(혼합형 5년 고정금리)의 직접적인 산정 기준으로서 잔금대출 금융비용 절감에 결정적 호재",
                 'history': kr10y_history
+            },
+            'wti': {
+                'name': 'WTI 국제 유가',
+                'symbol': 'CL=F',
+                'price': current_wti,
+                'diff': wti_diff,
+                'diffPct': wti_diff_pct,
+                'desc': "💡 글로벌 원유 대표 가격 지표(WTI). 유가 하락은 글로벌 인플레이션 진정과 금리 인하에 우호적인 거시 환경을 조성합니다.",
+                'history': wti_history
             }
         },
         'portfolioImpact': {
