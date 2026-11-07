@@ -8032,9 +8032,15 @@
                     S.fx.lastUpdated = new Date().toISOString();
                     S.updatedAt = new Date().toISOString();
                     
+                    if (marketInsightsData && marketInsightsData.macro && marketInsightsData.macro.fx) {
+                        marketInsightsData.macro.fx.current = gotRate;
+                        if (gotDxy > 0) marketInsightsData.macro.fx.dxy = gotDxy;
+                    }
                     save(false);
                     render();
                     renderFx();
+                    renderDashboardStockBarCharts();
+                    renderInsights();
                     
                     // 구글 스프레드시트에 백그라운드 동기화 (클라우드 DB 보관)
                     if (sync.url) {
@@ -10434,17 +10440,29 @@
             const period = currentStocksSyncPeriod || "1M";
             const sliceCount = period === "1W" ? 5 : (period === "1M" ? 22 : (period === "3M" ? 65 : (period === "6M" ? 130 : 260)));
 
-            // 1) 원·달러 환율 데이터 준비
+            const now = new Date();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const todayStr = `${mm}.${dd}`;
+
+            // 1) 원·달러 환율 데이터 준비 (시장분석/헤더/실시간 단가와 100% 동기화)
             let fxHist = (data.macro.fx && data.macro.fx.history) ? [...data.macro.fx.history] : [];
-            const curFx = (S && S.fx && S.fx.usdKrw > 0) ? S.fx.usdKrw : ((data.macro.fx && data.macro.fx.current) || 1335.1);
+            const curFx = (data.macro.fx && data.macro.fx.current) ? data.macro.fx.current : ((S && S.fx && S.fx.usdKrw > 0) ? S.fx.usdKrw : 1335.1);
             if (curFx && fxHist.length > 0) {
-                const now = new Date();
-                const mm = String(now.getMonth() + 1).padStart(2, '0');
-                const dd = String(now.getDate()).padStart(2, '0');
-                const todayStr = `${mm}.${dd}`;
                 const lastIdx = fxHist.length - 1;
                 if (fxHist[lastIdx].date === todayStr) {
                     fxHist[lastIdx].val = curFx;
+                    fxHist[lastIdx].close = curFx;
+                } else {
+                    fxHist.push({
+                        date: todayStr,
+                        fullDate: todayISO().replace(/-/g, '.'),
+                        val: curFx,
+                        open: curFx,
+                        high: Math.max(curFx, fxHist[lastIdx].high || curFx),
+                        low: Math.min(curFx, fxHist[lastIdx].low || curFx),
+                        close: curFx
+                    });
                 }
             }
             const fxPts = fxHist.slice(-sliceCount);
@@ -10457,14 +10475,32 @@
                 diffId: "sbiDiff_fx",
                 rangeId: "sbiRange_fx",
                 pts: fxPts,
-                fmtPrice: v => `${v.toLocaleString('ko-KR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}원`,
-                fmtDiff: v => `${Math.abs(v).toFixed(1)}원`,
+                fmtPrice: v => `${v.toLocaleString('ko-KR', { minimumFractionDigits: (v % 1 === 0 ? 0 : 2), maximumFractionDigits: 2 })}원`,
+                fmtDiff: v => `${Math.abs(v).toFixed(2)}원`,
                 fmtY: v => Math.round(v).toLocaleString('ko-KR'),
                 unit: "원"
             });
 
             // 2) SCHD 데이터 준비
             let schdHist = (data.macro.schd && data.macro.schd.history) ? [...data.macro.schd.history] : [];
+            const curSchd = (data.macro.schd && data.macro.schd.price) ? data.macro.schd.price : 35.17;
+            if (curSchd && schdHist.length > 0) {
+                const lastIdx = schdHist.length - 1;
+                if (schdHist[lastIdx].date === todayStr) {
+                    schdHist[lastIdx].val = curSchd;
+                    schdHist[lastIdx].close = curSchd;
+                } else {
+                    schdHist.push({
+                        date: todayStr,
+                        fullDate: todayISO().replace(/-/g, '.'),
+                        val: curSchd,
+                        open: curSchd,
+                        high: Math.max(curSchd, schdHist[lastIdx].high || curSchd),
+                        low: Math.min(curSchd, schdHist[lastIdx].low || curSchd),
+                        close: curSchd
+                    });
+                }
+            }
             const schdPts = schdHist.slice(-sliceCount);
 
             renderStockLineSvgChart({
@@ -10500,6 +10536,24 @@
                     { date: "10.29", val: 14955, open: 14850, high: 14990, low: 14850 },
                     { date: "10.30", val: 15175, open: 14955, high: 15200, low: 14940 }
                 ];
+            }
+            const curTiger = (data.macro.tiger && data.macro.tiger.price) ? data.macro.tiger.price : 15250;
+            if (curTiger && tigerHist.length > 0) {
+                const lastIdx = tigerHist.length - 1;
+                if (tigerHist[lastIdx].date === todayStr) {
+                    tigerHist[lastIdx].val = curTiger;
+                    tigerHist[lastIdx].close = curTiger;
+                } else {
+                    tigerHist.push({
+                        date: todayStr,
+                        fullDate: todayISO().replace(/-/g, '.'),
+                        val: curTiger,
+                        open: curTiger,
+                        high: Math.max(curTiger, tigerHist[lastIdx].high || curTiger),
+                        low: Math.min(curTiger, tigerHist[lastIdx].low || curTiger),
+                        close: curTiger
+                    });
+                }
             }
             const tigerPts = tigerHist.slice(-sliceCount);
 
@@ -10761,8 +10815,19 @@
                         if (res && res.priceOk > 0) {
                             S.lastSyncSlot = targetSlot;
                             localStorage.setItem("toad_last_sync_slot", targetSlot);
+                            if (marketInsightsData && marketInsightsData.macro) {
+                                const th = S.holdings.find(h => h.code === '458730');
+                                if (th && th.price && marketInsightsData.macro.tiger) {
+                                    marketInsightsData.macro.tiger.price = th.price;
+                                }
+                                if (res.fxOk && S.fx && S.fx.usdKrw > 0 && marketInsightsData.macro.fx) {
+                                    marketInsightsData.macro.fx.current = S.fx.usdKrw;
+                                }
+                            }
                             save(false);
                             render();
+                            renderDashboardStockBarCharts();
+                            renderInsights();
                             if (!silent) {
                                 toast(`⚡ ${res.priceOk}/${res.priceTotal}개 종목 및 환율 실시간 갱신 완료!` + (res.fxOk ? " (환율도 최신화됨)" : ""));
                             }
@@ -10821,9 +10886,21 @@
                     S.syncLog.push({ date: todayISO(), mode: silent ? `자동(${cp.timeLabel})` : "자동", detail: codes.length + "종목 중 " + okCount + "종목 반영" });
                 }
 
+                if (okCount > 0 && marketInsightsData && marketInsightsData.macro) {
+                    const th = S.holdings.find(h => h.code === '458730');
+                    if (th && th.price && marketInsightsData.macro.tiger) {
+                        marketInsightsData.macro.tiger.price = th.price;
+                    }
+                }
+
                 if (okCount < codes.length) {
                     if (silent) {
-                        if (okCount > 0) { save(false); render(); }
+                        if (okCount > 0) {
+                            save(false);
+                            render();
+                            renderDashboardStockBarCharts();
+                            renderInsights();
+                        }
                     } else {
                         openPriceModal(okCount === 0
                             ? "자동 조회가 차단되었습니다. 증권사 앱이나 네이버 금융에서 " + priceWordLabel() + " 종가를 확인해 입력해 주세요."
@@ -10833,6 +10910,8 @@
                     await syncLiveFx(false);
                     save(false);
                     render();
+                    renderDashboardStockBarCharts();
+                    renderInsights();
                     if (!silent) {
                         toast(okCount + "개 종목 종가 및 환율을 반영했습니다" + (silent ? ` (${cp.timeLabel} 자동)` : ""));
                     }
@@ -11008,6 +11087,12 @@
                         const parsed = JSON.parse(cached);
                         if (parsed && parsed.macro) {
                             marketInsightsData = parsed;
+                            if (parsed.macro.fx && parsed.macro.fx.current > 0) {
+                                S.fx = S.fx || {};
+                                S.fx.usdKrw = parsed.macro.fx.current;
+                                S.fx.usdKrwDate = todayISO();
+                                if (typeof renderFx === "function") renderFx();
+                            }
                             renderInsights();
                             renderDashboardStockBarCharts();
                         }
@@ -11022,6 +11107,12 @@
                     const data = await res.json();
                     if (data && data.macro) {
                         marketInsightsData = data;
+                        if (data.macro.fx && data.macro.fx.current > 0) {
+                            S.fx = S.fx || {};
+                            S.fx.usdKrw = data.macro.fx.current;
+                            S.fx.usdKrwDate = todayISO();
+                            if (typeof renderFx === "function") renderFx();
+                        }
                         try {
                             localStorage.setItem("money_market_insights_cache_v1", JSON.stringify(data));
                         } catch (errLs) {}
@@ -11037,6 +11128,7 @@
                 marketInsightsData = DEFAULT_MARKET_INSIGHTS;
             }
             renderInsights();
+            renderDashboardStockBarCharts();
         }
 
         async function refreshInsights(showToast = true) {
@@ -11415,6 +11507,29 @@
                     { date: '10.28', val: cur * 0.999 },
                     { date: '10.31', val: cur }
                 ];
+            } else {
+                // 최신 단가(current 또는 price)와 history의 마지막 데이터 포인트를 완벽 동기화
+                const cur = item ? (item.current != null ? item.current : (item.price != null ? item.price : null)) : null;
+                if (cur != null) {
+                    const now = new Date();
+                    const mm = String(now.getMonth() + 1).padStart(2, '0');
+                    const dd = String(now.getDate()).padStart(2, '0');
+                    const todayStr = `${mm}.${dd}`;
+                    const lastIdx = hist.length - 1;
+                    if (hist[lastIdx].date === todayStr) {
+                        hist[lastIdx].val = cur;
+                    } else if (Math.abs(hist[lastIdx].val - cur) > 0.001) {
+                        hist.push({
+                            date: todayStr,
+                            fullDate: todayISO().replace(/-/g, '.'),
+                            val: cur,
+                            open: cur,
+                            high: Math.max(cur, hist[lastIdx].high || cur),
+                            low: Math.min(cur, hist[lastIdx].low || cur),
+                            close: cur
+                        });
+                    }
+                }
             }
             const range = chartRangeState[key] || '1m';
             if (range === '1w') return hist.slice(-5);
@@ -12986,9 +13101,9 @@
             const savedTs = Number(localStorage.getItem("toad_last_price_sync_ts") || 0);
             const effectiveLastTs = Math.max(lastLiveMarketSyncTs, savedTs);
 
-            // 장중(한국장 09:00~15:35, 미국장 22:30~05:00)이며 마지막 조회 후 5분 경과 시 조용히 최신 시세 갱신
-            const fiveMin = 5 * 60 * 1000;
-            if (force || (ms.isOpen && (nowTs - effectiveLastTs > fiveMin))) {
+            // 장중(한국장 09:00~15:35, 미국장 22:30~05:00)이며 마지막 조회 후 1분(55초) 경과 시 조용히 최신 시세 갱신
+            const liveInterval = 55 * 1000;
+            if (force || (ms.isOpen && (nowTs - effectiveLastTs > liveInterval))) {
                 lastLiveMarketSyncTs = nowTs;
                 safeSetItem("toad_last_price_sync_ts", nowTs.toString());
                 try {
@@ -13898,7 +14013,7 @@
                 const needSlotSync = lastSlot !== cp.slotId;
                 const ms = getMarketStatusInfo();
                 const lastTs = Number(localStorage.getItem("toad_last_price_sync_ts") || 0);
-                const needLiveSync = ms.isOpen && (Date.now() - lastTs > 5 * 60 * 1000);
+                const needLiveSync = ms.isOpen && (Date.now() - lastTs > 55 * 1000);
                 
                 if (needSlotSync || needLiveSync || sync.url) {
                     isDailyAssetSyncing = true;
@@ -13935,7 +14050,7 @@
             }
         });
 
-        // 사용자가 대시보드를 켜두고 있는 동안 1분마다 장중 시세 자동 체크 (최소 5분 쿨다운 준수)
+        // 사용자가 대시보드를 켜두고 있는 동안 1분마다 장중 시세 자동 갱신 (장중 1분 자동 주기)
         setInterval(() => {
             if (document.visibilityState === "visible") {
                 checkMarketHoursLiveSync();

@@ -66,6 +66,27 @@ def fetch_yahoo_quote(symbol):
                 
             diff = (price - prev) if (price and prev) else 0.0
             diff_pct = (diff / prev * 100) if (prev and prev > 0) else 0.0
+
+            # 최신 실시간 시세(regularMarketPrice)를 시계열 히스토리의 최신 데이터 포인트에 완벽 동기화
+            if price and history:
+                today_kst = datetime.now(KST).strftime('%m.%d')
+                today_full = datetime.now(KST).strftime('%Y.%m.%d')
+                if history[-1]['date'] == today_kst:
+                    history[-1]['val'] = round(price, 2)
+                    history[-1]['close'] = round(price, 2)
+                    if price > history[-1]['high']: history[-1]['high'] = round(price, 2)
+                    if price < history[-1]['low']: history[-1]['low'] = round(price, 2)
+                else:
+                    history.append({
+                        'date': today_kst,
+                        'fullDate': today_full,
+                        'val': round(price, 2),
+                        'open': round(price, 2),
+                        'high': round(price, 2),
+                        'low': round(price, 2),
+                        'close': round(price, 2)
+                    })
+
             return {
                 'price': round(price, 3) if price else None,
                 'prev': round(prev, 3) if prev else None,
