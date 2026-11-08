@@ -301,7 +301,7 @@ function parseYahooQuoteMeta_(jsonText) {
     var j = JSON.parse(jsonText);
     var m = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
     var cur = m && (m.regularMarketPrice || m.chartPreviousClose);
-    var prev = m && (m.chartPreviousClose || m.previousClose);
+    var prev = m && (m.previousClose || m.chartPreviousClose);
     if (cur > 0) {
       return { price: Math.round(cur * 100) / 100, prevPrice: Math.round((prev > 0 ? prev : cur) * 100) / 100 };
     }
@@ -316,7 +316,7 @@ function parseNaverPolling_(jsonText) {
     var v2 = d && (d.closePriceRaw || d.closePrice || d.nv);
     var cur = v2 ? Number(String(v2).replace(/[^0-9.-]/g, "")) : 0;
     if (cur > 0) {
-      var diff = d.compareToPreviousClosePriceRaw ? Number(d.compareToPreviousClosePriceRaw) : 0;
+      var diff = Math.abs(d.compareToPreviousClosePriceRaw ? Number(d.compareToPreviousClosePriceRaw) : 0);
       var isFalling = d.compareToPreviousPrice && (d.compareToPreviousPrice.name === "FALLING" || d.compareToPreviousPrice.code === "5");
       var prev = isFalling ? (cur + diff) : (cur - diff);
       return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
@@ -335,7 +335,7 @@ function fetchStockPriceSingleFallback_(code, isNumeric) {
         var v3 = j3 && (j3.closePrice || j3.nowPrice);
         var cur = v3 ? Number(String(v3).replace(/[^0-9.-]/g, "")) : 0;
         if (cur > 0) {
-          var diff = j3.compareToPreviousClosePrice ? Number(j3.compareToPreviousClosePrice) : 0;
+          var diff = Math.abs(j3.compareToPreviousClosePrice ? Number(j3.compareToPreviousClosePrice) : 0);
           var isFalling = j3.compareToPreviousPrice && (j3.compareToPreviousPrice.name === "FALLING" || j3.compareToPreviousPrice.code === "5");
           var prev = isFalling ? (cur + diff) : (cur - diff);
           return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };

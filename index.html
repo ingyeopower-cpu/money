@@ -5752,7 +5752,7 @@
                     <div class="field"><label id="tf-stockSelLabel">종목</label><select id="tf-stockSel"></select></div>
                     <div class="field" id="tf-newNameWrap" style="display:none"><label>종목명</label><input id="tf-newName" placeholder="새 종목명"></div>
                     <div class="field" id="tf-newCodeWrap" style="display:none;max-width:110px"><label>코드(선택)</label><input id="tf-newCode" placeholder="458730"></div>
-                    <div class="field" style="max-width:110px"><label id="tf-qtyLabel">주수</label><input class="num" id="tf-qty" placeholder="10"></div>
+                    <div class="field" style="max-width:130px"><label id="tf-qtyLabel">주수</label><input class="num" id="tf-qty" placeholder="주수 입력"></div>
                     <div class="field" style="max-width:130px"><label id="tf-execPriceLabel">체결단가(원)</label><input class="num" id="tf-execPrice" placeholder="15,000"></div>
                 </div>
                 <div class="hint" id="tf-stockHint" style="display:none;margin-top:6px;color:var(--brand);">
@@ -7347,14 +7347,14 @@
                     else h.divYield = 0;
                 }
                 const BASE_PREV_PRICES = {
-                    "458730": 14540, // TIGER 미국배당다우존스 (9/14 종가)
-                    "379800": 23135, // KODEX 미국S&P500 (9/14 종가)
-                    "379810": 25870, // KODEX 미국나스닥100 (9/14 종가)
-                    "476800": 4200,  // KODEX 한국부동산리츠인프라 (9/14 종가)
-                    "455660": 9335,  // ACE 미국하이일드액티브(H) (9/14 종가)
-                    "SOXL": 101.13
+                    "458730": 15420, // TIGER 미국배당다우존스
+                    "379800": 22600, // KODEX 미국S&P500
+                    "379810": 24200, // KODEX 미국나스닥100
+                    "476800": 3900,  // KODEX 한국부동산리츠인프라
+                    "455660": 9180,  // ACE 미국하이일드액티브(H)
+                    "SOXL": 40.87
                 };
-                if (typeof h.prevPrice !== "number" || h.prevPrice <= 0) {
+                if (typeof h.prevPrice !== "number" || h.prevPrice <= 0 || (h.code === "SOXL" && h.prevPrice > 100)) {
                     h.prevPrice = BASE_PREV_PRICES[h.code] || h.price;
                 }
             });
@@ -9578,11 +9578,15 @@
                 document.getElementById("tf-stockSelLabel").textContent = "매수 종목";
                 document.getElementById("tf-qtyLabel").textContent = "매수 주수";
                 document.getElementById("tf-execPriceLabel").textContent = "체결단가(원)";
+                const qInp = document.getElementById("tf-qty");
+                if (qInp) qInp.placeholder = "주수 입력 (예: 10)";
             } else {
                 hint.innerHTML = '💡 <b>주식 매도 (현금화)</b>: 주수 × 체결단가로 매도 대금이 계산되어 받을 항목으로 이동하며, 주식 보유 수량이 차감됩니다.';
                 document.getElementById("tf-stockSelLabel").textContent = "매도 종목";
                 document.getElementById("tf-qtyLabel").textContent = "매도 주수";
                 document.getElementById("tf-execPriceLabel").textContent = "매도단가(원)";
+                const qInp = document.getElementById("tf-qty");
+                if (qInp) qInp.placeholder = "주수 입력 (예: 10)";
             }
 
             const sel = document.getElementById("tf-stockSel");
@@ -9617,16 +9621,24 @@
             if (newNameWrap) newNameWrap.style.display = isNew ? "" : "none";
             if (newCodeWrap) newCodeWrap.style.display = isNew ? "" : "none";
 
-            // 종목 선택 시 기본 단가 자동 제안 (입력 편의 향상)
+            // 종목 선택 시 기본 단가 자동 제안 및 주수 플레이스홀더 직관적 안내
             if (selEl && !isNew) {
                 const h = S.holdings.find(x => x.id === selEl.value);
                 const epInput = document.getElementById("tf-execPrice");
-                if (h && epInput && !epInput.value) {
+                const qtyInput = document.getElementById("tf-qty");
+                const fromId = document.getElementById("tf-from").value;
+                const f = S.buckets.find(x => x.id === fromId);
+                const isSell = (f && f.kind === "stock");
+
+                if (h) {
                     const defaultP = h.price || h.avgPrice || 0;
-                    if (defaultP > 0) {
+                    if (defaultP > 0 && epInput && !epInput.value) {
                         epInput.value = won(defaultP);
-                        updateTfAmtFromStock();
                     }
+                    if (qtyInput) {
+                        qtyInput.placeholder = isSell ? `최대 ${won(h.qty || 0)}주` : "주수 입력 (예: 10)";
+                    }
+                    updateTfAmtFromStock();
                 }
             }
         }
@@ -9640,7 +9652,10 @@
 
             const qty = parseNum(document.getElementById("tf-qty").value);
             const execPrice = parseNum(document.getElementById("tf-execPrice").value);
-            document.getElementById("tf-amt").value = (qty > 0 && execPrice > 0) ? won(qty * execPrice) : "";
+            const amtEl = document.getElementById("tf-amt");
+            if (amtEl) {
+                amtEl.value = (qty > 0 && execPrice > 0) ? won(qty * execPrice) : "";
+            }
         }
 
         function renderLog() {
@@ -10724,7 +10739,7 @@
                     if (!d) return null;
                     const cur = parseNum(d.closePrice || d.closePriceRaw || d.nv);
                     if (cur <= 0) return null;
-                    const diff = parseNum(d.compareToPreviousClosePriceRaw || d.compareToPreviousClosePrice || 0);
+                    const diff = Math.abs(parseNum(d.compareToPreviousClosePriceRaw || d.compareToPreviousClosePrice || 0));
                     const isDown = d.compareToPreviousPrice && (d.compareToPreviousPrice.name === "FALLING" || d.compareToPreviousPrice.code === "5");
                     const prev = isDown ? (cur + diff) : (cur - diff);
                     return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
@@ -10736,7 +10751,7 @@
                     const m = j && j.chart && j.chart.result && j.chart.result[0] && j.chart.result[0].meta;
                     if (!m) return null;
                     const cur = parseNum(m.regularMarketPrice || m.chartPreviousClose);
-                    const prev = parseNum(m.chartPreviousClose);
+                    const prev = parseNum(m.previousClose || m.chartPreviousClose);
                     if (cur <= 0) return null;
                     return { price: cur, prevPrice: prev > 0 ? prev : cur };
                 }
@@ -10747,7 +10762,7 @@
                     if (!j) return null;
                     const cur = parseNum(j.closePrice || j.nowPrice);
                     if (cur <= 0) return null;
-                    const diff = parseNum(j.compareToPreviousClosePrice || 0);
+                    const diff = Math.abs(parseNum(j.compareToPreviousClosePrice || 0));
                     const isDown = j.compareToPreviousPrice && (j.compareToPreviousPrice.name === "FALLING" || j.compareToPreviousPrice.code === "5");
                     const prev = isDown ? (cur + diff) : (cur - diff);
                     return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
@@ -12865,6 +12880,14 @@
         }
         function addEntry(e) {
             S.entries.push(e); applyEntry(e, 1);
+            // 거래(저축/유입/이동/배당) 발생 시 오늘의 자산 히스토리 스냅샷도 즉시 갱신
+            const today = todayISO();
+            const curTot = totalAssets();
+            S.history = S.history || [];
+            const exIdx = S.history.findIndex(h => h.date === today);
+            if (exIdx >= 0) S.history[exIdx].total = curTot;
+            else S.history.push({ date: today, total: curTot });
+            S.history.sort((a, b) => a.date.localeCompare(b.date));
             autosave(); render();
         }
         document.getElementById("sv-bucket").addEventListener("change", updateSvStockUI);
@@ -12936,8 +12959,12 @@
             updateTfStockUI();
         });
         document.getElementById("tf-stockSel").addEventListener("change", updateTfNewUI);
-        document.getElementById("tf-qty").addEventListener("input", updateTfAmtFromStock);
-        document.getElementById("tf-execPrice").addEventListener("input", updateTfAmtFromStock);
+        ["input", "change", "keyup", "paste"].forEach(ev => {
+            const qEl = document.getElementById("tf-qty");
+            const epEl = document.getElementById("tf-execPrice");
+            if (qEl) qEl.addEventListener(ev, updateTfAmtFromStock);
+            if (epEl) epEl.addEventListener(ev, updateTfAmtFromStock);
+        });
 
         document.getElementById("btnAddTransfer").addEventListener("click", () => {
             const from = document.getElementById("tf-from").value, to = document.getElementById("tf-to").value;
@@ -12952,9 +12979,19 @@
             if (isToStock) {
                 // 현금 → 주식 매수(자금 투입)
                 const qty = parseNum(document.getElementById("tf-qty").value);
-                if (qty <= 0) { alert("매수할 주수를 입력해 주세요."); return; }
+                if (qty <= 0) {
+                    alert("매수할 주수를 입력해 주세요.");
+                    const qInp = document.getElementById("tf-qty");
+                    if (qInp) qInp.focus();
+                    return;
+                }
                 const execPrice = parseNum(document.getElementById("tf-execPrice").value);
-                if (execPrice <= 0) { alert("체결단가를 입력해 주세요."); return; }
+                if (execPrice <= 0) {
+                    alert("체결단가를 입력해 주세요.");
+                    const epInp = document.getElementById("tf-execPrice");
+                    if (epInp) epInp.focus();
+                    return;
+                }
                 const amt = qty * execPrice;
 
                 const sel = document.getElementById("tf-stockSel").value;
@@ -12985,9 +13022,19 @@
             } else if (isFromStock) {
                 // 주식 → 현금 매도(현금화)
                 const qty = parseNum(document.getElementById("tf-qty").value);
-                if (qty <= 0) { alert("매도할 주수를 입력해 주세요."); return; }
+                if (qty <= 0) {
+                    alert("매도할 주수를 입력해 주세요.");
+                    const qInp = document.getElementById("tf-qty");
+                    if (qInp) qInp.focus();
+                    return;
+                }
                 const execPrice = parseNum(document.getElementById("tf-execPrice").value);
-                if (execPrice <= 0) { alert("매도단가를 입력해 주세요."); return; }
+                if (execPrice <= 0) {
+                    alert("매도단가를 입력해 주세요.");
+                    const epInp = document.getElementById("tf-execPrice");
+                    if (epInp) epInp.focus();
+                    return;
+                }
                 const amt = qty * execPrice;
 
                 const sel = document.getElementById("tf-stockSel").value;
@@ -13909,6 +13956,8 @@
                     if (!isFinite(numVal)) return;
                     const formatted = numVal.toLocaleString("ko-KR");
                     el.value = formatted;
+                    if (el.id === "tf-execPrice" && typeof updateTfAmtFromStock === "function") updateTfAmtFromStock();
+                    if (el.id === "sv-execPrice" && typeof updateSvAmtFromStock === "function") updateSvAmtFromStock();
                     const newPos = Math.max(0, pos + (formatted.length - prevLen));
                     el.setSelectionRange(newPos, newPos);
                 });
