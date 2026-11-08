@@ -1207,6 +1207,22 @@
             color: #60a5fa;
         }
 
+        @media (max-width: 380px) {
+            .mobile-bottom-dock {
+                padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+            }
+            .dock-item {
+                padding: 4px 5px !important;
+                gap: 2px !important;
+            }
+            .dock-item .dock-icon {
+                font-size: 17px !important;
+            }
+            .dock-item .dock-label {
+                font-size: 9.5px !important;
+                letter-spacing: -0.04em !important;
+            }
+        }
         @media (max-width: 768px) {
             .mobile-bottom-dock {
                 display: flex;
@@ -7339,17 +7355,17 @@
             d.holdings = (d.holdings || []).filter(h => !(h.account === "우리사주" || (h.name && h.name.indexOf("우리사주") >= 0) || (h.name && h.name.indexOf("현대차") >= 0 && h.code === "우리사주") || h.id === "h_hyundai_esop"));
             d.buckets = (d.buckets || []).filter(b => !(b.name && b.name.indexOf("우리사주") >= 0));
 
-            // [긴급 데이터 자가치유] 9월 5일 기준 옛날 수량으로 캐시 덮어쓰기된 경우 실보유 수량으로 자동 보정
+            // [긴급 데이터 자가치유] 이전 캐시 충돌 등으로 손상된 값 정확한 수량/잔액으로 복원
             (function healState_(state) {
                 if (!state || !state.holdings || !state.buckets) return;
                 const tg = (state.holdings || []).find(h => h.code === "458730" && h.account === "일반계좌");
-                if (tg && (tg.qty === 1169 || tg.qty < 2900)) { tg.qty = 2939; tg.avgPrice = 15024; tg.price = 15250; tg.prevPrice = 15420; }
+                if (tg && tg.qty === 1169) { tg.qty = 2939; tg.avgPrice = 15024; tg.price = 15250; tg.prevPrice = 15420; }
 
                 const ti = (state.holdings || []).find(h => h.id === "v6zjfbn");
                 if (ti && ti.qty === 3183) { ti.qty = 3212; ti.price = 15250; ti.prevPrice = 15420; }
 
                 const nq = (state.holdings || []).find(h => h.code === "379810" && h.account === "일반계좌");
-                if (nq && (nq.qty === 210 || nq.qty < 400)) { nq.qty = 403; nq.avgPrice = 27950; nq.price = 24050; nq.prevPrice = 24200; }
+                if (nq && nq.qty === 210) { nq.qty = 403; nq.avgPrice = 27950; nq.price = 24050; nq.prevPrice = 24200; }
 
                 const soxl = (state.holdings || []).find(h => h.code === "SOXL");
                 if (soxl && (soxl.price === 117.28 || soxl.prevPrice === 117.28 || !soxl.prevPrice)) {
@@ -7367,13 +7383,6 @@
 
                 const bCash = (state.buckets || []).find(b => b.name === "현금");
                 if (bCash && bCash.amount === 3000001) bCash.amount = 3000000;
-
-                if (Array.isArray(state.history)) {
-                    state.history.forEach(h => {
-                        if (h.date === "2026-11-08" && h.total < 215000000) h.total = 218338961.37;
-                        if (h.date === "2026-11-07" && h.total > 225000000) h.total = 218826157;
-                    });
-                }
             })(d);
 
             d.holdings.forEach(h => {
@@ -7530,8 +7539,11 @@
             await syncPush();
             return { skipped: false };
         }
+        let syncPending = false;
         async function serverRefreshMarket(targetSlot) {
             if (!sync.url) return null;
+            if (syncing) { syncPending = true; return null; }
+            syncing = true;
             // 초고속 병렬 조회(1~2초 완료)에 맞춰 타임아웃 15초 부여 (앱스스크립트 콜드스타트 여유분)
             const ac = new AbortController(); const t = setTimeout(() => ac.abort(), 15000);
             try {
@@ -7562,7 +7574,14 @@
                     render();
                 }
                 return j;
-            } finally { clearTimeout(t); }
+            } finally {
+                clearTimeout(t);
+                syncing = false;
+                if (syncPending) {
+                    syncPending = false;
+                    setTimeout(doSync, 100);
+                }
+            }
         }
         function mergeEntries_(localEntries, remoteEntries) {
             const map = new Map();
@@ -7578,7 +7597,11 @@
         }
 
         async function doSync() {
-            if (!sync.url || syncing) return;
+            if (!sync.url) return;
+            if (syncing) {
+                syncPending = true;
+                return;
+            }
             syncing = true; setSyncStatus("동기화 중…");
             try {
                 const pulled = await syncPull();
@@ -7614,7 +7637,13 @@
                 sync.lastSyncAt = new Date().toISOString(); saveSyncCfg();
             } catch (e) {
                 setSyncStatus("동기화 실패: " + (e.message || e), "err");
-            } finally { syncing = false; }
+            } finally {
+                syncing = false;
+                if (syncPending) {
+                    syncPending = false;
+                    setTimeout(doSync, 100);
+                }
+            }
         }
         async function syncForcePull() {
             if (!sync.url) return;
@@ -7693,16 +7722,32 @@
                 };
             }
         }
+        function getKstDateOffset(daysBack) {
+            const now = new Date(Date.now() - (daysBack || 0) * 86400000);
+            try {
+                const formatter = new Intl.DateTimeFormat("en-US", {
+                    timeZone: "Asia/Seoul",
+                    year: "numeric", month: "numeric", day: "numeric"
+                });
+                const parts = formatter.formatToParts(now);
+                const m = {};
+                parts.forEach(p => m[p.type] = p.value);
+                return `${m.year}-${String(m.month).padStart(2, "0")}-${String(m.day).padStart(2, "0")}`;
+            } catch (e) {
+                const d = new Date(Date.now() - (daysBack || 0) * 86400000);
+                return d.toISOString().slice(0, 10);
+            }
+        }
         function nowHM_() {
             const kst = getKstDate();
             return String(kst.hour).padStart(2, "0") + ":" + String(kst.minute).padStart(2, "0");
         }
         /* ---------- 정규장 운영 상태 체크 (한국장 09:00~15:35, 미국장 22:30~05:00) ---------- */
         function getMarketStatusInfo() {
-            const now = new Date();
-            const kstDate = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-            const day = kstDate.getDay(); // 0: 일, 1: 월, ..., 6: 토
-            const mins = kstDate.getHours() * 60 + kstDate.getMinutes();
+            const kst = getKstDate();
+            const dayMap = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+            const day = dayMap[kst.weekday] !== undefined ? dayMap[kst.weekday] : 0;
+            const mins = kst.hour * 60 + kst.minute;
 
             const isWeekday = (day >= 1 && day <= 5);
             // 한국 정규장: 평일 09:00 (540분) ~ 15:35 (935분)
@@ -7769,7 +7814,7 @@
         const lockedAssets = () => {
             const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
             const hLocked = (S.holdings || []).filter(h => h.excludeFromGoal).reduce((s, h) => s + (h.qty || 0) * (h.price || 0) * (h.isUsd ? fxRate : 1), 0);
-            const bLocked = (S.buckets || []).filter(b => b.excludeFromGoal).reduce((s, b) => s + (b.amount || 0), 0);
+            const bLocked = (S.buckets || []).filter(b => b.excludeFromGoal).reduce((s, b) => s + (b.kind === "stock" ? 0 : (b.amount || 0)), 0);
             return hLocked + bLocked;
         };
         // 실제 잔금 치룰 때 쓸 수 있는 가용 자산
@@ -8041,27 +8086,27 @@
 
                 // 2) 2순위 보조 실시간 환율 API (exchangerate-api.com - 초경량 응답)
                 if (!gotRate) {
+                    const ac2 = new AbortController();
+                    const timer2 = setTimeout(() => ac2.abort(), 4000);
                     try {
-                        const ac2 = new AbortController();
-                        const timer2 = setTimeout(() => ac2.abort(), 4000);
                         const r2 = await fetch("https://api.exchangerate-api.com/v4/latest/USD", { signal: ac2.signal });
-                        clearTimeout(timer2);
                         const j2 = await r2.json();
                         if (j2 && j2.rates && j2.rates.KRW) {
                             gotRate = Math.round(j2.rates.KRW * 100) / 100;
                         }
                     } catch (netErr2) {
                         console.warn("Tier-2 FX API failed:", netErr2);
+                    } finally {
+                        clearTimeout(timer2);
                     }
                 }
 
                 // 3) 3순위 무료 공개 실시간 환율 API (open.er-api.com)
                 if (!gotRate) {
+                    const ac1 = new AbortController();
+                    const timer1 = setTimeout(() => ac1.abort(), 4000);
                     try {
-                        const ac1 = new AbortController();
-                        const timer1 = setTimeout(() => ac1.abort(), 4000);
                         const r = await fetch("https://open.er-api.com/v6/latest/USD", { signal: ac1.signal });
-                        clearTimeout(timer1);
                         const j = await r.json();
                         if (j && j.result === "success" && j.rates && j.rates.KRW) {
                             gotRate = Math.round(j.rates.KRW * 100) / 100;
@@ -8073,6 +8118,8 @@
                         }
                     } catch (netErr1) {
                         console.warn("Tier-3 FX API failed:", netErr1);
+                    } finally {
+                        clearTimeout(timer1);
                     }
                 }
                 
@@ -8300,7 +8347,7 @@
             set("k-total-note", c.locked > 0 ? `${won(c.total)}원 (잔금 가용 ${kfmt(c.usable)})` : won(c.total) + "원");
             set("k-goal", kfmt(c.goal)); set("k-goal-note", "취득세 " + kfmt(acqTax()) + " 포함");
             set("k-gap", kfmt(c.gap));
-            set("k-gap-note", c.gap > 0 ? (c.locked > 0 ? "가용자산 기준 " : "") + "달성률 " + (c.usable / c.goal * 100).toFixed(1) + "%" : "목표 달성");
+            set("k-gap-note", c.gap > 0 ? (c.locked > 0 ? "가용자산 기준 " : "") + "달성률 " + (c.goal > 0 ? (c.usable / c.goal * 100).toFixed(1) : "0.0") + "%" : "목표 달성");
             set("k-months", c.n + "개월"); set("k-months-note", (S.goal.targetMonth || "") + " 기준");
             set("k-need", kfmt(c.need)); set("k-need-note", "매달 이만큼 모으면 목표 도달");
             set("k-plan", kfmt(c.plan));
@@ -9175,17 +9222,20 @@
                         tI = (P * rRate * G) + tempInt;
                         aP = (P + tI) / N;
                     } else if (loanType === "체증식") {
-                        const inc = 0.005;
+                        // HF 표준 체증식: 부의 상환(초기 상환액 < 첫달 이자) 원천 방지 및 점진적 원금 감채
+                        const inc = 0.002; // 현실적인 월 증액률 (~연 2.4%)
                         let factor = 0;
                         for (let i = 0; i < L; i++) factor += Math.pow(1 + inc, i) / Math.pow(1 + rRate, i + 1);
-                        const pmt_first = P / factor;
+                        let pmt_first = P / factor;
+                        if (pmt_first < P * rRate * 1.02) pmt_first = P * rRate * 1.02;
                         p1 = G === 0 ? pmt_first : P * rRate;
                         let tempInt = 0, currentBal = P, currentPmt = pmt_first;
                         for (let i = 0; i < L; i++) {
                             let intPart = currentBal * rRate;
-                            let prcPart = currentPmt - intPart;
+                            let prcPart = Math.max(0, currentPmt - intPart);
+                            if (i === L - 1) prcPart = currentBal; // 마지막 달 잔여 원금 완납
                             tempInt += intPart;
-                            currentBal -= prcPart;
+                            currentBal = Math.max(0, currentBal - prcPart);
                             currentPmt *= (1 + inc);
                         }
                         tI = (P * rRate * G) + tempInt;
@@ -9228,8 +9278,8 @@
 
             const dsrBar = document.getElementById("dsrbar");
 
-            // 스트레스 DSR 3단계 가산폭 계산 (비수도권 지방 완화 + 금리유형별 차등)
-            const baseStress = (S.loan.region === "metro") ? 1.50 : 0.75;
+            // 스트레스 DSR 2단계 현행 가산폭 계산 (수도권 1.20%p / 비수도권 0.75%p + 금리유형별 차등)
+            const baseStress = (S.loan.region === "metro") ? 1.20 : 0.75;
             let stressRatio = 0.3; // periodic default
             if (S.loan.rateType === "fixed") stressRatio = 0;
             else if (S.loan.rateType === "periodic") stressRatio = 0.3;
@@ -9254,10 +9304,14 @@
             }
 
             const stressNote = S.loan.useStressDsr ? ` (스트레스 +${stressAdd.toFixed(2)}%p 가산)` : "";
-            set("dsr-l", "현재 DSR " + dsr.toFixed(1) + "%" + stressNote);
+            if (income > 0) {
+                set("dsr-l", "현재 DSR " + dsr.toFixed(1) + "%" + stressNote);
+            } else {
+                set("dsr-l", "소득 입력 필요 (DSR 심사 불가)");
+            }
             set("dsr-r", "연간 상환액(DSR 심사용) " + kfmt(annualMortgageForDsr + (S.loan.otherDebt || 0)));
 
-            set("dti-l", "현재 DTI " + dti.toFixed(1) + "%" + (dti > 60 ? " (60% 초과 주의!)" : ""));
+            set("dti-l", income > 0 ? "현재 DTI " + dti.toFixed(1) + "%" + (dti > 60 ? " (60% 초과 주의!)" : "") : "소득 입력 필요 (DTI 심사 불가)");
 
             set("l-maxLtv", kfmt(maxLoan));
             const ltvNote = P > maxLoan
@@ -10690,7 +10744,7 @@
             else if (currentFxPeriod === "3M") daysBack = 90;
             else if (currentFxPeriod === "1Y") daysBack = 365;
 
-            const cutoffDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+            const cutoffDate = getKstDateOffset(daysBack);
             let filtered = data.filter(x => x.date >= cutoffDate);
             if (filtered.length < 2) {
                 const fallbackCounts = { "1W": 5, "1M": 20, "3M": 60, "1Y": 250 };
@@ -10752,7 +10806,7 @@
                 else if (currentAssetPeriod === "3M") daysBack = 90;
                 else if (currentAssetPeriod === "1Y") daysBack = 365;
 
-                const cutoffDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+                const cutoffDate = getKstDateOffset(daysBack);
                 filtered = historyList.filter(h => h.date >= cutoffDate);
                 if (filtered.length < 2 && historyList.length >= 2) {
                     const fallbackCounts = { "1W": 5, "1M": 15, "3M": 40, "1Y": 100 };
@@ -13130,17 +13184,7 @@
         let rz = null;
         window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(renderDash, 160); });
 
-        // 부부 연동: 핸드폰을 켜거나 앱 화면으로 돌아올 때 즉시 최신 데이터 자동 동기화
-        document.addEventListener("visibilitychange", () => {
-            if (document.visibilityState === "visible" && sync.url && !syncing) {
-                doSync();
-            }
-        });
-        window.addEventListener("focus", () => {
-            if (sync.url && !syncing) {
-                doSync();
-            }
-        });
+        // Note: 통합 체크포인트 및 시세 갱신 감지기가 하단 runInitialDataAndMarketSync() 영역에서 일원화 관리됨
 
         /* ---------- 자산 변화 체크 시점 시스템 (한국 장 종료 16:00 / 아침 정산 06:00) ---------- */
         function getCurrentMarketCheckpoint() {
@@ -13352,12 +13396,16 @@
 
         function getTopMovers(limit = 3) {
             const fxRate = S.fx && S.fx.usdKrw > 0 ? S.fx.usdKrw : 1350;
+            const prevFxRate = S.fx && S.fx.prevUsdKrw > 0 ? S.fx.prevUsdKrw : fxRate;
             const grouped = {};
             (S.holdings || []).forEach(h => {
-                if (!h.price || !h.prevPrice || h.price === h.prevPrice) return;
-                const diffPerShare = h.price - h.prevPrice;
-                const totalDiff = diffPerShare * (h.qty || 0) * (h.isUsd ? fxRate : 1);
-                const oldVal = h.prevPrice * (h.qty || 0) * (h.isUsd ? fxRate : 1);
+                if (!h.price || !h.prevPrice) return;
+                const curRate = h.isUsd ? fxRate : 1;
+                const prevRate = h.isUsd ? prevFxRate : 1;
+                const curVal = h.price * (h.qty || 0) * curRate;
+                const oldVal = h.prevPrice * (h.qty || 0) * prevRate;
+                const totalDiff = curVal - oldVal;
+                if (Math.abs(totalDiff) < 1) return;
                 const key = h.name || h.code;
                 if (!grouped[key]) {
                     grouped[key] = { name: key, diff: 0, oldTotal: 0, code: h.code };
@@ -13614,6 +13662,7 @@
                     flatImg.style.display = "none";
                 }
                 if (lossVideo) {
+                    lossVideo.muted = true;
                     lossVideo.style.display = "block";
                     lossVideo.currentTime = 0;
                     const p = lossVideo.play();
@@ -13635,6 +13684,7 @@
                     flatImg.style.display = "none";
                 }
                 if (gainVideo) {
+                    gainVideo.muted = true;
                     gainVideo.style.display = "block";
                     gainVideo.currentTime = 0;
                     const playPromise = gainVideo.play();
@@ -13677,10 +13727,11 @@
             renderToadModalContent(mode, change, false);
             const modal = document.getElementById("toadAlertModal");
             if (modal) modal.classList.add("show");
-            if (mode === "loss" || mode === "gain") {
+            // 자동 팝업 시 브라우저 오디오/진동 차단 정책 준수 (수동 클릭 시에만 효과음 출력)
+            if (isManual && (mode === "loss" || mode === "gain")) {
                 playToadSound(mode);
             }
-            if (navigator.vibrate) {
+            if (isManual && navigator.vibrate) {
                 if (mode === "loss") navigator.vibrate([100, 60, 140]);
                 else if (mode === "gain") navigator.vibrate([40, 40, 40, 40]);
             }
@@ -13988,12 +14039,22 @@
             const targets = document.querySelectorAll("input.num, [data-goal], [data-loan], [data-fx], #sv-amt, #sv-qty, #sv-execPrice, #in-amt, #dv-amt, #tf-amt, #tf-qty, #tf-execPrice");
             targets.forEach(inp => {
                 if (inp.type === "checkbox" || inp.type === "month" || inp.type === "date" || inp.tagName === "SELECT") return;
-                const isDecimal = inp.id === "g-acqTaxRate" || (inp.dataset && (inp.dataset.goal === "acqTaxRate" || inp.dataset.loan === "rate" || inp.dataset.fx === "usdKrw"));
+                const isDecimal = inp.id === "g-acqTaxRate" || (inp.dataset && (
+                    inp.dataset.goal === "acqTaxRate" ||
+                    inp.dataset.loan === "rate" ||
+                    inp.dataset.fx === "usdKrw" ||
+                    inp.dataset.f === "divYield" ||
+                    inp.dataset.f === "price" ||
+                    inp.dataset.f === "avgPrice"
+                ));
                 if (!inp.getAttribute("inputmode")) {
                     inp.setAttribute("inputmode", isDecimal ? "decimal" : "numeric");
                 }
                 inp.setAttribute("autocomplete", "off");
                 inp.setAttribute("spellcheck", "false");
+                if (!inp.getAttribute("enterkeyhint")) {
+                    inp.setAttribute("enterkeyhint", "next");
+                }
             });
         }
 

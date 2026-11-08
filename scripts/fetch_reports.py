@@ -9,6 +9,8 @@ sys.stdout.reconfigure(encoding='utf-8')
 import os
 import json
 import re
+import math
+import hashlib
 import urllib.parse
 from datetime import datetime, timezone, timedelta
 import requests
@@ -42,13 +44,13 @@ def fetch_yahoo_quote(symbol):
             history = []
             valid_closes = []
             for i, (t, c) in enumerate(zip(timestamps, closes)):
-                if c is not None:
+                if c is not None and not (isinstance(c, float) and math.isnan(c)):
                     valid_closes.append(c)
                     dt_str = datetime.fromtimestamp(t, KST).strftime('%m.%d')
                     full_dt_str = datetime.fromtimestamp(t, KST).strftime('%Y.%m.%d')
-                    o = opens[i] if i < len(opens) and opens[i] is not None else c
-                    h = highs[i] if i < len(highs) and highs[i] is not None else c
-                    l = lows[i] if i < len(lows) and lows[i] is not None else c
+                    o = opens[i] if i < len(opens) and opens[i] is not None and not (isinstance(opens[i], float) and math.isnan(opens[i])) else c
+                    h = highs[i] if i < len(highs) and highs[i] is not None and not (isinstance(highs[i], float) and math.isnan(highs[i])) else c
+                    l = lows[i] if i < len(lows) and lows[i] is not None and not (isinstance(lows[i], float) and math.isnan(lows[i])) else c
                     history.append({
                         'date': dt_str,
                         'fullDate': full_dt_str,
@@ -270,6 +272,21 @@ def generate_report_summary(title, broker, category, fx_direction='neutral'):
 def main():
     print(f"[{get_now_kst_iso()}] Starting market insights data generation...")
 
+    # 0. 기존 저장 데이터 안전 로드 (과거 리포트 및 기존 거시지표 히스토리 보존용)
+    output_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'market_insights.json')
+    old_data = {}
+    existing_reports = []
+    if os.path.exists(output_path):
+        try:
+            with open(output_path, 'r', encoding='utf-8') as f:
+                old_data = json.load(f)
+                if old_data and isinstance(old_data.get('reports'), list):
+                    existing_reports = old_data['reports']
+        except Exception as e:
+            print("Notice: Existing reports load exception:", e)
+
+    old_macro = old_data.get('macro', {}) if old_data else {}
+
     # 1. 실시간 시세 데이터 조회
     fx_quote = fetch_yahoo_quote('KRW=X')
     schd_quote = fetch_yahoo_quote('SCHD')
@@ -279,34 +296,41 @@ def main():
     wti_quote = fetch_yahoo_quote('CL=F')
     vix_quote = fetch_yahoo_quote('^VIX')
 
-    # 기본값 보정 (Fallback)
-    current_fx = fx_quote['price'] if fx_quote and fx_quote.get('price') else 1348.99
-    fx_diff = fx_quote['diff'] if fx_quote and fx_quote.get('diff') is not None else -2.5
-    fx_diff_pct = fx_quote['diffPct'] if fx_quote and fx_quote.get('diffPct') is not None else -0.19
+    # 기본값 및 기존 데이터 우선 승계 (Fallback: 하드코딩 대신 이전 성공 데이터 보존)
+    old_fx = old_macro.get('fx', {})
+    current_fx = fx_quote['price'] if fx_quote and fx_quote.get('price') else old_fx.get('current', 1355.0)
+    fx_diff = fx_quote['diff'] if fx_quote and fx_quote.get('diff') is not None else old_fx.get('diff', 0.0)
+    fx_diff_pct = fx_quote['diffPct'] if fx_quote and fx_quote.get('diffPct') is not None else old_fx.get('diffPct', 0.0)
 
-    current_schd = schd_quote['price'] if schd_quote and schd_quote.get('price') else 35.78
-    schd_diff = schd_quote['diff'] if schd_quote and schd_quote.get('diff') is not None else 0.15
-    schd_diff_pct = schd_quote['diffPct'] if schd_quote and schd_quote.get('diffPct') is not None else 0.42
+    old_schd = old_macro.get('schd', {})
+    current_schd = schd_quote['price'] if schd_quote and schd_quote.get('price') else old_schd.get('current', 35.78)
+    schd_diff = schd_quote['diff'] if schd_quote and schd_quote.get('diff') is not None else old_schd.get('diff', 0.0)
+    schd_diff_pct = schd_quote['diffPct'] if schd_quote and schd_quote.get('diffPct') is not None else old_schd.get('diffPct', 0.0)
 
-    current_tiger = tiger_quote['price'] if tiger_quote and tiger_quote.get('price') else 15175.0
-    tiger_diff = tiger_quote['diff'] if tiger_quote and tiger_quote.get('diff') is not None else 1020.0
-    tiger_diff_pct = tiger_quote['diffPct'] if tiger_quote and tiger_quote.get('diffPct') is not None else 7.21
+    old_tiger = old_macro.get('tiger', {})
+    current_tiger = tiger_quote['price'] if tiger_quote and tiger_quote.get('price') else old_tiger.get('current', 15250.0)
+    tiger_diff = tiger_quote['diff'] if tiger_quote and tiger_quote.get('diff') is not None else old_tiger.get('diff', 0.0)
+    tiger_diff_pct = tiger_quote['diffPct'] if tiger_quote and tiger_quote.get('diffPct') is not None else old_tiger.get('diffPct', 0.0)
 
-    current_nasdaq = nasdaq_quote['price'] if nasdaq_quote and nasdaq_quote.get('price') else 20384.8
-    nasdaq_diff = nasdaq_quote['diff'] if nasdaq_quote and nasdaq_quote.get('diff') is not None else 185.2
-    nasdaq_diff_pct = nasdaq_quote['diffPct'] if nasdaq_quote and nasdaq_quote.get('diffPct') is not None else 0.92
+    old_nasdaq = old_macro.get('nasdaq', {})
+    current_nasdaq = nasdaq_quote['price'] if nasdaq_quote and nasdaq_quote.get('price') else old_nasdaq.get('current', 20384.8)
+    nasdaq_diff = nasdaq_quote['diff'] if nasdaq_quote and nasdaq_quote.get('diff') is not None else old_nasdaq.get('diff', 0.0)
+    nasdaq_diff_pct = nasdaq_quote['diffPct'] if nasdaq_quote and nasdaq_quote.get('diffPct') is not None else old_nasdaq.get('diffPct', 0.0)
 
-    current_tnx = tnx_quote['price'] if tnx_quote and tnx_quote.get('price') else 4.185
-    tnx_diff = tnx_quote['diff'] if tnx_quote and tnx_quote.get('diff') is not None else -0.04
-    tnx_diff_pct = tnx_quote['diffPct'] if tnx_quote and tnx_quote.get('diffPct') is not None else -0.95
+    old_tnx = old_macro.get('us10y', {})
+    current_tnx = tnx_quote['price'] if tnx_quote and tnx_quote.get('price') else old_tnx.get('current', 4.185)
+    tnx_diff = tnx_quote['diff'] if tnx_quote and tnx_quote.get('diff') is not None else old_tnx.get('diff', 0.0)
+    tnx_diff_pct = tnx_quote['diffPct'] if tnx_quote and tnx_quote.get('diffPct') is not None else old_tnx.get('diffPct', 0.0)
 
-    current_wti = wti_quote['price'] if wti_quote and wti_quote.get('price') else 70.38
-    wti_diff = wti_quote['diff'] if wti_quote and wti_quote.get('diff') is not None else -0.68
-    wti_diff_pct = wti_quote['diffPct'] if wti_quote and wti_quote.get('diffPct') is not None else -0.96
+    old_wti = old_macro.get('wti', {})
+    current_wti = wti_quote['price'] if wti_quote and wti_quote.get('price') else old_wti.get('current', 70.38)
+    wti_diff = wti_quote['diff'] if wti_quote and wti_quote.get('diff') is not None else old_wti.get('diff', 0.0)
+    wti_diff_pct = wti_quote['diffPct'] if wti_quote and wti_quote.get('diffPct') is not None else old_wti.get('diffPct', 0.0)
 
-    current_vix = vix_quote['price'] if vix_quote and vix_quote.get('price') else 16.5
-    vix_diff = vix_quote['diff'] if vix_quote and vix_quote.get('diff') is not None else -0.35
-    vix_diff_pct = vix_quote['diffPct'] if vix_quote and vix_quote.get('diffPct') is not None else -2.08
+    old_vix = old_macro.get('vix', {})
+    current_vix = vix_quote['price'] if vix_quote and vix_quote.get('price') else old_vix.get('current', 16.5)
+    vix_diff = vix_quote['diff'] if vix_quote and vix_quote.get('diff') is not None else old_vix.get('diff', 0.0)
+    vix_diff_pct = vix_quote['diffPct'] if vix_quote and vix_quote.get('diffPct') is not None else old_vix.get('diffPct', 0.0)
 
     # 2. 주요 기관 리포트 수집
     raw_reports = fetch_hankyung_reports()
@@ -477,18 +501,6 @@ def main():
         }
     ]
 
-    # 기존 파일(data/market_insights.json)에 보관된 과거 날짜 리포트 읽기 (영구 날짜별 아카이브)
-    output_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'market_insights.json')
-    existing_reports = []
-    if os.path.exists(output_path):
-        try:
-            with open(output_path, 'r', encoding='utf-8') as f:
-                old_data = json.load(f)
-                if old_data and isinstance(old_data.get('reports'), list):
-                    existing_reports = old_data['reports']
-        except Exception as e:
-            print("Notice: Existing reports load exception:", e)
-
     # 리포트 고유 식별 함수 (중복 제거)
     def get_rep_key(r):
         rep_id = str(r.get('id', ''))
@@ -534,8 +546,8 @@ def main():
     final_reports = merged_reports[:150]
 
     # 3. 종합 데이터 객체 구성
-    # 부부 실제 보유 TIGER 미국배당다우존스 5,062주 연동 계산
-    tiger_qty = 5062
+    # 부부 실제 보유 TIGER 미국배당다우존스 6,861주 연동 계산 (아내 일반 2,939 + 아내 ISA 3,212 + 남편 ISA 710)
+    tiger_qty = 6861
     est_annual_div_per_share = 560  # 주당 약 560원 연간 배당 추정
     total_tiger_div = tiger_qty * est_annual_div_per_share
 
@@ -544,19 +556,19 @@ def main():
     toad_title = ""
     
     if current_fx > 1360:
-        fx_comment = f"현재 원·달러 환율({current_fx:,.1f}원)은 상단 구간입니다. 보유하신 외화자산(미국 단기국채 983만원, SOXL 등)의 원화 평가액이 든든하게 올라섰습니다! 💵"
+        fx_comment = f"현재 원·달러 환율({current_fx:,.1f}원)은 상단 구간입니다. 보유하신 외화자산(미국 단기국채 1,800만원, SOXL 등)의 원화 평가액이 든든하게 올라섰습니다! 💵"
     elif current_fx < 1330:
         fx_comment = f"원·달러 환율({current_fx:,.1f}원)이 안정적인 하향 흐름을 보이고 있어, 해외 우량 배당 자산을 저렴하게 추가 모아가기 좋은 환율 타이밍입니다! 🍵"
     else:
         fx_comment = f"원·달러 환율({current_fx:,.1f}원)은 안정적인 박스권 흐름을 유지하고 있습니다. 📊"
 
-    fx_history = fx_quote.get('history', []) if fx_quote else []
-    schd_history = schd_quote.get('history', []) if schd_quote else []
-    tiger_history = tiger_quote.get('history', []) if tiger_quote else []
-    nasdaq_history = nasdaq_quote.get('history', []) if nasdaq_quote else []
-    tnx_history = tnx_quote.get('history', []) if tnx_quote else []
-    wti_history = wti_quote.get('history', []) if wti_quote else []
-    vix_history = vix_quote.get('history', []) if vix_quote else []
+    fx_history = fx_quote.get('history', []) if (fx_quote and fx_quote.get('history')) else old_fx.get('history', [])
+    schd_history = schd_quote.get('history', []) if (schd_quote and schd_quote.get('history')) else old_schd.get('history', [])
+    tiger_history = tiger_quote.get('history', []) if (tiger_quote and tiger_quote.get('history')) else old_tiger.get('history', [])
+    nasdaq_history = nasdaq_quote.get('history', []) if (nasdaq_quote and nasdaq_quote.get('history')) else old_nasdaq.get('history', [])
+    tnx_history = tnx_quote.get('history', []) if (tnx_quote and tnx_quote.get('history')) else old_tnx.get('history', [])
+    wti_history = wti_quote.get('history', []) if (wti_quote and wti_quote.get('history')) else old_wti.get('history', [])
+    vix_history = vix_quote.get('history', []) if (vix_quote and vix_quote.get('history')) else old_vix.get('history', [])
 
     # 한국 국채 10년물 금리 히스토리 생성 (날짜 및 일봉 시계열은 tnx_history 또는 fx_history 기반 동조)
     base_pts = tnx_history if tnx_history else fx_history
@@ -703,7 +715,7 @@ def main():
                     "서학개미·연기금의 미국 AI 빅테크 주식 매수 열풍으로 구조적 자본 유출",
                     "중동 지정학적 리스크 및 국제 유가 급등에 따른 무역수지 악화"
                 ],
-                'portfolioImpact': "부부 외화자산(미국 단기국채 983만, SOXL 등) 원화 환산액 급증 (+10원당 약 +65만 원 평가익)",
+                'portfolioImpact': "부부 외화자산(미국 단기국채 1,800만, SOXL 등) 원화 환산액 급증 (+10원당 약 +65만 원 평가익)",
                 'toadAction': "💡 신규 달러 환전은 자제하고, 기보유 달러자산의 평가익을 누리며 환율 상단에서 필요 시 부분 원화 환전 검토"
             },
             'down': {
@@ -722,11 +734,12 @@ def main():
         'reports': final_reports  # 날짜별 누적 보관 리포트 리스트
     }
 
-    # 파일 저장
-    output_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'market_insights.json')
+    # 파일 원자적(Atomic) 안전 저장 (.tmp 후 교체)
+    temp_path = output_path + '.tmp'
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, 'w', encoding='utf-8') as f:
+    with open(temp_path, 'w', encoding='utf-8') as f:
         json.dump(market_insights, f, ensure_ascii=False, indent=2)
+    os.replace(temp_path, output_path)
 
     print(f"Successfully generated {output_path} with {len(final_reports)} reports.")
 

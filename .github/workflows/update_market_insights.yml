@@ -2,9 +2,9 @@ name: Update Market Insights & Financial Reports
 
 on:
   schedule:
-    # 1. 평일 아침 07:30 KST (UTC 22:30, 일~목): 미국 증시 마감 & 아침 모닝 리포트 수집
-    - cron: '30 22 * * 0-4'
-    # 2. 평일 오후 16:00 KST (UTC 07:00, 월~금): 국내 장 마감 환율 & 오후 신규 리포트 수집
+    # 1. 월~토 아침 07:30 KST (UTC 22:30, 일~금): 미국 금요일 증시 마감까지 완벽 포함
+    - cron: '30 22 * * 0-5'
+    # 2. 월~금 오후 16:00 KST (UTC 07:00, 월~금): 국내 장 마감 환율 & 오후 신규 리포트 수집
     - cron: '0 7 * * 1-5'
   workflow_dispatch: # 관리자가 깃허브 웹에서 수동으로 즉시 실행 가능
 
@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -37,4 +39,9 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Actions [Market Insights Bot]"
           git add data/market_insights.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(insights): 금융기관 리포트 및 거시지표 자동 갱신" && git push)
+          if ! git diff --quiet || ! git diff --staged --quiet; then
+            git commit -m "chore(insights): 금융기관 리포트 및 거시지표 자동 갱신"
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push && break || sleep 5
+            done
+          fi

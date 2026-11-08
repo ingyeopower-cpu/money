@@ -59,20 +59,44 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  var lock = LockService.getScriptLock();
+  var hasLock = lock.tryLock(10000);
+  if (!hasLock) {
+    return jsonOut_({ ok: false, error: "서버가 사용 중입니다. 잠시 후 다시 시도해주세요." });
+  }
+
   try {
+    if (!e || !e.postData || !e.postData.contents) {
+      return jsonOut_({ ok: false, error: "no_post_data" });
+    }
+
     var payload;
     try {
       payload = JSON.parse(e.postData.contents);
     } catch (parseErr) {
       return jsonOut_({ ok: false, error: "bad_json" });
     }
+
+    // 다중 직렬화 방어 및 객체 언랩
+    var dataToSave = (payload && payload.data !== undefined) ? payload.data : payload;
+    while (typeof dataToSave === "string") {
+      try { dataToSave = JSON.parse(dataToSave); } catch (e) { break; }
+    }
+
+    // 필수 필드 검증으로 빈 값에 의한 A1 셀 소멸 방어
+    if (!dataToSave || typeof dataToSave !== "object" || !dataToSave.buckets || !dataToSave.goal) {
+      return jsonOut_({ ok: false, error: "invalid_data_structure: 필수 데이터 누락으로 저장이 거부되었습니다." });
+    }
+
     var sheet = getSheet_();
     var now = new Date().toISOString();
-    sheet.getRange("A1").setValue(JSON.stringify(payload.data));
+    sheet.getRange("A1").setValue(JSON.stringify(dataToSave));
     sheet.getRange("B1").setValue(now);
     return jsonOut_({ ok: true, updatedAt: now });
   } catch (err) {
     return jsonOut_({ ok: false, error: String(err) });
+  } finally {
+    lock.releaseLock();
   }
 }
 
@@ -88,15 +112,25 @@ function 권한테스트() {
  * CORS(브라우저 보안 정책)에 막히지 않으며 10여 개 종목을 1번에 동시 조회합니다.
  */
 function refreshMarket_() {
-  var sheet = getSheet_();
-  var raw = sheet.getRange("A1").getValue();
-  if (!raw) return { ok: false, error: "저장된 데이터가 없습니다" };
-  var data;
-  try {
-    data = JSON.parse(String(raw));
-  } catch (e) {
-    return { ok: false, error: "데이터 파싱 오류" };
+  var lock = LockService.getScriptLock();
+  var hasLock = lock.tryLock(10000);
+  if (!hasLock) {
+    return { ok: false, error: "다른 시세 동기화 또는 저장이 진행 중입니다." };
   }
+
+  try {
+    var sheet = getSheet_();
+    var raw = sheet.getRange("A1").getValue();
+    if (!raw) return { ok: false, error: "저장된 데이터가 없습니다" };
+    var data;
+    try {
+      data = JSON.parse(String(raw));
+      while (typeof data === "string") {
+        data = JSON.parse(data);
+      }
+    } catch (e) {
+      return { ok: false, error: "데이터 파싱 오류" };
+    }
 
   var codes = [];
   (data.holdings || []).forEach(function (h) {
@@ -243,11 +277,12 @@ function refreshMarket_() {
       if (h.isFixed) return;
       if (prices[h.code]) {
         var pInfo = prices[h.code];
+        var oldPrice = h.price;
         h.price = pInfo.price;
         if (pInfo.prevPrice && pInfo.prevPrice > 0) {
           h.prevPrice = pInfo.prevPrice;
-        } else if (h.price && h.priceDate && h.priceDate !== today) {
-          h.prevPrice = h.price;
+        } else if (oldPrice && h.priceDate && h.priceDate !== today) {
+          h.prevPrice = oldPrice;
         }
         h.priceDate = today;
       }
@@ -294,6 +329,9 @@ function refreshMarket_() {
     ok: true, data: JSON.stringify(data), updatedAt: data.updatedAt,
     priceOk: priceOk, priceTotal: priceTotal, fxOk: fxOk
   };
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function parseYahooQuoteMeta_(jsonText) {
@@ -316,9 +354,9 @@ function parseNaverPolling_(jsonText) {
     var v2 = d && (d.closePriceRaw || d.closePrice || d.nv);
     var cur = v2 ? Number(String(v2).replace(/[^0-9.-]/g, "")) : 0;
     if (cur > 0) {
-      var diff = Math.abs(d.compareToPreviousClosePriceRaw ? Number(d.compareToPreviousClosePriceRaw) : 0);
-      var isFalling = d.compareToPreviousPrice && (d.compareToPreviousPrice.name === "FALLING" || d.compareToPreviousPrice.code === "5");
-      var prev = isFalling ? (cur + diff) : (cur - diff);
+      var rawDiff = d.compareToPreviousClosePriceRaw || d.compareToPreviousClosePrice;
+      var signedDiff = rawDiff ? Number(String(rawDiff).replace(/,/g, "")) : 0;
+      var prev = cur - signedDiff;
       return { price: Math.round(cur), prevPrice: Math.round(prev > 0 ? prev : cur) };
     }
   } catch (e) {}
