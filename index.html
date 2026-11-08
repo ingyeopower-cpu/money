@@ -7339,6 +7339,43 @@
             d.holdings = (d.holdings || []).filter(h => !(h.account === "우리사주" || (h.name && h.name.indexOf("우리사주") >= 0) || (h.name && h.name.indexOf("현대차") >= 0 && h.code === "우리사주") || h.id === "h_hyundai_esop"));
             d.buckets = (d.buckets || []).filter(b => !(b.name && b.name.indexOf("우리사주") >= 0));
 
+            // [긴급 데이터 자가치유] 9월 5일 기준 옛날 수량으로 캐시 덮어쓰기된 경우 실보유 수량으로 자동 보정
+            (function healState_(state) {
+                if (!state || !state.holdings || !state.buckets) return;
+                const tg = (state.holdings || []).find(h => h.code === "458730" && h.account === "일반계좌");
+                if (tg && (tg.qty === 1169 || tg.qty < 2900)) { tg.qty = 2939; tg.avgPrice = 15024; tg.price = 15250; tg.prevPrice = 15420; }
+
+                const ti = (state.holdings || []).find(h => h.id === "v6zjfbn");
+                if (ti && ti.qty === 3183) { ti.qty = 3212; ti.price = 15250; ti.prevPrice = 15420; }
+
+                const nq = (state.holdings || []).find(h => h.code === "379810" && h.account === "일반계좌");
+                if (nq && (nq.qty === 210 || nq.qty < 400)) { nq.qty = 403; nq.avgPrice = 27950; nq.price = 24050; nq.prevPrice = 24200; }
+
+                const soxl = (state.holdings || []).find(h => h.code === "SOXL");
+                if (soxl && (soxl.price === 117.28 || soxl.prevPrice === 117.28 || !soxl.prevPrice)) {
+                    soxl.qty = 20; soxl.price = 45.97; soxl.prevPrice = 40.87;
+                }
+
+                const bUsb = (state.buckets || []).find(b => b.name === "미국 단기국채");
+                if (bUsb && bUsb.amount === 9830000) bUsb.amount = 18000000;
+
+                const bKrb = (state.buckets || []).find(b => b.name === "국내채권");
+                if (bKrb && bKrb.amount === 30000000) bKrb.amount = 6600000;
+
+                const bSav = (state.buckets || []).find(b => b.name === "적금");
+                if (bSav && (bSav.amount === 12000000 || bSav.amount === 13000000)) bSav.amount = 3797920;
+
+                const bCash = (state.buckets || []).find(b => b.name === "현금");
+                if (bCash && bCash.amount === 3000001) bCash.amount = 3000000;
+
+                if (Array.isArray(state.history)) {
+                    state.history.forEach(h => {
+                        if (h.date === "2026-11-08" && h.total < 215000000) h.total = 218338961.37;
+                        if (h.date === "2026-11-07" && h.total > 225000000) h.total = 218826157;
+                    });
+                }
+            })(d);
+
             d.holdings.forEach(h => {
                 if (typeof h.avgPrice !== "number") h.avgPrice = 0;
                 if (typeof h.account !== "string") h.account = "";
@@ -7476,6 +7513,9 @@
                 const pulled = await syncPull();
                 if (!pulled || pulled.ok === false) return null;
                 let remoteData = pulled.data ? JSON.parse(pulled.data) : null;
+                while (typeof remoteData === "string") {
+                    try { remoteData = JSON.parse(remoteData); } catch (e) { break; }
+                }
                 if (remoteData && !(remoteData.goal && remoteData.buckets)) remoteData = null;
                 return remoteData;
             } catch (e) { return null; }
@@ -7500,6 +7540,9 @@
                 const j = await r.json();
                 if (!j || j.ok === false) throw new Error((j && j.error) || "서버 갱신 실패");
                 let remoteData = j.data ? JSON.parse(j.data) : null;
+                while (typeof remoteData === "string") {
+                    try { remoteData = JSON.parse(remoteData); } catch (e) { break; }
+                }
                 if (remoteData && remoteData.goal && remoteData.buckets) {
                     // 서버 최신 시세 반영 시 오프라인 기록 누락 방지를 위해 entries 및 history 안전 병합
                     const mergedEntries = mergeEntries_(S.entries, remoteData.entries);
@@ -7541,6 +7584,9 @@
                 const pulled = await syncPull();
                 if (!pulled || pulled.ok === false) throw new Error(errText_(pulled && pulled.error));
                 let remoteData = pulled.data ? JSON.parse(pulled.data) : null;
+                while (typeof remoteData === "string") {
+                    try { remoteData = JSON.parse(remoteData); } catch (e) { break; }
+                }
                 if (remoteData && !(remoteData.goal && remoteData.buckets)) remoteData = null;
                 const remoteAt = remoteData && remoteData.updatedAt || null;
                 const localAt = S.updatedAt;
@@ -7577,7 +7623,10 @@
             try {
                 const pulled = await syncPull();
                 if (!pulled || pulled.ok === false) throw new Error(errText_(pulled && pulled.error));
-                const remote = pulled.data ? JSON.parse(pulled.data) : null;
+                let remote = pulled.data ? JSON.parse(pulled.data) : null;
+                while (typeof remote === "string") {
+                    try { remote = JSON.parse(remote); } catch (e) { break; }
+                }
                 if (!remote || !(remote.goal && remote.buckets)) { setSyncStatus("구글시트에 아직 저장된 데이터가 없습니다", "err"); return; }
                 S = migrate(remote);
                 document.documentElement.setAttribute("data-theme", S.theme || "light");
@@ -14121,6 +14170,7 @@
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
                 navigator.serviceWorker.register("./sw.js").then((reg) => {
+                    reg.update();
                     console.log("[PWA] ServiceWorker registered with scope:", reg.scope);
                 }).catch((err) => {
                     console.warn("[PWA] ServiceWorker registration failed:", err);
