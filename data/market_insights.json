@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-11-07 15:08 KST",
+  "updatedAt": "2026-11-09 10:50 KST",
   "macro": {
     "fx": {
-      "current": 1363.65,
-      "diff": -76.09,
-      "diffPct": -5.28,
+      "current": 1359.98,
+      "diff": -87.92,
+      "diffPct": -6.07,
       "dxy": 99.16,
       "targetBand": {
         "low": 1320,
@@ -12,15 +12,6 @@
       },
       "consensus": "연준 금리인하 사이클 진입 속 상방 경직적 완만한 박스권 하향 안정화",
       "history": [
-        {
-          "date": "11.07",
-          "fullDate": "2025.11.07",
-          "val": 1447.9,
-          "open": 1447.9,
-          "high": 1462.42,
-          "low": 1446.3,
-          "close": 1447.9
-        },
         {
           "date": "11.10",
           "fullDate": "2025.11.10",
@@ -2344,13 +2335,13 @@
           "close": 1356.34
         },
         {
-          "date": "11.07",
-          "fullDate": "2026.11.07",
-          "val": 1363.65,
+          "date": "11.09",
+          "fullDate": "2026.11.09",
+          "val": 1359.98,
           "open": 1363.65,
-          "high": 1363.65,
-          "low": 1363.65,
-          "close": 1363.65
+          "high": 1364.34,
+          "low": 1357.08,
+          "close": 1359.98
         }
       ]
     },
@@ -4644,8 +4635,8 @@
           "close": 35.17
         },
         {
-          "date": "11.07",
-          "fullDate": "2026.11.07",
+          "date": "11.09",
+          "fullDate": "2026.11.09",
           "val": 35.17,
           "open": 35.17,
           "high": 35.17,
@@ -4657,33 +4648,15 @@
     "tiger": {
       "name": "TIGER 미국배당다우존스",
       "code": "458730",
-      "price": 15250.0,
-      "diff": 3025.0,
-      "diffPct": 24.74,
-      "holdingQty": 5062,
+      "price": 15230.0,
+      "diff": 2940.0,
+      "diffPct": 23.92,
+      "holdingQty": 6861,
       "divYield": 3.65,
       "divGrowth5Y": 11.8,
       "peRatio": 15.4,
       "desc": "💡 부부 합산 5,062주 보유 중! 매월 약 23.6만 원 배당금이 잔금 준비 통장으로 자동 기여합니다.",
       "history": [
-        {
-          "date": "11.06",
-          "fullDate": "2025.11.06",
-          "val": 12225.0,
-          "open": 12175.0,
-          "high": 12230.0,
-          "low": 12175.0,
-          "close": 12225.0
-        },
-        {
-          "date": "11.07",
-          "fullDate": "2025.11.07",
-          "val": 12290.0,
-          "open": 12225.0,
-          "high": 12290.0,
-          "low": 12200.0,
-          "close": 12290.0
-        },
         {
           "date": "11.10",
           "fullDate": "2025.11.10",
@@ -6872,13 +6845,13 @@
           "close": 15250.0
         },
         {
-          "date": "11.07",
-          "fullDate": "2026.11.07",
-          "val": 15250.0,
-          "open": 15250.0,
-          "high": 15250.0,
-          "low": 15250.0,
-          "close": 15250.0
+          "date": "11.09",
+          "fullDate": "2026.11.09",
+          "val": 15230.0,
+          "open": 15220.0,
+          "high": 15235.0,
+          "low": 15125.0,
+          "close": 15230.0
         }
       ]
     },
@@ -9165,8 +9138,8 @@
           "close": 26989.99
         },
         {
-          "date": "11.07",
-          "fullDate": "2026.11.07",
+          "date": "11.09",
+          "fullDate": "2026.11.09",
           "val": 26989.99,
           "open": 26989.99,
           "high": 26989.99,
@@ -11451,8 +11424,8 @@
           "close": 4.86
         },
         {
-          "date": "11.07",
-          "fullDate": "2026.11.07",
+          "date": "11.09",
+          "fullDate": "2026.11.09",
           "val": 4.86,
           "open": 4.86,
           "high": 4.86,
@@ -12730,8 +12703,8 @@
           "val": 3.12
         },
         {
-          "date": "11.07",
-          "fullDate": "2026.11.07",
+          "date": "11.09",
+          "fullDate": "2026.11.09",
           "val": 3.08
         }
       ]
@@ -12739,20 +12712,11 @@
     "wti": {
       "name": "WTI 국제 유가",
       "symbol": "CL=F",
-      "price": 90.83,
-      "diff": 31.4,
-      "diffPct": 52.84,
+      "price": 90.53,
+      "diff": 30.78,
+      "diffPct": 51.51,
       "desc": "💡 글로벌 원유 대표 가격 지표(WTI). 유가 하락은 글로벌 인플레이션 진정과 금리 인하에 우호적인 거시 환경을 조성합니다.",
       "history": [
-        {
-          "date": "11.07",
-          "fullDate": "2025.11.07",
-          "val": 59.75,
-          "open": 59.65,
-          "high": 60.46,
-          "low": 59.32,
-          "close": 59.75
-        },
         {
           "date": "11.10",
           "fullDate": "2025.11.10",
@@ -15004,13 +14968,13 @@
           "close": 90.83
         },
         {
-          "date": "11.07",
-          "fullDate": "2026.11.07",
-          "val": 90.83,
+          "date": "11.09",
+          "fullDate": "2026.11.09",
+          "val": 90.53,
           "open": 90.83,
           "high": 90.83,
-          "low": 90.83,
-          "close": 90.83
+          "low": 89.82,
+          "close": 90.53
         }
       ]
     },
@@ -17310,8 +17274,8 @@
           "close": 25.64
         },
         {
-          "date": "11.07",
-          "fullDate": "2026.11.07",
+          "date": "11.09",
+          "fullDate": "2026.11.09",
           "val": 25.64,
           "open": 25.64,
           "high": 25.64,
@@ -17322,16 +17286,16 @@
     }
   },
   "portfolioImpact": {
-    "tigerHoldingQty": 5062,
-    "tigerEstAnnualDividend": 2834720,
-    "tigerEstMonthlyDividend": 236227,
+    "tigerHoldingQty": 6861,
+    "tigerEstAnnualDividend": 3842160,
+    "tigerEstMonthlyDividend": 320180,
     "fxSensitivityComment": "원·달러 환율 10원 변동 시 부부 외화자산(미국 단기국채 983만, SOXL 등) 평가액 약 ±65만원 변동",
     "vixComment": "VIX 변동성 25.6pt — 🟡 변동성 확대 (분할 매수 템포 조절)"
   },
   "toadComment": {
     "icon": "",
     "title": "",
-    "message": "현재 원·달러 환율(1,363.7원)은 상단 구간입니다. 보유하신 외화자산(미국 단기국채 983만원, SOXL 등)의 원화 평가액이 든든하게 올라섰습니다! 💵<br>미국 국채 10년물 금리(<b>4.86%</b>)와 한국 국고채 10년물 금리(<b>3.08%</b>)가 나란히 하향 안정세를 이어가고 있어, 배당 가치주(SCHD) 주가 모멘텀과 2028년 5월 잔금대출 실행 시 금리 부담 완화에 매우 긍정적입니다.<br>두 분이 모으신 TIGER 미국배당다우존스 <b>5,062주</b>에서 올해 약 <b>2,834,720원 (월 약 236,227원)</b>의 배당금이 통장에 차곡차곡 쌓여 잔금 저축을 가속합니다! 🍷"
+    "message": "원·달러 환율(1,360.0원)은 안정적인 박스권 흐름을 유지하고 있습니다. 📊<br>미국 국채 10년물 금리(<b>4.86%</b>)와 한국 국고채 10년물 금리(<b>3.08%</b>)가 나란히 하향 안정세를 이어가고 있어, 배당 가치주(SCHD) 주가 모멘텀과 2028년 5월 잔금대출 실행 시 금리 부담 완화에 매우 긍정적입니다.<br>두 분이 모으신 TIGER 미국배당다우존스 <b>6,861주</b>에서 올해 약 <b>3,842,160원 (월 약 320,180원)</b>의 배당금이 통장에 차곡차곡 쌓여 잔금 저축을 가속합니다! 🍷"
   },
   "scenarioAnalysis": {
     "title": "원·달러 환율 상승 vs 하락 양방향 시나리오 & 포트폴리오 대응 전략",
@@ -17344,7 +17308,7 @@
         "서학개미·연기금의 미국 AI 빅테크 주식 매수 열풍으로 구조적 자본 유출",
         "중동 지정학적 리스크 및 국제 유가 급등에 따른 무역수지 악화"
       ],
-      "portfolioImpact": "부부 외화자산(미국 단기국채 983만, SOXL 등) 원화 환산액 급증 (+10원당 약 +65만 원 평가익)",
+      "portfolioImpact": "부부 외화자산(미국 단기국채 1,800만, SOXL 등) 원화 환산액 급증 (+10원당 약 +65만 원 평가익)",
       "toadAction": "💡 신규 달러 환전은 자제하고, 기보유 달러자산의 평가익을 누리며 환율 상단에서 필요 시 부분 원화 환전 검토"
     },
     "down": {
@@ -17363,7 +17327,7 @@
   "reports": [
     {
       "id": "curated_fx_down_1",
-      "date": "2026-11-07",
+      "date": "2026-11-09",
       "category": "fx",
       "categoryLabel": "💵 원·달러 환율",
       "fxDirection": "down",
@@ -17385,7 +17349,7 @@
     },
     {
       "id": "curated_fx_down_2",
-      "date": "2026-11-07",
+      "date": "2026-11-09",
       "category": "fx",
       "categoryLabel": "💵 원·달러 환율",
       "fxDirection": "down",
@@ -17407,7 +17371,7 @@
     },
     {
       "id": "curated_fx_down_3",
-      "date": "2026-11-07",
+      "date": "2026-11-09",
       "category": "fx",
       "categoryLabel": "💵 원·달러 환율",
       "fxDirection": "down",
@@ -17429,7 +17393,7 @@
     },
     {
       "id": "curated_fx_up_1",
-      "date": "2026-11-07",
+      "date": "2026-11-09",
       "category": "fx",
       "categoryLabel": "💵 원·달러 환율",
       "fxDirection": "up",
@@ -17451,7 +17415,7 @@
     },
     {
       "id": "curated_fx_up_2",
-      "date": "2026-11-07",
+      "date": "2026-11-09",
       "category": "fx",
       "categoryLabel": "💵 원·달러 환율",
       "fxDirection": "up",
@@ -17473,7 +17437,7 @@
     },
     {
       "id": "curated_fx_up_3",
-      "date": "2026-11-07",
+      "date": "2026-11-09",
       "category": "fx",
       "categoryLabel": "💵 원·달러 환율",
       "fxDirection": "up",
@@ -17495,7 +17459,7 @@
     },
     {
       "id": "curated_fx_neutral_1",
-      "date": "2026-11-07",
+      "date": "2026-11-09",
       "category": "fx",
       "categoryLabel": "💵 원·달러 환율",
       "fxDirection": "neutral",
@@ -17517,7 +17481,7 @@
     },
     {
       "id": "curated_schd_1",
-      "date": "2026-11-07",
+      "date": "2026-11-09",
       "category": "schd",
       "categoryLabel": "👑 SCHD·미국배당",
       "fxDirection": "neutral",
@@ -17538,7 +17502,7 @@
     },
     {
       "id": "curated_rates_1",
-      "date": "2026-11-07",
+      "date": "2026-11-09",
       "category": "rates",
       "categoryLabel": "📈 미국 국채·금리",
       "fxDirection": "neutral",
@@ -17555,6 +17519,394 @@
         "미10년물",
         "채권금리",
         "잔금대출"
+      ]
+    },
+    {
+      "id": "rep_1",
+      "date": "2026-11-09",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "fxDirection": "neutral",
+      "title": "AI에도 Fed Put이 가능한가",
+      "broker": "한화투자증권",
+      "writer": "김성수,한시화",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653927",
+      "summary": [
+        "주요 기관(한화투자증권) 채권 리포트: 미국 국채 10년물 금리 및 글로벌 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표 둔화 추세와 고용시장 정상화에 따른 장기 무위험 금리 하향 안정 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리 안정으로 2028년 5월 잔금대출 금융비용 절감 기대"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_2",
+      "date": "2026-11-09",
+      "category": "rates",
+      "categoryLabel": "📈 미국 국채·금리",
+      "fxDirection": "neutral",
+      "title": "위험에 대한 위험, 결국 비용 문제",
+      "broker": "메리츠증권",
+      "writer": "윤여삼,김영준",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653908",
+      "summary": [
+        "주요 기관(메리츠증권) 채권 리포트: 미국 국채 10년물 금리 및 글로벌 통화정책 기조 정밀 진단",
+        "미국 인플레이션 지표 둔화 추세와 고용시장 정상화에 따른 장기 무위험 금리 하향 안정 압력",
+        "국내 주택담보대출(잔금대출) 금리 가늠자인 장기채 금리 안정으로 2028년 5월 잔금대출 금융비용 절감 기대"
+      ],
+      "tags": [
+        "국채금리",
+        "FOMC",
+        "연준"
+      ]
+    },
+    {
+      "id": "rep_3",
+      "date": "2026-11-09",
+      "category": "fx",
+      "categoryLabel": "💵 원·달러 환율",
+      "fxDirection": "neutral",
+      "title": "Daily Forex Live",
+      "broker": "우리은행",
+      "writer": "민경원,임환열",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653876",
+      "summary": [
+        "주요 기관(우리은행) 외환 리서치: 대내외 수급 공방 속 1,320~1,370원 박스권 밸런스 장세 진단",
+        "수출업체 네고(하락 압력)와 해외주식 투자 환전(상승 압력)이 팽팽하게 맞서는 균형 구간",
+        "최적 전략: 박스권 하단에서는 배당자산 추가 매수, 상단에서는 환차익 향유 투트랙 대응"
+      ],
+      "tags": [
+        "환율",
+        "외환시장",
+        "달러",
+        "박스권"
+      ]
+    },
+    {
+      "id": "rep_4",
+      "date": "2026-11-09",
+      "category": "schd",
+      "categoryLabel": "👑 SCHD·미국배당",
+      "fxDirection": "neutral",
+      "title": "미국 10월 고용: 흠잡을 게 별로 없다",
+      "broker": "메리츠증권",
+      "writer": "이승훈,박민서",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653910",
+      "summary": [
+        "주요 기관(메리츠증권) 글로벌 배당 리포트: Dow Jones Dividend 100(SCHD) 펀더멘털 평가",
+        "연 3.5%대 안정적 배당수익률 및 10년 연속 배당 성장 우량 가치주의 하방 경직성 확인",
+        "부부 5,062주 보유: 분기 배당금 재투자를 통한 2028년 잔금 마련 복리 스노우볼 가속"
+      ],
+      "tags": [
+        "배당성장",
+        "미국주식",
+        "ETF"
+      ]
+    },
+    {
+      "id": "rep_5",
+      "date": "2026-11-09",
+      "category": "schd",
+      "categoryLabel": "👑 SCHD·미국배당",
+      "fxDirection": "neutral",
+      "title": "미국의 블루웨이브와 중국 테크",
+      "broker": "메리츠증권",
+      "writer": "최설화",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653909",
+      "summary": [
+        "주요 기관(메리츠증권) 글로벌 배당 리포트: Dow Jones Dividend 100(SCHD) 펀더멘털 평가",
+        "연 3.5%대 안정적 배당수익률 및 10년 연속 배당 성장 우량 가치주의 하방 경직성 확인",
+        "부부 5,062주 보유: 분기 배당금 재투자를 통한 2028년 잔금 마련 복리 스노우볼 가속"
+      ],
+      "tags": [
+        "배당성장",
+        "미국주식",
+        "ETF"
+      ]
+    },
+    {
+      "id": "rep_6",
+      "date": "2026-11-09",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "BAAJA와 바젤3로 본, 블루 웨이브",
+      "broker": "LS증권",
+      "writer": "정다운",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653952",
+      "summary": [
+        "주요 기관(LS증권) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_7",
+      "date": "2026-11-09",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "wake up! 아침에 슼",
+      "broker": "SK증권",
+      "writer": "SK증권 리서치센터",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653951",
+      "summary": [
+        "주요 기관(SK증권) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_8",
+      "date": "2026-11-09",
+      "category": "schd",
+      "categoryLabel": "👑 SCHD·미국배당",
+      "fxDirection": "neutral",
+      "title": "미국 10월 고용: 고용은 안도, 여전히 물가가 과제",
+      "broker": "SK증권",
+      "writer": "신윤정",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653950",
+      "summary": [
+        "주요 기관(SK증권) 글로벌 배당 리포트: Dow Jones Dividend 100(SCHD) 펀더멘털 평가",
+        "연 3.5%대 안정적 배당수익률 및 10년 연속 배당 성장 우량 가치주의 하방 경직성 확인",
+        "부부 5,062주 보유: 분기 배당금 재투자를 통한 2028년 잔금 마련 복리 스노우볼 가속"
+      ],
+      "tags": [
+        "배당성장",
+        "미국주식",
+        "ETF"
+      ]
+    },
+    {
+      "id": "rep_9",
+      "date": "2026-11-09",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "Market NOWCAST : 불확실성과 가격",
+      "broker": "SK증권",
+      "writer": "조준기",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653949",
+      "summary": [
+        "주요 기관(SK증권) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_10",
+      "date": "2026-11-09",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "[찰스 리버 래버러토리스] 반도체보다 원숭이",
+      "broker": "SK증권",
+      "writer": "박제민",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653948",
+      "summary": [
+        "주요 기관(SK증권) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_11",
+      "date": "2026-11-09",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "상상인 Macro Daily",
+      "broker": "상상인증권",
+      "writer": "투자전략팀",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653934",
+      "summary": [
+        "주요 기관(상상인증권) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_12",
+      "date": "2026-11-09",
+      "category": "schd",
+      "categoryLabel": "👑 SCHD·미국배당",
+      "fxDirection": "neutral",
+      "title": "10월 미국 고용: 본격적인 회복은 아직",
+      "broker": "한화투자증권",
+      "writer": "최규호",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653928",
+      "summary": [
+        "주요 기관(한화투자증권) 글로벌 배당 리포트: Dow Jones Dividend 100(SCHD) 펀더멘털 평가",
+        "연 3.5%대 안정적 배당수익률 및 10년 연속 배당 성장 우량 가치주의 하방 경직성 확인",
+        "부부 5,062주 보유: 분기 배당금 재투자를 통한 2028년 잔금 마련 복리 스노우볼 가속"
+      ],
+      "tags": [
+        "배당성장",
+        "미국주식",
+        "ETF"
+      ]
+    },
+    {
+      "id": "rep_13",
+      "date": "2026-11-09",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "start with ibks",
+      "broker": "IBK투자증권",
+      "writer": "투자분석부",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653921",
+      "summary": [
+        "주요 기관(IBK투자증권) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_14",
+      "date": "2026-11-09",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "ibks morning brief",
+      "broker": "IBK투자증권",
+      "writer": "기간산업분석부・혁신기업분석부",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653919",
+      "summary": [
+        "주요 기관(IBK투자증권) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_15",
+      "date": "2026-11-09",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "유안타 클라스: Weekly Hot Stocks",
+      "broker": "유안타증권",
+      "writer": "리서치센터",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653907",
+      "summary": [
+        "주요 기관(유안타증권) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_16",
+      "date": "2026-11-09",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "유안타 클라스: Weekly Hot Stocks",
+      "broker": "유안타증권",
+      "writer": "리서치센터",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653906",
+      "summary": [
+        "주요 기관(유안타증권) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_17",
+      "date": "2026-11-09",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "YUANTA DAILY MARKET VIEW",
+      "broker": "유안타증권",
+      "writer": "리서치센터",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653904",
+      "summary": [
+        "주요 기관(유안타증권) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_18",
+      "date": "2026-11-09",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "morning meeting brief",
+      "broker": "대신증권",
+      "writer": "리서치센터",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653890",
+      "summary": [
+        "주요 기관(대신증권) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
+      ]
+    },
+    {
+      "id": "rep_19",
+      "date": "2026-11-09",
+      "category": "market",
+      "categoryLabel": "🌐 글로벌 시황",
+      "fxDirection": "neutral",
+      "title": "안녕하세요 위클리에요",
+      "broker": "유진투자증권",
+      "writer": "양승윤",
+      "pdfUrl": "http://consensus.hankyung.com/analysis/downpdf?report_idx=653889",
+      "summary": [
+        "주요 기관(유진투자증권) 글로벌 거시 리포트: 주요국 경제지표 및 시장 유동성 환경 진단",
+        "거시 변수 불확실성 속에서 우량 자산 중심의 포트폴리오 밸런싱 전략 제시",
+        "안전자산과 성장자산의 분산 투자를 통한 장기 목표 달성 솔루션 안내"
+      ],
+      "tags": [
+        "거시경제",
+        "시장전략"
       ]
     },
     {
