@@ -1,5 +1,5 @@
 // sw.js - 고석현의 돈통 PWA Service Worker (오프라인 지원 및 앱 설치 활성화)
-const CACHE_NAME = 'money-pwa-v3';
+const CACHE_NAME = 'money-pwa-v4';
 const STATIC_ASSETS = [
   './',
   './index.html',
