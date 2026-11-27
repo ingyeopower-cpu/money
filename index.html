@@ -6896,8 +6896,8 @@
                         "name": "TIGER 미국배당다우존스",
                         "code": "458730",
                         "account": "일반계좌",
-                        "qty": 3263,
-                        "avgPrice": 14985,
+                        "qty": 3635,
+                        "avgPrice": 15002,
                         "price": 14990,
                         "priceDate": "2026-11-27",
                         "owner": "아내",
@@ -7068,6 +7068,52 @@
                     }
                 ],
                 "entries": [
+                    {
+                        "id": "ent_1a21c492721",
+                        "type": "saving",
+                        "date": "2026-11-27",
+                        "amount": 6450015,
+                        "bucketId": "b_stock",
+                        "holdingId": "iu1r0px",
+                        "stockQty": 429,
+                        "execPrice": 15035,
+                        "memo": "아내 일반 TIGER 배당 매수"
+                    },
+                    {
+                        "id": "51g7os4",
+                        "type": "saving",
+                        "date": "2026-11-13",
+                        "amount": 4504005,
+                        "bucketId": "b_stock",
+                        "memo": "",
+                        "holdingId": "iu1r0px",
+                        "stockQty": 297,
+                        "execPrice": 15165
+                    },
+                    {
+                        "id": "uusgra9",
+                        "type": "transfer",
+                        "date": "2026-11-07",
+                        "amount": 9202080,
+                        "fromId": "jsnhcyj",
+                        "toId": "b_stock",
+                        "memo": "",
+                        "holdingId": "iu1r0px",
+                        "stockQty": 608,
+                        "execPrice": 15135,
+                        "stockMode": "buy"
+                    },
+                    {
+                        "id": "ljbj0wb",
+                        "type": "saving",
+                        "date": "2026-11-06",
+                        "amount": 9202080,
+                        "bucketId": "b_stock",
+                        "memo": "",
+                        "holdingId": "iu1r0px",
+                        "stockQty": 608,
+                        "execPrice": 15135
+                    },
                     {
                         "id": "aua05vm",
                         "type": "saving",
@@ -7305,14 +7351,14 @@
                         "memo": ""
                     },
                     {
-                        "id": "ent_1a21c492721",
+                        "id": "ent_1a21c4e249c",
                         "type": "saving",
                         "date": "2026-11-27",
-                        "amount": 6450015,
+                        "amount": 5637660,
                         "bucketId": "b_stock",
                         "holdingId": "iu1r0px",
-                        "stockQty": 429,
-                        "execPrice": 15035,
+                        "stockQty": 372,
+                        "execPrice": 15155,
                         "memo": "아내 일반 TIGER 배당 매수"
                     }
                 ],
@@ -7481,20 +7527,40 @@
                         "date": "2026-11-27",
                         "mode": "서버 자동",
                         "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                        "date": "2026-11-27",
+                        "mode": "서버 자동",
+                        "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                        "date": "2026-11-27",
+                        "mode": "서버 자동",
+                        "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                        "date": "2026-11-27",
+                        "mode": "서버 자동",
+                        "detail": "6종목 중 6종목 반영"
+                    },
+                    {
+                        "date": "2026-11-27",
+                        "mode": "서버 자동",
+                        "detail": "6종목 중 6종목 반영"
                     }
                 ],
                 "lastSync": "2026-11-27",
                 "fx": {
                     "usdKrw": 1343.84,
                     "usdKrwDate": "2026-11-27",
-                    "dxy": 103.805,
+                    "dxy": 103.811,
                     "dxyDate": "2026-11-27",
                     "dxyIsExact": true,
                     "prevUsdKrw": 1355.38,
-                    "lastUpdated": "2026-11-13T12:59:28.859Z"
+                    "lastUpdated": "2026-11-27T09:19:00.451Z"
                 },
                 "theme": "dark",
-                "updatedAt": "2026-11-27T09:14:45.000Z",
+                "updatedAt": "2026-11-27T09:20:12.000Z",
                 "history": [
                     {
                         "date": "2026-08-20",
@@ -7654,11 +7720,11 @@
                     },
                     {
                         "date": "2026-11-13",
-                        "total": 225449847.6
+                        "total": 223825811.308
                     },
                     {
                         "date": "2026-11-27",
-                        "total": 228094949.136
+                        "total": 233671229.136
                     }
                 ],
                 "loan": {
@@ -7730,7 +7796,7 @@
             (function healState_(state) {
                 if (!state || !state.holdings || !state.buckets) return;
                 const tg = (state.holdings || []).find(h => h.code === "458730" && h.account === "일반계좌");
-                if (tg && (tg.qty === 1169 || tg.qty === 2939 || tg.qty === 3236 || tg.qty === 2834)) { tg.qty = 3263; tg.avgPrice = 14985; tg.price = 14635; }
+                if (tg && (tg.qty === 1169 || tg.qty === 2939 || tg.qty === 3236 || tg.qty === 2834 || tg.qty === 3263)) { tg.qty = 3635; tg.avgPrice = 15002; tg.price = 14635; }
 
                 const ti = (state.holdings || []).find(h => h.id === "v6zjfbn");
                 if (ti && (ti.qty === 3183 || ti.avgPrice === 15669)) { ti.qty = 3212; ti.avgPrice = 15661; ti.price = 15200; }
