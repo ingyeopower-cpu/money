@@ -8041,9 +8041,10 @@
             }
         }
         function mergeEntries_(localEntries, remoteEntries) {
+            const ghostIds = new Set(["51g7os4", "uusgra9", "ljbj0wb"]);
             const map = new Map();
-            (remoteEntries || []).forEach(e => { if (e && e.id) map.set(e.id, e); });
-            (localEntries || []).forEach(e => { if (e && e.id) map.set(e.id, e); });
+            (remoteEntries || []).forEach(e => { if (e && e.id && !ghostIds.has(e.id)) map.set(e.id, e); });
+            (localEntries || []).forEach(e => { if (e && e.id && !ghostIds.has(e.id)) map.set(e.id, e); });
             return Array.from(map.values()).sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.id || "").localeCompare(a.id || ""));
         }
         function mergeHistory_(localHist, remoteHist) {
